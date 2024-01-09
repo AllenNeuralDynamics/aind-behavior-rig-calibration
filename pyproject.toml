@@ -14,7 +14,7 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = [
-    "aind_data_schema"
+    "aind_data_schema=0.22.8"
 ]
 
 [project.optional-dependencies]
