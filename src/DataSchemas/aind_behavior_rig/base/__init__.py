@@ -1,9 +1,13 @@
-from typing import Any, Callable, Optional, Union, Annotated
-from pydantic import GetJsonSchemaHandler, Field
-from pydantic_core import core_schema
-from pydantic.json_schema import JsonSchemaValue
-from semver import Version
+from typing import Any, Callable
+
+from aind_behavior_rig.utils import build_json_schema as base_build_json_schema
+from aind_data_schema.base import AindModel
 from aind_data_schema.models.devices import Calibration
+from aind_data_schema.models.stimulus import Software
+from pydantic import Field, GetJsonSchemaHandler
+from pydantic.json_schema import JsonSchemaValue
+from pydantic_core import core_schema
+from semver import Version
 
 
 class SemVerAnnotation:
@@ -42,5 +46,26 @@ class SemVerAnnotation:
 
 
 class CalibrationModel(Calibration):
-    """Base class for all aind-behavior-calibration models"""
-    version: SemVerAnnotation = Field(..., description="Version of the model.")
+    """Base class for all aind-behavior calibration models"""
+
+    model_version: SemVerAnnotation = Field(..., description="Version of the model.")
+
+    def build_json_schema(self):
+        base_build_json_schema(self)
+
+
+class OperationControlModel(AindModel):
+    """Base class for all aind-behavior operation control models"""
+
+    model_version: SemVerAnnotation = Field(..., description="Version of the model.")
+    calibration_code: Software = Field(None, description="Calibration workflow")
+    notes: str = Field(None, description="Notes about the experiment")
+
+    def build_json_schema(self):
+        base_build_json_schema(self)
+
+
+class BonsaiWorkflow(Software):
+    """Bonsai workflow"""
+
+    pass

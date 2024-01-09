@@ -1,4 +1,4 @@
-# aind-behavior-rig-calibration
+# aind-behavior-rig
 
 A repository containing code for data acquisition and processing for AIND behavior rigs.
 

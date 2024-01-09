@@ -1,8 +1,8 @@
+from typing import Dict, List, Literal, Optional
 
-from typing import List, Dict, Optional, Literal
-from pydantic import Field, PositiveFloat
+from aind_behavior_rig.base import CalibrationModel
 from aind_data_schema.base import AindModel
-from aind_behavior_rig_calibration.base import CalibrationModel
+from pydantic import Field, PositiveFloat
 
 
 class WaterValveCalibrationInput(AindModel):
@@ -53,7 +53,8 @@ class WaterValveCalibrationOutput(AindModel):
 
 class WaterValveCalibration(CalibrationModel):
     """Water valve calibration class"""
-    version: Literal["0.1.0"] = "0.1.0"
+
+    model_version: Literal["0.1.0"] = "0.1.0"
     description: Literal[
         "Calibration of the water valve delivery system"
     ] = "Calibration of the water valve delivery system"

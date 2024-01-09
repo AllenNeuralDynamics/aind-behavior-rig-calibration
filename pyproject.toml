@@ -3,8 +3,8 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "aind-behavior-rig-calibration"
-description = "A library that defines AIND data schema and validates JSON files for calibration models."
+name = "aind-behavior-rig"
+description = "A library that defines AIND data schema and validates JSON files for behavior rig models."
 license = {text = "MIT"}
 requires-python = ">=3.11"
 classifiers = [
@@ -14,13 +14,13 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = [
-    "aind_data_schema=0.22.8"
+    "aind_data_schema==0.22.8"
 ]
 
 [project.optional-dependencies]
 dev = [
-    'aind_behavior_rig_calibration[docs]',
-    'aind_behavior_rig_calibration[linters]'
+    'aind_behavior_rig[docs]',
+    'aind_behavior_rig[linters]'
 ]
 
 linters = [
@@ -42,7 +42,7 @@ docs = [
 where = ["src/DataSchemas"]
 
 [tool.setuptools.dynamic]
-version = {attr = "aind_behavior_rig_calibration.__version__"}
+version = {attr = "aind_behavior_rig.__version__"}
 readme = {file = ["README.md"]}
 
 [tool.black]
@@ -68,7 +68,7 @@ exclude = '''
 
 [tool.coverage.run]
 omit = ["*__init__*"]
-source = ["aind_behavior_rig_calibration", "tests"]
+source = ["aind_behavior_rig", "tests"]
 
 [tool.coverage.report]
 exclude_lines = ["if __name__ == .__main__.:", "pragma: no cover"]
