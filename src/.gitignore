@@ -3,3 +3,4 @@
 .vscode
 src.sln
 *bonsai.layout
+*.egg-info
