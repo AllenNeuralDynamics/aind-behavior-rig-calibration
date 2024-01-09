@@ -1,20 +1,46 @@
-from pydantic import Field
-from semver import VersionInfo
-from aind_data_schema.base import AindModel
+from typing import Any, Callable, Optional, Union, Annotated
+from pydantic import GetJsonSchemaHandler, Field
+from pydantic_core import core_schema
+from pydantic.json_schema import JsonSchemaValue
+from semver import Version
+from aind_data_schema.models.devices import Calibration
 
 
-class Version(VersionInfo):
-    """Version of the model"""
+class SemVerAnnotation:
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls,
+        _source_type: Any,
+        _handler: Callable[[Any], core_schema.CoreSchema],
+    ) -> core_schema.CoreSchema:
+        def validate_from_str(value: str) -> Version:
+            return Version.parse(value)
+
+        from_str_schema = core_schema.chain_schema(
+            [
+                core_schema.str_schema(),
+                core_schema.no_info_plain_validator_function(validate_from_str),
+            ]
+        )
+
+        return core_schema.json_or_python_schema(
+            json_schema=from_str_schema,
+            python_schema=core_schema.union_schema(
+                [
+                    core_schema.is_instance_schema(Version),
+                    from_str_schema,
+                ]
+            ),
+            serialization=core_schema.to_string_ser_schema(),
+        )
 
     @classmethod
-    def __get_validators__(cls):
-        yield cls.parse
-
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(examples=["1.0.2", "2.15.3-alpha", "21.3.15-beta+12345"])
+    def __get_pydantic_json_schema__(
+        cls, _core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> JsonSchemaValue:
+        return handler(core_schema.str_schema())
 
 
-class CalibrationModel(AindModel):
+class CalibrationModel(Calibration):
     """Base class for all aind-behavior-calibration models"""
-    version: Version = Field(..., description="Version of the model.")
+    version: SemVerAnnotation = Field(..., description="Version of the model.")
