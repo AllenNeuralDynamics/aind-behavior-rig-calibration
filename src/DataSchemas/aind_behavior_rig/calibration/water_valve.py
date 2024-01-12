@@ -1,13 +1,14 @@
 from typing import Dict, List, Literal, Optional
 
-from aind_behavior_rig.base import CalibrationModel
-from aind_data_schema.base import AindModel
+from aind_behavior_rig.base import RigCalibrationVersionedModel
+from aind_data_schema.models.devices import Calibration
 from pydantic import Field, PositiveFloat
 
 
-class WaterValveCalibrationInput(AindModel):
+class WaterValveCalibrationInput(RigCalibrationVersionedModel):
     """Input for water valve calibration class"""
 
+    model_version: Literal["0.1.0"] = "0.1.0"
     valve_open_interval: PositiveFloat = Field(
         ..., description="Time between two consecutive valve openings (s)", title="Valve open interval", units="s"
     )
@@ -20,9 +21,10 @@ class WaterValveCalibrationInput(AindModel):
     repeat_count: int = Field(..., ge=0, description="Number of times the valve opened.", title="Repeat count")
 
 
-class WaterValveCalibrationOutput(AindModel):
+class WaterValveCalibrationOutput(RigCalibrationVersionedModel):
     """Output for water valve calibration class"""
 
+    model_version: Literal["0.1.0"] = "0.1.0"
     interval_average: Optional[Dict[PositiveFloat, PositiveFloat]] = Field(
         None,
         description="Dictionary keyed by measured valve interval and corresponding average single event volume.",
@@ -51,12 +53,15 @@ class WaterValveCalibrationOutput(AindModel):
     )
 
 
-class WaterValveCalibration(CalibrationModel):
+class WaterValveCalibration(Calibration):
     """Water valve calibration class"""
 
-    model_version: Literal["0.1.0"] = "0.1.0"
+    device_name: str = Field(
+        "WaterValve", title="Device name", description="Must match a device name in rig/instrument"
+    )
     description: Literal[
         "Calibration of the water valve delivery system"
     ] = "Calibration of the water valve delivery system"
     input: List[WaterValveCalibrationInput] = Field([], title="Input of the calibration")
     output: Optional[WaterValveCalibrationOutput] = Field(None, title="Output of the calibration.")
+    notes: Optional[str] = Field(None, title="Notes")

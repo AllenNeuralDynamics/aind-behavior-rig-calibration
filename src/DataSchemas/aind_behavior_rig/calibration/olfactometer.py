@@ -1,8 +1,9 @@
-from typing import Dict, IntEnum, List, Literal, Optional
+from typing import Dict, IntEnum
 
 from aind_behavior_rig.base import OperationControlModel
+from aind_data_schema.base import AindModel
 from aind_data_schema.models.devices import OlfactometerChannel
-from aind_data_schema.models.stimulus import OlfactometerChannelConfig, OlfactoryStimulation
+from aind_data_schema.models.stimulus import OlfactometerChannelConfig
 from pydantic import Field
 
 
