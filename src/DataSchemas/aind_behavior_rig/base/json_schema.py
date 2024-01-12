@@ -5,6 +5,9 @@ from pydantic.json_schema import (
     _deduplicate_schemas,
 )
 from pydantic_core import core_schema
+from pydantic import BaseModel
+from os import PathLike
+from typing import TypeVar
 
 
 REF_TEMPLATE = "#/definitions/{model}"
@@ -41,3 +44,13 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
         if len(members) == 1:
             return members[0]
         return {"oneOf": members}
+
+
+Model = TypeVar("Model", bound=BaseModel)
+
+
+def export_schema(model: Model,
+                  output_path: PathLike,
+                  schema_generator: GenerateJsonSchema = CustomGenerateJsonSchema):
+    """Export the schema of a model to a json file"""
+    return model.model_json_schema(schema_generator=schema_generator)
