@@ -1,14 +1,13 @@
 from typing import Dict, List, Literal, Optional
 
-from aind_behavior_rig.base import RigCalibrationVersionedModel
+from aind_behavior_rig.base import RigCalibrationFullModel, RigCalibrationModel
 from aind_data_schema.models.devices import Calibration
 from pydantic import Field, PositiveFloat
 
 
-class WaterValveCalibrationInput(RigCalibrationVersionedModel):
+class WaterValveCalibrationInput(RigCalibrationModel):
     """Input for water valve calibration class"""
 
-    model_version: Literal["0.1.0"] = "0.1.0"
     valve_open_interval: PositiveFloat = Field(
         ..., description="Time between two consecutive valve openings (s)", title="Valve open interval", units="s"
     )
@@ -21,10 +20,9 @@ class WaterValveCalibrationInput(RigCalibrationVersionedModel):
     repeat_count: int = Field(..., ge=0, description="Number of times the valve opened.", title="Repeat count")
 
 
-class WaterValveCalibrationOutput(RigCalibrationVersionedModel):
+class WaterValveCalibrationOutput(RigCalibrationModel):
     """Output for water valve calibration class"""
 
-    model_version: Literal["0.1.0"] = "0.1.0"
     interval_average: Optional[Dict[PositiveFloat, PositiveFloat]] = Field(
         None,
         description="Dictionary keyed by measured valve interval and corresponding average single event volume.",
@@ -65,3 +63,9 @@ class WaterValveCalibration(Calibration):
     input: List[WaterValveCalibrationInput] = Field([], title="Input of the calibration")
     output: Optional[WaterValveCalibrationOutput] = Field(None, title="Output of the calibration.")
     notes: Optional[str] = Field(None, title="Notes")
+
+
+class WaterValveCalibrationModel(RigCalibrationFullModel):
+    spec_version: Literal["0.1.0"] = "0.1.0"
+    operation_control: Literal["Missing"] = "Missing"
+    calibration: WaterValveCalibration = Field(..., title="Calibration")

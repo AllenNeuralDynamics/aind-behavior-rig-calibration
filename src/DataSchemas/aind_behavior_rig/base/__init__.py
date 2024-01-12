@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from typing import Any, Callable
 
+import pydantic
 from aind_data_schema.base import AindCoreModel, AindModel
 from aind_data_schema.models.stimulus import Software
 from pydantic import Field, GetJsonSchemaHandler
@@ -54,7 +57,7 @@ class RigCalibrationModel(AindModel, extra="ignore"):
 class RigCalibrationVersionedModel(AindModel, extra="ignore"):
     """Base class for all RigCalibrationVersionedModel models"""
 
-    model_version: SemVerAnnotation = Field(..., description="Version of the model.")
+    spec_version: SemVerAnnotation = Field(..., description="Version of the specification json-schema model.")
 
 
 class OperationControlModel(RigCalibrationVersionedModel):
@@ -63,3 +66,10 @@ class OperationControlModel(RigCalibrationVersionedModel):
 
 class BonsaiWorkflow(Software):
     """Bonsai workflow"""
+
+
+class RigCalibrationFullModel(RigCalibrationVersionedModel):
+    """Base class for all RigCalibrationFullModel models"""
+
+    operation_control: OperationControlModel = Field(..., title="Operation control")
+    calibration: pydantic.BaseModel = Field(..., title="Calibration")
