@@ -27,7 +27,7 @@ These should only need to be installed once on a fresh new system, and are not r
 
 ## Notes on data-schema regeneration
 
- 1 - Install [bonsai.sgen dotnet tool](https://github.com/bonsai-rx/sgen)
+ 1 - Install [bonsai.sgen dotnet tool](https://github.com/bonsai-rx/sgen) by regenerating from `.config/dotnet-tools.json` by running `dotnet tool restore` in the root of the repository.
 
  2 - Run `bonsai.sgen` targeting the root schema in `src\DataSchemas`. E.g.:
 
