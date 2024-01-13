@@ -9,7 +9,7 @@ from pydantic import Field, GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 from semver import Version
-
+from datetime import datetime
 
 class SemVerAnnotation:
     @classmethod
@@ -67,3 +67,5 @@ class RigCalibrationFullModel(RigCalibrationCoreModel):
 
     operation_control: OperationControlModel = Field(..., title="Operation control")
     calibration: pydantic.BaseModel = Field(..., title="Calibration")
+    date: datetime = Field(..., title="Date")
+    notes: str = Field("", title="Notes")
