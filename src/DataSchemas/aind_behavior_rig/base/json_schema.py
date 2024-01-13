@@ -1,4 +1,3 @@
-from os import PathLike
 from typing import TypeVar
 
 from pydantic import BaseModel

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any, Callable
 
 import pydantic
@@ -9,7 +10,7 @@ from pydantic import Field, GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 from semver import Version
-from datetime import datetime
+
 
 class SemVerAnnotation:
     @classmethod

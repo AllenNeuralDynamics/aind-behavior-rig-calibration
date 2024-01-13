@@ -1,6 +1,6 @@
 from typing import Dict, List, Literal, Optional
 
-from aind_behavior_rig.base import RigCalibrationFullModel, RigCalibrationModel, OperationControlModel
+from aind_behavior_rig.base import OperationControlModel, RigCalibrationFullModel, RigCalibrationModel
 from aind_data_schema.models.devices import Calibration
 from pydantic import Field, PositiveFloat
 
@@ -68,9 +68,18 @@ class WaterValveCalibration(Calibration):
 class OlfactometerOperationControl(OperationControlModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
 
-    valve_open_time: list[PositiveFloat] = Field(..., min_length=1, description="An array with the times (s) the valve is open during calibration", units="s")
-    valve_open_interval: PositiveFloat = Field(0.2, description="Time between two consecutive valve openings (s)", title="Valve open interval", units="s")
-    repeat_count: int = Field(200, ge=1, description="Number of times the valve opened per measure valve_open_time entry", title="Repeat count")
+    valve_open_time: list[PositiveFloat] = Field(
+        ..., min_length=1, description="An array with the times (s) the valve is open during calibration", units="s"
+    )
+    valve_open_interval: PositiveFloat = Field(
+        0.2, description="Time between two consecutive valve openings (s)", title="Valve open interval", units="s"
+    )
+    repeat_count: int = Field(
+        200,
+        ge=1,
+        description="Number of times the valve opened per measure valve_open_time entry",
+        title="Repeat count",
+    )
 
 
 class WaterValveCalibrationModel(RigCalibrationFullModel):
