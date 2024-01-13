@@ -1,0 +1,204 @@
+{
+  "definitions": {
+    "ChannelType": {
+      "description": "Olfactometer channel types",
+      "enum": [
+        "Odor",
+        "Carrier"
+      ],
+      "title": "ChannelType",
+      "type": "string"
+    },
+    "ConcentrationUnit": {
+      "description": "Concentraion units",
+      "enum": [
+        "molar",
+        "micromolar",
+        "nanomolar",
+        "% m/m",
+        "% v/v"
+      ],
+      "title": "ConcentrationUnit",
+      "type": "string"
+    },
+    "OlfactometerChannel": {
+      "additionalProperties": false,
+      "description": "description of a Olfactometer channel",
+      "properties": {
+        "channel_index": {
+          "title": "Channel index",
+          "type": "integer"
+        },
+        "channel_type": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ChannelType"
+            }
+          ],
+          "default": "Odor",
+          "title": "Channel type"
+        },
+        "flow_capacity": {
+          "default": 100,
+          "enum": [
+            100,
+            1000
+          ],
+          "title": "Flow capacity",
+          "type": "integer"
+        },
+        "flow_unit": {
+          "default": "mL/min",
+          "title": "Flow unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "channel_index"
+      ],
+      "title": "OlfactometerChannel",
+      "type": "object"
+    },
+    "OlfactometerChannelConfig": {
+      "additionalProperties": false,
+      "description": "Description of olfactometer channel configurations",
+      "properties": {
+        "channel_index": {
+          "title": "Channel index",
+          "type": "integer"
+        },
+        "odorant": {
+          "title": "Odorant",
+          "type": "string"
+        },
+        "odorant_dilution": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Odorant dilution"
+        },
+        "odorant_dilution_unit": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ConcentrationUnit"
+            }
+          ],
+          "default": "% v/v",
+          "title": "Dilution unit"
+        }
+      },
+      "required": [
+        "channel_index",
+        "odorant",
+        "odorant_dilution"
+      ],
+      "title": "OlfactometerChannelConfig",
+      "type": "object"
+    },
+    "OlfactometerOperationControl": {
+      "description": "Olfactometer operation control model that is used to run a calibration data acquisition workflow",
+      "properties": {
+        "channel_config": {
+          "additionalProperties": {
+            "$ref": "#/definitions/OlfactometerChannel"
+          },
+          "default": {},
+          "description": "Configuration of olfactometer channels",
+          "title": "Channel Config",
+          "type": "object"
+        },
+        "stimulus_config": {
+          "additionalProperties": {
+            "$ref": "#/definitions/OlfactometerChannelConfig"
+          },
+          "default": {},
+          "description": "Configuration of the odor stimuli",
+          "title": "Stimulus Config",
+          "type": "object"
+        },
+        "full_flow_rate": {
+          "default": 1000,
+          "description": "Full flow rate of the olfactometer",
+          "maximum": 1000.0,
+          "minimum": 0.0,
+          "title": "Full Flow Rate",
+          "type": "number"
+        },
+        "target_stimulus_flow_rate": {
+          "default": 100,
+          "description": "Target flow rate of the odor stimuli",
+          "maximum": 1000.0,
+          "minimum": 0.0,
+          "title": "Target Stimulus Flow Rate",
+          "type": "number"
+        },
+        "n_repeats_per_stimulus": {
+          "default": 1,
+          "description": "Number of repeats per stimulus",
+          "minimum": 1,
+          "title": "N Repeats Per Stimulus",
+          "type": "integer"
+        },
+        "time_on": {
+          "default": 1,
+          "description": "Time (s) the valve is open during calibration",
+          "minimum": 0.0,
+          "title": "Time On",
+          "type": "number",
+          "units": "s"
+        },
+        "time_off": {
+          "default": 1,
+          "description": "Time (s) the valve is close during calibration",
+          "minimum": 0.0,
+          "title": "Time Off",
+          "type": "number",
+          "units": "s"
+        }
+      },
+      "title": "OlfactometerOperationControl",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "describedBy": {
+      "title": "Describedby",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1.0",
+      "default": "0.1.0",
+      "title": "Schema Version"
+    },
+    "operation_control": {
+      "$ref": "#/definitions/OlfactometerOperationControl"
+    },
+    "calibration": {
+      "const": "Missing",
+      "default": "Missing",
+      "title": "Calibration"
+    },
+    "date": {
+      "format": "date-time",
+      "title": "Date",
+      "type": "string"
+    },
+    "notes": {
+      "default": "",
+      "title": "Notes",
+      "type": "string"
+    }
+  },
+  "required": [
+    "describedBy",
+    "operation_control",
+    "date"
+  ],
+  "title": "OlfactometerCalibrationModel",
+  "type": "object"
+}

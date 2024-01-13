@@ -1,0 +1,246 @@
+{
+  "definitions": {
+    "OlfactometerOperationControl": {
+      "description": "Olfactometer operation control model that is used to run a calibration data acquisition workflow",
+      "properties": {
+        "valve_open_time": {
+          "description": "An array with the times (s) the valve is open during calibration",
+          "items": {
+            "exclusiveMinimum": 0.0,
+            "type": "number"
+          },
+          "minItems": 1,
+          "title": "Valve Open Time",
+          "type": "array",
+          "units": "s"
+        },
+        "valve_open_interval": {
+          "default": 0.2,
+          "description": "Time between two consecutive valve openings (s)",
+          "exclusiveMinimum": 0.0,
+          "title": "Valve open interval",
+          "type": "number",
+          "units": "s"
+        },
+        "repeat_count": {
+          "default": 200,
+          "description": "Number of times the valve opened per measure valve_open_time entry",
+          "minimum": 1,
+          "title": "Repeat count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "valve_open_time"
+      ],
+      "title": "OlfactometerOperationControl",
+      "type": "object"
+    },
+    "WaterValveCalibration": {
+      "additionalProperties": false,
+      "description": "Water valve calibration class",
+      "properties": {
+        "calibration_date": {
+          "format": "date-time",
+          "title": "Date and time of calibration",
+          "type": "string"
+        },
+        "device_name": {
+          "default": "WaterValve",
+          "description": "Must match a device name in rig/instrument",
+          "title": "Device name",
+          "type": "string"
+        },
+        "description": {
+          "const": "Calibration of the water valve delivery system",
+          "default": "Calibration of the water valve delivery system",
+          "title": "Description"
+        },
+        "input": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/WaterValveCalibrationInput"
+          },
+          "title": "Input of the calibration",
+          "type": "array"
+        },
+        "output": {
+          "default": null,
+          "oneOf": [
+            {
+              "$ref": "#/definitions/WaterValveCalibrationOutput"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Output of the calibration."
+        },
+        "notes": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "calibration_date"
+      ],
+      "title": "WaterValveCalibration",
+      "type": "object"
+    },
+    "WaterValveCalibrationInput": {
+      "description": "Input for water valve calibration class",
+      "properties": {
+        "valve_open_interval": {
+          "description": "Time between two consecutive valve openings (s)",
+          "exclusiveMinimum": 0.0,
+          "title": "Valve open interval",
+          "type": "number",
+          "units": "s"
+        },
+        "valve_open_time": {
+          "description": "Valve open interval (s)",
+          "exclusiveMinimum": 0.0,
+          "title": "Valve open time",
+          "type": "number",
+          "units": "s"
+        },
+        "water_weight": {
+          "description": "Weight of water delivered (g)",
+          "items": {
+            "exclusiveMinimum": 0.0,
+            "type": "number"
+          },
+          "minItems": 1,
+          "title": "Water weight",
+          "type": "array",
+          "units": "g"
+        },
+        "repeat_count": {
+          "description": "Number of times the valve opened.",
+          "minimum": 0,
+          "title": "Repeat count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "valve_open_interval",
+        "valve_open_time",
+        "water_weight",
+        "repeat_count"
+      ],
+      "title": "WaterValveCalibrationInput",
+      "type": "object"
+    },
+    "WaterValveCalibrationOutput": {
+      "description": "Output for water valve calibration class",
+      "properties": {
+        "interval_average": {
+          "default": null,
+          "description": "Dictionary keyed by measured valve interval and corresponding average single event volume.",
+          "oneOf": [
+            {
+              "additionalProperties": {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Interval average",
+          "units": "s"
+        },
+        "slope": {
+          "description": "Slope of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)",
+          "title": "Regression slope",
+          "type": "number",
+          "units": "g/s"
+        },
+        "offset": {
+          "description": "Offset of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)",
+          "title": "Regression offset",
+          "type": "number",
+          "units": "g"
+        },
+        "r2": {
+          "description": "R2 metric from the linear model.",
+          "exclusiveMinimum": 0.0,
+          "maximum": 1.0,
+          "title": "R2",
+          "type": "number"
+        },
+        "valid_domain": {
+          "default": null,
+          "description": "The optional time-intervals the calibration curve was calculated on.",
+          "oneOf": [
+            {
+              "items": {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              "minItems": 2,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Valid domain",
+          "units": "s"
+        }
+      },
+      "required": [
+        "slope",
+        "offset",
+        "r2"
+      ],
+      "title": "WaterValveCalibrationOutput",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "describedBy": {
+      "title": "Describedby",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1.0",
+      "default": "0.1.0",
+      "title": "Schema Version"
+    },
+    "operation_control": {
+      "$ref": "#/definitions/OlfactometerOperationControl"
+    },
+    "calibration": {
+      "$ref": "#/definitions/WaterValveCalibration"
+    },
+    "date": {
+      "format": "date-time",
+      "title": "Date",
+      "type": "string"
+    },
+    "notes": {
+      "default": "",
+      "title": "Notes",
+      "type": "string"
+    }
+  },
+  "required": [
+    "describedBy",
+    "operation_control",
+    "calibration",
+    "date"
+  ],
+  "title": "WaterValveCalibrationModel",
+  "type": "object"
+}
