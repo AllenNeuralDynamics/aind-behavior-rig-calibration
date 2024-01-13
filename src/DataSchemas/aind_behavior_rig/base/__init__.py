@@ -54,13 +54,7 @@ class RigCalibrationModel(AindModel, extra="ignore"):
     """Base class for all RigCalibrationModel models"""
 
 
-class RigCalibrationVersionedModel(AindModel, extra="ignore"):
-    """Base class for all RigCalibrationVersionedModel models"""
-
-    spec_version: SemVerAnnotation = Field(..., description="Version of the specification json-schema model.")
-
-
-class OperationControlModel(RigCalibrationVersionedModel):
+class OperationControlModel(RigCalibrationModel):
     """Base class for all aind-behavior operation control models"""
 
 
@@ -68,7 +62,7 @@ class BonsaiWorkflow(Software):
     """Bonsai workflow"""
 
 
-class RigCalibrationFullModel(RigCalibrationVersionedModel):
+class RigCalibrationFullModel(RigCalibrationCoreModel):
     """Base class for all RigCalibrationFullModel models"""
 
     operation_control: OperationControlModel = Field(..., title="Operation control")

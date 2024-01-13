@@ -33,6 +33,6 @@ class OlfactometerOperationControl(OperationControlModel):
 
 
 class OlfactometerCalibrationModel(RigCalibrationFullModel):
-    spec_version: Literal["0.1.0"] = "0.1.0"
-    operation_control: OperationControlModel
+    schema_version: Literal["0.1.0"] = "0.1.0"
+    operation_control: OlfactometerOperationControl
     calibration: Literal["Missing"] = "Missing"

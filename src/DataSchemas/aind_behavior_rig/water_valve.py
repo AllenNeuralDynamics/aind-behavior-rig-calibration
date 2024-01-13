@@ -66,6 +66,6 @@ class WaterValveCalibration(Calibration):
 
 
 class WaterValveCalibrationModel(RigCalibrationFullModel):
-    spec_version: Literal["0.1.0"] = "0.1.0"
+    schema_version: Literal["0.1.0"] = "0.1.0"
     operation_control: Literal["Missing"] = "Missing"
     calibration: WaterValveCalibration = Field(..., title="Calibration")
