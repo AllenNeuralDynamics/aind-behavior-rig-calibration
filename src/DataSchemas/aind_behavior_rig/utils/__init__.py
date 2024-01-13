@@ -2,7 +2,7 @@ from enum import Enum
 from os import PathLike
 from subprocess import CompletedProcess, run
 from typing import List, Optional
-
+from string import capwords
 import pydantic
 
 
@@ -37,18 +37,27 @@ def bonsai_sgen(
         serializer (List[BonsaiSgenSerializers], optional): Specifies the serializer data annotations to include in the generated classes. Defaults to [BonsaiSgenSerializers.JSON, BonsaiSgenSerializers.YAML].
     """
 
-    cmd_string = f"bonsai-sgen --schema {schema_path} --output {output_path}"
-    cmd_string += "" if namespace is None else f"--namespace {namespace}"
-    cmd_string += "" if root_element is None else f"--root {root_element}"
+    cmd_string = f"bonsai.sgen --schema \"{schema_path}\" --output \"{output_path}\""
+    cmd_string += "" if namespace is None else f" --namespace {namespace}"
+    cmd_string += "" if root_element is None else f" --root {root_element}"
 
     if len(serializer) == 0 or BonsaiSgenSerializers.NONE in serializer:
         cmd_string += " --serializer none"
     else:
-        cmd_string += " --serializer "
-        for i, serializer in enumerate(serializer):
-            cmd_string += f"{serializer.value}"
-            if i < len(serializer) - 1:
-                cmd_string += "|"
-    return run(cmd_string, shell=True)
+        cmd_string += " --serializer"
+        cmd_string += " ".join([f" {sr.value}" for sr in serializer])
 
-    # --serializer {serializer}"
+    return run(cmd_string, shell=True, check=True)
+
+
+def snake_to_pascale_case(s: str) -> str:
+    """
+    Converts a snake_case string to PascalCase.
+
+    Args:
+        s (str): The snake_case string to be converted.
+
+    Returns:
+        str: The PascalCase string.
+    """
+    return "".join(map(capwords, s.split("_")))
