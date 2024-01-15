@@ -65,7 +65,7 @@ class WaterValveCalibration(Calibration):
     notes: Optional[str] = Field(None, title="Notes")
 
 
-class OlfactometerOperationControl(OperationControlModel):
+class WaterValveOperationControl(OperationControlModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
 
     valve_open_time: list[PositiveFloat] = Field(
@@ -84,5 +84,5 @@ class OlfactometerOperationControl(OperationControlModel):
 
 class WaterValveCalibrationModel(RigCalibrationFullModel):
     schema_version: Literal["0.1.0"] = "0.1.0"
-    operation_control: OlfactometerOperationControl
+    operation_control: WaterValveOperationControl
     calibration: WaterValveCalibration
