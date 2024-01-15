@@ -1,12 +1,11 @@
 import unittest
-import json
 from pydantic import ValidationError
 from datetime import datetime
 from aind_data_schema.models.devices import Calibration
-from aind_behavior_rig_calibration.water_valve_calibration import WaterValveCalibration, WaterValveCalibrationInput, WaterValveCalibrationOutput
+from aind_behavior_rig.water_valve import WaterValveCalibration, WaterValveCalibrationInput, WaterValveCalibrationOutput
 
 
-class WaterValveCalibrationTests(unittest.TestCase):
+class WaterValveTests(unittest.TestCase):
     """Tests the water calibration model."""
 
     def test_compare_versions(self):
