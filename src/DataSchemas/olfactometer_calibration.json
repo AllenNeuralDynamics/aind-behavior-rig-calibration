@@ -129,14 +129,6 @@
           "title": "Full Flow Rate",
           "type": "number"
         },
-        "target_stimulus_flow_rate": {
-          "default": 100,
-          "description": "Target flow rate of the odor stimuli",
-          "maximum": 1000.0,
-          "minimum": 0.0,
-          "title": "Target Stimulus Flow Rate",
-          "type": "number"
-        },
         "n_repeats_per_stimulus": {
           "default": 1,
           "description": "Number of repeats per stimulus",
@@ -183,21 +175,84 @@
       "default": "Missing",
       "title": "Calibration"
     },
-    "date": {
-      "format": "date-time",
-      "title": "Date",
+    "rootPath": {
+      "description": "Root path of the experiment",
+      "title": "Rootpath",
       "type": "string"
+    },
+    "date": {
+      "default": null,
+      "oneOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Date"
     },
     "notes": {
       "default": "",
       "title": "Notes",
       "type": "string"
+    },
+    "experiment": {
+      "default": "Calibration",
+      "description": "Name of the experiment",
+      "title": "Experiment",
+      "type": "string"
+    },
+    "experimenter": {
+      "default": "Experimenter",
+      "description": "Name of the subject",
+      "title": "Experimenter",
+      "type": "string"
+    },
+    "allowDirty": {
+      "default": false,
+      "description": "Allow code to run from dirty repository",
+      "title": "Allowdirty",
+      "type": "boolean"
+    },
+    "remoteDataPath": {
+      "default": null,
+      "description": "Path to remote data. If null, no attempt to copy data will be made",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Remotedatapath"
+    },
+    "rngSeed": {
+      "default": 0,
+      "description": "Seed of the random number generator. If 0 it will be randomized.",
+      "title": "Rngseed",
+      "type": "integer"
+    },
+    "commitHash": {
+      "default": null,
+      "description": "Commit hash of the repository",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Commithash"
     }
   },
   "required": [
     "describedBy",
     "operation_control",
-    "date"
+    "rootPath"
   ],
   "title": "OlfactometerCalibrationModel",
   "type": "object"
