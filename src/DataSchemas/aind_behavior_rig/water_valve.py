@@ -84,5 +84,6 @@ class WaterValveOperationControl(OperationControlModel):
 
 class WaterValveCalibrationModel(RigCalibrationFullModel):
     schema_version: Literal["0.1.0"] = "0.1.0"
+    describedBy: Literal[""] = ""
     operation_control: WaterValveOperationControl
-    calibration: WaterValveCalibration
+    calibration: Optional[WaterValveCalibration] = Field(None, description="Calibration data")
