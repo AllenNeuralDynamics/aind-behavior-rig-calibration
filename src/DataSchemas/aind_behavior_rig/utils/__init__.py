@@ -50,7 +50,7 @@ def bonsai_sgen(
     return run(cmd_string, shell=True, check=True)
 
 
-def snake_to_pascale_case(s: str) -> str:
+def snake_to_pascal_case(s: str) -> str:
     """
     Converts a snake_case string to PascalCase.
 

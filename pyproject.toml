@@ -10,8 +10,7 @@ requires-python = ">=3.11"
 classifiers = [
     "Programming Language :: Python :: 3"
 ]
-readme = "README.md"
-dynamic = ["version"]
+dynamic = ["version", "readme"]
 
 dependencies = [
     "aind_data_schema"
