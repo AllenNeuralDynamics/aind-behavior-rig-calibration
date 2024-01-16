@@ -10,15 +10,16 @@
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
                  xmlns:p4="clr-namespace:AindBehaviorRigCalibration.OlfactometerCalibration;assembly=Extensions"
                  xmlns:p5="clr-namespace:AindVrForagingDataSchema.Rig;assembly=Extensions"
-                 xmlns:p6="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
-                 xmlns:p7="clr-namespace:AllenNeuralDynamics.VersionControl;assembly=AllenNeuralDynamics.VersionControl"
+                 xmlns:p6="clr-namespace:System.Reactive;assembly=System.Reactive.Core"
+                 xmlns:p7="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
+                 xmlns:p8="clr-namespace:AllenNeuralDynamics.VersionControl;assembly=AllenNeuralDynamics.VersionControl"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
-                 xmlns:p8="clr-namespace:Harp.Olfactometer;assembly=Harp.Olfactometer"
-                 xmlns:p9="clr-namespace:AllenNeuralDynamics.Core.Logging;assembly=AllenNeuralDynamics.Core"
-                 xmlns:p10="clr-namespace:;assembly=Extensions"
-                 xmlns:p11="clr-namespace:Harp.Olfactometer;assembly=Extensions"
-                 xmlns:p12="clr-namespace:Harp.TimestampGeneratorGen3;assembly=Harp.TimestampGeneratorGen3"
-                 xmlns:p13="clr-namespace:Harp.AnalogInput;assembly=Extensions"
+                 xmlns:p9="clr-namespace:Harp.Olfactometer;assembly=Harp.Olfactometer"
+                 xmlns:p10="clr-namespace:AllenNeuralDynamics.Core.Logging;assembly=AllenNeuralDynamics.Core"
+                 xmlns:p11="clr-namespace:;assembly=Extensions"
+                 xmlns:p12="clr-namespace:Harp.Olfactometer;assembly=Extensions"
+                 xmlns:p13="clr-namespace:Harp.TimestampGeneratorGen3;assembly=Harp.TimestampGeneratorGen3"
+                 xmlns:p14="clr-namespace:Harp.AnalogInput;assembly=Extensions"
                  xmlns:gl="clr-namespace:Bonsai.Shaders;assembly=Bonsai.Shaders"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -58,11 +59,6 @@
                 <p3:IsInitiallyChecked>false</p3:IsInitiallyChecked>
               </Combinator>
             </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Take">
-                <rx:Count>1</rx:Count>
-              </Combinator>
-            </Expression>
             <Expression xsi:type="VisualizerMapping">
               <VisualizerType xsi:type="TypeMapping" TypeArguments="viz:BooleanTimeSeriesVisualizer" />
             </Expression>
@@ -75,18 +71,43 @@
               <viz:CellSpans />
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="rx:Condition">
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Unit" />
+            <Expression xsi:type="MulticastSubject">
+              <Name>StartExperimentTrigger</Name>
+            </Expression>
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
             <Edge From="2" To="3" Label="Source1" />
-            <Edge From="3" To="9" Label="Source1" />
+            <Edge From="3" To="8" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="9" Label="Source2" />
+            <Edge From="5" To="8" Label="Source2" />
             <Edge From="6" To="7" Label="Source1" />
-            <Edge From="7" To="8" Label="Source1" />
-            <Edge From="8" To="9" Label="Source3" />
-            <Edge From="9" To="10" Label="Source1" />
+            <Edge From="6" To="10" Label="Source1" />
+            <Edge From="7" To="8" Label="Source3" />
+            <Edge From="8" To="9" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="11" To="12" Label="Source1" />
+            <Edge From="12" To="13" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -166,6 +187,20 @@
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>HarpTimestampSource</Name>
       </Expression>
+      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p6:Unit">
+        <rx:Name>StartExperimentTrigger</rx:Name>
+      </Expression>
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>StartLogging</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Delay">
+          <rx:DueTime>PT1S</rx:DueTime>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>StartExperiment</Name>
+      </Expression>
       <Expression xsi:type="GroupWorkflow">
         <Name>Validation</Name>
         <Workflow>
@@ -207,21 +242,21 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:ThrowException">
-                <p6:Message>Channel3 must be defined as a carrier!</p6:Message>
+              <Combinator xsi:type="p7:ThrowException">
+                <p7:Message>Channel3 must be defined as a carrier!</p7:Message>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:CreateRepository">
-                <p7:Path>../.</p7:Path>
+              <Combinator xsi:type="p8:CreateRepository">
+                <p8:Path>../.</p8:Path>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:AsyncSubject">
               <Name>Repository</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:IsRepositoryClean">
-                <p7:IgnoreUntracked>false</p7:IgnoreUntracked>
+              <Combinator xsi:type="p8:IsRepositoryClean">
+                <p8:IgnoreUntracked>false</p8:IgnoreUntracked>
               </Combinator>
             </Expression>
             <Expression xsi:type="BitwiseNot" />
@@ -252,8 +287,8 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:ThrowException">
-                <p6:Message>Repository is not clean! Please discard all local changes.</p6:Message>
+              <Combinator xsi:type="p7:ThrowException">
+                <p7:Message>Repository is not clean! Please discard all local changes.</p7:Message>
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -282,8 +317,8 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:ThrowException">
-                <p6:Message>No water valve calibration settings found!</p6:Message>
+              <Combinator xsi:type="p7:ThrowException">
+                <p7:Message>No water valve calibration settings found!</p7:Message>
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -304,8 +339,8 @@
                   <Expression xsi:type="SubscribeSubject">
                     <Name>HarpOlfactometerEvents</Name>
                   </Expression>
-                  <Expression xsi:type="p8:Parse">
-                    <harp:Register xsi:type="p8:TimestampedChannel3ActualFlow" />
+                  <Expression xsi:type="p9:Parse">
+                    <harp:Register xsi:type="p9:TimestampedChannel3ActualFlow" />
                   </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>Value</Selector>
@@ -358,8 +393,8 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:ThrowException">
-                <p6:Message>Flow on Channel3 is lower than expected.</p6:Message>
+              <Combinator xsi:type="p7:ThrowException">
+                <p7:Message>Flow on Channel3 is lower than expected.</p7:Message>
               </Combinator>
             </Expression>
           </Nodes>
@@ -441,7 +476,7 @@
                       </Edges>
                     </Workflow>
                   </Expression>
-                  <Expression xsi:type="PropertySource" TypeArguments="p8:CreateEndValvesStatePayload,p8:EndValves">
+                  <Expression xsi:type="PropertySource" TypeArguments="p9:CreateEndValvesStatePayload,p9:EndValves">
                     <MemberName>EndValvesState</MemberName>
                     <Value>EndValve0</Value>
                   </Expression>
@@ -460,16 +495,16 @@
                       </Edges>
                     </Workflow>
                   </Expression>
-                  <Expression xsi:type="PropertySource" TypeArguments="p8:CreateEndValvesStatePayload,p8:EndValves">
+                  <Expression xsi:type="PropertySource" TypeArguments="p9:CreateEndValvesStatePayload,p9:EndValves">
                     <MemberName>EndValvesState</MemberName>
                     <Value>None</Value>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Merge" />
                   </Expression>
-                  <Expression xsi:type="p8:Format">
+                  <Expression xsi:type="p9:Format">
                     <harp:MessageType>Write</harp:MessageType>
-                    <harp:Register xsi:type="p8:EndValveState" />
+                    <harp:Register xsi:type="p9:EndValveState" />
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
                     <Name>HarpOlfactometerCommands</Name>
@@ -495,23 +530,11 @@
           <Edges />
         </Workflow>
       </Expression>
-      <Expression xsi:type="Unit" />
-      <Expression xsi:type="rx:PublishSubject">
-        <Name>StartLogging</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Delay">
-          <rx:DueTime>PT1S</rx:DueTime>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="rx:PublishSubject">
-        <Name>StartExperiment</Name>
-      </Expression>
       <Expression xsi:type="GroupWorkflow">
         <Name>Init</Name>
         <Workflow>
           <Nodes>
-            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p9:SoftwareEvent">
+            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p10:SoftwareEvent">
               <rx:Name>SoftwareEvent</rx:Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -582,8 +605,8 @@
               <Combinator xsi:type="rx:Zip" />
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p9:CreateSoftwareEvent">
-                <p9:EventName>OdorConfig</p9:EventName>
+              <Combinator xsi:type="p10:CreateSoftwareEvent">
+                <p10:EventName>OdorConfig</p10:EventName>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -736,15 +759,15 @@
                     </PropertyMappings>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p10:CreateOdorMix">
-                      <p10:channel3AsCarrier>true</p10:channel3AsCarrier>
-                      <p10:PercentageChannel0>0</p10:PercentageChannel0>
-                      <p10:PercentageChannel1>0</p10:PercentageChannel1>
-                      <p10:PercentageChannel2>0</p10:PercentageChannel2>
-                      <p10:PercentageChannel3>NaN</p10:PercentageChannel3>
-                      <p10:Channel3AsCarrier>true</p10:Channel3AsCarrier>
-                      <p10:TargetOdorFlow>100</p10:TargetOdorFlow>
-                      <p10:TotalFlow>1000</p10:TotalFlow>
+                    <Combinator xsi:type="p11:CreateOdorMix">
+                      <p11:channel3AsCarrier>true</p11:channel3AsCarrier>
+                      <p11:PercentageChannel0>0</p11:PercentageChannel0>
+                      <p11:PercentageChannel1>0</p11:PercentageChannel1>
+                      <p11:PercentageChannel2>0</p11:PercentageChannel2>
+                      <p11:PercentageChannel3>NaN</p11:PercentageChannel3>
+                      <p11:Channel3AsCarrier>true</p11:Channel3AsCarrier>
+                      <p11:TargetOdorFlow>100</p11:TargetOdorFlow>
+                      <p11:TotalFlow>1000</p11:TotalFlow>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
@@ -1000,10 +1023,10 @@
                     <Name>HarpOlfactometerEvents</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p11:FilterVisibility" />
+                    <Combinator xsi:type="p12:FilterVisibility" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p8:GroupByRegister" />
+                    <Combinator xsi:type="p9:GroupByRegister" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
@@ -1028,7 +1051,7 @@
                     <Name>HarpClockGenEvents</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p12:GroupByRegister" />
+                    <Combinator xsi:type="p13:GroupByRegister" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
@@ -1053,7 +1076,7 @@
                     <Name>HarpAnalogInputEvents</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p13:FilterVisibility" />
+                    <Combinator xsi:type="p14:FilterVisibility" />
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="p1:GroupByRegister" />
@@ -1123,8 +1146,8 @@
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p9:CreateSoftwareEvent">
-                      <p9:EventName>SoftwareEvent</p9:EventName>
+                    <Combinator xsi:type="p10:CreateSoftwareEvent">
+                      <p10:EventName>SoftwareEvent</p10:EventName>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
@@ -1137,10 +1160,10 @@
                     <Combinator xsi:type="harp:CreateTimestamped" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p9:TimestampSoftwareEvent" />
+                    <Combinator xsi:type="p10:TimestampSoftwareEvent" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p9:SerializeToJson" />
+                    <Combinator xsi:type="p10:SerializeToJson" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogDataSchema.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
@@ -1292,7 +1315,7 @@
                     <Combinator xsi:type="harp:CreateTimestamped" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p9:TimestampSoftwareEvent" />
+                    <Combinator xsi:type="p10:TimestampSoftwareEvent" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogSoftwareEventsDemux.bonsai">
                     <LoggerName>SoftwareEvents</LoggerName>
@@ -1344,15 +1367,15 @@
         <Workflow>
           <Nodes>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p10:CreateOdorMix">
-                <p10:channel3AsCarrier>true</p10:channel3AsCarrier>
-                <p10:PercentageChannel0>0</p10:PercentageChannel0>
-                <p10:PercentageChannel1>0</p10:PercentageChannel1>
-                <p10:PercentageChannel2>0</p10:PercentageChannel2>
-                <p10:PercentageChannel3>NaN</p10:PercentageChannel3>
-                <p10:Channel3AsCarrier>true</p10:Channel3AsCarrier>
-                <p10:TargetOdorFlow>100</p10:TargetOdorFlow>
-                <p10:TotalFlow>1000</p10:TotalFlow>
+              <Combinator xsi:type="p11:CreateOdorMix">
+                <p11:channel3AsCarrier>true</p11:channel3AsCarrier>
+                <p11:PercentageChannel0>0</p11:PercentageChannel0>
+                <p11:PercentageChannel1>0</p11:PercentageChannel1>
+                <p11:PercentageChannel2>0</p11:PercentageChannel2>
+                <p11:PercentageChannel3>NaN</p11:PercentageChannel3>
+                <p11:Channel3AsCarrier>true</p11:Channel3AsCarrier>
+                <p11:TargetOdorFlow>100</p11:TargetOdorFlow>
+                <p11:TotalFlow>1000</p11:TotalFlow>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -1420,7 +1443,7 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:StripDirectoryPath" />
+              <Combinator xsi:type="p7:StripDirectoryPath" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>CompoundRootPath</Name>
@@ -1441,10 +1464,10 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:StartRobocopy">
-                <p6:CreateLog>true</p6:CreateLog>
-                <p6:Arguments>/E /DCOPY:DAT /R:100 /W:3 /tee</p6:Arguments>
-                <p6:ProcessWindowStyle>Normal</p6:ProcessWindowStyle>
+              <Combinator xsi:type="p7:StartRobocopy">
+                <p7:CreateLog>true</p7:CreateLog>
+                <p7:Arguments>/E /DCOPY:DAT /R:100 /W:3 /tee</p7:Arguments>
+                <p7:ProcessWindowStyle>Normal</p7:ProcessWindowStyle>
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -1536,9 +1559,9 @@
       <Edge From="19" To="20" Label="Source1" />
       <Edge From="20" To="21" Label="Source1" />
       <Edge From="21" To="22" Label="Source1" />
+      <Edge From="23" To="24" Label="Source1" />
+      <Edge From="24" To="25" Label="Source1" />
       <Edge From="25" To="26" Label="Source1" />
-      <Edge From="26" To="27" Label="Source1" />
-      <Edge From="27" To="28" Label="Source1" />
       <Edge From="30" To="31" Label="Source1" />
       <Edge From="31" To="32" Label="Source1" />
       <Edge From="32" To="33" Label="Source1" />
