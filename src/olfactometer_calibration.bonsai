@@ -158,7 +158,7 @@
         <Name>DEPRECATE</Name>
         <Text><![CDATA[To be replaced by the rig base class from schemas]]></Text>
       </Expression>
-      <Expression xsi:type="p5:DeserializeFromJson">
+      <Expression xsi:type="p5:DeserializeFromYaml">
         <p5:Type xsi:type="TypeMapping" TypeArguments="p5:AindVrForagingRig" />
       </Expression>
       <Expression xsi:type="Combinator">
