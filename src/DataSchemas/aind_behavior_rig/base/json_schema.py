@@ -1,7 +1,7 @@
 from typing import TypeVar
 
 from pydantic import BaseModel
-from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue, _deduplicate_schemas
+from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue, JsonSchemaMode, _deduplicate_schemas
 from pydantic_core import core_schema
 
 
@@ -37,7 +37,8 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
 
 Model = TypeVar("Model", bound=BaseModel)
 
-
-def export_schema(model: Model, schema_generator: GenerateJsonSchema = CustomGenerateJsonSchema):
+def export_schema(model: Model,
+                  schema_generator: GenerateJsonSchema = CustomGenerateJsonSchema,
+                  mode: JsonSchemaMode = 'serialization'):
     """Export the schema of a model to a json file"""
-    return model.model_json_schema(schema_generator=schema_generator)
+    return model.model_json_schema(schema_generator=schema_generator, mode=mode)

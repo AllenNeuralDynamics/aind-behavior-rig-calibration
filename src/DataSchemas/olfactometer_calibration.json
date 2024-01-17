@@ -123,15 +123,8 @@
           "type": "string"
         },
         "odorant_dilution": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "string"
-            }
-          ],
-          "title": "Odorant dilution"
+          "title": "Odorant dilution",
+          "type": "string"
         },
         "odorant_dilution_unit": {
           "allOf": [

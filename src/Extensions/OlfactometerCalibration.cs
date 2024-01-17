@@ -365,7 +365,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         private string _odorant;
     
-        private Odorant_dilution _odorant_dilution;
+        private string _odorant_dilution;
     
         private ConcentrationUnit _odorant_dilution_unit = AindBehaviorRigCalibration.OlfactometerCalibration.ConcentrationUnit.__v_v;
     
@@ -409,10 +409,9 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("odorant_dilution", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="odorant_dilution")]
-        public Odorant_dilution Odorant_dilution
+        public string Odorant_dilution
         {
             get
             {
@@ -985,50 +984,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class Odorant_dilution
-    {
-    
-        public Odorant_dilution()
-        {
-        }
-    
-        protected Odorant_dilution(Odorant_dilution other)
-        {
-        }
-    
-        public System.IObservable<Odorant_dilution> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Odorant_dilution(this)));
-        }
-    
-        public System.IObservable<Odorant_dilution> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new Odorant_dilution(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            return false;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
     /// <summary>
     /// Serializes a sequence of data model objects into JSON strings.
     /// </summary>
@@ -1068,11 +1023,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         {
             return Process<OlfactometerCalibrationModel>(source);
         }
-
-        public System.IObservable<string> Process(System.IObservable<Odorant_dilution> source)
-        {
-            return Process<Odorant_dilution>(source);
-        }
     }
 
 
@@ -1088,7 +1038,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerChannelConfig>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerOperationControl>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationModel>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Odorant_dilution>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
@@ -1161,11 +1110,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         {
             return Process<OlfactometerCalibrationModel>(source);
         }
-
-        public System.IObservable<string> Process(System.IObservable<Odorant_dilution> source)
-        {
-            return Process<Odorant_dilution>(source);
-        }
     }
 
 
@@ -1181,7 +1125,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerChannelConfig>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerOperationControl>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationModel>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Odorant_dilution>))]
     public partial class DeserializeFromYaml : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
