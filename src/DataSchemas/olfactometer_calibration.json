@@ -21,6 +21,57 @@
       "title": "ConcentrationUnit",
       "type": "string"
     },
+    "OlfactometerCalibration": {
+      "additionalProperties": false,
+      "description": "Olfactometer calibration class",
+      "properties": {
+        "calibration_date": {
+          "format": "date-time",
+          "title": "Date and time of calibration",
+          "type": "string"
+        },
+        "device_name": {
+          "default": "Olfactometer",
+          "description": "Must match a device name in rig/instrument",
+          "title": "Device name",
+          "type": "string"
+        },
+        "description": {
+          "const": "Calibration of the harp olfactometer device",
+          "default": "Calibration of the harp olfactometer device",
+          "title": "Description"
+        },
+        "input": {
+          "default": {},
+          "description": "Calibration input",
+          "title": "inputs",
+          "type": "object"
+        },
+        "output": {
+          "default": {},
+          "description": "Calibration output",
+          "title": "outputs",
+          "type": "object"
+        },
+        "notes": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "calibration_date"
+      ],
+      "title": "OlfactometerCalibration",
+      "type": "object"
+    },
     "OlfactometerChannel": {
       "additionalProperties": false,
       "description": "description of a Olfactometer channel",
@@ -72,15 +123,8 @@
           "type": "string"
         },
         "odorant_dilution": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "string"
-            }
-          ],
-          "title": "Odorant dilution"
+          "title": "Odorant dilution",
+          "type": "string"
         },
         "odorant_dilution_unit": {
           "allOf": [
@@ -159,8 +203,9 @@
   },
   "properties": {
     "describedBy": {
-      "title": "Describedby",
-      "type": "string"
+      "const": "",
+      "default": "",
+      "title": "Describedby"
     },
     "schema_version": {
       "const": "0.1.0",
@@ -171,9 +216,16 @@
       "$ref": "#/definitions/OlfactometerOperationControl"
     },
     "calibration": {
-      "const": "Missing",
-      "default": "Missing",
-      "title": "Calibration"
+      "default": null,
+      "description": "Calibration data",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/OlfactometerCalibration"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "rootPath": {
       "description": "Root path of the experiment",
@@ -250,7 +302,6 @@
     }
   },
   "required": [
-    "describedBy",
     "operation_control",
     "rootPath"
   ],

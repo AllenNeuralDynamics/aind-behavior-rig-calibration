@@ -593,13 +593,13 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     public partial class WaterValveCalibrationModel
     {
     
-        private string _describedBy;
+        private object _describedBy;
     
         private object _schema_version;
     
         private WaterValveOperationControl _operation_control = new WaterValveOperationControl();
     
-        private WaterValveCalibration _calibration = new WaterValveCalibration();
+        private WaterValveCalibration _calibration;
     
         private string _rootPath;
     
@@ -640,9 +640,10 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
             _commitHash = other._commitHash;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("describedBy", Required=Newtonsoft.Json.Required.Always)]
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="describedBy")]
-        public string DescribedBy
+        public object DescribedBy
         {
             get
             {
@@ -684,9 +685,13 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
             }
         }
     
+        /// <summary>
+        /// Calibration data
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration", Required=Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="calibration")]
+        [System.ComponentModel.DescriptionAttribute("Calibration data")]
         public WaterValveCalibration Calibration
         {
             get

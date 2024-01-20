@@ -210,8 +210,9 @@
   },
   "properties": {
     "describedBy": {
-      "title": "Describedby",
-      "type": "string"
+      "const": "",
+      "default": "",
+      "title": "Describedby"
     },
     "schema_version": {
       "const": "0.1.0",
@@ -222,7 +223,16 @@
       "$ref": "#/definitions/WaterValveOperationControl"
     },
     "calibration": {
-      "$ref": "#/definitions/WaterValveCalibration"
+      "default": null,
+      "description": "Calibration data",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/WaterValveCalibration"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "rootPath": {
       "description": "Root path of the experiment",
@@ -299,9 +309,7 @@
     }
   },
   "required": [
-    "describedBy",
     "operation_control",
-    "calibration",
     "rootPath"
   ],
   "title": "WaterValveCalibrationModel",

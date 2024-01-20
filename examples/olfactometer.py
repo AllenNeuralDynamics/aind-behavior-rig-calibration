@@ -3,8 +3,11 @@ from aind_behavior_services.olfactometer import (
     OlfactometerChannel,
     OlfactometerChannelConfig,
     OlfactometerOperationControl,
+    OlfactometerCalibration, OlfactometerCalibrationModel
 )
 from aind_data_schema.models.devices import ChannelType
+
+import datetime
 
 channels_config = [
     OlfactometerChannel(
@@ -39,5 +42,13 @@ OpControl = OlfactometerOperationControl(
     time_off=1,
 )
 
+out_model = OlfactometerCalibrationModel(
+    operation_control=OpControl,
+    calibration=None,
+    rootPath="C:\\Data",
+    date=datetime.datetime.now(),
+    allowDirty=False,
+    experiment="OlfactometerCalibration")
+
 with open("olfactometer.json", "w") as f:
-    f.write(OpControl.model_dump_json(indent=3))
+    f.write(out_model.model_dump_json(indent=3))
