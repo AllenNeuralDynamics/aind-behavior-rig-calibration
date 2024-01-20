@@ -19,11 +19,11 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     public partial class WaterValveCalibration
     {
     
-        private System.DateTimeOffset _calibration_date;
+        private System.DateTimeOffset _calibrationDate;
     
-        private string _device_name = "WaterValve";
+        private string _deviceName = "WaterValve";
     
-        private object _description;
+        private string _description = "Calibration of the water valve delivery system";
     
         private System.Collections.Generic.List<WaterValveCalibrationInput> _input = new System.Collections.Generic.List<WaterValveCalibrationInput>();
     
@@ -37,8 +37,8 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         protected WaterValveCalibration(WaterValveCalibration other)
         {
-            _calibration_date = other._calibration_date;
-            _device_name = other._device_name;
+            _calibrationDate = other._calibrationDate;
+            _deviceName = other._deviceName;
             _description = other._description;
             _input = other._input;
             _output = other._output;
@@ -48,15 +48,15 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("calibration_date", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="calibration_date")]
-        public System.DateTimeOffset Calibration_date
+        public System.DateTimeOffset CalibrationDate
         {
             get
             {
-                return _calibration_date;
+                return _calibrationDate;
             }
             set
             {
-                _calibration_date = value;
+                _calibrationDate = value;
             }
         }
     
@@ -66,22 +66,21 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("device_name")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="device_name")]
         [System.ComponentModel.DescriptionAttribute("Must match a device name in rig/instrument")]
-        public string Device_name
+        public string DeviceName
         {
             get
             {
-                return _device_name;
+                return _deviceName;
             }
             set
             {
-                _device_name = value;
+                _deviceName = value;
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("description")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="description")]
-        public object Description
+        public string Description
         {
             get
             {
@@ -149,8 +148,8 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("calibration_date = " + _calibration_date + ", ");
-            stringBuilder.Append("device_name = " + _device_name + ", ");
+            stringBuilder.Append("calibration_date = " + _calibrationDate + ", ");
+            stringBuilder.Append("device_name = " + _deviceName + ", ");
             stringBuilder.Append("description = " + _description + ", ");
             stringBuilder.Append("input = " + _input + ", ");
             stringBuilder.Append("output = " + _output + ", ");
@@ -183,13 +182,13 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     public partial class WaterValveCalibrationInput
     {
     
-        private double _valve_open_interval;
+        private double _valveOpenInterval;
     
-        private double _valve_open_time;
+        private double _valveOpenTime;
     
-        private System.Collections.Generic.List<double> _water_weight = new System.Collections.Generic.List<double>();
+        private System.Collections.Generic.List<double> _waterWeight = new System.Collections.Generic.List<double>();
     
-        private int _repeat_count;
+        private int _repeatCount;
     
         public WaterValveCalibrationInput()
         {
@@ -197,10 +196,10 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         protected WaterValveCalibrationInput(WaterValveCalibrationInput other)
         {
-            _valve_open_interval = other._valve_open_interval;
-            _valve_open_time = other._valve_open_time;
-            _water_weight = other._water_weight;
-            _repeat_count = other._repeat_count;
+            _valveOpenInterval = other._valveOpenInterval;
+            _valveOpenTime = other._valveOpenTime;
+            _waterWeight = other._waterWeight;
+            _repeatCount = other._repeatCount;
         }
     
         /// <summary>
@@ -209,15 +208,15 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("valve_open_interval", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="valve_open_interval")]
         [System.ComponentModel.DescriptionAttribute("Time between two consecutive valve openings (s)")]
-        public double Valve_open_interval
+        public double ValveOpenInterval
         {
             get
             {
-                return _valve_open_interval;
+                return _valveOpenInterval;
             }
             set
             {
-                _valve_open_interval = value;
+                _valveOpenInterval = value;
             }
         }
     
@@ -227,15 +226,15 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("valve_open_time", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="valve_open_time")]
         [System.ComponentModel.DescriptionAttribute("Valve open interval (s)")]
-        public double Valve_open_time
+        public double ValveOpenTime
         {
             get
             {
-                return _valve_open_time;
+                return _valveOpenTime;
             }
             set
             {
-                _valve_open_time = value;
+                _valveOpenTime = value;
             }
         }
     
@@ -246,15 +245,15 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("water_weight", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="water_weight")]
         [System.ComponentModel.DescriptionAttribute("Weight of water delivered (g)")]
-        public System.Collections.Generic.List<double> Water_weight
+        public System.Collections.Generic.List<double> WaterWeight
         {
             get
             {
-                return _water_weight;
+                return _waterWeight;
             }
             set
             {
-                _water_weight = value;
+                _waterWeight = value;
             }
         }
     
@@ -264,15 +263,15 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("repeat_count", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="repeat_count")]
         [System.ComponentModel.DescriptionAttribute("Number of times the valve opened.")]
-        public int Repeat_count
+        public int RepeatCount
         {
             get
             {
-                return _repeat_count;
+                return _repeatCount;
             }
             set
             {
-                _repeat_count = value;
+                _repeatCount = value;
             }
         }
     
@@ -288,10 +287,10 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("valve_open_interval = " + _valve_open_interval + ", ");
-            stringBuilder.Append("valve_open_time = " + _valve_open_time + ", ");
-            stringBuilder.Append("water_weight = " + _water_weight + ", ");
-            stringBuilder.Append("repeat_count = " + _repeat_count);
+            stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
+            stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
+            stringBuilder.Append("water_weight = " + _waterWeight + ", ");
+            stringBuilder.Append("repeat_count = " + _repeatCount);
             return true;
         }
     
@@ -320,7 +319,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     public partial class WaterValveCalibrationOutput
     {
     
-        private System.Collections.Generic.IDictionary<string, double> _interval_average;
+        private System.Collections.Generic.IDictionary<string, double> _intervalAverage;
     
         private double _slope;
     
@@ -328,7 +327,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         private double _r2;
     
-        private System.Collections.Generic.List<double> _valid_domain;
+        private System.Collections.Generic.List<double> _validDomain;
     
         public WaterValveCalibrationOutput()
         {
@@ -336,11 +335,11 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         protected WaterValveCalibrationOutput(WaterValveCalibrationOutput other)
         {
-            _interval_average = other._interval_average;
+            _intervalAverage = other._intervalAverage;
             _slope = other._slope;
             _offset = other._offset;
             _r2 = other._r2;
-            _valid_domain = other._valid_domain;
+            _validDomain = other._validDomain;
         }
     
         /// <summary>
@@ -351,15 +350,15 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="interval_average")]
         [System.ComponentModel.DescriptionAttribute("Dictionary keyed by measured valve interval and corresponding average single even" +
             "t volume.")]
-        public System.Collections.Generic.IDictionary<string, double> Interval_average
+        public System.Collections.Generic.IDictionary<string, double> IntervalAverage
         {
             get
             {
-                return _interval_average;
+                return _intervalAverage;
             }
             set
             {
-                _interval_average = value;
+                _intervalAverage = value;
             }
         }
     
@@ -424,15 +423,15 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("valid_domain")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="valid_domain")]
         [System.ComponentModel.DescriptionAttribute("The optional time-intervals the calibration curve was calculated on.")]
-        public System.Collections.Generic.List<double> Valid_domain
+        public System.Collections.Generic.List<double> ValidDomain
         {
             get
             {
-                return _valid_domain;
+                return _validDomain;
             }
             set
             {
-                _valid_domain = value;
+                _validDomain = value;
             }
         }
     
@@ -448,11 +447,11 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("interval_average = " + _interval_average + ", ");
+            stringBuilder.Append("interval_average = " + _intervalAverage + ", ");
             stringBuilder.Append("slope = " + _slope + ", ");
             stringBuilder.Append("offset = " + _offset + ", ");
             stringBuilder.Append("r2 = " + _r2 + ", ");
-            stringBuilder.Append("valid_domain = " + _valid_domain);
+            stringBuilder.Append("valid_domain = " + _validDomain);
             return true;
         }
     
@@ -482,11 +481,11 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     public partial class WaterValveOperationControl
     {
     
-        private System.Collections.Generic.List<double> _valve_open_time = new System.Collections.Generic.List<double>();
+        private System.Collections.Generic.List<double> _valveOpenTime = new System.Collections.Generic.List<double>();
     
-        private double _valve_open_interval = 0.2D;
+        private double _valveOpenInterval = 0.2D;
     
-        private int _repeat_count = 200;
+        private int _repeatCount = 200;
     
         public WaterValveOperationControl()
         {
@@ -494,9 +493,9 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         protected WaterValveOperationControl(WaterValveOperationControl other)
         {
-            _valve_open_time = other._valve_open_time;
-            _valve_open_interval = other._valve_open_interval;
-            _repeat_count = other._repeat_count;
+            _valveOpenTime = other._valveOpenTime;
+            _valveOpenInterval = other._valveOpenInterval;
+            _repeatCount = other._repeatCount;
         }
     
         /// <summary>
@@ -506,15 +505,15 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("valve_open_time", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="valve_open_time")]
         [System.ComponentModel.DescriptionAttribute("An array with the times (s) the valve is open during calibration")]
-        public System.Collections.Generic.List<double> Valve_open_time
+        public System.Collections.Generic.List<double> ValveOpenTime
         {
             get
             {
-                return _valve_open_time;
+                return _valveOpenTime;
             }
             set
             {
-                _valve_open_time = value;
+                _valveOpenTime = value;
             }
         }
     
@@ -524,15 +523,15 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("valve_open_interval")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="valve_open_interval")]
         [System.ComponentModel.DescriptionAttribute("Time between two consecutive valve openings (s)")]
-        public double Valve_open_interval
+        public double ValveOpenInterval
         {
             get
             {
-                return _valve_open_interval;
+                return _valveOpenInterval;
             }
             set
             {
-                _valve_open_interval = value;
+                _valveOpenInterval = value;
             }
         }
     
@@ -542,15 +541,15 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("repeat_count")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="repeat_count")]
         [System.ComponentModel.DescriptionAttribute("Number of times the valve opened per measure valve_open_time entry")]
-        public int Repeat_count
+        public int RepeatCount
         {
             get
             {
-                return _repeat_count;
+                return _repeatCount;
             }
             set
             {
-                _repeat_count = value;
+                _repeatCount = value;
             }
         }
     
@@ -566,9 +565,9 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("valve_open_time = " + _valve_open_time + ", ");
-            stringBuilder.Append("valve_open_interval = " + _valve_open_interval + ", ");
-            stringBuilder.Append("repeat_count = " + _repeat_count);
+            stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
+            stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
+            stringBuilder.Append("repeat_count = " + _repeatCount);
             return true;
         }
     
@@ -593,11 +592,11 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     public partial class WaterValveCalibrationModel
     {
     
-        private object _describedBy;
+        private string _describedBy = "";
     
-        private object _schema_version;
+        private string _schemaVersion = "0.1.0";
     
-        private WaterValveOperationControl _operation_control = new WaterValveOperationControl();
+        private WaterValveOperationControl _operationControl = new WaterValveOperationControl();
     
         private WaterValveCalibration _calibration;
     
@@ -626,8 +625,8 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         protected WaterValveCalibrationModel(WaterValveCalibrationModel other)
         {
             _describedBy = other._describedBy;
-            _schema_version = other._schema_version;
-            _operation_control = other._operation_control;
+            _schemaVersion = other._schemaVersion;
+            _operationControl = other._operationControl;
             _calibration = other._calibration;
             _rootPath = other._rootPath;
             _date = other._date;
@@ -640,10 +639,9 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
             _commitHash = other._commitHash;
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="describedBy")]
-        public object DescribedBy
+        public string DescribedBy
         {
             get
             {
@@ -655,33 +653,32 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="schema_version")]
-        public object Schema_version
+        public string SchemaVersion
         {
             get
             {
-                return _schema_version;
+                return _schemaVersion;
             }
             set
             {
-                _schema_version = value;
+                _schemaVersion = value;
             }
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("operation_control", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="operation_control")]
-        public WaterValveOperationControl Operation_control
+        public WaterValveOperationControl OperationControl
         {
             get
             {
-                return _operation_control;
+                return _operationControl;
             }
             set
             {
-                _operation_control = value;
+                _operationControl = value;
             }
         }
     
@@ -872,8 +869,8 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("describedBy = " + _describedBy + ", ");
-            stringBuilder.Append("schema_version = " + _schema_version + ", ");
-            stringBuilder.Append("operation_control = " + _operation_control + ", ");
+            stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
+            stringBuilder.Append("operation_control = " + _operationControl + ", ");
             stringBuilder.Append("calibration = " + _calibration + ", ");
             stringBuilder.Append("rootPath = " + _rootPath + ", ");
             stringBuilder.Append("date = " + _date + ", ");

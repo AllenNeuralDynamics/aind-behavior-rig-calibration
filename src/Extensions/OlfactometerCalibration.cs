@@ -49,11 +49,11 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="% m/m")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="% m/m")]
-        @__m_m = 3,
+        MM = 3,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="% v/v")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="% v/v")]
-        @__v_v = 4,
+        VV = 4,
     }
 
 
@@ -67,11 +67,11 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     public partial class OlfactometerCalibration
     {
     
-        private System.DateTimeOffset _calibration_date;
+        private System.DateTimeOffset _calibrationDate;
     
-        private string _device_name = "Olfactometer";
+        private string _deviceName = "Olfactometer";
     
-        private object _description;
+        private string _description = "Calibration of the harp olfactometer device";
     
         private object _input;
     
@@ -85,8 +85,8 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         protected OlfactometerCalibration(OlfactometerCalibration other)
         {
-            _calibration_date = other._calibration_date;
-            _device_name = other._device_name;
+            _calibrationDate = other._calibrationDate;
+            _deviceName = other._deviceName;
             _description = other._description;
             _input = other._input;
             _output = other._output;
@@ -96,15 +96,15 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("calibration_date", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="calibration_date")]
-        public System.DateTimeOffset Calibration_date
+        public System.DateTimeOffset CalibrationDate
         {
             get
             {
-                return _calibration_date;
+                return _calibrationDate;
             }
             set
             {
-                _calibration_date = value;
+                _calibrationDate = value;
             }
         }
     
@@ -114,22 +114,21 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("device_name")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="device_name")]
         [System.ComponentModel.DescriptionAttribute("Must match a device name in rig/instrument")]
-        public string Device_name
+        public string DeviceName
         {
             get
             {
-                return _device_name;
+                return _deviceName;
             }
             set
             {
-                _device_name = value;
+                _deviceName = value;
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("description")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="description")]
-        public object Description
+        public string Description
         {
             get
             {
@@ -205,8 +204,8 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("calibration_date = " + _calibration_date + ", ");
-            stringBuilder.Append("device_name = " + _device_name + ", ");
+            stringBuilder.Append("calibration_date = " + _calibrationDate + ", ");
+            stringBuilder.Append("device_name = " + _deviceName + ", ");
             stringBuilder.Append("description = " + _description + ", ");
             stringBuilder.Append("input = " + _input + ", ");
             stringBuilder.Append("output = " + _output + ", ");
@@ -239,13 +238,13 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     public partial class OlfactometerChannel
     {
     
-        private int _channel_index;
+        private int _channelIndex;
     
-        private ChannelType _channel_type = AindBehaviorRigCalibration.OlfactometerCalibration.ChannelType.Odor;
+        private ChannelType _channelType = AindBehaviorRigCalibration.OlfactometerCalibration.ChannelType.Odor;
     
-        private OlfactometerChannelFlow_capacity _flow_capacity = AindBehaviorRigCalibration.OlfactometerCalibration.OlfactometerChannelFlow_capacity._100;
+        private OlfactometerChannelFlowCapacity _flowCapacity = AindBehaviorRigCalibration.OlfactometerCalibration.OlfactometerChannelFlowCapacity.100;
     
-        private string _flow_unit = "mL/min";
+        private string _flowUnit = "mL/min";
     
         public OlfactometerChannel()
         {
@@ -253,67 +252,67 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         protected OlfactometerChannel(OlfactometerChannel other)
         {
-            _channel_index = other._channel_index;
-            _channel_type = other._channel_type;
-            _flow_capacity = other._flow_capacity;
-            _flow_unit = other._flow_unit;
+            _channelIndex = other._channelIndex;
+            _channelType = other._channelType;
+            _flowCapacity = other._flowCapacity;
+            _flowUnit = other._flowUnit;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("channel_index", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="channel_index")]
-        public int Channel_index
+        public int ChannelIndex
         {
             get
             {
-                return _channel_index;
+                return _channelIndex;
             }
             set
             {
-                _channel_index = value;
+                _channelIndex = value;
             }
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("channel_type")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="channel_type")]
-        public ChannelType Channel_type
+        public ChannelType ChannelType
         {
             get
             {
-                return _channel_type;
+                return _channelType;
             }
             set
             {
-                _channel_type = value;
+                _channelType = value;
             }
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("flow_capacity")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="flow_capacity")]
-        public OlfactometerChannelFlow_capacity Flow_capacity
+        public OlfactometerChannelFlowCapacity FlowCapacity
         {
             get
             {
-                return _flow_capacity;
+                return _flowCapacity;
             }
             set
             {
-                _flow_capacity = value;
+                _flowCapacity = value;
             }
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("flow_unit")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="flow_unit")]
-        public string Flow_unit
+        public string FlowUnit
         {
             get
             {
-                return _flow_unit;
+                return _flowUnit;
             }
             set
             {
-                _flow_unit = value;
+                _flowUnit = value;
             }
         }
     
@@ -329,10 +328,10 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("channel_index = " + _channel_index + ", ");
-            stringBuilder.Append("channel_type = " + _channel_type + ", ");
-            stringBuilder.Append("flow_capacity = " + _flow_capacity + ", ");
-            stringBuilder.Append("flow_unit = " + _flow_unit);
+            stringBuilder.Append("channel_index = " + _channelIndex + ", ");
+            stringBuilder.Append("channel_type = " + _channelType + ", ");
+            stringBuilder.Append("flow_capacity = " + _flowCapacity + ", ");
+            stringBuilder.Append("flow_unit = " + _flowUnit);
             return true;
         }
     
@@ -361,13 +360,13 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     public partial class OlfactometerChannelConfig
     {
     
-        private int _channel_index;
+        private int _channelIndex;
     
         private string _odorant;
     
-        private string _odorant_dilution;
+        private string _odorantDilution;
     
-        private ConcentrationUnit _odorant_dilution_unit = AindBehaviorRigCalibration.OlfactometerCalibration.ConcentrationUnit.__v_v;
+        private ConcentrationUnit _odorantDilutionUnit = AindBehaviorRigCalibration.OlfactometerCalibration.ConcentrationUnit.VV;
     
         public OlfactometerChannelConfig()
         {
@@ -375,23 +374,23 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         protected OlfactometerChannelConfig(OlfactometerChannelConfig other)
         {
-            _channel_index = other._channel_index;
+            _channelIndex = other._channelIndex;
             _odorant = other._odorant;
-            _odorant_dilution = other._odorant_dilution;
-            _odorant_dilution_unit = other._odorant_dilution_unit;
+            _odorantDilution = other._odorantDilution;
+            _odorantDilutionUnit = other._odorantDilutionUnit;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("channel_index", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="channel_index")]
-        public int Channel_index
+        public int ChannelIndex
         {
             get
             {
-                return _channel_index;
+                return _channelIndex;
             }
             set
             {
-                _channel_index = value;
+                _channelIndex = value;
             }
         }
     
@@ -411,30 +410,30 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         [Newtonsoft.Json.JsonPropertyAttribute("odorant_dilution", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="odorant_dilution")]
-        public string Odorant_dilution
+        public string OdorantDilution
         {
             get
             {
-                return _odorant_dilution;
+                return _odorantDilution;
             }
             set
             {
-                _odorant_dilution = value;
+                _odorantDilution = value;
             }
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("odorant_dilution_unit")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="odorant_dilution_unit")]
-        public ConcentrationUnit Odorant_dilution_unit
+        public ConcentrationUnit OdorantDilutionUnit
         {
             get
             {
-                return _odorant_dilution_unit;
+                return _odorantDilutionUnit;
             }
             set
             {
-                _odorant_dilution_unit = value;
+                _odorantDilutionUnit = value;
             }
         }
     
@@ -450,10 +449,10 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("channel_index = " + _channel_index + ", ");
+            stringBuilder.Append("channel_index = " + _channelIndex + ", ");
             stringBuilder.Append("odorant = " + _odorant + ", ");
-            stringBuilder.Append("odorant_dilution = " + _odorant_dilution + ", ");
-            stringBuilder.Append("odorant_dilution_unit = " + _odorant_dilution_unit);
+            stringBuilder.Append("odorant_dilution = " + _odorantDilution + ", ");
+            stringBuilder.Append("odorant_dilution_unit = " + _odorantDilutionUnit);
             return true;
         }
     
@@ -483,17 +482,17 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     public partial class OlfactometerOperationControl
     {
     
-        private System.Collections.Generic.IDictionary<string, OlfactometerChannel> _channel_config;
+        private System.Collections.Generic.IDictionary<string, OlfactometerChannel> _channelConfig;
     
-        private System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> _stimulus_config;
+        private System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> _stimulusConfig;
     
-        private double _full_flow_rate = 1000D;
+        private double _fullFlowRate = 1000D;
     
-        private int _n_repeats_per_stimulus = 1;
+        private int _nRepeatsPerStimulus = 1;
     
-        private double _time_on = 1D;
+        private double _timeOn = 1D;
     
-        private double _time_off = 1D;
+        private double _timeOff = 1D;
     
         public OlfactometerOperationControl()
         {
@@ -501,12 +500,12 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         protected OlfactometerOperationControl(OlfactometerOperationControl other)
         {
-            _channel_config = other._channel_config;
-            _stimulus_config = other._stimulus_config;
-            _full_flow_rate = other._full_flow_rate;
-            _n_repeats_per_stimulus = other._n_repeats_per_stimulus;
-            _time_on = other._time_on;
-            _time_off = other._time_off;
+            _channelConfig = other._channelConfig;
+            _stimulusConfig = other._stimulusConfig;
+            _fullFlowRate = other._fullFlowRate;
+            _nRepeatsPerStimulus = other._nRepeatsPerStimulus;
+            _timeOn = other._timeOn;
+            _timeOff = other._timeOff;
         }
     
         /// <summary>
@@ -516,15 +515,15 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("channel_config")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="channel_config")]
         [System.ComponentModel.DescriptionAttribute("Configuration of olfactometer channels")]
-        public System.Collections.Generic.IDictionary<string, OlfactometerChannel> Channel_config
+        public System.Collections.Generic.IDictionary<string, OlfactometerChannel> ChannelConfig
         {
             get
             {
-                return _channel_config;
+                return _channelConfig;
             }
             set
             {
-                _channel_config = value;
+                _channelConfig = value;
             }
         }
     
@@ -535,15 +534,15 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("stimulus_config")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="stimulus_config")]
         [System.ComponentModel.DescriptionAttribute("Configuration of the odor stimuli")]
-        public System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> Stimulus_config
+        public System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> StimulusConfig
         {
             get
             {
-                return _stimulus_config;
+                return _stimulusConfig;
             }
             set
             {
-                _stimulus_config = value;
+                _stimulusConfig = value;
             }
         }
     
@@ -553,15 +552,15 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("full_flow_rate")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="full_flow_rate")]
         [System.ComponentModel.DescriptionAttribute("Full flow rate of the olfactometer")]
-        public double Full_flow_rate
+        public double FullFlowRate
         {
             get
             {
-                return _full_flow_rate;
+                return _fullFlowRate;
             }
             set
             {
-                _full_flow_rate = value;
+                _fullFlowRate = value;
             }
         }
     
@@ -571,15 +570,15 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("n_repeats_per_stimulus")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="n_repeats_per_stimulus")]
         [System.ComponentModel.DescriptionAttribute("Number of repeats per stimulus")]
-        public int N_repeats_per_stimulus
+        public int NRepeatsPerStimulus
         {
             get
             {
-                return _n_repeats_per_stimulus;
+                return _nRepeatsPerStimulus;
             }
             set
             {
-                _n_repeats_per_stimulus = value;
+                _nRepeatsPerStimulus = value;
             }
         }
     
@@ -589,15 +588,15 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("time_on")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="time_on")]
         [System.ComponentModel.DescriptionAttribute("Time (s) the valve is open during calibration")]
-        public double Time_on
+        public double TimeOn
         {
             get
             {
-                return _time_on;
+                return _timeOn;
             }
             set
             {
-                _time_on = value;
+                _timeOn = value;
             }
         }
     
@@ -607,15 +606,15 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         [Newtonsoft.Json.JsonPropertyAttribute("time_off")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="time_off")]
         [System.ComponentModel.DescriptionAttribute("Time (s) the valve is close during calibration")]
-        public double Time_off
+        public double TimeOff
         {
             get
             {
-                return _time_off;
+                return _timeOff;
             }
             set
             {
-                _time_off = value;
+                _timeOff = value;
             }
         }
     
@@ -631,12 +630,12 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("channel_config = " + _channel_config + ", ");
-            stringBuilder.Append("stimulus_config = " + _stimulus_config + ", ");
-            stringBuilder.Append("full_flow_rate = " + _full_flow_rate + ", ");
-            stringBuilder.Append("n_repeats_per_stimulus = " + _n_repeats_per_stimulus + ", ");
-            stringBuilder.Append("time_on = " + _time_on + ", ");
-            stringBuilder.Append("time_off = " + _time_off);
+            stringBuilder.Append("channel_config = " + _channelConfig + ", ");
+            stringBuilder.Append("stimulus_config = " + _stimulusConfig + ", ");
+            stringBuilder.Append("full_flow_rate = " + _fullFlowRate + ", ");
+            stringBuilder.Append("n_repeats_per_stimulus = " + _nRepeatsPerStimulus + ", ");
+            stringBuilder.Append("time_on = " + _timeOn + ", ");
+            stringBuilder.Append("time_off = " + _timeOff);
             return true;
         }
     
@@ -661,11 +660,11 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     public partial class OlfactometerCalibrationModel
     {
     
-        private object _describedBy;
+        private string _describedBy = "";
     
-        private object _schema_version;
+        private string _schemaVersion = "0.1.0";
     
-        private OlfactometerOperationControl _operation_control = new OlfactometerOperationControl();
+        private OlfactometerOperationControl _operationControl = new OlfactometerOperationControl();
     
         private OlfactometerCalibration _calibration;
     
@@ -694,8 +693,8 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         protected OlfactometerCalibrationModel(OlfactometerCalibrationModel other)
         {
             _describedBy = other._describedBy;
-            _schema_version = other._schema_version;
-            _operation_control = other._operation_control;
+            _schemaVersion = other._schemaVersion;
+            _operationControl = other._operationControl;
             _calibration = other._calibration;
             _rootPath = other._rootPath;
             _date = other._date;
@@ -708,10 +707,9 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
             _commitHash = other._commitHash;
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="describedBy")]
-        public object DescribedBy
+        public string DescribedBy
         {
             get
             {
@@ -723,33 +721,32 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="schema_version")]
-        public object Schema_version
+        public string SchemaVersion
         {
             get
             {
-                return _schema_version;
+                return _schemaVersion;
             }
             set
             {
-                _schema_version = value;
+                _schemaVersion = value;
             }
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("operation_control", Required=Newtonsoft.Json.Required.Always)]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="operation_control")]
-        public OlfactometerOperationControl Operation_control
+        public OlfactometerOperationControl OperationControl
         {
             get
             {
-                return _operation_control;
+                return _operationControl;
             }
             set
             {
-                _operation_control = value;
+                _operationControl = value;
             }
         }
     
@@ -940,8 +937,8 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("describedBy = " + _describedBy + ", ");
-            stringBuilder.Append("schema_version = " + _schema_version + ", ");
-            stringBuilder.Append("operation_control = " + _operation_control + ", ");
+            stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
+            stringBuilder.Append("operation_control = " + _operationControl + ", ");
             stringBuilder.Append("calibration = " + _calibration + ", ");
             stringBuilder.Append("rootPath = " + _rootPath + ", ");
             stringBuilder.Append("date = " + _date + ", ");
@@ -971,16 +968,16 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
-    public enum OlfactometerChannelFlow_capacity
+    public enum OlfactometerChannelFlowCapacity
     {
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="100")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="100")]
-        _100 = 100,
+        100 = 100,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="1000")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="1000")]
-        _1000 = 1000,
+        1000 = 1000,
     }
 
 

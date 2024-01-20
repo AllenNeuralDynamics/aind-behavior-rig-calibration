@@ -1,11 +1,8 @@
 import json
 from pathlib import Path
-from string import capwords
-
-from aind_behavior_rig.base.json_schema import export_schema
-from aind_behavior_rig.olfactometer import OlfactometerCalibrationModel
-from aind_behavior_rig.water_valve import WaterValveCalibrationModel
-from aind_behavior_rig.utils import bonsai_sgen, BonsaiSgenSerializers, snake_to_pascal_case
+from aind_behavior_services.utils import export_schema, bonsai_sgen, BonsaiSgenSerializers, snake_to_pascal_case
+from aind_behavior_services.calibration.olfactometer import OlfactometerCalibrationModel
+from aind_behavior_services.calibration.water_valve import WaterValveCalibrationModel
 
 SCHEMA_ROOT = Path("./src/DataSchemas/")
 EXTENSIONS_ROOT = Path("./src/Extensions/")
@@ -30,6 +27,7 @@ def main():
             serializer=SGEN_SERIALIZERS
             )
         print(cmd_return.stdout)
+
 
 if __name__ == "__main__":
     main()

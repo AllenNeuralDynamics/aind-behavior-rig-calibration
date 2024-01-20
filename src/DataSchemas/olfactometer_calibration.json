@@ -39,7 +39,8 @@
         "description": {
           "const": "Calibration of the harp olfactometer device",
           "default": "Calibration of the harp olfactometer device",
-          "title": "Description"
+          "title": "Description",
+          "type": "string"
         },
         "input": {
           "default": {},
@@ -205,12 +206,14 @@
     "describedBy": {
       "const": "",
       "default": "",
-      "title": "Describedby"
+      "title": "Describedby",
+      "type": "string"
     },
     "schema_version": {
       "const": "0.1.0",
       "default": "0.1.0",
-      "title": "Schema Version"
+      "title": "Schema Version",
+      "type": "string"
     },
     "operation_control": {
       "$ref": "#/definitions/OlfactometerOperationControl"

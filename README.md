@@ -1,4 +1,4 @@
-# aind-behavior-rig
+# aind-behavior-services
 
 A repository containing code for data acquisition and processing for AIND behavior rigs.
 
