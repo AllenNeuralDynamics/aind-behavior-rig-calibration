@@ -1,4 +1,4 @@
-from aind_behavior_rig.olfactometer import (
+from aind_behavior_services.olfactometer import (
     HarpOlfactometerChannel,
     OlfactometerChannel,
     OlfactometerChannelConfig,

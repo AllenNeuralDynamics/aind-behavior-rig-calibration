@@ -2,7 +2,7 @@ import unittest
 from pydantic import ValidationError
 from datetime import datetime
 from aind_data_schema.models.devices import Calibration
-from aind_behavior_rig.water_valve import WaterValveCalibration, WaterValveCalibrationInput, WaterValveCalibrationOutput
+from aind_behavior_services.water_valve import WaterValveCalibration, WaterValveCalibrationInput, WaterValveCalibrationOutput
 
 
 class WaterValveTests(unittest.TestCase):

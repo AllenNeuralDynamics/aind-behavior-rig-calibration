@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import Dict, Literal
 
-from aind_behavior_rig.base import OperationControlModel, RigCalibrationFullModel
+from aind_behavior_services.calibration import OperationControlModel, RigCalibrationFullModel
 from aind_data_schema.models.devices import OlfactometerChannel
 from aind_data_schema.models.stimulus import OlfactometerChannelConfig
 from pydantic import Field

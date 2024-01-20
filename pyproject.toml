@@ -3,7 +3,7 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "aind-behavior-rig"
+name = "aind-behavior-services"
 description = "A library that defines AIND data schema and validates JSON files for behavior rig models."
 license = {text = "MIT"}
 requires-python = ">=3.11"
@@ -18,8 +18,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    'aind_behavior_rig[docs]',
-    'aind_behavior_rig[linters]'
+    'aind_behavior_services[docs]',
+    'aind_behavior_services[linters]'
 ]
 
 linters = [
@@ -41,7 +41,7 @@ docs = [
 where = ["src/DataSchemas"]
 
 [tool.setuptools.dynamic]
-version = {attr = "aind_behavior_rig.__version__"}
+version = {attr = "aind_behavior_services.__version__"}
 readme = {file = ["README.md"]}
 
 [tool.black]
@@ -67,7 +67,7 @@ exclude = '''
 
 [tool.coverage.run]
 omit = ["*__init__*"]
-source = ["aind_behavior_rig", "tests"]
+source = ["aind_behavior_services", "tests"]
 
 [tool.coverage.report]
 exclude_lines = ["if __name__ == .__main__.:", "pragma: no cover"]

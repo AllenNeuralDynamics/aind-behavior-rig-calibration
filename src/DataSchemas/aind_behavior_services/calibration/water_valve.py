@@ -1,6 +1,6 @@
 from typing import Dict, List, Literal, Optional
 
-from aind_behavior_rig.base import OperationControlModel, RigCalibrationFullModel, RigCalibrationModel
+from aind_behavior_services.calibration import OperationControlModel, RigCalibrationFullModel, RigCalibrationModel
 from aind_data_schema.models.devices import Calibration
 from pydantic import Field, PositiveFloat
 
