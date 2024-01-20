@@ -17,15 +17,6 @@ class SemVerAnnotation:
         _source_type: Any,
         _handler: Callable[[Any], core_schema.CoreSchema],
     ) -> core_schema.CoreSchema:
-        ...
-class SemVerAnnotation:
-    
-    @classmethod
-    def __get_pydantic_core_schema__(
-        cls,
-        _source_type: Any,
-        _handler: Callable[[Any], core_schema.CoreSchema],
-    ) -> core_schema.CoreSchema:
         def validate_from_str(value: str) -> Version:
             return Version.parse(value)
 

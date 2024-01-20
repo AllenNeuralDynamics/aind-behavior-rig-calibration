@@ -5,15 +5,11 @@ from subprocess import CompletedProcess, run
 from typing import List, Optional, TypeVar
 
 from pydantic import BaseModel
-from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue, _deduplicate_schemas
-from pydantic_core import core_schema
+from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue, JsonSchemaMode, _deduplicate_schemas
+from pydantic_core import core_schema, to_jsonable_python
 
 
 class CustomGenerateJsonSchema(GenerateJsonSchema):
-    """
-    A custom class that extends the GenerateJsonSchema class.
-    """
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.nullable_as_oneof = kwargs.get("nullable_as_oneof", True)
@@ -42,13 +38,61 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
             return members[0]
         return {"oneOf": members}
 
+    def literal_schema(self, schema: core_schema.LiteralSchema) -> JsonSchemaValue:
+        """Generates a JSON schema that matches a literal value.
+
+        Args:
+            schema: The core schema.
+
+        Returns:
+            The generated JSON schema.
+        """
+        expected = [v.value if isinstance(v, Enum) else v for v in schema['expected']]
+        # jsonify the expected values
+        expected = [to_jsonable_python(v) for v in expected]
+
+        types = {type(e) for e in expected}
+
+        if len(expected) == 1:
+            if isinstance(expected[0], str):
+                return {'const': expected[0], 'type': 'string'}
+            elif isinstance(expected[0], int):
+                return {'const': expected[0], 'type': 'integer'}
+            elif isinstance(expected[0], float):
+                return {'const': expected[0], 'type': 'number'}
+            elif isinstance(expected[0], bool):
+                return {'const': expected[0], 'type': 'boolean'}
+            elif isinstance(expected[0], list):
+                return {'const': expected[0], 'type': 'array'}
+            elif expected[0] is None:
+                return {'const': expected[0], 'type': 'null'}
+            else:
+                return {'const': expected[0]}
+
+        if types == {str}:
+            return {'enum': expected, 'type': 'string'}
+        elif types == {int}:
+            return {'enum': expected, 'type': 'integer'}
+        elif types == {float}:
+            return {'enum': expected, 'type': 'number'}
+        elif types == {bool}:
+            return {'enum': expected, 'type': 'boolean'}
+        elif types == {list}:
+            return {'enum': expected, 'type': 'array'}
+        # there is not None case because if it's mixed it hits the final `else`
+        # if it's a single Literal[None] then it becomes a `const` schema above
+        else:
+            return {'enum': expected}
+
 
 Model = TypeVar("Model", bound=BaseModel)
 
 
-def export_schema(model: Model, schema_generator: GenerateJsonSchema = CustomGenerateJsonSchema):
+def export_schema(model: Model,
+                  schema_generator: GenerateJsonSchema = CustomGenerateJsonSchema,
+                  mode: JsonSchemaMode = 'serialization'):
     """Export the schema of a model to a json file"""
-    return model.model_json_schema(schema_generator=schema_generator)
+    return model.model_json_schema(schema_generator=schema_generator, mode=mode)
 
 
 class BonsaiSgenSerializers(Enum):
