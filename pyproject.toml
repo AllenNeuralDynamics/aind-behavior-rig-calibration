@@ -13,7 +13,7 @@ classifiers = [
 dynamic = ["version", "readme"]
 
 dependencies = [
-    "aind_data_schema"
+    "https://github.com/AllenNeuralDynamics/Aind.Behavior.TaskLauncher"
 ]
 
 [project.optional-dependencies]
