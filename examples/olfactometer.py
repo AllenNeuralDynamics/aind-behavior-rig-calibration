@@ -50,5 +50,5 @@ out_model = OlfactometerCalibrationModel(
     allowDirty=False,
     experiment="OlfactometerCalibration")
 
-with open("olfactometer.json", "w") as f:
+with open("local/olfactometer.json", "w") as f:
     f.write(out_model.model_dump_json(indent=3))
