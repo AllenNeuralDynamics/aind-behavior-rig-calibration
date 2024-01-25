@@ -47,7 +47,7 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
         Returns:
             The generated JSON schema.
         """
-        expected = [v.value if isinstance(v, Enum) else v for v in schema['expected']]
+        expected = [v.value if isinstance(v, Enum) else v for v in schema["expected"]]
         # jsonify the expected values
         expected = [to_jsonable_python(v) for v in expected]
 
@@ -55,42 +55,44 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
 
         if len(expected) == 1:
             if isinstance(expected[0], str):
-                return {'const': expected[0], 'type': 'string'}
+                return {"const": expected[0], "type": "string"}
             elif isinstance(expected[0], int):
-                return {'const': expected[0], 'type': 'integer'}
+                return {"const": expected[0], "type": "integer"}
             elif isinstance(expected[0], float):
-                return {'const': expected[0], 'type': 'number'}
+                return {"const": expected[0], "type": "number"}
             elif isinstance(expected[0], bool):
-                return {'const': expected[0], 'type': 'boolean'}
+                return {"const": expected[0], "type": "boolean"}
             elif isinstance(expected[0], list):
-                return {'const': expected[0], 'type': 'array'}
+                return {"const": expected[0], "type": "array"}
             elif expected[0] is None:
-                return {'const': expected[0], 'type': 'null'}
+                return {"const": expected[0], "type": "null"}
             else:
-                return {'const': expected[0]}
+                return {"const": expected[0]}
 
         if types == {str}:
-            return {'enum': expected, 'type': 'string'}
+            return {"enum": expected, "type": "string"}
         elif types == {int}:
-            return {'enum': expected, 'type': 'integer'}
+            return {"enum": expected, "type": "integer"}
         elif types == {float}:
-            return {'enum': expected, 'type': 'number'}
+            return {"enum": expected, "type": "number"}
         elif types == {bool}:
-            return {'enum': expected, 'type': 'boolean'}
+            return {"enum": expected, "type": "boolean"}
         elif types == {list}:
-            return {'enum': expected, 'type': 'array'}
+            return {"enum": expected, "type": "array"}
         # there is not None case because if it's mixed it hits the final `else`
         # if it's a single Literal[None] then it becomes a `const` schema above
         else:
-            return {'enum': expected}
+            return {"enum": expected}
 
 
 Model = TypeVar("Model", bound=BaseModel)
 
 
-def export_schema(model: Model,
-                  schema_generator: GenerateJsonSchema = CustomGenerateJsonSchema,
-                  mode: JsonSchemaMode = 'serialization'):
+def export_schema(
+    model: Model,
+    schema_generator: GenerateJsonSchema = CustomGenerateJsonSchema,
+    mode: JsonSchemaMode = "serialization",
+):
     """Export the schema of a model to a json file"""
     return model.model_json_schema(schema_generator=schema_generator, mode=mode)
 

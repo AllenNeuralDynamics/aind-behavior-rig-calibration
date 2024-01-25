@@ -37,9 +37,7 @@ class OlfactometerCalibration(Calibration):
     device_name: str = Field(
         "Olfactometer", title="Device name", description="Must match a device name in rig/instrument"
     )
-    description: Literal[
-        "Calibration of the harp olfactometer device"
-    ] = "Calibration of the harp olfactometer device"
+    description: Literal["Calibration of the harp olfactometer device"] = "Calibration of the harp olfactometer device"
     notes: Optional[str] = Field(None, title="Notes")
 
 
