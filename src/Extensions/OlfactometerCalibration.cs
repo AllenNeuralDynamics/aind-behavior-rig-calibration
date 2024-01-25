@@ -49,11 +49,11 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="% m/m")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="% m/m")]
-        MM = 3,
+        _MM = 3,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="% v/v")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="% v/v")]
-        VV = 4,
+        _VV = 4,
     }
 
 
@@ -242,7 +242,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         private ChannelType _channelType = AindBehaviorRigCalibration.OlfactometerCalibration.ChannelType.Odor;
     
-        private OlfactometerChannelFlowCapacity _flowCapacity = AindBehaviorRigCalibration.OlfactometerCalibration.OlfactometerChannelFlowCapacity.100;
+        private OlfactometerChannelFlowCapacity _flowCapacity = AindBehaviorRigCalibration.OlfactometerCalibration.OlfactometerChannelFlowCapacity._100;
     
         private string _flowUnit = "mL/min";
     
@@ -366,7 +366,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         private string _odorantDilution;
     
-        private ConcentrationUnit _odorantDilutionUnit = AindBehaviorRigCalibration.OlfactometerCalibration.ConcentrationUnit.VV;
+        private ConcentrationUnit _odorantDilutionUnit = AindBehaviorRigCalibration.OlfactometerCalibration.ConcentrationUnit._VV;
     
         public OlfactometerChannelConfig()
         {
@@ -973,11 +973,11 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="100")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="100")]
-        100 = 100,
+        _100 = 100,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="1000")]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="1000")]
-        1000 = 1000,
+        _1000 = 1000,
     }
 
 
