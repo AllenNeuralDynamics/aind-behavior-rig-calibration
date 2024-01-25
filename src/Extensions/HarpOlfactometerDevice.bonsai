@@ -77,7 +77,7 @@
         <Name>OperationControl</Name>
       </Expression>
       <Expression xsi:type="MemberSelector">
-        <Selector>Channel_config</Selector>
+        <Selector>ChannelConfig</Selector>
       </Expression>
       <Expression xsi:type="Index">
         <Operand xsi:type="StringProperty">
@@ -85,7 +85,7 @@
         </Operand>
       </Expression>
       <Expression xsi:type="MemberSelector">
-        <Selector>Channel_type</Selector>
+        <Selector>ChannelType</Selector>
       </Expression>
       <Expression xsi:type="Equal">
         <Operand xsi:type="WorkflowProperty" TypeArguments="p2:ChannelType">
