@@ -102,7 +102,7 @@
       <Expression xsi:type="p1:CreateMessage">
         <harp:MessageType>Write</harp:MessageType>
         <harp:Payload xsi:type="p1:CreateAcquisitionStatePayload">
-          <p1:AcquisitionState>Disabled</p1:AcquisitionState>
+          <p1:AcquisitionState>Enabled</p1:AcquisitionState>
         </harp:Payload>
       </Expression>
       <Expression xsi:type="MulticastSubject">
