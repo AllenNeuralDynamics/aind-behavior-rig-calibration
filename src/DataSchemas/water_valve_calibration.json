@@ -243,17 +243,9 @@
       "type": "string"
     },
     "date": {
-      "default": null,
-      "oneOf": [
-        {
-          "format": "date-time",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Date"
+      "format": "date-time",
+      "title": "Date",
+      "type": "string"
     },
     "notes": {
       "default": "",

@@ -46,10 +46,10 @@ class RigCalibrationFullModel(RigCalibrationCoreModel):
     commitHash: Optional[str] = Field(None, description="Commit hash of the repository")
 
 
-GenericType = TypeVar("GenericType", bound="GenericModel") 
+GenericType = TypeVar("GenericType", bound="GenericModel")
 
 
 class GenericModel(BaseModel, extra="allow"):
     """Base calss for generic model"""
-    pass
 
+    pass

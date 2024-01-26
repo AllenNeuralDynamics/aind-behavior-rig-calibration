@@ -12,7 +12,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     /// <summary>
     /// Water valve calibration class
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Water valve calibration class")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
@@ -47,7 +47,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("calibration_date", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="calibration_date")]
         public System.DateTimeOffset CalibrationDate
         {
             get
@@ -64,7 +63,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Must match a device name in rig/instrument
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("device_name")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="device_name")]
         [System.ComponentModel.DescriptionAttribute("Must match a device name in rig/instrument")]
         public string DeviceName
         {
@@ -79,7 +77,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("description")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="description")]
         public string Description
         {
             get
@@ -94,7 +91,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("input")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="input")]
         public System.Collections.Generic.List<WaterValveCalibrationInput> Input
         {
             get
@@ -109,7 +105,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("output")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="output")]
         public WaterValveCalibrationOutput Output
         {
             get
@@ -123,7 +118,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("notes")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="notes")]
         public string Notes
         {
             get
@@ -175,7 +169,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     /// <summary>
     /// Input for water valve calibration class
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Input for water valve calibration class")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
@@ -206,7 +200,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Time between two consecutive valve openings (s)
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("valve_open_interval", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="valve_open_interval")]
         [System.ComponentModel.DescriptionAttribute("Time between two consecutive valve openings (s)")]
         public double ValveOpenInterval
         {
@@ -224,7 +217,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Valve open interval (s)
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("valve_open_time", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="valve_open_time")]
         [System.ComponentModel.DescriptionAttribute("Valve open interval (s)")]
         public double ValveOpenTime
         {
@@ -243,7 +235,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("water_weight", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="water_weight")]
         [System.ComponentModel.DescriptionAttribute("Weight of water delivered (g)")]
         public System.Collections.Generic.List<double> WaterWeight
         {
@@ -261,7 +252,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Number of times the valve opened.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("repeat_count", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="repeat_count")]
         [System.ComponentModel.DescriptionAttribute("Number of times the valve opened.")]
         public int RepeatCount
         {
@@ -312,7 +302,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     /// <summary>
     /// Output for water valve calibration class
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Output for water valve calibration class")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
@@ -347,7 +337,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("interval_average")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="interval_average")]
         [System.ComponentModel.DescriptionAttribute("Dictionary keyed by measured valve interval and corresponding average single even" +
             "t volume.")]
         public System.Collections.Generic.IDictionary<string, double> IntervalAverage
@@ -366,7 +355,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Slope of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("slope", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="slope")]
         [System.ComponentModel.DescriptionAttribute("Slope of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)")]
         public double Slope
         {
@@ -384,7 +372,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Offset of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("offset", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="offset")]
         [System.ComponentModel.DescriptionAttribute("Offset of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)")]
         public double Offset
         {
@@ -402,7 +389,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// R2 metric from the linear model.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("r2", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="r2")]
         [System.ComponentModel.DescriptionAttribute("R2 metric from the linear model.")]
         public double R2
         {
@@ -421,7 +407,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("valid_domain")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="valid_domain")]
         [System.ComponentModel.DescriptionAttribute("The optional time-intervals the calibration curve was calculated on.")]
         public System.Collections.Generic.List<double> ValidDomain
         {
@@ -473,7 +458,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     /// <summary>
     /// Olfactometer operation control model that is used to run a calibration data acquisition workflow
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Olfactometer operation control model that is used to run a calibration data acqui" +
         "sition workflow")]
     [Bonsai.CombinatorAttribute()]
@@ -503,7 +488,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("valve_open_time", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="valve_open_time")]
         [System.ComponentModel.DescriptionAttribute("An array with the times (s) the valve is open during calibration")]
         public System.Collections.Generic.List<double> ValveOpenTime
         {
@@ -521,7 +505,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Time between two consecutive valve openings (s)
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("valve_open_interval")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="valve_open_interval")]
         [System.ComponentModel.DescriptionAttribute("Time between two consecutive valve openings (s)")]
         public double ValveOpenInterval
         {
@@ -539,7 +522,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Number of times the valve opened per measure valve_open_time entry
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("repeat_count")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="repeat_count")]
         [System.ComponentModel.DescriptionAttribute("Number of times the valve opened per measure valve_open_time entry")]
         public int RepeatCount
         {
@@ -586,7 +568,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     public partial class WaterValveCalibrationModel
@@ -602,7 +584,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         private string _rootPath;
     
-        private System.DateTimeOffset? _date;
+        private System.DateTimeOffset _date;
     
         private string _notes = "";
     
@@ -640,7 +622,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="describedBy")]
         public string DescribedBy
         {
             get
@@ -654,7 +635,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="schema_version")]
         public string SchemaVersion
         {
             get
@@ -669,7 +649,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("operation_control", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="operation_control")]
         public WaterValveOperationControl OperationControl
         {
             get
@@ -687,7 +666,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="calibration")]
         [System.ComponentModel.DescriptionAttribute("Calibration data")]
         public WaterValveCalibration Calibration
         {
@@ -705,7 +683,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Root path of the experiment
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("rootPath", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="rootPath")]
         [System.ComponentModel.DescriptionAttribute("Root path of the experiment")]
         public string RootPath
         {
@@ -721,8 +698,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("date")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="date")]
-        public System.DateTimeOffset? Date
+        public System.DateTimeOffset Date
         {
             get
             {
@@ -735,7 +711,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("notes")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="notes")]
         public string Notes
         {
             get
@@ -752,7 +727,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Name of the experiment
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("experiment")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="experiment")]
         [System.ComponentModel.DescriptionAttribute("Name of the experiment")]
         public string Experiment
         {
@@ -770,7 +744,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Name of the subject
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("experimenter")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="experimenter")]
         [System.ComponentModel.DescriptionAttribute("Name of the subject")]
         public string Experimenter
         {
@@ -788,7 +761,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Allow code to run from dirty repository
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("allowDirty")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="allowDirty")]
         [System.ComponentModel.DescriptionAttribute("Allow code to run from dirty repository")]
         public bool AllowDirty
         {
@@ -806,7 +778,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Path to remote data. If null, no attempt to copy data will be made
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("remoteDataPath")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="remoteDataPath")]
         [System.ComponentModel.DescriptionAttribute("Path to remote data. If null, no attempt to copy data will be made")]
         public string RemoteDataPath
         {
@@ -824,7 +795,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Seed of the random number generator. If 0 it will be randomized.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("rngSeed")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="rngSeed")]
         [System.ComponentModel.DescriptionAttribute("Seed of the random number generator. If 0 it will be randomized.")]
         public int RngSeed
         {
@@ -842,7 +812,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         /// Commit hash of the repository
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("commitHash")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="commitHash")]
         [System.ComponentModel.DescriptionAttribute("Commit hash of the repository")]
         public string CommitHash
         {
@@ -902,7 +871,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     /// <summary>
     /// Serializes a sequence of data model objects into JSON strings.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Serializes a sequence of data model objects into JSON strings.")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
@@ -944,7 +913,7 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     /// <summary>
     /// Deserializes a sequence of JSON strings into data model objects.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
@@ -977,103 +946,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         private static System.IObservable<T> Process<T>(System.IObservable<string> source)
         {
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.DeserializeObject<T>(value));
-        }
-    }
-
-
-    /// <summary>
-    /// Serializes a sequence of data model objects into YAML strings.
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Serializes a sequence of data model objects into YAML strings.")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    public partial class SerializeToYaml
-    {
-    
-        private System.IObservable<string> Process<T>(System.IObservable<T> source)
-        {
-            return System.Reactive.Linq.Observable.Defer(() =>
-            {
-                var serializer = new YamlDotNet.Serialization.SerializerBuilder()
-                    .Build();
-                return System.Reactive.Linq.Observable.Select(source, value => serializer.Serialize(value)); 
-            });
-        }
-
-        public System.IObservable<string> Process(System.IObservable<WaterValveCalibration> source)
-        {
-            return Process<WaterValveCalibration>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<WaterValveCalibrationInput> source)
-        {
-            return Process<WaterValveCalibrationInput>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<WaterValveCalibrationOutput> source)
-        {
-            return Process<WaterValveCalibrationOutput>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<WaterValveOperationControl> source)
-        {
-            return Process<WaterValveOperationControl>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<WaterValveCalibrationModel> source)
-        {
-            return Process<WaterValveCalibrationModel>(source);
-        }
-    }
-
-
-    /// <summary>
-    /// Deserializes a sequence of YAML strings into data model objects.
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of YAML strings into data model objects.")]
-    [System.ComponentModel.DefaultPropertyAttribute("Type")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibration>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibrationInput>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibrationOutput>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveOperationControl>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibrationModel>))]
-    public partial class DeserializeFromYaml : Bonsai.Expressions.SingleArgumentExpressionBuilder
-    {
-    
-        public DeserializeFromYaml()
-        {
-            Type = new Bonsai.Expressions.TypeMapping<WaterValveCalibrationModel>();
-        }
-
-        public Bonsai.Expressions.TypeMapping Type { get; set; }
-
-        public override System.Linq.Expressions.Expression Build(System.Collections.Generic.IEnumerable<System.Linq.Expressions.Expression> arguments)
-        {
-            var typeMapping = (Bonsai.Expressions.TypeMapping)Type;
-            var returnType = typeMapping.GetType().GetGenericArguments()[0];
-            return System.Linq.Expressions.Expression.Call(
-                typeof(DeserializeFromYaml),
-                "Process",
-                new System.Type[] { returnType },
-                System.Linq.Enumerable.Single(arguments));
-        }
-
-        private static System.IObservable<T> Process<T>(System.IObservable<string> source)
-        {
-            return System.Reactive.Linq.Observable.Defer(() =>
-            {
-                var serializer = new YamlDotNet.Serialization.DeserializerBuilder()
-                    .Build();
-                return System.Reactive.Linq.Observable.Select(source, value =>
-                {
-                    var reader = new System.IO.StringReader(value);
-                    var parser = new YamlDotNet.Core.MergingParser(new YamlDotNet.Core.Parser(reader));
-                    return serializer.Deserialize<T>(parser);
-                });
-            });
         }
     }
 }

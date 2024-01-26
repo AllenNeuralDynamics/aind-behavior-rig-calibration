@@ -12,17 +12,15 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     /// <summary>
     /// Olfactometer channel types
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum ChannelType
     {
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="Odor")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Odor")]
         Odor = 0,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="Carrier")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Carrier")]
         Carrier = 1,
     }
 
@@ -30,29 +28,24 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     /// <summary>
     /// Concentraion units
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum ConcentrationUnit
     {
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="molar")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="molar")]
         Molar = 0,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="micromolar")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="micromolar")]
         Micromolar = 1,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="nanomolar")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="nanomolar")]
         Nanomolar = 2,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="% m/m")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="% m/m")]
         _MM = 3,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="% v/v")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="% v/v")]
         _VV = 4,
     }
 
@@ -60,7 +53,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     /// <summary>
     /// Olfactometer calibration class
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Olfactometer calibration class")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
@@ -95,7 +88,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("calibration_date", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="calibration_date")]
         public System.DateTimeOffset CalibrationDate
         {
             get
@@ -112,7 +104,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Must match a device name in rig/instrument
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("device_name")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="device_name")]
         [System.ComponentModel.DescriptionAttribute("Must match a device name in rig/instrument")]
         public string DeviceName
         {
@@ -127,7 +118,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("description")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="description")]
         public string Description
         {
             get
@@ -145,7 +135,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("input")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="input")]
         [System.ComponentModel.DescriptionAttribute("Calibration input")]
         public object Input
         {
@@ -164,7 +153,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("output")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="output")]
         [System.ComponentModel.DescriptionAttribute("Calibration output")]
         public object Output
         {
@@ -179,7 +167,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("notes")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="notes")]
         public string Notes
         {
             get
@@ -231,7 +218,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     /// <summary>
     /// description of a Olfactometer channel
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("description of a Olfactometer channel")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
@@ -259,7 +246,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("channel_index", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="channel_index")]
         public int ChannelIndex
         {
             get
@@ -274,7 +260,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("channel_type")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="channel_type")]
         public ChannelType ChannelType
         {
             get
@@ -289,7 +274,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("flow_capacity")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="flow_capacity")]
         public OlfactometerChannelFlowCapacity FlowCapacity
         {
             get
@@ -303,7 +287,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("flow_unit")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="flow_unit")]
         public string FlowUnit
         {
             get
@@ -353,7 +336,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     /// <summary>
     /// Description of olfactometer channel configurations
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Description of olfactometer channel configurations")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
@@ -381,7 +364,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("channel_index", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="channel_index")]
         public int ChannelIndex
         {
             get
@@ -395,7 +377,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("odorant", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="odorant")]
         public string Odorant
         {
             get
@@ -409,7 +390,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("odorant_dilution", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="odorant_dilution")]
         public string OdorantDilution
         {
             get
@@ -424,7 +404,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("odorant_dilution_unit")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="odorant_dilution_unit")]
         public ConcentrationUnit OdorantDilutionUnit
         {
             get
@@ -474,7 +453,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     /// <summary>
     /// Olfactometer operation control model that is used to run a calibration data acquisition workflow
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Olfactometer operation control model that is used to run a calibration data acqui" +
         "sition workflow")]
     [Bonsai.CombinatorAttribute()]
@@ -513,7 +492,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("channel_config")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="channel_config")]
         [System.ComponentModel.DescriptionAttribute("Configuration of olfactometer channels")]
         public System.Collections.Generic.IDictionary<string, OlfactometerChannel> ChannelConfig
         {
@@ -532,7 +510,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("stimulus_config")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="stimulus_config")]
         [System.ComponentModel.DescriptionAttribute("Configuration of the odor stimuli")]
         public System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> StimulusConfig
         {
@@ -550,7 +527,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Full flow rate of the olfactometer
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("full_flow_rate")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="full_flow_rate")]
         [System.ComponentModel.DescriptionAttribute("Full flow rate of the olfactometer")]
         public double FullFlowRate
         {
@@ -568,7 +544,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Number of repeats per stimulus
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("n_repeats_per_stimulus")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="n_repeats_per_stimulus")]
         [System.ComponentModel.DescriptionAttribute("Number of repeats per stimulus")]
         public int NRepeatsPerStimulus
         {
@@ -586,7 +561,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Time (s) the valve is open during calibration
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("time_on")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="time_on")]
         [System.ComponentModel.DescriptionAttribute("Time (s) the valve is open during calibration")]
         public double TimeOn
         {
@@ -604,7 +578,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Time (s) the valve is close during calibration
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("time_off")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="time_off")]
         [System.ComponentModel.DescriptionAttribute("Time (s) the valve is close during calibration")]
         public double TimeOff
         {
@@ -654,7 +627,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     public partial class OlfactometerCalibrationModel
@@ -670,7 +643,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         private string _rootPath;
     
-        private System.DateTimeOffset? _date;
+        private System.DateTimeOffset _date;
     
         private string _notes = "";
     
@@ -708,7 +681,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="describedBy")]
         public string DescribedBy
         {
             get
@@ -722,7 +694,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="schema_version")]
         public string SchemaVersion
         {
             get
@@ -737,7 +708,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("operation_control", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="operation_control")]
         public OlfactometerOperationControl OperationControl
         {
             get
@@ -755,7 +725,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="calibration")]
         [System.ComponentModel.DescriptionAttribute("Calibration data")]
         public OlfactometerCalibration Calibration
         {
@@ -773,7 +742,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Root path of the experiment
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("rootPath", Required=Newtonsoft.Json.Required.Always)]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="rootPath")]
         [System.ComponentModel.DescriptionAttribute("Root path of the experiment")]
         public string RootPath
         {
@@ -789,8 +757,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("date")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="date")]
-        public System.DateTimeOffset? Date
+        public System.DateTimeOffset Date
         {
             get
             {
@@ -803,7 +770,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("notes")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="notes")]
         public string Notes
         {
             get
@@ -820,7 +786,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Name of the experiment
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("experiment")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="experiment")]
         [System.ComponentModel.DescriptionAttribute("Name of the experiment")]
         public string Experiment
         {
@@ -838,7 +803,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Name of the subject
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("experimenter")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="experimenter")]
         [System.ComponentModel.DescriptionAttribute("Name of the subject")]
         public string Experimenter
         {
@@ -856,7 +820,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Allow code to run from dirty repository
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("allowDirty")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="allowDirty")]
         [System.ComponentModel.DescriptionAttribute("Allow code to run from dirty repository")]
         public bool AllowDirty
         {
@@ -874,7 +837,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Path to remote data. If null, no attempt to copy data will be made
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("remoteDataPath")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="remoteDataPath")]
         [System.ComponentModel.DescriptionAttribute("Path to remote data. If null, no attempt to copy data will be made")]
         public string RemoteDataPath
         {
@@ -892,7 +854,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Seed of the random number generator. If 0 it will be randomized.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("rngSeed")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="rngSeed")]
         [System.ComponentModel.DescriptionAttribute("Seed of the random number generator. If 0 it will be randomized.")]
         public int RngSeed
         {
@@ -910,7 +871,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         /// Commit hash of the repository
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("commitHash")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="commitHash")]
         [System.ComponentModel.DescriptionAttribute("Commit hash of the repository")]
         public string CommitHash
         {
@@ -967,16 +927,14 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     public enum OlfactometerChannelFlowCapacity
     {
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="100")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="100")]
         _100 = 100,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="1000")]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="1000")]
         _1000 = 1000,
     }
 
@@ -984,7 +942,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     /// <summary>
     /// Serializes a sequence of data model objects into JSON strings.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Serializes a sequence of data model objects into JSON strings.")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
@@ -1026,7 +984,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     /// <summary>
     /// Deserializes a sequence of JSON strings into data model objects.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
@@ -1059,103 +1017,6 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         private static System.IObservable<T> Process<T>(System.IObservable<string> source)
         {
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.DeserializeObject<T>(value));
-        }
-    }
-
-
-    /// <summary>
-    /// Serializes a sequence of data model objects into YAML strings.
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Serializes a sequence of data model objects into YAML strings.")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    public partial class SerializeToYaml
-    {
-    
-        private System.IObservable<string> Process<T>(System.IObservable<T> source)
-        {
-            return System.Reactive.Linq.Observable.Defer(() =>
-            {
-                var serializer = new YamlDotNet.Serialization.SerializerBuilder()
-                    .Build();
-                return System.Reactive.Linq.Observable.Select(source, value => serializer.Serialize(value)); 
-            });
-        }
-
-        public System.IObservable<string> Process(System.IObservable<OlfactometerCalibration> source)
-        {
-            return Process<OlfactometerCalibration>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<OlfactometerChannel> source)
-        {
-            return Process<OlfactometerChannel>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<OlfactometerChannelConfig> source)
-        {
-            return Process<OlfactometerChannelConfig>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<OlfactometerOperationControl> source)
-        {
-            return Process<OlfactometerOperationControl>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<OlfactometerCalibrationModel> source)
-        {
-            return Process<OlfactometerCalibrationModel>(source);
-        }
-    }
-
-
-    /// <summary>
-    /// Deserializes a sequence of YAML strings into data model objects.
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0, YamlDotNet v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of YAML strings into data model objects.")]
-    [System.ComponentModel.DefaultPropertyAttribute("Type")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibration>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerChannel>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerChannelConfig>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerOperationControl>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationModel>))]
-    public partial class DeserializeFromYaml : Bonsai.Expressions.SingleArgumentExpressionBuilder
-    {
-    
-        public DeserializeFromYaml()
-        {
-            Type = new Bonsai.Expressions.TypeMapping<OlfactometerCalibrationModel>();
-        }
-
-        public Bonsai.Expressions.TypeMapping Type { get; set; }
-
-        public override System.Linq.Expressions.Expression Build(System.Collections.Generic.IEnumerable<System.Linq.Expressions.Expression> arguments)
-        {
-            var typeMapping = (Bonsai.Expressions.TypeMapping)Type;
-            var returnType = typeMapping.GetType().GetGenericArguments()[0];
-            return System.Linq.Expressions.Expression.Call(
-                typeof(DeserializeFromYaml),
-                "Process",
-                new System.Type[] { returnType },
-                System.Linq.Enumerable.Single(arguments));
-        }
-
-        private static System.IObservable<T> Process<T>(System.IObservable<string> source)
-        {
-            return System.Reactive.Linq.Observable.Defer(() =>
-            {
-                var serializer = new YamlDotNet.Serialization.DeserializerBuilder()
-                    .Build();
-                return System.Reactive.Linq.Observable.Select(source, value =>
-                {
-                    var reader = new System.IO.StringReader(value);
-                    var parser = new YamlDotNet.Core.MergingParser(new YamlDotNet.Core.Parser(reader));
-                    return serializer.Deserialize<T>(parser);
-                });
-            });
         }
     }
 }
