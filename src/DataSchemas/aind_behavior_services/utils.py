@@ -1,11 +1,13 @@
+import json
 from enum import Enum
 from os import PathLike
+from pathlib import Path
 from string import capwords
 from subprocess import CompletedProcess, run
-from typing import List, Optional, TypeVar
+from typing import Dict, List, Optional, TypeVar
 
 from pydantic import BaseModel
-from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue, JsonSchemaMode, _deduplicate_schemas
+from pydantic.json_schema import GenerateJsonSchema, JsonSchemaMode, JsonSchemaValue, _deduplicate_schemas
 from pydantic_core import core_schema, to_jsonable_python
 
 
@@ -92,9 +94,13 @@ def export_schema(
     model: Model,
     schema_generator: GenerateJsonSchema = CustomGenerateJsonSchema,
     mode: JsonSchemaMode = "serialization",
+    def_keyword: str = "definitions",
 ):
     """Export the schema of a model to a json file"""
-    return model.model_json_schema(schema_generator=schema_generator, mode=mode)
+    _model = model.model_json_schema(schema_generator=schema_generator, mode=mode)
+    json_model = json.dumps(_model, indent=2)
+    json_model = json_model.replace("$defs", def_keyword)
+    return json_model
 
 
 class BonsaiSgenSerializers(Enum):
@@ -124,7 +130,7 @@ def bonsai_sgen(
     """
 
     if serializer is None:
-        serializer = [BonsaiSgenSerializers.JSON, BonsaiSgenSerializers.YAML]
+        serializer = [BonsaiSgenSerializers.JSON]
 
     cmd_string = f'bonsai.sgen --schema "{schema_path}" --output "{output_path}"'
     cmd_string += "" if namespace is None else f" --namespace {namespace}"
@@ -137,6 +143,27 @@ def bonsai_sgen(
         cmd_string += " ".join([f" {sr.value}" for sr in serializer])
 
     return run(cmd_string, shell=True, check=True)
+
+
+def convert_pydantic_to_bonsai(
+    models: Dict[str, BaseModel],
+    schema_path: PathLike = Path("./src/DataSchemas/"),
+    output_path: PathLike = Path("./src/Extensions/"),
+    namespace_prefix: str = "DataSchema",
+    serializer: Optional[List[BonsaiSgenSerializers]] = None,
+) -> None:
+
+    for output_model_name, model in models.items():
+        with open(schema_path / f"{output_model_name}.json", "w") as f:
+            json_model = export_schema(model)
+            f.write(json_model)
+        cmd_return = bonsai_sgen(
+            schema_path=schema_path / f"{output_model_name}.json",
+            output_path=output_path / f"{snake_to_pascal_case(output_model_name)}.cs",
+            namespace=f"{namespace_prefix}.{snake_to_pascal_case(output_model_name)}",
+            serializer=serializer,
+        )
+        print(cmd_return.stdout)
 
 
 def snake_to_pascal_case(s: str) -> str:

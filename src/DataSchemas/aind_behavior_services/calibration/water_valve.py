@@ -57,9 +57,9 @@ class WaterValveCalibration(Calibration):
     device_name: str = Field(
         "WaterValve", title="Device name", description="Must match a device name in rig/instrument"
     )
-    description: Literal[
+    description: Literal["Calibration of the water valve delivery system"] = (
         "Calibration of the water valve delivery system"
-    ] = "Calibration of the water valve delivery system"
+    )
     input: List[WaterValveCalibrationInput] = Field([], title="Input of the calibration")
     output: Optional[WaterValveCalibrationOutput] = Field(None, title="Output of the calibration.")
     notes: Optional[str] = Field(None, title="Notes")
