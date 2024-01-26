@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TypeVar
 
 from aind_data_schema.base import AindCoreModel, AindModel
 from aind_data_schema.models.stimulus import Software
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, RootModel
 
 
 class RigCalibrationCoreModel(AindCoreModel, extra="ignore"):
@@ -30,7 +30,7 @@ class RigCalibrationFullModel(RigCalibrationCoreModel):
     operation_control: OperationControlModel = Field(..., title="Operation control")
     calibration: Optional[BaseModel] = Field(None, title="Calibration")
     rootPath: str = Field(..., description="Root path of the experiment")
-    date: Optional[datetime] = Field(None, title="Date")
+    date: datetime = Field(default_factory=datetime.now, title="Date")
     notes: str = Field("", title="Notes")
     experiment: str = Field("Calibration", description="Name of the experiment")
     experimenter: str = Field("Experimenter", description="Name of the subject")
@@ -44,3 +44,12 @@ class RigCalibrationFullModel(RigCalibrationCoreModel):
         description="Seed of the random number generator. If 0 it will be randomized.",
     )
     commitHash: Optional[str] = Field(None, description="Commit hash of the repository")
+
+
+GenericType = TypeVar("GenericType", bound="GenericModel") 
+
+
+class GenericModel(BaseModel, extra="allow"):
+    """Base calss for generic model"""
+    pass
+
