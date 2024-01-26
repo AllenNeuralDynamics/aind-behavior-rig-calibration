@@ -1,9 +1,9 @@
-from aind_behavior_services.olfactometer import (
+from aind_behavior_services.calibration.olfactometer import (
     HarpOlfactometerChannel,
     OlfactometerChannel,
     OlfactometerChannelConfig,
     OlfactometerOperationControl,
-    OlfactometerCalibration, OlfactometerCalibrationModel
+    OlfactometerCalibrationModel
 )
 from aind_data_schema.models.devices import ChannelType
 
