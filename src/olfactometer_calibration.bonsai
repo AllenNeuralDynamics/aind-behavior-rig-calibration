@@ -1793,7 +1793,7 @@
                     </harp:Register>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p1:GroupByRegister" />
+                    <Combinator xsi:type="harp:GroupByRegister" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
