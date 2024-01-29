@@ -19,7 +19,6 @@
                  xmlns:p11="clr-namespace:AllenNeuralDynamics.Core.Logging;assembly=AllenNeuralDynamics.Core"
                  xmlns:p12="clr-namespace:Harp.Olfactometer;assembly=Extensions"
                  xmlns:p13="clr-namespace:Harp.TimestampGeneratorGen3;assembly=Harp.TimestampGeneratorGen3"
-                 xmlns:p14="clr-namespace:Harp.AnalogInput;assembly=Extensions"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -1787,8 +1786,11 @@
                   <Expression xsi:type="SubscribeSubject">
                     <Name>HarpAnalogInputEvents</Name>
                   </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p14:FilterVisibility" />
+                  <Expression xsi:type="harp:FilterRegister">
+                    <harp:FilterType>Exclude</harp:FilterType>
+                    <harp:Register xsi:type="harp:FilterRegisterAddress">
+                      <harp:Address>15</harp:Address>
+                    </harp:Register>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="p1:GroupByRegister" />
