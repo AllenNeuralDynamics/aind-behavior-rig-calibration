@@ -21,12 +21,15 @@ class SpinnakerCamera(AindModel):
 
 
 class HarpDeviceType(str, Enum):
+    LOADCELLS = "loadcells"
     BEHAVIOR = "behavior"
     OLFACTOMETER = "olfactometer"
     CLOCKGENERATOR = "clockgenerator"
+    CLOCKSYNCHRONIZER = "clocksynchronizer"
     TREADMILL = "treadmill"
     LICKOMETER = "lickometer"
     ANALOGINPUT = "analoginput"
+    SOUNDCARD = "soundcard"
     GENERIC = "generic"
 
 
@@ -43,6 +46,16 @@ class HarpBehavior(HarpDeviceBase):
     who_am_i: Literal[1216] = 1216
 
 
+class HarpSoundCard(HarpDeviceBase):
+    device_type: Literal[HarpDeviceType.SOUNDCARD] = HarpDeviceType.SOUNDCARD
+    who_am_i: Literal[1280] = 1280
+
+
+class HarpLoadCells(HarpDeviceBase):
+    device_type: Literal[HarpDeviceType.LOADCELLS] = HarpDeviceType.LOADCELLS
+    who_am_i: Literal[1232] = 1232
+
+
 class HarpOlfactometer(HarpDeviceBase):
     device_type: Literal[HarpDeviceType.OLFACTOMETER] = HarpDeviceType.OLFACTOMETER
     who_am_i: Literal[1140] = 1140
@@ -51,6 +64,11 @@ class HarpOlfactometer(HarpDeviceBase):
 class HarpClockGenerator(HarpDeviceBase):
     device_type: Literal[HarpDeviceType.CLOCKGENERATOR] = HarpDeviceType.CLOCKGENERATOR
     who_am_i: Literal[1158] = 1158
+
+
+class HarpClockSynchronizer(HarpDeviceBase):
+    device_type: Literal[HarpDeviceType.CLOCKSYNCHRONIZER] = HarpDeviceType.CLOCKSYNCHRONIZER
+    who_am_i: Literal[1152] = 1152
 
 
 class HarpAnalogInput(HarpDeviceBase):
