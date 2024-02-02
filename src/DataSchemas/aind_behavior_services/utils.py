@@ -6,15 +6,16 @@ from string import capwords
 from subprocess import CompletedProcess, run
 from typing import Dict, List, Optional, TypeVar
 
-from pydantic import BaseModel
+from pydantic import BaseModel, PydanticInvalidForJsonSchema
 from pydantic.json_schema import GenerateJsonSchema, JsonSchemaMode, JsonSchemaValue, _deduplicate_schemas
-from pydantic_core import core_schema, to_jsonable_python
+from pydantic_core import core_schema, to_jsonable_python, PydanticOmit
 
 
 class CustomGenerateJsonSchema(GenerateJsonSchema):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.nullable_as_oneof = kwargs.get("nullable_as_oneof", True)
+        self.unions_as_oneof = kwargs.get("unions_as_oneof", True)
 
     def nullable_schema(self, schema: core_schema.NullableSchema) -> JsonSchemaValue:
         null_schema = {"type": "null"}
@@ -85,6 +86,34 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
         # if it's a single Literal[None] then it becomes a `const` schema above
         else:
             return {"enum": expected}
+
+    def union_schema(self, schema: core_schema.UnionSchema) -> JsonSchemaValue:
+        """Generates a JSON schema that matches a schema that allows values matching any of the given schemas.
+
+        Args:
+            schema: The core schema.
+
+        Returns:
+            The generated JSON schema.
+        """
+        generated: list[JsonSchemaValue] = []
+
+        choices = schema["choices"]
+        for choice in choices:
+            # choice will be a tuple if an explicit label was provided
+            choice_schema = choice[0] if isinstance(choice, tuple) else choice
+            try:
+                generated.append(self.generate_inner(choice_schema))
+            except PydanticOmit:
+                continue
+            except PydanticInvalidForJsonSchema as exc:
+                self.emit_warning("skipped-choice", exc.message)
+        if len(generated) == 1:
+            return generated[0]
+        if self.unions_as_oneof is True:
+            return self.get_flattened_oneof(generated)
+        else:
+            return self.get_flattened_anyof(generated)
 
 
 Model = TypeVar("Model", bound=BaseModel)
