@@ -137,6 +137,23 @@
           "title": "Load cells offset",
           "type": "object"
         },
+        "baseline": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "default": {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "title": "Load cells baseline to be subtracted from the raw data after applying the offset.",
+          "type": "object"
+        },
         "weight_lookup": {
           "additionalProperties": {
             "maxItems": 2,
@@ -152,7 +169,7 @@
             "type": "array"
           },
           "default": {},
-          "title": "Load cells lookup calibration table for each channel: (weight, baseline)",
+          "title": "Load cells lookup calibration table for each channel: (weight, baseline).",
           "type": "object"
         }
       },

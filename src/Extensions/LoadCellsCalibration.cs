@@ -334,6 +334,8 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
     
         private System.Collections.Generic.IDictionary<string, int> _offset;
     
+        private System.Collections.Generic.IDictionary<string, double> _baseline;
+    
         private System.Collections.Generic.IDictionary<string, System.Collections.Generic.List<object>> _weightLookup;
     
         public LoadCellsCalibrationOutput()
@@ -343,6 +345,7 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
         protected LoadCellsCalibrationOutput(LoadCellsCalibrationOutput other)
         {
             _offset = other._offset;
+            _baseline = other._baseline;
             _weightLookup = other._weightLookup;
         }
     
@@ -357,6 +360,20 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
             set
             {
                 _offset = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("baseline")]
+        public System.Collections.Generic.IDictionary<string, double> Baseline
+        {
+            get
+            {
+                return _baseline;
+            }
+            set
+            {
+                _baseline = value;
             }
         }
     
@@ -387,6 +404,7 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("offset = " + _offset + ", ");
+            stringBuilder.Append("baseline = " + _baseline + ", ");
             stringBuilder.Append("weight_lookup = " + _weightLookup);
             return true;
         }
