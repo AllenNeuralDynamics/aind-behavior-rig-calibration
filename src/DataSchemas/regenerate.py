@@ -3,7 +3,7 @@ from aind_behavior_services.calibration.olfactometer import OlfactometerCalibrat
 from aind_behavior_services.calibration.water_valve import WaterValveCalibrationModel
 from aind_behavior_services.utils import convert_pydantic_to_bonsai
 
-SCHEMA_ROOT = Path("./src/DataSchemas/")
+SCHEMA_ROOT = Path("./src/DataSchemas/schemas")
 EXTENSIONS_ROOT = Path("./src/Extensions/")
 NAMESPACE_PREFIX = "AindBehaviorRigCalibration"
 
