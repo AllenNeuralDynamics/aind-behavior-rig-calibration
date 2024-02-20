@@ -1,66 +1,6 @@
 {
   "definitions": {
-    "WaterValveCalibration": {
-      "additionalProperties": false,
-      "description": "Water valve calibration class",
-      "properties": {
-        "calibration_date": {
-          "format": "date-time",
-          "title": "Date and time of calibration",
-          "type": "string"
-        },
-        "device_name": {
-          "default": "WaterValve",
-          "description": "Must match a device name in rig/instrument",
-          "title": "Device name",
-          "type": "string"
-        },
-        "description": {
-          "const": "Calibration of the water valve delivery system",
-          "default": "Calibration of the water valve delivery system",
-          "title": "Description",
-          "type": "string"
-        },
-        "input": {
-          "default": [],
-          "items": {
-            "$ref": "#/definitions/WaterValveCalibrationInput"
-          },
-          "title": "Input of the calibration",
-          "type": "array"
-        },
-        "output": {
-          "default": null,
-          "oneOf": [
-            {
-              "$ref": "#/definitions/WaterValveCalibrationOutput"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Output of the calibration."
-        },
-        "notes": {
-          "default": null,
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Notes"
-        }
-      },
-      "required": [
-        "calibration_date"
-      ],
-      "title": "WaterValveCalibration",
-      "type": "object"
-    },
-    "WaterValveCalibrationInput": {
+    "Measurement": {
       "description": "Input for water valve calibration class",
       "properties": {
         "valve_open_interval": {
@@ -101,10 +41,84 @@
         "water_weight",
         "repeat_count"
       ],
+      "title": "Measurement",
+      "type": "object"
+    },
+    "WaterValveCalibration": {
+      "additionalProperties": false,
+      "description": "Water valve calibration class",
+      "properties": {
+        "calibration_date": {
+          "format": "date-time",
+          "title": "Date and time of calibration",
+          "type": "string"
+        },
+        "device_name": {
+          "default": "WaterValve",
+          "description": "Must match a device name in rig/instrument",
+          "title": "Device name",
+          "type": "string"
+        },
+        "description": {
+          "const": "Calibration of the water valve delivery system",
+          "default": "Calibration of the water valve delivery system",
+          "title": "Description",
+          "type": "string"
+        },
+        "input": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/WaterValveCalibrationInput"
+            }
+          ],
+          "title": "Input of the calibration"
+        },
+        "output": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/WaterValveCalibrationOutput"
+            }
+          ],
+          "title": "Output of the calibration."
+        },
+        "notes": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "calibration_date",
+        "input",
+        "output"
+      ],
+      "title": "WaterValveCalibration",
+      "type": "object"
+    },
+    "WaterValveCalibrationInput": {
+      "properties": {
+        "measurements": {
+          "default": [],
+          "description": "List of measurements",
+          "items": {
+            "$ref": "#/definitions/Measurement"
+          },
+          "title": "Measurements",
+          "type": "array"
+        }
+      },
       "title": "WaterValveCalibrationInput",
       "type": "object"
     },
     "WaterValveCalibrationOutput": {
+      "additionalProperties": true,
       "description": "Output for water valve calibration class",
       "properties": {
         "interval_average": {
@@ -173,6 +187,7 @@
       "type": "object"
     },
     "WaterValveOperationControl": {
+      "additionalProperties": true,
       "description": "Olfactometer operation control model that is used to run a calibration data acquisition workflow",
       "properties": {
         "valve_open_time": {
@@ -209,6 +224,7 @@
       "type": "object"
     }
   },
+  "additionalProperties": false,
   "properties": {
     "describedBy": {
       "const": "",

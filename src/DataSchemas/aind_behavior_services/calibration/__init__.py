@@ -3,16 +3,16 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Optional, TypeVar
 
-from aind_data_schema.base import AindCoreModel, AindModel
+from aind_data_schema.base import AindCoreModel, AindGeneric
 from aind_data_schema.models.stimulus import Software
 from pydantic import BaseModel, Field, RootModel
 
 
-class RigCalibrationCoreModel(AindCoreModel, extra="ignore"):
+class RigCalibrationCoreModel(AindCoreModel):
     """Base class for all RigCalibrationCoreModel models"""
 
 
-class RigCalibrationModel(AindModel, extra="ignore"):
+class RigCalibrationModel(AindGeneric):
     """Base class for all RigCalibrationModel models"""
 
 
@@ -44,12 +44,3 @@ class RigCalibrationFullModel(RigCalibrationCoreModel):
         description="Seed of the random number generator. If 0 it will be randomized.",
     )
     commitHash: Optional[str] = Field(None, description="Commit hash of the repository")
-
-
-GenericType = TypeVar("GenericType", bound="GenericModel")
-
-
-class GenericModel(BaseModel, extra="allow"):
-    """Base calss for generic model"""
-
-    pass

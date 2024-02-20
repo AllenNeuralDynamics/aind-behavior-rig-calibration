@@ -1,5 +1,12 @@
 {
   "definitions": {
+    "AindGeneric": {
+      "additionalProperties": true,
+      "description": "Base class for generic types that can be used in AIND schema",
+      "properties": {},
+      "title": "AindGeneric",
+      "type": "object"
+    },
     "ChannelType": {
       "description": "Olfactometer channel types",
       "enum": [
@@ -43,16 +50,24 @@
           "type": "string"
         },
         "input": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/AindGeneric"
+            }
+          ],
           "default": {},
           "description": "Calibration input",
-          "title": "inputs",
-          "type": "object"
+          "title": "inputs"
         },
         "output": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/AindGeneric"
+            }
+          ],
           "default": {},
           "description": "Calibration output",
-          "title": "outputs",
-          "type": "object"
+          "title": "outputs"
         },
         "notes": {
           "default": null,
@@ -146,6 +161,7 @@
       "type": "object"
     },
     "OlfactometerOperationControl": {
+      "additionalProperties": true,
       "description": "Olfactometer operation control model that is used to run a calibration data acquisition workflow",
       "properties": {
         "channel_config": {
@@ -202,6 +218,7 @@
       "type": "object"
     }
   },
+  "additionalProperties": false,
   "properties": {
     "describedBy": {
       "const": "",

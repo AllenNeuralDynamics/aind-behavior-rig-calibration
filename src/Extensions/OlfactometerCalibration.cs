@@ -10,6 +10,54 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     #pragma warning disable // Disable all warnings
 
     /// <summary>
+    /// Base class for generic types that can be used in AIND schema
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Base class for generic types that can be used in AIND schema")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class AindGeneric
+    {
+    
+        public AindGeneric()
+        {
+        }
+    
+        protected AindGeneric(AindGeneric other)
+        {
+        }
+    
+        public System.IObservable<AindGeneric> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AindGeneric(this)));
+        }
+    
+        public System.IObservable<AindGeneric> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new AindGeneric(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            return false;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// Olfactometer channel types
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -66,9 +114,9 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         private string _description = "Calibration of the harp olfactometer device";
     
-        private object _input;
+        private AindGeneric _input;
     
-        private object _output;
+        private AindGeneric _output;
     
         private string _notes;
     
@@ -136,7 +184,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("input")]
         [System.ComponentModel.DescriptionAttribute("Calibration input")]
-        public object Input
+        public AindGeneric Input
         {
             get
             {
@@ -154,7 +202,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("output")]
         [System.ComponentModel.DescriptionAttribute("Calibration output")]
-        public object Output
+        public AindGeneric Output
         {
             get
             {
@@ -954,6 +1002,11 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.SerializeObject(value));
         }
 
+        public System.IObservable<string> Process(System.IObservable<AindGeneric> source)
+        {
+            return Process<AindGeneric>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<OlfactometerCalibration> source)
         {
             return Process<OlfactometerCalibration>(source);
@@ -988,6 +1041,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindGeneric>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerChannel>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerChannelConfig>))]
