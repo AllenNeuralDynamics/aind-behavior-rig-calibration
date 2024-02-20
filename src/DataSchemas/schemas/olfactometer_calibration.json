@@ -161,7 +161,7 @@
       "type": "object"
     },
     "OlfactometerOperationControl": {
-      "additionalProperties": true,
+      "additionalProperties": false,
       "description": "Olfactometer operation control model that is used to run a calibration data acquisition workflow",
       "properties": {
         "channel_config": {

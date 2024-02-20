@@ -103,6 +103,7 @@
       "type": "object"
     },
     "WaterValveCalibrationInput": {
+      "additionalProperties": false,
       "properties": {
         "measurements": {
           "default": [],
@@ -118,7 +119,7 @@
       "type": "object"
     },
     "WaterValveCalibrationOutput": {
-      "additionalProperties": true,
+      "additionalProperties": false,
       "description": "Output for water valve calibration class",
       "properties": {
         "interval_average": {
@@ -187,7 +188,7 @@
       "type": "object"
     },
     "WaterValveOperationControl": {
-      "additionalProperties": true,
+      "additionalProperties": false,
       "description": "Olfactometer operation control model that is used to run a calibration data acquisition workflow",
       "properties": {
         "valve_open_time": {

@@ -36,7 +36,7 @@ class Measurement(BaseModel):
     repeat_count: int = Field(..., ge=0, description="Number of times the valve opened.", title="Repeat count")
 
 
-class WaterValveCalibrationInput(BaseModel):
+class WaterValveCalibrationInput(RigCalibrationModel):
     measurements: List[Measurement] = Field(default=[], description="List of measurements")
 
 
