@@ -1,5 +1,37 @@
 {
   "definitions": {
+    "LoadCellCalibration": {
+      "properties": {
+        "measured_offset": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "default": {},
+          "title": "Load cells offset. Each entry is expected to be in the format of: Channel : (offset, baseline)",
+          "type": "object"
+        },
+        "measured_weight": {
+          "default": {},
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Load cells measured weight. Each entry is expected to be in the format of: (known weight(g), baseline)",
+          "type": "array"
+        }
+      },
+      "title": "LoadCellCalibration",
+      "type": "object"
+    },
     "LoadCellsCalibration": {
       "additionalProperties": false,
       "description": "Load cells calibration class",
@@ -60,13 +92,70 @@
     },
     "LoadCellsCalibrationInput": {
       "additionalProperties": false,
-      "properties": {},
+      "properties": {
+        "channels": {
+          "additionalProperties": {
+            "$ref": "#/definitions/LoadCellCalibration"
+          },
+          "default": {},
+          "title": "Load cells calibration data",
+          "type": "object"
+        },
+        "weight_units": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/MassUnit"
+            }
+          ],
+          "default": "gram",
+          "title": "Weight units"
+        }
+      },
       "title": "LoadCellsCalibrationInput",
       "type": "object"
     },
     "LoadCellsCalibrationOutput": {
       "additionalProperties": false,
-      "properties": {},
+      "properties": {
+        "offset": {
+          "additionalProperties": {
+            "description": "Load cell offset value [-255, 255]",
+            "maximum": 255,
+            "minimum": -255,
+            "type": "integer"
+          },
+          "default": {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "title": "Load cells offset",
+          "type": "object"
+        },
+        "weight_lookup": {
+          "additionalProperties": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "default": {},
+          "title": "Load cells lookup calibration table for each channel: (weight, baseline)",
+          "type": "object"
+        }
+      },
       "title": "LoadCellsCalibrationOutput",
       "type": "object"
     },
@@ -105,6 +194,18 @@
       },
       "title": "LoadCellsOperationControl",
       "type": "object"
+    },
+    "MassUnit": {
+      "description": "Enumeration of Mass Measurements",
+      "enum": [
+        "kilogram",
+        "gram",
+        "milligram",
+        "microgram",
+        "nanogram"
+      ],
+      "title": "MassUnit",
+      "type": "string"
     }
   },
   "additionalProperties": false,
