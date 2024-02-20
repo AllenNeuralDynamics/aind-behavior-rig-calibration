@@ -1,0 +1,216 @@
+{
+  "definitions": {
+    "LoadCellsCalibration": {
+      "additionalProperties": false,
+      "description": "Load cells calibration class",
+      "properties": {
+        "calibration_date": {
+          "format": "date-time",
+          "title": "Date and time of calibration",
+          "type": "string"
+        },
+        "device_name": {
+          "default": "LoadCells",
+          "description": "Must match a device name in rig/instrument",
+          "title": "Device name",
+          "type": "string"
+        },
+        "description": {
+          "const": "Calibration of the load cells system",
+          "default": "Calibration of the load cells system",
+          "title": "Description",
+          "type": "string"
+        },
+        "input": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/LoadCellsCalibrationInput"
+            }
+          ],
+          "title": "Input of the calibration"
+        },
+        "output": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/LoadCellsCalibrationOutput"
+            }
+          ],
+          "title": "Output of the calibration."
+        },
+        "notes": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "calibration_date",
+        "input",
+        "output"
+      ],
+      "title": "LoadCellsCalibration",
+      "type": "object"
+    },
+    "LoadCellsCalibrationInput": {
+      "additionalProperties": false,
+      "properties": {},
+      "title": "LoadCellsCalibrationInput",
+      "type": "object"
+    },
+    "LoadCellsCalibrationOutput": {
+      "additionalProperties": false,
+      "properties": {},
+      "title": "LoadCellsCalibrationOutput",
+      "type": "object"
+    },
+    "LoadCellsOperationControl": {
+      "additionalProperties": false,
+      "description": "Load cells operation control model that is used to run a calibration data acquisition workflow",
+      "properties": {
+        "channels": {
+          "default": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "description": "List of channels to calibrate",
+          "items": {
+            "description": "Load cell channel number available",
+            "maximum": 7,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Channels",
+          "type": "array"
+        },
+        "offset_buffer_size": {
+          "default": 200,
+          "description": "Size of the buffer (in samples) acquired.",
+          "minimum": 1,
+          "title": "Buffer size",
+          "type": "integer"
+        }
+      },
+      "title": "LoadCellsOperationControl",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "describedBy": {
+      "const": "",
+      "default": "",
+      "title": "Describedby",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1.0",
+      "default": "0.1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "operation_control": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/LoadCellsOperationControl"
+        }
+      ],
+      "title": "Operation control"
+    },
+    "calibration": {
+      "default": null,
+      "description": "Calibration data",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/LoadCellsCalibration"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "rootPath": {
+      "description": "Root path of the experiment",
+      "title": "Rootpath",
+      "type": "string"
+    },
+    "date": {
+      "format": "date-time",
+      "title": "Date",
+      "type": "string"
+    },
+    "notes": {
+      "default": "",
+      "title": "Notes",
+      "type": "string"
+    },
+    "experiment": {
+      "default": "Calibration",
+      "description": "Name of the experiment",
+      "title": "Experiment",
+      "type": "string"
+    },
+    "experimenter": {
+      "default": "Experimenter",
+      "description": "Name of the subject",
+      "title": "Experimenter",
+      "type": "string"
+    },
+    "allowDirty": {
+      "default": false,
+      "description": "Allow code to run from dirty repository",
+      "title": "Allowdirty",
+      "type": "boolean"
+    },
+    "remoteDataPath": {
+      "default": null,
+      "description": "Path to remote data. If null, no attempt to copy data will be made",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Remotedatapath"
+    },
+    "rngSeed": {
+      "default": 0,
+      "description": "Seed of the random number generator. If 0 it will be randomized.",
+      "title": "Rngseed",
+      "type": "integer"
+    },
+    "commitHash": {
+      "default": null,
+      "description": "Commit hash of the repository",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Commithash"
+    }
+  },
+  "required": [
+    "operation_control",
+    "rootPath"
+  ],
+  "title": "LoadCellsCalibrationModel",
+  "type": "object"
+}
