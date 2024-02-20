@@ -1,7 +1,8 @@
 from pathlib import Path
+
+from aind_behavior_services.calibration.load_cells import LoadCellsCalibrationModel
 from aind_behavior_services.calibration.olfactometer import OlfactometerCalibrationModel
 from aind_behavior_services.calibration.water_valve import WaterValveCalibrationModel
-from aind_behavior_services.calibration.load_cells import LoadCellsCalibrationModel
 from aind_behavior_services.utils import convert_pydantic_to_bonsai
 
 SCHEMA_ROOT = Path("./src/DataSchemas/schemas")

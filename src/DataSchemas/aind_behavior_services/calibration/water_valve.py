@@ -1,8 +1,8 @@
-from typing import Dict, List, Literal, Optional, Annotated
+from typing import Annotated, Dict, List, Literal, Optional
 
 from aind_behavior_services.calibration import OperationControlModel, RigCalibrationFullModel, RigCalibrationModel
 from aind_data_schema.models.devices import Calibration
-from pydantic import Field, BaseModel
+from pydantic import BaseModel, Field
 
 __version__ = "0.1.0"
 

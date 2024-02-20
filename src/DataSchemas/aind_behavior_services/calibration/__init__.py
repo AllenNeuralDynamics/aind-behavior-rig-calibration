@@ -12,7 +12,7 @@ class RigCalibrationCoreModel(AindCoreModel):
     """Base class for all RigCalibrationCoreModel models"""
 
 
-class RigCalibrationModel(AindGeneric, extra='forbid'):
+class RigCalibrationModel(AindGeneric, extra="forbid"):
     """Base class for all RigCalibrationModel models"""
 
 
