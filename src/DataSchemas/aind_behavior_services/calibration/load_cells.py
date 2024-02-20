@@ -1,20 +1,30 @@
-from typing import Dict, List, Literal, Optional, Annotated
+from typing import Dict, List, Literal, Optional, Annotated, Tuple
 
 from aind_behavior_services.calibration import OperationControlModel, RigCalibrationFullModel, RigCalibrationModel
 from aind_data_schema.models.devices import Calibration
+from aind_data_schema.models.units import MassUnit
 from pydantic import Field, BaseModel
 
 __version__ = "0.1.0"
 
 LoadCellChannel = Annotated[int, Field(ge=0, le=7, description="Load cell channel number available")]
 
+LoadCellOffset = Annotated[int, Field(ge=-255, le=255, description="Load cell offset value [-255, 255]")]
+
+
+class LoadCellCalibration(BaseModel):
+    measured_offset: Dict[LoadCellOffset, float] = Field({}, title="Load cells offset. Each entry is expected to be in the format of: Channel : (offset, baseline)")
+    measured_weight: List[Tuple[float, float]] = Field({}, title="Load cells measured weight. Each entry is expected to be in the format of: (known weight(g), baseline)")
+
 
 class LoadCellsCalibrationInput(RigCalibrationModel):
-    pass
+    channels: Dict[LoadCellChannel, LoadCellCalibration] = Field(default={}, title="Load cells calibration data")
+    weight_units: MassUnit = Field(default=MassUnit.G, title="Weight units")
 
 
 class LoadCellsCalibrationOutput(RigCalibrationModel):
-    pass
+    offset: Dict[LoadCellChannel, LoadCellOffset] = Field(default={lc: 0 for lc in range(8)}, validate_default=True, title="Load cells offset")
+    weight_lookup: Dict[LoadCellChannel, Tuple[float, float]] = Field({}, validate_default=True, title="Load cells lookup calibration table for each channel: (weight, baseline)")
 
 
 class LoadCellsCalibration(Calibration):
