@@ -1,21 +1,37 @@
-from typing import Dict, List, Literal, Optional
+from typing import Dict, List, Literal, Optional, Annotated
 
 from aind_behavior_services.calibration import OperationControlModel, RigCalibrationFullModel, RigCalibrationModel
 from aind_data_schema.models.devices import Calibration
-from pydantic import Field, PositiveFloat
+from pydantic import Field
+
+__version__ = "0.1.0"
+
+PositiveFloat = Annotated[float, Field(gt=0)]
 
 
 class WaterValveCalibrationInput(RigCalibrationModel):
     """Input for water valve calibration class"""
 
-    valve_open_interval: PositiveFloat = Field(
-        ..., description="Time between two consecutive valve openings (s)", title="Valve open interval", units="s"
+    valve_open_interval: float = Field(
+        ...,
+        description="Time between two consecutive valve openings (s)",
+        title="Valve open interval",
+        units="s",
+        gt=0,
     )
-    valve_open_time: PositiveFloat = Field(
-        ..., description="Valve open interval (s)", title="Valve open time", units="s"
+    valve_open_time: float = Field(
+        ...,
+        description="Valve open interval (s)",
+        title="Valve open time",
+        units="s",
+        gt=0,
     )
     water_weight: List[PositiveFloat] = Field(
-        ..., description="Weight of water delivered (g)", title="Water weight", units="g", min_length=1
+        ...,
+        description="Weight of water delivered (g)",
+        title="Water weight",
+        units="g",
+        min_length=1,
     )
     repeat_count: int = Field(..., ge=0, description="Number of times the valve opened.", title="Repeat count")
 
@@ -41,7 +57,7 @@ class WaterValveCalibrationOutput(RigCalibrationModel):
         title="Regression offset",
         units="g",
     )
-    r2: PositiveFloat = Field(..., description="R2 metric from the linear model.", title="R2", gt=0, le=1)
+    r2: float = Field(..., description="R2 metric from the linear model.", title="R2", ge=0, le=1)
     valid_domain: Optional[List[PositiveFloat]] = Field(
         None,
         description="The optional time-intervals the calibration curve was calculated on.",
@@ -69,10 +85,17 @@ class WaterValveOperationControl(OperationControlModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
 
     valve_open_time: list[PositiveFloat] = Field(
-        ..., min_length=1, description="An array with the times (s) the valve is open during calibration", units="s"
+        ...,
+        min_length=1,
+        description="An array with the times (s) the valve is open during calibration",
+        units="s",
     )
-    valve_open_interval: PositiveFloat = Field(
-        0.2, description="Time between two consecutive valve openings (s)", title="Valve open interval", units="s"
+    valve_open_interval: float = Field(
+        0.2,
+        description="Time between two consecutive valve openings (s)",
+        title="Valve open interval",
+        units="s", 
+        gt=0,
     )
     repeat_count: int = Field(
         200,
@@ -83,7 +106,7 @@ class WaterValveOperationControl(OperationControlModel):
 
 
 class WaterValveCalibrationModel(RigCalibrationFullModel):
-    schema_version: Literal["0.1.0"] = "0.1.0"
+    schema_version: Literal[__version__] = __version__
     describedBy: Literal[""] = ""
     operation_control: WaterValveOperationControl
     calibration: Optional[WaterValveCalibration] = Field(None, description="Calibration data")
