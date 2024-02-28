@@ -5,8 +5,8 @@
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
                  xmlns:p2="clr-namespace:;assembly=AllenNeuralDynamics.Core.Design"
-                 xmlns:p3="clr-namespace:AllenNeuralDynamics.Core.Design;assembly=AllenNeuralDynamics.Core.Design"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:p3="clr-namespace:AllenNeuralDynamics.Core.Design;assembly=AllenNeuralDynamics.Core.Design"
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
                  xmlns:p4="clr-namespace:AindBehaviorRigCalibration.OlfactometerCalibration;assembly=Extensions"
                  xmlns:p5="clr-namespace:AindVrForagingDataSchema.AindVrForagingRig;assembly=Extensions"
@@ -51,11 +51,44 @@
               <VisualizerType xsi:type="TypeMapping" TypeArguments="p2:SoftwareEventVisualizer" />
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:ToggleButton">
-                <p3:CheckedLabel>Running...</p3:CheckedLabel>
-                <p3:UncheckedLabel>Start</p3:UncheckedLabel>
-                <p3:IsInitiallyChecked>false</p3:IsInitiallyChecked>
+              <Combinator xsi:type="BooleanProperty">
+                <Value>true</Value>
               </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>StartExperimentTrigger</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="BooleanProperty">
+                <Value>false</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Merge" />
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="Enabled" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p3:PushButton">
+                <p3:Label>Start!</p3:Label>
+                <p3:Enabled>true</p3:Enabled>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:PublishSubject">
+              <Name>StartButton</Name>
             </Expression>
             <Expression xsi:type="VisualizerMapping">
               <VisualizerType xsi:type="TypeMapping" TypeArguments="p3:ToggleButtonVisualizer" />
@@ -69,18 +102,8 @@
               <viz:CellSpans />
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
-            <Expression xsi:type="rx:Condition">
-              <Workflow>
-                <Nodes>
-                  <Expression xsi:type="WorkflowInput">
-                    <Name>Source1</Name>
-                  </Expression>
-                  <Expression xsi:type="WorkflowOutput" />
-                </Nodes>
-                <Edges>
-                  <Edge From="0" To="1" Label="Source1" />
-                </Edges>
-              </Workflow>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>StartButton</Name>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Take">
@@ -96,16 +119,23 @@
             <Edge From="0" To="1" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
             <Edge From="2" To="3" Label="Source1" />
-            <Edge From="3" To="8" Label="Source1" />
+            <Edge From="3" To="16" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="8" Label="Source2" />
+            <Edge From="5" To="16" Label="Source2" />
             <Edge From="6" To="7" Label="Source1" />
-            <Edge From="6" To="10" Label="Source1" />
-            <Edge From="7" To="8" Label="Source3" />
+            <Edge From="7" To="11" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
-            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="9" To="10" Label="Source1" />
+            <Edge From="10" To="11" Label="Source2" />
             <Edge From="11" To="12" Label="Source1" />
             <Edge From="12" To="13" Label="Source1" />
+            <Edge From="13" To="14" Label="Source1" />
+            <Edge From="14" To="15" Label="Source1" />
+            <Edge From="15" To="16" Label="Source3" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="18" To="19" Label="Source1" />
+            <Edge From="19" To="20" Label="Source1" />
+            <Edge From="20" To="21" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
