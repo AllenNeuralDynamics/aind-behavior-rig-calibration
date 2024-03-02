@@ -14,11 +14,11 @@ dynamic = ["version", "readme"]
 
 dependencies = [
     'aind_data_schema',
+    'harp-python',
 ]
 
 [project.optional-dependencies]
 dev = [
-    'aind_behavior_services[docs]',
     'aind_behavior_services[linters]'
 ]
 
@@ -31,11 +31,6 @@ linters = [
     'isort'
 ]
 
-docs = [
-    'Sphinx',
-    'sphinx-jinja',
-    'furo'
-]
 
 [tool.setuptools.packages.find]
 where = ["src/DataSchemas"]
