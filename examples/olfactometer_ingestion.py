@@ -1,15 +1,18 @@
-import harp
-import harp.reader
-from harp.reader import DeviceReader, _create_register_parser, _ReaderParams
+import glob
+import io
+import json
+import sys
 from os import PathLike
 from pathlib import Path
+from typing import List, Optional, TextIO
+
+import harp
+import harp.reader
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import sys
-import matplotlib.pyplot as plt
 import requests
-from typing import TextIO
-import io
+from harp.reader import DeviceReader, _create_register_parser, _ReaderParams
 
 
 def create_device(
@@ -42,11 +45,6 @@ def create_reader(
     return DeviceReader(device, reg_readers)
 
 
-from typing import Optional, List
-from os import PathLike
-import glob
-import json
-import pandas as pd
 
 
 def populate_software_events(target_folder="SoftwareEvents", root_path: PathLike = "."):
