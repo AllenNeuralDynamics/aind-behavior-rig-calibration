@@ -15,11 +15,14 @@ dynamic = ["version", "readme"]
 dependencies = [
     'aind_data_schema',
     'harp-python',
+    'matplotlib',
+    'scipy',
 ]
 
 [project.optional-dependencies]
 dev = [
-    'aind_behavior_services[linters]'
+    'aind_behavior_services[linters]',
+    'jupyter',
 ]
 
 linters = [
