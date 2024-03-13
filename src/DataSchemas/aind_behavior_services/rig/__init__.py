@@ -146,4 +146,4 @@ class Valve(AindModel):
 class AindBehaviorRigModel(AindCoreModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
-    schema_version: Literal[__version__] = Field(default=__version__)
+    schema_version: Literal[__version__] = __version__

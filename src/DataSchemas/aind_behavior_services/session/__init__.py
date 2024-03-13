@@ -10,7 +10,7 @@ __version__ = "0.1.0"
 
 
 class AindBehaviorSessionModel(AindCoreModel):
-    schema_version: Literal[__version__] = Field(default=__version__)
+    schema_version: Literal[__version__] = __version__
     experiment: str = Field(..., description="Name of the experiment")
     date: datetime = Field(default_factory=datetime.now, description="Date of the experiment")
     root_path: str = Field(..., description="Root path where data will be logged")
