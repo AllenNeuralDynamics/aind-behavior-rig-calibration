@@ -30,6 +30,8 @@ class HarpDeviceType(str, Enum):
     LICKOMETER = "lickometer"
     ANALOGINPUT = "analoginput"
     SOUNDCARD = "soundcard"
+    SNIFFDETECTOR = "sniffdetector"
+    CUTTLEFISH = "cuttlefish"
     GENERIC = "generic"
 
 
@@ -78,17 +80,39 @@ class HarpAnalogInput(HarpDeviceBase):
 
 class HarpLickometer(HarpDeviceBase):
     device_type: Literal[HarpDeviceType.LICKOMETER] = HarpDeviceType.LICKOMETER
-    who_am_i: Literal[None] = None
+    who_am_i: Literal[1400] = 1400
+
+
+class HarpSniffDetector(HarpDeviceBase):
+    device_type: Literal[HarpDeviceType.SNIFFDETECTOR] = HarpDeviceType.SNIFFDETECTOR
+    who_am_i: Literal[1401] = None
 
 
 class HarpTreadmill(HarpDeviceBase):
     device_type: Literal[HarpDeviceType.TREADMILL] = HarpDeviceType.TREADMILL
-    who_am_i: Literal[None] = None
+    who_am_i: Literal[1402] = 1402
+
+
+class HarpCuttlefish(HarpDeviceBase):
+    device_type: Literal[HarpDeviceType.CUTTLEFISH] = HarpDeviceType.CUTTLEFISH
+    who_am_i: Literal[1403] = 1403
 
 
 class HarpDevice(RootModel):
     root: Annotated[
-        Union[HarpBehavior, HarpOlfactometer, HarpClockGenerator, HarpAnalogInput, HarpLickometer, HarpTreadmill],
+        Union[
+            HarpBehavior,
+            HarpOlfactometer,
+            HarpClockGenerator,
+            HarpAnalogInput,
+            HarpLickometer,
+            HarpTreadmill,
+            HarpCuttlefish,
+            HarpLoadCells,
+            HarpSoundCard,
+            HarpSniffDetector,
+            HarpClockSynchronizer,
+        ],
         Field(discriminator="device_type"),
     ]
 
