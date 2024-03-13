@@ -11,6 +11,9 @@ from aind_data_schema.base import AindCoreModel, AindModel
 from pydantic import Field, RootModel
 
 
+__version__ = "0.1.1"
+
+
 class SpinnakerCamera(AindModel):
     serial_number: str = Field(..., description="Camera serial number")
     binning: int = Field(default=1, ge=1, description="Binning")
@@ -143,3 +146,4 @@ class Valve(AindModel):
 class AindBehaviorRigModel(AindCoreModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
+    schema_version: Literal[__version__] = Field(default=__version__)

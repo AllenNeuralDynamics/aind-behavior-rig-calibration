@@ -1,13 +1,16 @@
 # Import core types
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Literal
 
 # Import aind-datas-schema types
 from aind_data_schema.base import AindCoreModel
 from pydantic import Field
 
+__version__ = "0.1.0"
+
 
 class AindBehaviorSessionModel(AindCoreModel):
+    schema_version: Literal[__version__] = Field(default=__version__)
     experiment: str = Field(..., description="Name of the experiment")
     date: datetime = Field(default_factory=datetime.now, description="Date of the experiment")
     root_path: str = Field(..., description="Root path where data will be logged")
