@@ -25,8 +25,10 @@ class SchemaVersionCoercionTest(unittest.TestCase):
         pre_instance = AindBehaviorRigModelPre()
         post_instance = AindBehaviorRigModelPost()
 
-        with self.assertRaises(ValidationError):
+        try:
             pre_updated = AindBehaviorRigModelPost.model_validate_json(pre_instance.model_dump_json())
+        except ValidationError as e:
+            self.fail(f"Validation failed with error: {e}")
 
         self.assertEqual(
             pre_updated.schema_version, post_instance.schema_version, "Schema version was not coerced correctly."
