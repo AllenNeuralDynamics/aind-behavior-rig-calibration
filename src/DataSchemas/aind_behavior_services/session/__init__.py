@@ -1,6 +1,6 @@
 # Import core types
 from datetime import datetime
-from typing import Optional, Literal
+from typing import Literal, Optional
 
 # Import aind-datas-schema types
 from aind_data_schema.base import AindCoreModel

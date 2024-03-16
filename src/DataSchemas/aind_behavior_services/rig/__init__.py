@@ -10,7 +10,6 @@ from typing import Annotated, Any, Literal, Optional, Union
 from aind_data_schema.base import AindCoreModel, AindModel
 from pydantic import Field, RootModel
 
-
 __version__ = "0.1.1"
 
 
