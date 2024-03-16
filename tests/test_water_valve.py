@@ -2,10 +2,10 @@ import unittest
 from datetime import datetime
 
 from aind_behavior_services.calibration.water_valve import (
+    Measurement,
     WaterValveCalibration,
     WaterValveCalibrationInput,
     WaterValveCalibrationOutput,
-    Measurement
 )
 from aind_data_schema.models.devices import Calibration
 from pydantic import ValidationError
@@ -23,9 +23,7 @@ class WaterValveTests(unittest.TestCase):
         _linear_model = lambda time: _slope * time + _offset
         _water_weights = [_linear_model(x) for x in _delta_times]
         _inputs = [
-            Measurement(
-                valve_open_interval=0.5, valve_open_time=t[0], water_weight=[t[1]], repeat_count=1
-            )
+            Measurement(valve_open_interval=0.5, valve_open_time=t[0], water_weight=[t[1]], repeat_count=1)
             for t in zip(_delta_times, _water_weights)
         ]
 
