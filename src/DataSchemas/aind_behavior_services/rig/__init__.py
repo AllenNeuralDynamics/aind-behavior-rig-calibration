@@ -82,7 +82,7 @@ class HarpAnalogInput(HarpDeviceBase):
 
 class HarpLickometer(HarpDeviceBase):
     device_type: Literal[HarpDeviceType.LICKOMETER] = HarpDeviceType.LICKOMETER
-    who_am_i: Literal[1400] = 1400
+    who_am_i: Literal[1400] = None
 
 
 class HarpSniffDetector(HarpDeviceBase):
