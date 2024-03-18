@@ -1,7 +1,12 @@
 from typing import Annotated, Dict, List, Literal, Optional, Tuple
 
-from aind_behavior_services.calibration import OperationControlModel, RigCalibrationFullModel, RigCalibrationModel
-from aind_data_schema.models.devices import Calibration
+from aind_behavior_services.calibration import (
+    CalibrationBase,
+    OperationControlModel,
+    RigCalibrationFullModel,
+    RigCalibrationModel,
+)
+from aind_data_schema.base import AindGeneric
 from aind_data_schema.models.units import MassUnit
 from pydantic import BaseModel, Field
 
@@ -41,7 +46,7 @@ class LoadCellsCalibrationOutput(RigCalibrationModel):
     )
 
 
-class LoadCellsCalibration(Calibration):
+class LoadCellsCalibration(CalibrationBase):
     """Load cells calibration class"""
 
     device_name: str = Field("LoadCells", title="Device name", description="Must match a device name in rig/instrument")
@@ -49,6 +54,9 @@ class LoadCellsCalibration(Calibration):
     input: LoadCellsCalibrationInput = Field(default=..., title="Input of the calibration")
     output: LoadCellsCalibrationOutput = Field(default=..., title="Output of the calibration.")
     notes: Optional[str] = Field(None, title="Notes")
+
+    def calibrate(self, input: Optional[LoadCellsCalibrationInput] = None):
+        return super().calibrate(input)
 
 
 class LoadCellsOperationControl(OperationControlModel):

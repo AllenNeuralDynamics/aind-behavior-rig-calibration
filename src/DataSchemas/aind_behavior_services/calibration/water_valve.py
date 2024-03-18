@@ -1,8 +1,14 @@
 from typing import Annotated, Dict, List, Literal, Optional
 
-from aind_behavior_services.calibration import OperationControlModel, RigCalibrationFullModel, RigCalibrationModel
-from aind_data_schema.models.devices import Calibration
+import numpy as np
+from aind_behavior_services.calibration import (
+    CalibrationBase,
+    OperationControlModel,
+    RigCalibrationFullModel,
+    RigCalibrationModel,
+)
 from pydantic import BaseModel, Field
+from sklearn.linear_model import LinearRegression
 
 __version__ = "0.1.0"
 
@@ -71,7 +77,7 @@ class WaterValveCalibrationOutput(RigCalibrationModel):
     )
 
 
-class WaterValveCalibration(Calibration):
+class WaterValveCalibration(CalibrationBase):
     """Water valve calibration class"""
 
     device_name: str = Field(
@@ -81,8 +87,39 @@ class WaterValveCalibration(Calibration):
         "Calibration of the water valve delivery system"
     )
     input: WaterValveCalibrationInput = Field(default=..., title="Input of the calibration")
-    output: WaterValveCalibrationOutput = Field(default=..., title="Output of the calibration.")
+    output: WaterValveCalibrationOutput = Field(default=None, title="Output of the calibration.")
     notes: Optional[str] = Field(None, title="Notes")
+
+    def calibrate(
+        self, input: Optional[WaterValveCalibrationInput] = None, inplace: bool = True
+    ) -> WaterValveCalibrationOutput:
+        """Calibrate the water valve delivery system by populating the output field"""
+        # Calculate average volume per each measurement
+        if input is None:
+            input = self.input
+
+        x_times = []
+        y_weight = []
+
+        for measurement in input.measurements:
+            for weight in measurement.water_weight:
+                x_times.append(measurement.valve_open_time)
+                y_weight.append(weight / measurement.repeat_count)
+        x_times = np.asarray(x_times)
+        y_weight = np.asarray(y_weight)
+        # Calculate the linear regression
+        model = LinearRegression()
+        model.fit(x_times.reshape(-1, 1), y_weight)
+        _output = WaterValveCalibrationOutput(
+            interval_average={x: np.mean(y_weight[x_times == x]) for x in np.unique(x_times)},
+            slope=model.coef_[0],
+            offset=model.intercept_,
+            r2=model.score(x_times.reshape(-1, 1), y_weight),
+            valid_domain=list(np.unique(x_times)),
+        )
+        if inplace:
+            self.output = _output
+        return _output
 
 
 class WaterValveOperationControl(OperationControlModel):
