@@ -59,4 +59,4 @@ def coerce_schema_version(cls: BaseModel, v: str) -> str:
         )
         return str(_default_schema_version)
     else:
-        return v
+        return str(v)
