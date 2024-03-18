@@ -13,7 +13,7 @@ classifiers = [
 dynamic = ["version", "readme"]
 
 dependencies = [
-    'aind_data_schema',
+    'aind_data_schema == 0.31.8',
     'harp-python',
 ]
 
