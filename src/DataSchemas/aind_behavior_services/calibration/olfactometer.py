@@ -1,8 +1,8 @@
 from enum import IntEnum
 from typing import Dict, Literal, Optional
 
-from aind_behavior_services.calibration import OperationControlModel, RigCalibrationFullModel
-from aind_data_schema.models.devices import Calibration, OlfactometerChannel
+from aind_behavior_services.calibration import CalibrationBase, OperationControlModel, RigCalibrationFullModel
+from aind_data_schema.models.devices import OlfactometerChannel
 from aind_data_schema.models.stimulus import OlfactometerChannelConfig
 from pydantic import Field
 
@@ -31,7 +31,7 @@ class OlfactometerOperationControl(OperationControlModel):
     time_off: float = Field(1, ge=0, description="Time (s) the valve is close during calibration", units="s")
 
 
-class OlfactometerCalibration(Calibration):
+class OlfactometerCalibration(CalibrationBase):
     """Olfactometer calibration class"""
 
     device_name: str = Field(
@@ -39,6 +39,9 @@ class OlfactometerCalibration(Calibration):
     )
     description: Literal["Calibration of the harp olfactometer device"] = "Calibration of the harp olfactometer device"
     notes: Optional[str] = Field(None, title="Notes")
+
+    def calibrate(self, *args, **kwargs):
+        return super().calibrate(input)
 
 
 class OlfactometerCalibrationModel(RigCalibrationFullModel):

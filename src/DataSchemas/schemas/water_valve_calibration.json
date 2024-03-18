@@ -153,11 +153,19 @@
           "units": "g"
         },
         "r2": {
+          "default": null,
           "description": "R2 metric from the linear model.",
-          "maximum": 1.0,
-          "minimum": 0.0,
-          "title": "R2",
-          "type": "number"
+          "oneOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "R2"
         },
         "valid_domain": {
           "default": null,
@@ -181,8 +189,7 @@
       },
       "required": [
         "slope",
-        "offset",
-        "r2"
+        "offset"
       ],
       "title": "WaterValveCalibrationOutput",
       "type": "object"

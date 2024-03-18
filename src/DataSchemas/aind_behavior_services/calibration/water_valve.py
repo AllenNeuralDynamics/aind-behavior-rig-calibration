@@ -1,8 +1,15 @@
+from __future__ import annotations
 from typing import Annotated, Dict, List, Literal, Optional
 
-from aind_behavior_services.calibration import OperationControlModel, RigCalibrationFullModel, RigCalibrationModel
-from aind_data_schema.models.devices import Calibration
+import numpy as np
+from aind_behavior_services.calibration import (
+    CalibrationBase,
+    OperationControlModel,
+    RigCalibrationFullModel,
+    RigCalibrationModel,
+)
 from pydantic import BaseModel, Field
+from sklearn.linear_model import LinearRegression
 
 __version__ = "0.1.0"
 
@@ -39,6 +46,32 @@ class Measurement(BaseModel):
 class WaterValveCalibrationInput(RigCalibrationModel):
     measurements: List[Measurement] = Field(default=[], description="List of measurements")
 
+    def calibrate_output(self, input: Optional[WaterValveCalibrationInput] = None) -> WaterValveCalibrationOutput:
+        """Calibrate the water valve delivery system by populating the output field"""
+        # Calculate average volume per each measurement
+        if input is None:
+            input = self
+
+        x_times = []
+        y_weight = []
+
+        for measurement in input.measurements:
+            for weight in measurement.water_weight:
+                x_times.append(measurement.valve_open_time)
+                y_weight.append(weight / measurement.repeat_count)
+        x_times = np.asarray(x_times)
+        y_weight = np.asarray(y_weight)
+        # Calculate the linear regression
+        model = LinearRegression()
+        model.fit(x_times.reshape(-1, 1), y_weight)
+        return WaterValveCalibrationOutput(
+            interval_average={x: np.mean(y_weight[x_times == x]) for x in np.unique(x_times)},
+            slope=model.coef_[0],
+            offset=model.intercept_,
+            r2=model.score(x_times.reshape(-1, 1), y_weight),
+            valid_domain=list(np.unique(x_times)),
+        )
+
 
 class WaterValveCalibrationOutput(RigCalibrationModel):
     """Output for water valve calibration class"""
@@ -61,9 +94,9 @@ class WaterValveCalibrationOutput(RigCalibrationModel):
         title="Regression offset",
         units="g",
     )
-    r2: float = Field(..., description="R2 metric from the linear model.", title="R2", ge=0, le=1)
+    r2: Optional[float] = Field(default=None, description="R2 metric from the linear model.", title="R2", ge=0, le=1)
     valid_domain: Optional[List[PositiveFloat]] = Field(
-        None,
+        default=None,
         description="The optional time-intervals the calibration curve was calculated on.",
         min_length=2,
         title="Valid domain",
@@ -71,7 +104,7 @@ class WaterValveCalibrationOutput(RigCalibrationModel):
     )
 
 
-class WaterValveCalibration(Calibration):
+class WaterValveCalibration(CalibrationBase):
     """Water valve calibration class"""
 
     device_name: str = Field(

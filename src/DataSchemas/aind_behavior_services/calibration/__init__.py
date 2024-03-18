@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from abc import ABCMeta, abstractmethod
 from datetime import datetime
-from typing import Optional, TypeVar
+from typing import Any, Optional
 
 from aind_data_schema.base import AindCoreModel, AindGeneric
+from aind_data_schema.models.devices import Calibration
 from aind_data_schema.models.stimulus import Software
-from pydantic import BaseModel, Field, RootModel
+from pydantic import BaseModel, Field, RootModel, model_validator
 
 
 class RigCalibrationCoreModel(AindCoreModel):
@@ -22,6 +24,10 @@ class OperationControlModel(RigCalibrationModel):
 
 class BonsaiWorkflow(Software):
     """Bonsai workflow"""
+
+
+class CalibrationBase(Calibration):
+    """Base class for all calibration models"""
 
 
 class RigCalibrationFullModel(RigCalibrationCoreModel):
