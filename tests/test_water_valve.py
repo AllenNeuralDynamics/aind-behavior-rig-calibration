@@ -60,17 +60,19 @@ class WaterValveTests(unittest.TestCase):
         _offset = -0.3
         _linear_model = lambda time: _slope * time + _offset
         _water_weights = [_linear_model(x) for x in _delta_times]
-        _inputs = [
-            Measurement(valve_open_interval=0.5, valve_open_time=t[0], water_weight=[t[1]], repeat_count=1)
-            for t in zip(_delta_times, _water_weights)
-        ]
+        _inputs = WaterValveCalibrationInput(
+            measurements=[
+                Measurement(valve_open_interval=0.5, valve_open_time=t[0], water_weight=[t[1]], repeat_count=1)
+                for t in zip(_delta_times, _water_weights)
+            ]
+        )
 
         calibration = WaterValveCalibration(
-            input=WaterValveCalibrationInput(measurements=_inputs),
+            input=_inputs,
+            output=_inputs.calibrate_output(),
             device_name="WaterValve",
             calibration_date=datetime.now(),
         )
-        calibration.calibrate()
 
         self.assertAlmostEqual(_slope, calibration.output.slope, 2, "Slope is not almost equal")
         self.assertAlmostEqual(_offset, calibration.output.offset, 2, "Offset is not almost equal")

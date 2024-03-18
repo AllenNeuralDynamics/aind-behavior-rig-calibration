@@ -17,6 +17,7 @@ _inputs = [
     for t in zip(_delta_times, _water_weights)
 ]
 
+
 _outputs = WaterValveCalibrationOutput(
     interval_average={interval: volume for interval, volume in zip(_delta_times, _water_weights)},
     slope=_slope,
@@ -25,10 +26,10 @@ _outputs = WaterValveCalibrationOutput(
     valid_domain=[value for value in _delta_times],
 )
 
-
+input = WaterValveCalibrationInput(measurements=_inputs)
 calibration = WaterValveCalibration(
-    input=WaterValveCalibrationInput(measurements=_inputs),
+    input=input,
+    output=input.calibrate_output(),
     device_name="WaterValve",
     calibration_date=datetime.now(),
 )
-calibration = (calibration.calibrate())

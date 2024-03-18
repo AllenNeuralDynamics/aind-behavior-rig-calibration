@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
-from typing import Any, Optional, TypeVar
+from typing import Any, Optional
 
 from aind_data_schema.base import AindCoreModel, AindGeneric
 from aind_data_schema.models.devices import Calibration
@@ -26,12 +26,8 @@ class BonsaiWorkflow(Software):
     """Bonsai workflow"""
 
 
-class CalibrationBase(Calibration, metaclass=ABCMeta):
+class CalibrationBase(Calibration):
     """Base class for all calibration models"""
-
-    @abstractmethod
-    def calibrate(self, input: Optional[AindGeneric] = None) -> AindGeneric:
-        raise NotImplementedError
 
 
 class RigCalibrationFullModel(RigCalibrationCoreModel):
