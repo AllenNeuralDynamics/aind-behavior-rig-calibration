@@ -52,6 +52,30 @@ class WaterValveTests(unittest.TestCase):
         except ValidationError as e:
             self.fail(f"Validation failed with error: {e}")
 
+    def test_calibration_on_null_output(self):
+        """Test the compare_version method."""
+
+        _delta_times = [0.1, 0.2, 0.3, 0.4, 0.5]
+        _slope = 10.1
+        _offset = -0.3
+        _linear_model = lambda time: _slope * time + _offset
+        _water_weights = [_linear_model(x) for x in _delta_times]
+        _inputs = [
+            Measurement(valve_open_interval=0.5, valve_open_time=t[0], water_weight=[t[1]], repeat_count=1)
+            for t in zip(_delta_times, _water_weights)
+        ]
+
+        calibration = WaterValveCalibration(
+            input=WaterValveCalibrationInput(measurements=_inputs),
+            device_name="WaterValve",
+            calibration_date=datetime.now(),
+        )
+        calibration.calibrate()
+
+        self.assertAlmostEqual(_slope, calibration.output.slope, 2, "Slope is not almost equal")
+        self.assertAlmostEqual(_offset, calibration.output.offset, 2, "Offset is not almost equal")
+        self.assertAlmostEqual(1.0, calibration.output.r2, 2, "R2 is not almost equal")
+
 
 if __name__ == "__main__":
     unittest.main()
