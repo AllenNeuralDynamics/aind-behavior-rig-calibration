@@ -37,4 +37,3 @@ These should only need to be installed once on a fresh new system, and are not r
 ## Project dependency tree
 
 ![Dependency tree](./assets/dependency_tree.drawio.svg)
-<img src="./assets/dependency_tree.drawio.svg">
