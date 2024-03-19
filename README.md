@@ -32,3 +32,9 @@ These should only need to be installed once on a fresh new system, and are not r
  2 - Run `bonsai.sgen` targeting the root schema in `src\DataSchemas`. E.g.:
 
  3 - Regenerate by running `src\DataSchemas\regenerate.cmd`
+
+
+## Project dependency tree
+
+![Dependency tree](./assets/dependency_tree.drawio.svg)
+<img src="./assets/dependency_tree.drawio.svg">
