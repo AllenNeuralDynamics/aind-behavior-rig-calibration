@@ -10,7 +10,7 @@ from typing import Annotated, Any, Literal, Optional, Union
 from aind_data_schema.base import AindCoreModel, AindModel
 from pydantic import Field, RootModel
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 
 class SpinnakerCamera(AindModel):
@@ -82,7 +82,7 @@ class HarpAnalogInput(HarpDeviceBase):
 
 class HarpLickometer(HarpDeviceBase):
     device_type: Literal[HarpDeviceType.LICKOMETER] = HarpDeviceType.LICKOMETER
-    who_am_i: Literal[None] = None
+    who_am_i: Literal[1400] = 1400
 
 
 class HarpSniffDetector(HarpDeviceBase):
