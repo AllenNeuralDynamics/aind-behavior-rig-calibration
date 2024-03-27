@@ -1782,6 +1782,11 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:LastOrDefault" />
       </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Delay">
+          <rx:DueTime>PT5S</rx:DueTime>
+        </Combinator>
+      </Expression>
       <Expression xsi:type="rx:PublishSubject">
         <Name>EndExperiment</Name>
       </Expression>
@@ -2358,18 +2363,19 @@
       <Edge From="37" To="38" Label="Source1" />
       <Edge From="38" To="39" Label="Source1" />
       <Edge From="39" To="40" Label="Source1" />
-      <Edge From="40" To="42" Label="Source1" />
-      <Edge From="41" To="42" Label="Source2" />
-      <Edge From="43" To="46" Label="Source1" />
-      <Edge From="44" To="45" Label="Source1" />
-      <Edge From="45" To="46" Label="Source2" />
-      <Edge From="46" To="48" Label="Source1" />
-      <Edge From="47" To="48" Label="Source2" />
-      <Edge From="49" To="50" Label="Source1" />
+      <Edge From="40" To="41" Label="Source1" />
+      <Edge From="41" To="43" Label="Source1" />
+      <Edge From="42" To="43" Label="Source2" />
+      <Edge From="44" To="47" Label="Source1" />
+      <Edge From="45" To="46" Label="Source1" />
+      <Edge From="46" To="47" Label="Source2" />
+      <Edge From="47" To="49" Label="Source1" />
+      <Edge From="48" To="49" Label="Source2" />
       <Edge From="50" To="51" Label="Source1" />
       <Edge From="51" To="52" Label="Source1" />
       <Edge From="52" To="53" Label="Source1" />
       <Edge From="53" To="54" Label="Source1" />
+      <Edge From="54" To="55" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
