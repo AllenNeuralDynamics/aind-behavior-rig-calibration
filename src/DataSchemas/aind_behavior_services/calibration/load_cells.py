@@ -10,7 +10,7 @@ from aind_data_schema.base import AindGeneric
 from aind_data_schema.models.units import MassUnit
 from pydantic import BaseModel, Field
 
-__version__ = "0.1.0"
+__VERSION__ = "0.2.0"
 
 LoadCellChannel = Annotated[int, Field(ge=0, le=7, description="Load cell channel number available")]
 
@@ -56,7 +56,7 @@ class LoadCellsCalibration(CalibrationBase):
     notes: Optional[str] = Field(None, title="Notes")
 
     def calibrate(self, input: Optional[LoadCellsCalibrationInput] = None):
-        return super().calibrate(input)
+        raise NotImplementedError
 
 
 class LoadCellsOperationControl(OperationControlModel):
@@ -72,7 +72,9 @@ class LoadCellsOperationControl(OperationControlModel):
 
 
 class LoadCellsCalibrationModel(RigCalibrationFullModel):
-    schema_version: Literal[__version__] = __version__
-    describedBy: Literal[""] = ""
+    schema_version: Literal[__VERSION__] = __VERSION__
+    describedBy: Literal[
+        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json"
+    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json"
     operation_control: LoadCellsOperationControl = Field(..., title="Operation control")
     calibration: Optional[LoadCellsCalibration] = Field(None, description="Calibration data")
