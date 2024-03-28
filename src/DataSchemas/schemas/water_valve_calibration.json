@@ -235,14 +235,14 @@
   "additionalProperties": false,
   "properties": {
     "describedBy": {
-      "const": "",
-      "default": "",
+      "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json",
+      "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json",
       "title": "Describedby",
       "type": "string"
     },
     "schema_version": {
-      "const": "0.1.0",
-      "default": "0.1.0",
+      "const": "0.2.0",
+      "default": "0.2.0",
       "title": "Schema Version",
       "type": "string"
     },

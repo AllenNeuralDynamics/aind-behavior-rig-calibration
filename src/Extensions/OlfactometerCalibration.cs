@@ -681,9 +681,9 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     public partial class OlfactometerCalibrationModel
     {
     
-        private string _describedBy = "";
+        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json";
     
-        private string _schemaVersion = "0.1.0";
+        private string _schemaVersion = "0.2.0";
     
         private OlfactometerOperationControl _operationControl = new OlfactometerOperationControl();
     

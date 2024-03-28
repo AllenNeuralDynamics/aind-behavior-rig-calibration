@@ -547,9 +547,9 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
     public partial class LoadCellsCalibrationModel
     {
     
-        private string _describedBy = "";
+        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json";
     
-        private string _schemaVersion = "0.1.0";
+        private string _schemaVersion = "0.2.0";
     
         private LoadCellsOperationControl _operationControl = new LoadCellsOperationControl();
     
