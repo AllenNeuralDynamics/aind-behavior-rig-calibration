@@ -7,6 +7,9 @@ from aind_data_schema.models.stimulus import OlfactometerChannelConfig
 from pydantic import Field
 
 
+__VERSION__ = "0.2.0"
+
+
 class HarpOlfactometerChannel(IntEnum):
     """Harp Olfactometer available channel"""
 
@@ -45,7 +48,9 @@ class OlfactometerCalibration(CalibrationBase):
 
 
 class OlfactometerCalibrationModel(RigCalibrationFullModel):
-    schema_version: Literal["0.1.0"] = "0.1.0"
-    describedBy: Literal[""] = ""
+    schema_version: Literal[__VERSION__] = __VERSION__
+    describedBy: Literal[
+        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json"
+    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json"
     operation_control: OlfactometerOperationControl
     calibration: Optional[OlfactometerCalibration] = Field(None, description="Calibration data")

@@ -11,7 +11,7 @@ from aind_behavior_services.calibration import (
 from pydantic import BaseModel, Field
 from sklearn.linear_model import LinearRegression
 
-__version__ = "0.1.0"
+__VERSION__ = "0.2.0"
 
 PositiveFloat = Annotated[float, Field(gt=0)]
 
@@ -143,7 +143,9 @@ class WaterValveOperationControl(OperationControlModel):
 
 
 class WaterValveCalibrationModel(RigCalibrationFullModel):
-    schema_version: Literal[__version__] = __version__
-    describedBy: Literal[""] = ""
+    schema_version: Literal[__VERSION__] = __VERSION__
+    describedBy: Literal[
+        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json"
+    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json"
     operation_control: WaterValveOperationControl
     calibration: Optional[WaterValveCalibration] = Field(None, description="Calibration data")
