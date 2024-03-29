@@ -33,15 +33,15 @@ class Vector4(BaseModel):
 
 
 class MicrostepResolution(IntEnum):
-    MICROSTEP8: 0
-    MICROSTEP16: 1
-    MICROSTEP32: 2
-    MICROSTEP64: 3
+    MICROSTEP8 = 0
+    MICROSTEP16 = 1
+    MICROSTEP32 = 2
+    MICROSTEP64 = 3
 
 
 class MotorOperationMode(IntEnum):
-    QUIET: 0
-    DYNAMIC: 1
+    QUIET = 0
+    DYNAMIC = 1
 
 
 class AxisConfiguration(BaseModel):

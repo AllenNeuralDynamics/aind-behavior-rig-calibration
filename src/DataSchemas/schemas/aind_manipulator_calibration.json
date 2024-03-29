@@ -1,0 +1,404 @@
+{
+  "definitions": {
+    "AindManipulatorCalibration": {
+      "additionalProperties": false,
+      "description": "Load cells calibration class",
+      "properties": {
+        "calibration_date": {
+          "format": "date-time",
+          "title": "Date and time of calibration",
+          "type": "string"
+        },
+        "device_name": {
+          "default": "AindManipulator",
+          "description": "Must match a device name in rig/instrument",
+          "title": "Device name",
+          "type": "string"
+        },
+        "description": {
+          "const": "Calibration of the load cells system",
+          "default": "Calibration of the load cells system",
+          "title": "Description",
+          "type": "string"
+        },
+        "input": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/AindManipulatorCalibrationInput"
+            }
+          ],
+          "title": "Input of the calibration"
+        },
+        "output": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/AindManipulatorCalibrationOutput"
+            }
+          ],
+          "title": "Output of the calibration."
+        },
+        "notes": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "calibration_date",
+        "input",
+        "output"
+      ],
+      "title": "AindManipulatorCalibration",
+      "type": "object"
+    },
+    "AindManipulatorCalibrationInput": {
+      "additionalProperties": false,
+      "properties": {
+        "full_step_to_mm": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Vector4"
+            }
+          ],
+          "default": {
+            "x": 0.01,
+            "y1": 0.01,
+            "y2": 0.01,
+            "z": 0.01
+          },
+          "title": "Full step to mm"
+        }
+      },
+      "title": "AindManipulatorCalibrationInput",
+      "type": "object"
+    },
+    "AindManipulatorCalibrationOutput": {
+      "additionalProperties": false,
+      "properties": {},
+      "title": "AindManipulatorCalibrationOutput",
+      "type": "object"
+    },
+    "AindManipulatorOperationControl": {
+      "additionalProperties": false,
+      "properties": {
+        "AxesConfiguration": {
+          "default": [
+            {
+              "axis": 1,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 24000,
+              "min_limit": -1
+            },
+            {
+              "axis": 2,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 24000,
+              "min_limit": -1
+            },
+            {
+              "axis": 3,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 24000,
+              "min_limit": -1
+            },
+            {
+              "axis": 4,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 24000,
+              "min_limit": -1
+            }
+          ],
+          "items": {
+            "$ref": "#/definitions/AxisConfiguration"
+          },
+          "title": "Axes configuration. Only the axes that are configured will be enabled.",
+          "type": "array"
+        },
+        "HomingOrder": {
+          "default": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "items": {
+            "$ref": "#/definitions/Axis"
+          },
+          "title": "Homing order",
+          "type": "array"
+        },
+        "InitialPosition": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Vector4"
+            }
+          ],
+          "default": {
+            "x": 0.0,
+            "y1": 0.0,
+            "y2": 0.0,
+            "z": 0.0
+          }
+        }
+      },
+      "title": "AindManipulatorOperationControl",
+      "type": "object"
+    },
+    "Axis": {
+      "description": "Motor axis available",
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "title": "Axis",
+      "type": "integer"
+    },
+    "AxisConfiguration": {
+      "description": "Axis configuration",
+      "properties": {
+        "axis": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Axis"
+            }
+          ],
+          "title": "Axis to be configured"
+        },
+        "step_acceleration_interval": {
+          "default": 100,
+          "description": "Acceleration of the step interval in microseconds",
+          "maximum": 2000,
+          "minimum": 2,
+          "title": "Acceleration",
+          "type": "integer"
+        },
+        "step_interval": {
+          "default": 100,
+          "description": "Step interval in microseconds.",
+          "maximum": 20000,
+          "minimum": 100,
+          "title": "Step interval",
+          "type": "integer"
+        },
+        "microstep_resolution": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/MicrostepResolution"
+            }
+          ],
+          "default": 0,
+          "title": "Microstep resolution"
+        },
+        "maximum_step_interval": {
+          "default": 2000,
+          "maximum": 20000,
+          "minimum": 100,
+          "title": "Configures the time between step motor pulses (us) used when starting or stopping a movement",
+          "type": "integer"
+        },
+        "motor_operation_mode": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/MotorOperationMode"
+            }
+          ],
+          "default": 0,
+          "title": "Motor operation mode"
+        },
+        "max_limit": {
+          "default": 24000,
+          "title": "Maximum limit. A value of 0 disables this limit.",
+          "type": "integer"
+        },
+        "min_limit": {
+          "default": -1,
+          "title": "Minimum limit. A value of 0 disables this limit.",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "axis"
+      ],
+      "title": "AxisConfiguration",
+      "type": "object"
+    },
+    "MicrostepResolution": {
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "title": "MicrostepResolution",
+      "type": "integer"
+    },
+    "MotorOperationMode": {
+      "enum": [
+        0,
+        1
+      ],
+      "title": "MotorOperationMode",
+      "type": "integer"
+    },
+    "Vector4": {
+      "properties": {
+        "x": {
+          "title": "X coordinate",
+          "type": "number"
+        },
+        "y1": {
+          "title": "Y1 coordinate",
+          "type": "number"
+        },
+        "y2": {
+          "title": "Y2 coordinate",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z coordinate",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y1",
+        "y2",
+        "z"
+      ],
+      "title": "Vector4",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "describedBy": {
+      "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json",
+      "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json",
+      "title": "Describedby",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1.0",
+      "default": "0.1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "operation_control": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/AindManipulatorOperationControl"
+        }
+      ],
+      "title": "Operation control"
+    },
+    "calibration": {
+      "default": null,
+      "description": "Calibration data",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/AindManipulatorCalibration"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "rootPath": {
+      "description": "Root path of the experiment",
+      "title": "Rootpath",
+      "type": "string"
+    },
+    "date": {
+      "format": "date-time",
+      "title": "Date",
+      "type": "string"
+    },
+    "notes": {
+      "default": "",
+      "title": "Notes",
+      "type": "string"
+    },
+    "experiment": {
+      "default": "Calibration",
+      "description": "Name of the experiment",
+      "title": "Experiment",
+      "type": "string"
+    },
+    "experimenter": {
+      "default": "Experimenter",
+      "description": "Name of the subject",
+      "title": "Experimenter",
+      "type": "string"
+    },
+    "allowDirty": {
+      "default": false,
+      "description": "Allow code to run from dirty repository",
+      "title": "Allowdirty",
+      "type": "boolean"
+    },
+    "remoteDataPath": {
+      "default": null,
+      "description": "Path to remote data. If null, no attempt to copy data will be made",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Remotedatapath"
+    },
+    "rngSeed": {
+      "default": 0,
+      "description": "Seed of the random number generator. If 0 it will be randomized.",
+      "title": "Rngseed",
+      "type": "integer"
+    },
+    "commitHash": {
+      "default": null,
+      "description": "Commit hash of the repository",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Commithash"
+    }
+  },
+  "required": [
+    "operation_control",
+    "rootPath"
+  ],
+  "title": "AindManipulatorCalibrationModel",
+  "type": "object"
+}
