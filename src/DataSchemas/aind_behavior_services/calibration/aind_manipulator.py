@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 
 __version__ = "0.1.0"
 
-MIN_LIMIT = 0
+MIN_LIMIT = -1
 MAX_LIMIT = 24000
 
 
@@ -68,8 +68,8 @@ class AxisConfiguration(BaseModel):
         title="Configures the time between step motor pulses (us) used when starting or stopping a movement",
     )
     motor_operation_mode: MotorOperationMode = Field(default=MotorOperationMode.QUIET, title="Motor operation mode")
-    max_limit: int = Field(default=MAX_LIMIT, title="Maximum limit")
-    min_limit: int = Field(default=MIN_LIMIT, title="Minimum limit")
+    max_limit: int = Field(default=MAX_LIMIT, title="Maximum limit. A value of 0 disables this limit.")
+    min_limit: int = Field(default=MIN_LIMIT, title="Minimum limit. A value of 0 disables this limit.")
 
 
 class AindManipulatorCalibrationInput(RigCalibrationModel):
