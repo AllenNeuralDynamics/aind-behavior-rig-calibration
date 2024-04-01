@@ -11,9 +11,6 @@ from pydantic import BaseModel, Field
 
 __version__ = "0.1.0"
 
-MIN_LIMIT = -1
-MAX_LIMIT = 24000
-
 
 class Axis(IntEnum):
     """Motor axis available"""
@@ -68,8 +65,8 @@ class AxisConfiguration(BaseModel):
         title="Configures the time between step motor pulses (us) used when starting or stopping a movement",
     )
     motor_operation_mode: MotorOperationMode = Field(default=MotorOperationMode.QUIET, title="Motor operation mode")
-    max_limit: int = Field(default=MAX_LIMIT, title="Maximum limit. A value of 0 disables this limit.")
-    min_limit: int = Field(default=MIN_LIMIT, title="Minimum limit. A value of 0 disables this limit.")
+    max_limit: int = Field(default=24000, title="Maximum limit. A value of 0 disables this limit.")
+    min_limit: int = Field(default=-1, title="Minimum limit. A value of 0 disables this limit.")
 
 
 class AindManipulatorCalibrationInput(RigCalibrationModel):
@@ -93,7 +90,7 @@ class AindManipulatorCalibration(CalibrationBase):
 
 
 class AindManipulatorOperationControl(OperationControlModel):
-    AxesConfiguration: List[AxisConfiguration] = Field(
+    axis_configuration: List[AxisConfiguration] = Field(
         default=[
             AxisConfiguration(axis=Axis.Y1),
             AxisConfiguration(axis=Axis.Y2),
@@ -103,10 +100,10 @@ class AindManipulatorOperationControl(OperationControlModel):
         title="Axes configuration. Only the axes that are configured will be enabled.",
         validate_default=True,
     )
-    HomingOrder: List[Axis] = Field(
+    homing_order: List[Axis] = Field(
         default=[Axis.Y1, Axis.Y2, Axis.X, Axis.Z], title="Homing order", validate_default=True
     )
-    InitialPosition: Vector4 = Field(default=Vector4(y1=0, y2=0, x=0, z=0), validate_default=True)
+    initial_position: Vector4 = Field(default=Vector4(y1=0, y2=0, x=0, z=0), validate_default=True)
 
 
 class AindManipulatorCalibrationModel(RigCalibrationFullModel):

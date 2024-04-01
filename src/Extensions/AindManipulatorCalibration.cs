@@ -278,7 +278,7 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     public partial class AindManipulatorOperationControl
     {
     
-        private System.Collections.Generic.List<AxisConfiguration> _axesConfiguration = new System.Collections.Generic.List<AxisConfiguration>();
+        private System.Collections.Generic.List<AxisConfiguration> _axisConfiguration = new System.Collections.Generic.List<AxisConfiguration>();
     
         private System.Collections.Generic.List<Axis> _homingOrder = new System.Collections.Generic.List<Axis>();
     
@@ -290,27 +290,27 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     
         protected AindManipulatorOperationControl(AindManipulatorOperationControl other)
         {
-            _axesConfiguration = other._axesConfiguration;
+            _axisConfiguration = other._axisConfiguration;
             _homingOrder = other._homingOrder;
             _initialPosition = other._initialPosition;
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("AxesConfiguration")]
-        public System.Collections.Generic.List<AxisConfiguration> AxesConfiguration
+        [Newtonsoft.Json.JsonPropertyAttribute("axis_configuration")]
+        public System.Collections.Generic.List<AxisConfiguration> AxisConfiguration
         {
             get
             {
-                return _axesConfiguration;
+                return _axisConfiguration;
             }
             set
             {
-                _axesConfiguration = value;
+                _axisConfiguration = value;
             }
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("HomingOrder")]
+        [Newtonsoft.Json.JsonPropertyAttribute("homing_order")]
         public System.Collections.Generic.List<Axis> HomingOrder
         {
             get
@@ -324,7 +324,7 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("InitialPosition")]
+        [Newtonsoft.Json.JsonPropertyAttribute("initial_position")]
         public Vector4 InitialPosition
         {
             get
@@ -349,9 +349,9 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("AxesConfiguration = " + _axesConfiguration + ", ");
-            stringBuilder.Append("HomingOrder = " + _homingOrder + ", ");
-            stringBuilder.Append("InitialPosition = " + _initialPosition);
+            stringBuilder.Append("axis_configuration = " + _axisConfiguration + ", ");
+            stringBuilder.Append("homing_order = " + _homingOrder + ", ");
+            stringBuilder.Append("initial_position = " + _initialPosition);
             return true;
         }
     

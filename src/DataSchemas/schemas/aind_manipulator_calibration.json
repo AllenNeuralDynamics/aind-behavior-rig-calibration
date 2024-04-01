@@ -88,7 +88,7 @@
     "AindManipulatorOperationControl": {
       "additionalProperties": false,
       "properties": {
-        "AxesConfiguration": {
+        "axis_configuration": {
           "default": [
             {
               "axis": 1,
@@ -137,7 +137,7 @@
           "title": "Axes configuration. Only the axes that are configured will be enabled.",
           "type": "array"
         },
-        "HomingOrder": {
+        "homing_order": {
           "default": [
             1,
             2,
@@ -150,7 +150,7 @@
           "title": "Homing order",
           "type": "array"
         },
-        "InitialPosition": {
+        "initial_position": {
           "allOf": [
             {
               "$ref": "#/definitions/Vector4"
