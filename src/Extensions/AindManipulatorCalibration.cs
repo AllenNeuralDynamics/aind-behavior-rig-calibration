@@ -174,6 +174,12 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     
         private Vector4 _fullStepToMm;
     
+        private System.Collections.Generic.List<AxisConfiguration> _axisConfiguration = new System.Collections.Generic.List<AxisConfiguration>();
+    
+        private System.Collections.Generic.List<Axis> _homingOrder = new System.Collections.Generic.List<Axis>();
+    
+        private Vector4 _initialPosition;
+    
         public AindManipulatorCalibrationInput()
         {
         }
@@ -181,6 +187,9 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
         protected AindManipulatorCalibrationInput(AindManipulatorCalibrationInput other)
         {
             _fullStepToMm = other._fullStepToMm;
+            _axisConfiguration = other._axisConfiguration;
+            _homingOrder = other._homingOrder;
+            _initialPosition = other._initialPosition;
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -197,6 +206,48 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
             }
         }
     
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("axis_configuration")]
+        public System.Collections.Generic.List<AxisConfiguration> AxisConfiguration
+        {
+            get
+            {
+                return _axisConfiguration;
+            }
+            set
+            {
+                _axisConfiguration = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("homing_order")]
+        public System.Collections.Generic.List<Axis> HomingOrder
+        {
+            get
+            {
+                return _homingOrder;
+            }
+            set
+            {
+                _homingOrder = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("initial_position")]
+        public Vector4 InitialPosition
+        {
+            get
+            {
+                return _initialPosition;
+            }
+            set
+            {
+                _initialPosition = value;
+            }
+        }
+    
         public System.IObservable<AindManipulatorCalibrationInput> Process()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AindManipulatorCalibrationInput(this)));
@@ -209,7 +260,10 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("full_step_to_mm = " + _fullStepToMm);
+            stringBuilder.Append("full_step_to_mm = " + _fullStepToMm + ", ");
+            stringBuilder.Append("axis_configuration = " + _axisConfiguration + ", ");
+            stringBuilder.Append("homing_order = " + _homingOrder + ", ");
+            stringBuilder.Append("initial_position = " + _initialPosition);
             return true;
         }
     
@@ -278,63 +332,12 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     public partial class AindManipulatorOperationControl
     {
     
-        private System.Collections.Generic.List<AxisConfiguration> _axisConfiguration = new System.Collections.Generic.List<AxisConfiguration>();
-    
-        private System.Collections.Generic.List<Axis> _homingOrder = new System.Collections.Generic.List<Axis>();
-    
-        private Vector4 _initialPosition;
-    
         public AindManipulatorOperationControl()
         {
         }
     
         protected AindManipulatorOperationControl(AindManipulatorOperationControl other)
         {
-            _axisConfiguration = other._axisConfiguration;
-            _homingOrder = other._homingOrder;
-            _initialPosition = other._initialPosition;
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("axis_configuration")]
-        public System.Collections.Generic.List<AxisConfiguration> AxisConfiguration
-        {
-            get
-            {
-                return _axisConfiguration;
-            }
-            set
-            {
-                _axisConfiguration = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("homing_order")]
-        public System.Collections.Generic.List<Axis> HomingOrder
-        {
-            get
-            {
-                return _homingOrder;
-            }
-            set
-            {
-                _homingOrder = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("initial_position")]
-        public Vector4 InitialPosition
-        {
-            get
-            {
-                return _initialPosition;
-            }
-            set
-            {
-                _initialPosition = value;
-            }
         }
     
         public System.IObservable<AindManipulatorOperationControl> Process()
@@ -349,10 +352,7 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("axis_configuration = " + _axisConfiguration + ", ");
-            stringBuilder.Append("homing_order = " + _homingOrder + ", ");
-            stringBuilder.Append("initial_position = " + _initialPosition);
-            return true;
+            return false;
         }
     
         public override string ToString()
@@ -741,9 +741,9 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     
         private string _schemaVersion = "0.1.0";
     
-        private AindManipulatorOperationControl _operationControl = new AindManipulatorOperationControl();
+        private AindManipulatorOperationControl _operationControl;
     
-        private AindManipulatorCalibration _calibration;
+        private AindManipulatorCalibration _calibration = new AindManipulatorCalibration();
     
         private string _rootPath;
     
@@ -811,7 +811,7 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("operation_control", Required=Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonPropertyAttribute("operation_control")]
         public AindManipulatorOperationControl OperationControl
         {
             get
@@ -828,7 +828,7 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
         /// Calibration data
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
+        [Newtonsoft.Json.JsonPropertyAttribute("calibration", Required=Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DescriptionAttribute("Calibration data")]
         public AindManipulatorCalibration Calibration
         {

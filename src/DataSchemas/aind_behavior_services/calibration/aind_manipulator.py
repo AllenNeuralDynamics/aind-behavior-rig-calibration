@@ -72,6 +72,20 @@ class AxisConfiguration(BaseModel):
 
 class AindManipulatorCalibrationInput(RigCalibrationModel):
     full_step_to_mm: Vector4 = Field(default=(Vector4(x=0.010, y1=0.010, y2=0.010, z=0.010)), title="Full step to mm")
+    axis_configuration: List[AxisConfiguration] = Field(
+        default=[
+            AxisConfiguration(axis=Axis.Y1),
+            AxisConfiguration(axis=Axis.Y2),
+            AxisConfiguration(axis=Axis.X),
+            AxisConfiguration(axis=Axis.Z),
+        ],
+        title="Axes configuration. Only the axes that are configured will be enabled.",
+        validate_default=True,
+    )
+    homing_order: List[Axis] = Field(
+        default=[Axis.Y1, Axis.Y2, Axis.X, Axis.Z], title="Homing order", validate_default=True
+    )
+    initial_position: Vector4 = Field(default=Vector4(y1=0, y2=0, x=0, z=0), validate_default=True)
 
 
 class AindManipulatorCalibrationOutput(RigCalibrationModel):
@@ -91,20 +105,7 @@ class AindManipulatorCalibration(CalibrationBase):
 
 
 class AindManipulatorOperationControl(OperationControlModel):
-    axis_configuration: List[AxisConfiguration] = Field(
-        default=[
-            AxisConfiguration(axis=Axis.Y1),
-            AxisConfiguration(axis=Axis.Y2),
-            AxisConfiguration(axis=Axis.X),
-            AxisConfiguration(axis=Axis.Z),
-        ],
-        title="Axes configuration. Only the axes that are configured will be enabled.",
-        validate_default=True,
-    )
-    homing_order: List[Axis] = Field(
-        default=[Axis.Y1, Axis.Y2, Axis.X, Axis.Z], title="Homing order", validate_default=True
-    )
-    initial_position: Vector4 = Field(default=Vector4(y1=0, y2=0, x=0, z=0), validate_default=True)
+    pass
 
 
 class AindManipulatorCalibrationModel(RigCalibrationFullModel):
@@ -112,5 +113,7 @@ class AindManipulatorCalibrationModel(RigCalibrationFullModel):
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json"
     ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json"
-    operation_control: AindManipulatorOperationControl = Field(..., title="Operation control")
-    calibration: Optional[AindManipulatorCalibration] = Field(default=None, description="Calibration data")
+    operation_control: AindManipulatorOperationControl = Field(
+        default=AindManipulatorOperationControl(), validate_default=True, title="Operation control"
+    )
+    calibration: AindManipulatorCalibration = Field(..., description="Calibration data")

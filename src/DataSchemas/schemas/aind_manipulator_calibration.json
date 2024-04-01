@@ -74,20 +74,7 @@
             "z": 0.01
           },
           "title": "Full step to mm"
-        }
-      },
-      "title": "AindManipulatorCalibrationInput",
-      "type": "object"
-    },
-    "AindManipulatorCalibrationOutput": {
-      "additionalProperties": false,
-      "properties": {},
-      "title": "AindManipulatorCalibrationOutput",
-      "type": "object"
-    },
-    "AindManipulatorOperationControl": {
-      "additionalProperties": false,
-      "properties": {
+        },
         "axis_configuration": {
           "default": [
             {
@@ -164,6 +151,18 @@
           }
         }
       },
+      "title": "AindManipulatorCalibrationInput",
+      "type": "object"
+    },
+    "AindManipulatorCalibrationOutput": {
+      "additionalProperties": false,
+      "properties": {},
+      "title": "AindManipulatorCalibrationOutput",
+      "type": "object"
+    },
+    "AindManipulatorOperationControl": {
+      "additionalProperties": false,
+      "properties": {},
       "title": "AindManipulatorOperationControl",
       "type": "object"
     },
@@ -315,19 +314,16 @@
           "$ref": "#/definitions/AindManipulatorOperationControl"
         }
       ],
+      "default": {},
       "title": "Operation control"
     },
     "calibration": {
-      "default": null,
-      "description": "Calibration data",
-      "oneOf": [
+      "allOf": [
         {
           "$ref": "#/definitions/AindManipulatorCalibration"
-        },
-        {
-          "type": "null"
         }
-      ]
+      ],
+      "description": "Calibration data"
     },
     "rootPath": {
       "description": "Root path of the experiment",
@@ -396,7 +392,7 @@
     }
   },
   "required": [
-    "operation_control",
+    "calibration",
     "rootPath"
   ],
   "title": "AindManipulatorCalibrationModel",
