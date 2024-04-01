@@ -1,12 +1,6 @@
 from typing import Annotated, Dict, List, Literal, Optional, Tuple
 
-from aind_behavior_services.calibration import (
-    CalibrationBase,
-    OperationControlModel,
-    RigCalibrationFullModel,
-    RigCalibrationModel,
-)
-from aind_data_schema.base import AindGeneric
+from aind_behavior_services.calibration import CalibrationBase, CalibrationBaseModel, RigCalibrationFullModel
 from aind_data_schema.models.units import MassUnit
 from pydantic import BaseModel, Field
 
@@ -27,12 +21,12 @@ class LoadCellCalibration(BaseModel):
     )
 
 
-class LoadCellsCalibrationInput(RigCalibrationModel):
+class LoadCellsCalibrationInput(CalibrationBaseModel):
     channels: Dict[LoadCellChannel, LoadCellCalibration] = Field(default={}, title="Load cells calibration data")
     weight_units: MassUnit = Field(default=MassUnit.G, title="Weight units")
 
 
-class LoadCellsCalibrationOutput(RigCalibrationModel):
+class LoadCellsCalibrationOutput(CalibrationBaseModel):
     offset: Dict[LoadCellChannel, LoadCellOffset] = Field(
         default={lc: 0 for lc in range(8)}, validate_default=True, title="Load cells offset"
     )
@@ -59,7 +53,7 @@ class LoadCellsCalibration(CalibrationBase):
         raise NotImplementedError
 
 
-class LoadCellsOperationControl(OperationControlModel):
+class LoadCellsOperationControl(CalibrationBaseModel):
     """Load cells operation control model that is used to run a calibration data acquisition workflow"""
 
     channels: List[LoadCellChannel] = Field(list(range(8)), description="List of channels to calibrate")

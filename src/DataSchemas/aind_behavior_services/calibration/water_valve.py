@@ -1,13 +1,9 @@
 from __future__ import annotations
+
 from typing import Annotated, Dict, List, Literal, Optional
 
 import numpy as np
-from aind_behavior_services.calibration import (
-    CalibrationBase,
-    OperationControlModel,
-    RigCalibrationFullModel,
-    RigCalibrationModel,
-)
+from aind_behavior_services.calibration import CalibrationBase, CalibrationBaseModel, RigCalibrationFullModel
 from pydantic import BaseModel, Field
 from sklearn.linear_model import LinearRegression
 
@@ -43,7 +39,7 @@ class Measurement(BaseModel):
     repeat_count: int = Field(..., ge=0, description="Number of times the valve opened.", title="Repeat count")
 
 
-class WaterValveCalibrationInput(RigCalibrationModel):
+class WaterValveCalibrationInput(CalibrationBaseModel):
     measurements: List[Measurement] = Field(default=[], description="List of measurements")
 
     def calibrate_output(self, input: Optional[WaterValveCalibrationInput] = None) -> WaterValveCalibrationOutput:
@@ -73,7 +69,7 @@ class WaterValveCalibrationInput(RigCalibrationModel):
         )
 
 
-class WaterValveCalibrationOutput(RigCalibrationModel):
+class WaterValveCalibrationOutput(CalibrationBaseModel):
     """Output for water valve calibration class"""
 
     interval_average: Optional[Dict[PositiveFloat, PositiveFloat]] = Field(
@@ -118,7 +114,7 @@ class WaterValveCalibration(CalibrationBase):
     notes: Optional[str] = Field(None, title="Notes")
 
 
-class WaterValveOperationControl(OperationControlModel):
+class WaterValveOperationControl(CalibrationBaseModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
 
     valve_open_time: list[PositiveFloat] = Field(

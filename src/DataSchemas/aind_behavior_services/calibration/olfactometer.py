@@ -1,11 +1,10 @@
 from enum import IntEnum
 from typing import Dict, Literal, Optional
 
-from aind_behavior_services.calibration import CalibrationBase, OperationControlModel, RigCalibrationFullModel
+from aind_behavior_services.calibration import CalibrationBase, CalibrationBaseModel, RigCalibrationFullModel
 from aind_data_schema.models.devices import OlfactometerChannel
 from aind_data_schema.models.stimulus import OlfactometerChannelConfig
 from pydantic import Field
-
 
 __VERSION__ = "0.2.0"
 
@@ -19,7 +18,7 @@ class HarpOlfactometerChannel(IntEnum):
     Channel3 = 3
 
 
-class OlfactometerOperationControl(OperationControlModel):
+class OlfactometerOperationControl(CalibrationBaseModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
 
     channel_config: Dict[HarpOlfactometerChannel, OlfactometerChannel] = Field(
@@ -42,9 +41,6 @@ class OlfactometerCalibration(CalibrationBase):
     )
     description: Literal["Calibration of the harp olfactometer device"] = "Calibration of the harp olfactometer device"
     notes: Optional[str] = Field(None, title="Notes")
-
-    def calibrate(self, *args, **kwargs):
-        return super().calibrate(input)
 
 
 class OlfactometerCalibrationModel(RigCalibrationFullModel):

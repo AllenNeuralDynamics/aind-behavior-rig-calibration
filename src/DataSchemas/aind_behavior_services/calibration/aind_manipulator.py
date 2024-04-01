@@ -1,13 +1,7 @@
-from typing import Annotated, Dict, List, Literal, Optional, Tuple
 from enum import IntEnum
+from typing import List, Literal, Optional
 
-from aind_behavior_services.calibration import (
-    CalibrationBase,
-    OperationControlModel,
-    RigCalibrationFullModel,
-    RigCalibrationModel,
-)
-
+from aind_behavior_services.calibration import CalibrationBase, CalibrationBaseModel, RigCalibrationFullModel
 from pydantic import BaseModel, Field
 
 __version__ = "0.1.0"
@@ -70,7 +64,7 @@ class AxisConfiguration(BaseModel):
     min_limit: int = Field(default=-1, title="Minimum limit. A value of 0 disables this limit.")
 
 
-class AindManipulatorCalibrationInput(RigCalibrationModel):
+class AindManipulatorCalibrationInput(CalibrationBaseModel):
     full_step_to_mm: Vector4 = Field(default=(Vector4(x=0.010, y1=0.010, y2=0.010, z=0.010)), title="Full step to mm")
     axis_configuration: List[AxisConfiguration] = Field(
         default=[
@@ -88,7 +82,7 @@ class AindManipulatorCalibrationInput(RigCalibrationModel):
     initial_position: Vector4 = Field(default=Vector4(y1=0, y2=0, x=0, z=0), validate_default=True)
 
 
-class AindManipulatorCalibrationOutput(RigCalibrationModel):
+class AindManipulatorCalibrationOutput(CalibrationBaseModel):
     pass
 
 
@@ -104,7 +98,7 @@ class AindManipulatorCalibration(CalibrationBase):
     notes: Optional[str] = Field(None, title="Notes")
 
 
-class AindManipulatorOperationControl(OperationControlModel):
+class AindManipulatorOperationControl(CalibrationBaseModel):
     pass
 
 

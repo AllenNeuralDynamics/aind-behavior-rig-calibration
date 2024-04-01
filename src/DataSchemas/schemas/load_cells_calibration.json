@@ -91,7 +91,6 @@
       "type": "object"
     },
     "LoadCellsCalibrationInput": {
-      "additionalProperties": false,
       "properties": {
         "channels": {
           "additionalProperties": {
@@ -115,7 +114,6 @@
       "type": "object"
     },
     "LoadCellsCalibrationOutput": {
-      "additionalProperties": false,
       "properties": {
         "offset": {
           "additionalProperties": {
@@ -177,7 +175,6 @@
       "type": "object"
     },
     "LoadCellsOperationControl": {
-      "additionalProperties": false,
       "description": "Load cells operation control model that is used to run a calibration data acquisition workflow",
       "properties": {
         "channels": {
@@ -239,6 +236,96 @@
       "title": "Schema Version",
       "type": "string"
     },
+    "experiment": {
+      "description": "Name of the experiment",
+      "title": "Experiment",
+      "type": "string"
+    },
+    "date": {
+      "description": "Date of the experiment",
+      "format": "date-time",
+      "title": "Date",
+      "type": "string"
+    },
+    "root_path": {
+      "description": "Root path where data will be logged",
+      "title": "Root Path",
+      "type": "string"
+    },
+    "remote_path": {
+      "default": null,
+      "description": "Remote path where data will be attempted to be copied to after experiment is done",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Remote Path"
+    },
+    "subject": {
+      "description": "Name of the subject",
+      "title": "Subject",
+      "type": "string"
+    },
+    "experiment_version": {
+      "description": "Version of the experiment",
+      "title": "Experiment Version",
+      "type": "string"
+    },
+    "rng_seed": {
+      "default": null,
+      "description": "Seed of the random number generator",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Rng Seed"
+    },
+    "notes": {
+      "default": null,
+      "description": "Notes about the experiment",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Notes"
+    },
+    "commit_hash": {
+      "default": "a462aabfdc574fce2a44be7f903a055f8268cb1e",
+      "description": "Commit hash of the repository",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Commit Hash"
+    },
+    "allow_dirty_repo": {
+      "default": false,
+      "description": "Allow running from a dirty repository",
+      "title": "Allow Dirty Repo",
+      "type": "boolean"
+    },
+    "skip_hardware_validation": {
+      "default": false,
+      "description": "Skip hardware validation",
+      "title": "Skip Hardware Validation",
+      "type": "boolean"
+    },
     "operation_control": {
       "allOf": [
         {
@@ -258,76 +345,14 @@
           "type": "null"
         }
       ]
-    },
-    "rootPath": {
-      "description": "Root path of the experiment",
-      "title": "Rootpath",
-      "type": "string"
-    },
-    "date": {
-      "format": "date-time",
-      "title": "Date",
-      "type": "string"
-    },
-    "notes": {
-      "default": "",
-      "title": "Notes",
-      "type": "string"
-    },
-    "experiment": {
-      "default": "Calibration",
-      "description": "Name of the experiment",
-      "title": "Experiment",
-      "type": "string"
-    },
-    "experimenter": {
-      "default": "Experimenter",
-      "description": "Name of the subject",
-      "title": "Experimenter",
-      "type": "string"
-    },
-    "allowDirty": {
-      "default": false,
-      "description": "Allow code to run from dirty repository",
-      "title": "Allowdirty",
-      "type": "boolean"
-    },
-    "remoteDataPath": {
-      "default": null,
-      "description": "Path to remote data. If null, no attempt to copy data will be made",
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Remotedatapath"
-    },
-    "rngSeed": {
-      "default": 0,
-      "description": "Seed of the random number generator. If 0 it will be randomized.",
-      "title": "Rngseed",
-      "type": "integer"
-    },
-    "commitHash": {
-      "default": null,
-      "description": "Commit hash of the repository",
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Commithash"
     }
   },
   "required": [
-    "operation_control",
-    "rootPath"
+    "experiment",
+    "root_path",
+    "subject",
+    "experiment_version",
+    "operation_control"
   ],
   "title": "LoadCellsCalibrationModel",
   "type": "object"
