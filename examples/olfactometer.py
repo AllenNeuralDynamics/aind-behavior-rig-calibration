@@ -45,10 +45,12 @@ OpControl = OlfactometerOperationControl(
 out_model = OlfactometerCalibrationModel(
     operation_control=OpControl,
     calibration=None,
-    rootPath="C:\\Data",
+    root_path="C:\\Data",
     date=datetime.datetime.now(),
-    allowDirty=False,
+    allow_dirty_repo=False,
     experiment="OlfactometerCalibration",
+    experiment_version="0.0.0",
+    subject="Olfactometer",
 )
 
 with open("local/olfactometer.json", "w") as f:

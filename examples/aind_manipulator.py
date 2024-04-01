@@ -22,9 +22,11 @@ calibration = m.AindManipulatorCalibration(
 
 out_model = m.AindManipulatorCalibrationModel(
     calibration=calibration,
-    rootPath="C:\\Data",
-    allowDirty=False,
+    root_path="C:\\Data",
+    allow_dirty_repo=False,
     experiment="AindManipulatorSettings",
+    subject="AindManipulator",
+    experiment_version="manipulator_control"
 )
 
 
