@@ -29,5 +29,6 @@ out_model = m.AindManipulatorCalibrationModel(
     experiment="AindManipulatorSettings",
 )
 
+
 with open("local/aind_manipulator.json", "w") as f:
     f.write(out_model.model_dump_json(indent=3))

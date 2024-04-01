@@ -34,6 +34,7 @@ class HarpDeviceType(str, Enum):
     SOUNDCARD = "soundcard"
     SNIFFDETECTOR = "sniffdetector"
     CUTTLEFISH = "cuttlefish"
+    STEPPERDRIVER = "stepperdriver"
     GENERIC = "generic"
 
 
@@ -100,6 +101,11 @@ class HarpCuttlefish(HarpDeviceBase):
     who_am_i: Literal[1403] = 1403
 
 
+class HarpStepperDriver(HarpDeviceBase):
+    device_type: Literal[HarpDeviceType.STEPPERDRIVER] = HarpDeviceType.STEPPERDRIVER
+    who_am_i: Literal[1130] = 1130
+
+
 class HarpDevice(RootModel):
     root: Annotated[
         Union[
@@ -114,6 +120,7 @@ class HarpDevice(RootModel):
             HarpSoundCard,
             HarpSniffDetector,
             HarpClockSynchronizer,
+            HarpStepperDriver,
         ],
         Field(discriminator="device_type"),
     ]

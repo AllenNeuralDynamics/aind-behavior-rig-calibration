@@ -7,6 +7,7 @@ from aind_behavior_services.calibration import (
     RigCalibrationFullModel,
     RigCalibrationModel,
 )
+
 from pydantic import BaseModel, Field
 
 __version__ = "0.1.0"

@@ -1,9 +1,305 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.8.1"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
+                 xmlns:p1="clr-namespace:AindBehaviorRigCalibration.AindManipulatorCalibration;assembly=Extensions"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
+                 xmlns:p2="clr-namespace:Harp.StepperDriver;assembly=Harp.StepperDriver"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
-    <Nodes />
-    <Edges />
+    <Nodes>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Path" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="io:ReadAllText">
+          <io:Path>ManipulatorSettings</io:Path>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="p1:DeserializeFromJson">
+        <p1:Type xsi:type="TypeMapping" TypeArguments="p1:AindManipulatorCalibrationModel" />
+      </Expression>
+      <Expression xsi:type="rx:AsyncSubject" />
+      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:HarpMessage">
+        <rx:Name>StepperDriverCommands</rx:Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p2:Device">
+          <harp:OperationMode>Active</harp:OperationMode>
+          <harp:OperationLed>On</harp:OperationLed>
+          <harp:DumpRegisters>true</harp:DumpRegisters>
+          <harp:VisualIndicators>On</harp:VisualIndicators>
+          <harp:Heartbeat>Enabled</harp:Heartbeat>
+          <harp:IgnoreErrors>false</harp:IgnoreErrors>
+          <harp:PortName>COM8</harp:PortName>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Annotation">
+        <Name>TODO</Name>
+        <Text><![CDATA[]]></Text>
+      </Expression>
+      <Expression xsi:type="harp:FilterRegister">
+        <harp:FilterType>Exclude</harp:FilterType>
+        <harp:Register xsi:type="harp:FilterRegisterAddress">
+          <harp:Address>15</harp:Address>
+        </harp:Register>
+      </Expression>
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>StepperDriverEvents</Name>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>StepperDriverEvents</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:Take">
+            <rx:Count>1</rx:Count>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:SelectMany">
+          <Name>DeviceConfig</Name>
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="SubscribeSubject">
+                <Name>Events</Name>
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="rx:Take">
+                  <rx:Count>1</rx:Count>
+                </Combinator>
+              </Expression>
+              <Expression xsi:type="p2:CreateMessage">
+                <harp:MessageType>Write</harp:MessageType>
+                <harp:Payload xsi:type="p2:CreateInterlockEnabledPayload">
+                  <p2:InterlockEnabled>Open</p2:InterlockEnabled>
+                </harp:Payload>
+              </Expression>
+              <Expression xsi:type="MulticastSubject">
+                <Name>Commands</Name>
+              </Expression>
+              <Expression xsi:type="p2:CreateMessage">
+                <harp:MessageType>Write</harp:MessageType>
+                <harp:Payload xsi:type="p2:CreateEnableDigitalInputsPayload">
+                  <p2:EnableDigitalInputs>Input0 Input1 Input2 Input3</p2:EnableDigitalInputs>
+                </harp:Payload>
+              </Expression>
+              <Expression xsi:type="MulticastSubject">
+                <Name>Commands</Name>
+              </Expression>
+              <Expression xsi:type="p2:CreateMessage">
+                <harp:MessageType>Write</harp:MessageType>
+                <harp:Payload xsi:type="p2:CreateAccumulatedStepsSamplingRatePayload">
+                  <p2:AccumulatedStepsSamplingRate>Rate10Hz</p2:AccumulatedStepsSamplingRate>
+                </harp:Payload>
+              </Expression>
+              <Expression xsi:type="MulticastSubject">
+                <Name>Commands</Name>
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="1" Label="Source1" />
+              <Edge From="1" To="2" Label="Source1" />
+              <Edge From="2" To="3" Label="Source1" />
+              <Edge From="3" To="4" Label="Source1" />
+              <Edge From="4" To="5" Label="Source1" />
+              <Edge From="5" To="6" Label="Source1" />
+              <Edge From="6" To="7" Label="Source1" />
+              <Edge From="7" To="8" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:SelectMany">
+          <Name>ConfigureAll</Name>
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="WorkflowInput">
+                <Name>Source1</Name>
+              </Expression>
+              <Expression xsi:type="ExternalizedMapping">
+                <Property Name="Value" DisplayName="Motor" />
+              </Expression>
+              <Expression xsi:type="PropertySource" TypeArguments="p2:CreateEnableDriverPayload,p2:StepperMotors">
+                <MemberName>EnableDriver</MemberName>
+                <Value>Motor0 Motor1 Motor2 Motor3</Value>
+              </Expression>
+              <Expression xsi:type="rx:AsyncSubject">
+                <Name>MotorMask</Name>
+              </Expression>
+              <Expression xsi:type="SubscribeSubject">
+                <Name>MotorMask</Name>
+              </Expression>
+              <Expression xsi:type="BitwiseAnd">
+                <Operand xsi:type="WorkflowProperty" TypeArguments="p2:StepperMotors">
+                  <Value>Motor0</Value>
+                </Operand>
+              </Expression>
+              <Expression xsi:type="SubscribeSubject">
+                <Name>MotorMask</Name>
+              </Expression>
+              <Expression xsi:type="BitwiseAnd">
+                <Operand xsi:type="WorkflowProperty" TypeArguments="p2:StepperMotors">
+                  <Value>Motor1</Value>
+                </Operand>
+              </Expression>
+              <Expression xsi:type="SubscribeSubject">
+                <Name>MotorMask</Name>
+              </Expression>
+              <Expression xsi:type="BitwiseAnd">
+                <Operand xsi:type="WorkflowProperty" TypeArguments="p2:StepperMotors">
+                  <Value>Motor2</Value>
+                </Operand>
+              </Expression>
+              <Expression xsi:type="SubscribeSubject">
+                <Name>MotorMask</Name>
+              </Expression>
+              <Expression xsi:type="BitwiseAnd">
+                <Operand xsi:type="WorkflowProperty" TypeArguments="p2:StepperMotors">
+                  <Value>Motor3</Value>
+                </Operand>
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="rx:Merge" />
+              </Expression>
+              <Expression xsi:type="rx:Condition">
+                <Workflow>
+                  <Nodes>
+                    <Expression xsi:type="WorkflowInput">
+                      <Name>Source1</Name>
+                    </Expression>
+                    <Expression xsi:type="GreaterThan">
+                      <Operand xsi:type="WorkflowProperty" TypeArguments="sys:Byte">
+                        <Value>0</Value>
+                      </Operand>
+                    </Expression>
+                    <Expression xsi:type="WorkflowOutput" />
+                  </Nodes>
+                  <Edges>
+                    <Edge From="0" To="1" Label="Source1" />
+                    <Edge From="1" To="2" Label="Source1" />
+                  </Edges>
+                </Workflow>
+              </Expression>
+              <Expression xsi:type="ExternalizedMapping">
+                <Property Name="StepInterval" />
+                <Property Name="StepIntervalAcceleration" />
+                <Property Name="Motor0OperationMode" />
+              </Expression>
+              <Expression xsi:type="rx:CreateObservable">
+                <Name>ConfigureSingle</Name>
+                <Workflow>
+                  <Nodes>
+                    <Expression xsi:type="WorkflowInput">
+                      <Name>Source1</Name>
+                    </Expression>
+                    <Expression xsi:type="Combinator">
+                      <Combinator xsi:type="rx:Take">
+                        <rx:Count>1</rx:Count>
+                      </Combinator>
+                    </Expression>
+                    <Expression xsi:type="rx:AsyncSubject">
+                      <Name>Motor</Name>
+                    </Expression>
+                    <Expression xsi:type="SubscribeSubject">
+                      <Name>Motor</Name>
+                    </Expression>
+                    <Expression xsi:type="SubscribeSubject">
+                      <Name>Motor</Name>
+                    </Expression>
+                    <Expression xsi:type="PropertyMapping">
+                      <PropertyMappings>
+                        <Property Name="Motor" />
+                      </PropertyMappings>
+                    </Expression>
+                    <Expression xsi:type="ExternalizedMapping">
+                      <Property Name="StepInterval" />
+                      <Property Name="StepIntervalAcceleration" />
+                      <Property Name="Motor0OperationMode" />
+                    </Expression>
+                    <Expression xsi:type="IncludeWorkflow" Path="Extensions\ConfigureMotor.bonsai">
+                      <Motor>Motor3</Motor>
+                      <StepInterval>100</StepInterval>
+                      <StepIntervalAcceleration>100</StepIntervalAcceleration>
+                      <Motor0OperationMode>StopMotor0OnFalling</Motor0OperationMode>
+                    </Expression>
+                    <Expression xsi:type="WorkflowOutput" />
+                  </Nodes>
+                  <Edges>
+                    <Edge From="0" To="1" Label="Source1" />
+                    <Edge From="1" To="2" Label="Source1" />
+                    <Edge From="3" To="7" Label="Source1" />
+                    <Edge From="4" To="5" Label="Source1" />
+                    <Edge From="5" To="7" Label="Source2" />
+                    <Edge From="6" To="7" Label="Source3" />
+                    <Edge From="7" To="8" Label="Source1" />
+                  </Edges>
+                </Workflow>
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="rx:Concat" />
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="rx:Last" />
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="2" Label="Source1" />
+              <Edge From="1" To="2" Label="Source2" />
+              <Edge From="2" To="3" Label="Source1" />
+              <Edge From="4" To="5" Label="Source1" />
+              <Edge From="5" To="12" Label="Source1" />
+              <Edge From="6" To="7" Label="Source1" />
+              <Edge From="7" To="12" Label="Source2" />
+              <Edge From="8" To="9" Label="Source1" />
+              <Edge From="9" To="12" Label="Source3" />
+              <Edge From="10" To="11" Label="Source1" />
+              <Edge From="11" To="12" Label="Source4" />
+              <Edge From="12" To="13" Label="Source1" />
+              <Edge From="13" To="15" Label="Source1" />
+              <Edge From="14" To="15" Label="Source2" />
+              <Edge From="15" To="16" Label="Source1" />
+              <Edge From="16" To="17" Label="Source1" />
+              <Edge From="17" To="18" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="p2:CreateMessage">
+          <harp:MessageType>Write</harp:MessageType>
+          <harp:Payload xsi:type="p2:CreateEnableDriverPayload">
+            <p2:EnableDriver>Motor0 Motor1 Motor2 Motor3</p2:EnableDriver>
+          </harp:Payload>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MulticastSubject">
+          <Name>Commands</Name>
+        </Builder>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="4" To="5" Label="Source1" />
+      <Edge From="5" To="7" Label="Source1" />
+      <Edge From="6" To="7" Label="Source2" />
+      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="10" To="11" Label="Source1" />
+      <Edge From="11" To="12" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
+      <Edge From="13" To="14" Label="Source1" />
+    </Edges>
   </Workflow>
 </WorkflowBuilder>
