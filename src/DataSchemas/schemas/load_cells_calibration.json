@@ -302,7 +302,7 @@
       "title": "Notes"
     },
     "commit_hash": {
-      "default": "a462aabfdc574fce2a44be7f903a055f8268cb1e",
+      "default": null,
       "description": "Commit hash of the repository",
       "oneOf": [
         {

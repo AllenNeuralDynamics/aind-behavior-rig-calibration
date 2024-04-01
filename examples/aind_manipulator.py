@@ -1,5 +1,5 @@
 from aind_behavior_services.calibration import aind_manipulator as m
-
+from aind_behavior_services.base import get_commit_hash
 import datetime
 
 
@@ -26,7 +26,8 @@ out_model = m.AindManipulatorCalibrationModel(
     allow_dirty_repo=False,
     experiment="AindManipulatorSettings",
     subject="AindManipulator",
-    experiment_version="manipulator_control"
+    experiment_version="manipulator_control",
+    commit_hash=get_commit_hash()
 )
 
 

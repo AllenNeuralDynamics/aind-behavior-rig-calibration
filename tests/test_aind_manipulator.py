@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 
 from aind_behavior_services.calibration import aind_manipulator as m
-
+from aind_behavior_services.base import get_commit_hash
 
 class AindManipulatorTests(unittest.TestCase):
 
@@ -30,7 +30,8 @@ class AindManipulatorTests(unittest.TestCase):
             allow_dirty_repo=False,
             experiment="AindManipulatorSettings",
             subject="AindManipulator",
-            experiment_version="manipulator_control"
+            experiment_version="manipulator_control",
+            commit_hash=get_commit_hash()
         )
 
         out_model.model_dump_json(indent=3)

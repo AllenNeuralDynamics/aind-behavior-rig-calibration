@@ -23,6 +23,6 @@ class AindBehaviorSessionModel(AindCoreModel):
     experiment_version: str = Field(..., description="Version of the experiment")
     rng_seed: Optional[float] = Field(default=None, description="Seed of the random number generator")
     notes: Optional[str] = Field(default=None, description="Notes about the experiment")
-    commit_hash: Optional[str] = Field(default=get_commit_hash(), description="Commit hash of the repository")
+    commit_hash: Optional[str] = Field(default=None, description="Commit hash of the repository")
     allow_dirty_repo: bool = Field(default=False, description="Allow running from a dirty repository")
     skip_hardware_validation: bool = Field(default=False, description="Skip hardware validation")

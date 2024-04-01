@@ -1,13 +1,15 @@
+from aind_behavior_services.base import get_commit_hash
+import datetime
+
 from aind_behavior_services.calibration.olfactometer import (
     HarpOlfactometerChannel,
     OlfactometerChannel,
     OlfactometerChannelConfig,
     OlfactometerOperationControl,
     OlfactometerCalibrationModel,
+    ChannelType
 )
-from aind_data_schema.models.devices import ChannelType
 
-import datetime
 
 channels_config = [
     OlfactometerChannel(
@@ -30,6 +32,7 @@ stimuli_config = [
     OlfactometerChannelConfig(channel_index=HarpOlfactometerChannel.Channel1, odorant="Banana", odorant_dilution=0.1),
     OlfactometerChannelConfig(channel_index=HarpOlfactometerChannel.Channel2, odorant="Banana", odorant_dilution=0.1),
 ]
+
 stimuli_config = {channel.channel_index: channel for channel in stimuli_config}
 
 
@@ -51,6 +54,7 @@ out_model = OlfactometerCalibrationModel(
     experiment="OlfactometerCalibration",
     experiment_version="0.0.0",
     subject="Olfactometer",
+    commit_hash=get_commit_hash()
 )
 
 with open("local/olfactometer.json", "w") as f:

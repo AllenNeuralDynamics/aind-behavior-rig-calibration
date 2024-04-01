@@ -1,5 +1,6 @@
 import unittest
 from datetime import datetime
+from aind_behavior_services.base import get_commit_hash
 
 from aind_behavior_services.calibration.olfactometer import (
     HarpOlfactometerChannel,
@@ -62,6 +63,7 @@ class OlfactometerTests(unittest.TestCase):
             experiment="OlfactometerCalibration",
             experiment_version="0.0.0",
             subject="Olfactometer",
+            commit_hash=get_commit_hash()
         )
 
         out_model.model_dump_json(indent=3)
