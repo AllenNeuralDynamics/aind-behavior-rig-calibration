@@ -8,9 +8,9 @@ from enum import Enum
 from typing import Annotated, Any, Literal, Optional, Union
 
 from aind_data_schema.base import AindCoreModel, AindModel
-from pydantic import Field, RootModel
+from pydantic import Field, RootModel, BaseModel
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 
 class SpinnakerCamera(AindModel):
@@ -43,7 +43,7 @@ class HarpDeviceBase(AindModel):
     device_type: HarpDeviceType = Field(default=HarpDeviceType.GENERIC, description="Device type")
     serial_number: Optional[str] = Field(default=None, description="Device serial number")
     port_name: str = Field(..., description="Device port name")
-    additional_settings: Optional[Any] = Field(default=None, description="Additional settings")
+    additional_settings: Optional[BaseModel] = Field(default=None, description="Additional settings")
 
 
 class HarpBehavior(HarpDeviceBase):
@@ -104,6 +104,7 @@ class HarpCuttlefish(HarpDeviceBase):
 class HarpStepperDriver(HarpDeviceBase):
     device_type: Literal[HarpDeviceType.STEPPERDRIVER] = HarpDeviceType.STEPPERDRIVER
     who_am_i: Literal[1130] = 1130
+
 
 
 class HarpDevice(RootModel):
