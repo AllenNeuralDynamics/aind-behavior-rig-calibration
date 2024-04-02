@@ -106,7 +106,6 @@ class HarpStepperDriver(HarpDeviceBase):
     who_am_i: Literal[1130] = 1130
 
 
-
 class HarpDevice(RootModel):
     root: Annotated[
         Union[

@@ -1,4 +1,7 @@
 import json
+import os
+import subprocess
+
 from enum import Enum
 from os import PathLike
 from pathlib import Path
@@ -206,3 +209,86 @@ def snake_to_pascal_case(s: str) -> str:
         str: The PascalCase string.
     """
     return "".join(map(capwords, s.split("_")))
+
+
+def _build_bonsai_process_command(
+    workflow_file: PathLike | str,
+    bonsai_exe: PathLike | str = "bonsai/bonsai.exe",
+    is_editor_mode: bool = True,
+    is_start_flag: bool = True,
+    layout: Optional[PathLike | str] = None,
+    additional_properties: Optional[Dict[str, str]] = None,
+) -> str:
+
+    output_cmd: str = f'"{bonsai_exe}" "{workflow_file}"'
+    if is_editor_mode:
+        if is_start_flag:
+            output_cmd += " --start"
+    else:
+        output_cmd += " --no-editor"
+        if not (layout is None):
+            output_cmd += f' --visualizer-layout:"{layout}"'
+
+    if additional_properties:
+        for param, value in additional_properties.items():
+            output_cmd += f' -p:"{param}"="{value}"'
+
+    return output_cmd
+
+
+def run_bonsai_process(
+    workflow_file: PathLike | str,
+    bonsai_exe: PathLike | str = "bonsai/bonsai.exe",
+    is_editor_mode: bool = True,
+    is_start_flag: bool = True,
+    layout: Optional[PathLike | str] = None,
+    additional_properties: Optional[Dict[str, str]] = None,
+    cwd: Optional[PathLike | str] = None,
+    timeout: Optional[float] = None,
+) -> CompletedProcess:
+
+    output_cmd = _build_bonsai_process_command(
+        workflow_file=workflow_file,
+        bonsai_exe=bonsai_exe,
+        is_editor_mode=is_editor_mode,
+        is_start_flag=is_start_flag,
+        layout=layout,
+        additional_properties=additional_properties,
+    )
+    print(output_cmd)
+    if cwd is None:
+        cwd = os.getcwd()
+    return subprocess.run(output_cmd, cwd=cwd, check=True, timeout=timeout)
+
+
+def open_bonsai_process(
+    workflow_file: PathLike | str,
+    bonsai_exe: PathLike | str = "bonsai/bonsai.exe",
+    is_editor_mode: bool = True,
+    is_start_flag: bool = True,
+    layout: Optional[PathLike | str] = None,
+    additional_properties: Optional[Dict[str, str]] = None,
+    log_file_name: Optional[str] = None,
+    cwd: Optional[PathLike | str] = None,
+    creation_flags: Optional[int] = None,
+) -> subprocess.Popen:
+
+    output_cmd = _build_bonsai_process_command(
+        workflow_file=workflow_file,
+        bonsai_exe=bonsai_exe,
+        is_editor_mode=is_editor_mode,
+        is_start_flag=is_start_flag,
+        layout=layout,
+        additional_properties=additional_properties,
+    )
+
+    if cwd is None:
+        cwd = os.getcwd()
+    if creation_flags is None:
+        creation_flags = subprocess.CREATE_NEW_CONSOLE
+
+    if log_file_name is None:
+        return subprocess.Popen(output_cmd, cwd=cwd, creationflags=creation_flags)
+    else:
+        logging_cmd = f'powershell -ep Bypass -c "& {output_cmd} *>&1 | tee -a {log_file_name}"'
+        return subprocess.Popen(logging_cmd, cwd=cwd, creationflags=creation_flags)
