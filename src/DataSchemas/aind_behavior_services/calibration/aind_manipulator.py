@@ -17,7 +17,7 @@ class Axis(IntEnum):
     Z = 4
 
 
-class Vector4(BaseModel):
+class ManipulatorPosition(BaseModel):
     x: float = Field(..., title="X coordinate")
     y1: float = Field(..., title="Y1 coordinate")
     y2: float = Field(..., title="Y2 coordinate")
@@ -65,7 +65,7 @@ class AxisConfiguration(BaseModel):
 
 
 class AindManipulatorCalibrationInput(CalibrationBaseModel):
-    full_step_to_mm: Vector4 = Field(default=(Vector4(x=0.010, y1=0.010, y2=0.010, z=0.010)), title="Full step to mm")
+    full_step_to_mm: ManipulatorPosition = Field(default=(ManipulatorPosition(x=0.010, y1=0.010, y2=0.010, z=0.010)), title="Full step to mm")
     axis_configuration: List[AxisConfiguration] = Field(
         default=[
             AxisConfiguration(axis=Axis.Y1),
@@ -79,7 +79,7 @@ class AindManipulatorCalibrationInput(CalibrationBaseModel):
     homing_order: List[Axis] = Field(
         default=[Axis.Y1, Axis.Y2, Axis.X, Axis.Z], title="Homing order", validate_default=True
     )
-    initial_position: Vector4 = Field(default=Vector4(y1=0, y2=0, x=0, z=0), validate_default=True)
+    initial_position: ManipulatorPosition = Field(default=ManipulatorPosition(y1=0, y2=0, x=0, z=0), validate_default=True)
 
 
 class AindManipulatorCalibrationOutput(CalibrationBaseModel):

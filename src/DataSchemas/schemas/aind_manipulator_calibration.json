@@ -63,7 +63,7 @@
         "full_step_to_mm": {
           "allOf": [
             {
-              "$ref": "#/definitions/Vector4"
+              "$ref": "#/definitions/ManipulatorPosition"
             }
           ],
           "default": {
@@ -139,7 +139,7 @@
         "initial_position": {
           "allOf": [
             {
-              "$ref": "#/definitions/Vector4"
+              "$ref": "#/definitions/ManipulatorPosition"
             }
           ],
           "default": {
@@ -244,25 +244,7 @@
       "title": "AxisConfiguration",
       "type": "object"
     },
-    "MicrostepResolution": {
-      "enum": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "title": "MicrostepResolution",
-      "type": "integer"
-    },
-    "MotorOperationMode": {
-      "enum": [
-        0,
-        1
-      ],
-      "title": "MotorOperationMode",
-      "type": "integer"
-    },
-    "Vector4": {
+    "ManipulatorPosition": {
       "properties": {
         "x": {
           "title": "X coordinate",
@@ -287,8 +269,26 @@
         "y2",
         "z"
       ],
-      "title": "Vector4",
+      "title": "ManipulatorPosition",
       "type": "object"
+    },
+    "MicrostepResolution": {
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "title": "MicrostepResolution",
+      "type": "integer"
+    },
+    "MotorOperationMode": {
+      "enum": [
+        0,
+        1
+      ],
+      "title": "MotorOperationMode",
+      "type": "integer"
     }
   },
   "additionalProperties": false,

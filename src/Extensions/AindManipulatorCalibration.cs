@@ -172,13 +172,13 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     public partial class AindManipulatorCalibrationInput
     {
     
-        private Vector4 _fullStepToMm;
+        private ManipulatorPosition _fullStepToMm;
     
         private System.Collections.Generic.List<AxisConfiguration> _axisConfiguration = new System.Collections.Generic.List<AxisConfiguration>();
     
         private System.Collections.Generic.List<Axis> _homingOrder = new System.Collections.Generic.List<Axis>();
     
-        private Vector4 _initialPosition;
+        private ManipulatorPosition _initialPosition;
     
         public AindManipulatorCalibrationInput()
         {
@@ -194,7 +194,7 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("full_step_to_mm")]
-        public Vector4 FullStepToMm
+        public ManipulatorPosition FullStepToMm
         {
             get
             {
@@ -236,7 +236,7 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("initial_position")]
-        public Vector4 InitialPosition
+        public ManipulatorPosition InitialPosition
         {
             get
             {
@@ -590,39 +590,9 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    public enum MicrostepResolution
-    {
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="0")]
-        _0 = 0,
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="1")]
-        _1 = 1,
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="2")]
-        _2 = 2,
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="3")]
-        _3 = 3,
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    public enum MotorOperationMode
-    {
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="0")]
-        _0 = 0,
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="1")]
-        _1 = 1,
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class Vector4
+    public partial class ManipulatorPosition
     {
     
         private double _x;
@@ -633,11 +603,11 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     
         private double _z;
     
-        public Vector4()
+        public ManipulatorPosition()
         {
         }
     
-        protected Vector4(Vector4 other)
+        protected ManipulatorPosition(ManipulatorPosition other)
         {
             _x = other._x;
             _y1 = other._y1;
@@ -697,14 +667,14 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
             }
         }
     
-        public System.IObservable<Vector4> Process()
+        public System.IObservable<ManipulatorPosition> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Vector4(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new ManipulatorPosition(this)));
         }
     
-        public System.IObservable<Vector4> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<ManipulatorPosition> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new Vector4(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new ManipulatorPosition(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -728,6 +698,36 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    public enum MicrostepResolution
+    {
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="0")]
+        _0 = 0,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="1")]
+        _1 = 1,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="2")]
+        _2 = 2,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="3")]
+        _3 = 3,
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    public enum MotorOperationMode
+    {
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="0")]
+        _0 = 0,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="1")]
+        _1 = 1,
     }
 
 
@@ -1123,9 +1123,9 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
             return Process<AxisConfiguration>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<Vector4> source)
+        public System.IObservable<string> Process(System.IObservable<ManipulatorPosition> source)
         {
-            return Process<Vector4>(source);
+            return Process<ManipulatorPosition>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<AindManipulatorCalibrationModel> source)
@@ -1147,7 +1147,7 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindManipulatorCalibrationOutput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindManipulatorOperationControl>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AxisConfiguration>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Vector4>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ManipulatorPosition>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindManipulatorCalibrationModel>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
