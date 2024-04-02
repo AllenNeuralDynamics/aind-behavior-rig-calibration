@@ -3,50 +3,58 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
                  xmlns:p1="clr-namespace:AindBehaviorRigCalibration.AindManipulatorCalibration;assembly=Extensions"
-                 xmlns:p2="clr-namespace:AindVrForagingDataSchema.AindVrForagingRig;assembly=Extensions"
-                 xmlns:p3="clr-namespace:AindBehaviorRigCalibration.LoadCellsCalibration;assembly=Extensions"
-                 xmlns:p4="clr-namespace:AindBehaviorRigCalibration.OlfactometerCalibration;assembly=Extensions"
-                 xmlns:p5="clr-namespace:AindBehaviorRigCalibration.WaterValveCalibration;assembly=Extensions"
+                 xmlns:p2="clr-namespace:AindBehaviorRigCalibration.LoadCellsCalibration;assembly=Extensions"
+                 xmlns:p3="clr-namespace:AindBehaviorRigCalibration.OlfactometerCalibration;assembly=Extensions"
+                 xmlns:p4="clr-namespace:AindBehaviorRigCalibration.WaterValveCalibration;assembly=Extensions"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Path" DisplayName="aind_manipulator" />
+      </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:ReadAllText" />
       </Expression>
       <Expression xsi:type="p1:DeserializeFromJson">
         <p1:Type xsi:type="TypeMapping" TypeArguments="p1:AindManipulatorCalibrationModel" />
       </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Path" DisplayName="load_cells" />
+      </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:ReadAllText" />
       </Expression>
       <Expression xsi:type="p2:DeserializeFromJson">
-        <p2:Type xsi:type="TypeMapping" TypeArguments="p2:AindVrForagingRig" />
+        <p2:Type xsi:type="TypeMapping" TypeArguments="p2:LoadCellsCalibrationModel" />
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Path" DisplayName="olfactometer" />
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:ReadAllText" />
       </Expression>
       <Expression xsi:type="p3:DeserializeFromJson">
-        <p3:Type xsi:type="TypeMapping" TypeArguments="p3:LoadCellsCalibrationModel" />
+        <p3:Type xsi:type="TypeMapping" TypeArguments="p3:OlfactometerCalibrationModel" />
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Path" DisplayName="water_valve" />
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:ReadAllText" />
       </Expression>
       <Expression xsi:type="p4:DeserializeFromJson">
-        <p4:Type xsi:type="TypeMapping" TypeArguments="p4:OlfactometerCalibrationModel" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="io:ReadAllText" />
-      </Expression>
-      <Expression xsi:type="p5:DeserializeFromJson">
-        <p5:Type xsi:type="TypeMapping" TypeArguments="p5:WaterValveCalibrationModel" />
+        <p4:Type xsi:type="TypeMapping" TypeArguments="p4:WaterValveCalibrationModel" />
       </Expression>
     </Nodes>
     <Edges>
       <Edge From="0" To="1" Label="Source1" />
-      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
       <Edge From="4" To="5" Label="Source1" />
       <Edge From="6" To="7" Label="Source1" />
-      <Edge From="8" To="9" Label="Source1" />
+      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="10" To="11" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
