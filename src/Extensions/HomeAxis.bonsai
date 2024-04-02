@@ -28,7 +28,7 @@
             </Expression>
             <Expression xsi:type="PropertySource" TypeArguments="p1:CreateEnableDriverPayload,p1:StepperMotors">
               <MemberName>EnableDriver</MemberName>
-              <Value>Motor0</Value>
+              <Value>None</Value>
             </Expression>
             <Expression xsi:type="rx:AsyncSubject">
               <Name>MotorMask</Name>
@@ -37,7 +37,7 @@
               <rx:Name>ThisCommands</rx:Name>
             </Expression>
             <Expression xsi:type="MulticastSubject">
-              <Name>Commands</Name>
+              <Name>StepperDriverCommands</Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>MotorMask</Name>
@@ -108,7 +108,7 @@
                     <Name>ThisCommands</Name>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
-                    <Name>Events</Name>
+                    <Name>StepperDriverEvents</Name>
                   </Expression>
                   <Expression xsi:type="p1:Parse">
                     <harp:Register xsi:type="p1:DigitalInputState" />
@@ -212,7 +212,7 @@
                     <Name>ThisCommandsOffset</Name>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
-                    <Name>Events</Name>
+                    <Name>StepperDriverEvents</Name>
                   </Expression>
                   <Expression xsi:type="p1:Parse">
                     <harp:Register xsi:type="p1:DigitalInputState" />
@@ -309,7 +309,7 @@
               <Workflow>
                 <Nodes>
                   <Expression xsi:type="SubscribeSubject">
-                    <Name>Events</Name>
+                    <Name>StepperDriverEvents</Name>
                   </Expression>
                   <Expression xsi:type="p1:Parse">
                     <harp:Register xsi:type="p1:MotorStopped" />
@@ -502,7 +502,7 @@
               <Motor>Motor0</Motor>
             </Expression>
             <Expression xsi:type="MulticastSubject">
-              <Name>Commands</Name>
+              <Name>StepperDriverCommands</Name>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:HarpMessage">
               <rx:Name>ThisCommandsMask</rx:Name>
@@ -519,7 +519,7 @@
               <Motor>Motor0</Motor>
             </Expression>
             <Expression xsi:type="MulticastSubject">
-              <Name>Commands</Name>
+              <Name>StepperDriverCommands</Name>
             </Expression>
           </Nodes>
           <Edges>
