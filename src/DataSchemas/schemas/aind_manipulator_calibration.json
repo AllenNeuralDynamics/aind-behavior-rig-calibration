@@ -1,0 +1,425 @@
+{
+  "definitions": {
+    "AindManipulatorCalibration": {
+      "additionalProperties": false,
+      "description": "Load cells calibration class",
+      "properties": {
+        "calibration_date": {
+          "format": "date-time",
+          "title": "Date and time of calibration",
+          "type": "string"
+        },
+        "device_name": {
+          "default": "AindManipulator",
+          "description": "Must match a device name in rig/instrument",
+          "title": "Device name",
+          "type": "string"
+        },
+        "description": {
+          "const": "Calibration of the load cells system",
+          "default": "Calibration of the load cells system",
+          "title": "Description",
+          "type": "string"
+        },
+        "input": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/AindManipulatorCalibrationInput"
+            }
+          ],
+          "title": "Input of the calibration"
+        },
+        "output": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/AindManipulatorCalibrationOutput"
+            }
+          ],
+          "title": "Output of the calibration."
+        },
+        "notes": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "calibration_date",
+        "input",
+        "output"
+      ],
+      "title": "AindManipulatorCalibration",
+      "type": "object"
+    },
+    "AindManipulatorCalibrationInput": {
+      "properties": {
+        "full_step_to_mm": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ManipulatorPosition"
+            }
+          ],
+          "default": {
+            "x": 0.01,
+            "y1": 0.01,
+            "y2": 0.01,
+            "z": 0.01
+          },
+          "title": "Full step to mm"
+        },
+        "axis_configuration": {
+          "default": [
+            {
+              "axis": 1,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 24000,
+              "min_limit": -1
+            },
+            {
+              "axis": 2,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 24000,
+              "min_limit": -1
+            },
+            {
+              "axis": 3,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 24000,
+              "min_limit": -1
+            },
+            {
+              "axis": 4,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 24000,
+              "min_limit": -1
+            }
+          ],
+          "items": {
+            "$ref": "#/definitions/AxisConfiguration"
+          },
+          "title": "Axes configuration. Only the axes that are configured will be enabled.",
+          "type": "array"
+        },
+        "homing_order": {
+          "default": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "items": {
+            "$ref": "#/definitions/Axis"
+          },
+          "title": "Homing order",
+          "type": "array"
+        },
+        "initial_position": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ManipulatorPosition"
+            }
+          ],
+          "default": {
+            "x": 0.0,
+            "y1": 0.0,
+            "y2": 0.0,
+            "z": 0.0
+          }
+        }
+      },
+      "title": "AindManipulatorCalibrationInput",
+      "type": "object"
+    },
+    "AindManipulatorCalibrationOutput": {
+      "properties": {},
+      "title": "AindManipulatorCalibrationOutput",
+      "type": "object"
+    },
+    "AindManipulatorOperationControl": {
+      "properties": {},
+      "title": "AindManipulatorOperationControl",
+      "type": "object"
+    },
+    "Axis": {
+      "description": "Motor axis available",
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "title": "Axis",
+      "type": "integer"
+    },
+    "AxisConfiguration": {
+      "description": "Axis configuration",
+      "properties": {
+        "axis": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Axis"
+            }
+          ],
+          "title": "Axis to be configured"
+        },
+        "step_acceleration_interval": {
+          "default": 100,
+          "description": "Acceleration of the step interval in microseconds",
+          "maximum": 2000,
+          "minimum": 2,
+          "title": "Acceleration",
+          "type": "integer"
+        },
+        "step_interval": {
+          "default": 100,
+          "description": "Step interval in microseconds.",
+          "maximum": 20000,
+          "minimum": 100,
+          "title": "Step interval",
+          "type": "integer"
+        },
+        "microstep_resolution": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/MicrostepResolution"
+            }
+          ],
+          "default": 0,
+          "title": "Microstep resolution"
+        },
+        "maximum_step_interval": {
+          "default": 2000,
+          "maximum": 20000,
+          "minimum": 100,
+          "title": "Configures the time between step motor pulses (us) used when starting or stopping a movement",
+          "type": "integer"
+        },
+        "motor_operation_mode": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/MotorOperationMode"
+            }
+          ],
+          "default": 0,
+          "title": "Motor operation mode"
+        },
+        "max_limit": {
+          "default": 24000,
+          "title": "Maximum limit. A value of 0 disables this limit.",
+          "type": "integer"
+        },
+        "min_limit": {
+          "default": -1,
+          "title": "Minimum limit. A value of 0 disables this limit.",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "axis"
+      ],
+      "title": "AxisConfiguration",
+      "type": "object"
+    },
+    "ManipulatorPosition": {
+      "properties": {
+        "x": {
+          "title": "X coordinate",
+          "type": "number"
+        },
+        "y1": {
+          "title": "Y1 coordinate",
+          "type": "number"
+        },
+        "y2": {
+          "title": "Y2 coordinate",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z coordinate",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y1",
+        "y2",
+        "z"
+      ],
+      "title": "ManipulatorPosition",
+      "type": "object"
+    },
+    "MicrostepResolution": {
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "title": "MicrostepResolution",
+      "type": "integer"
+    },
+    "MotorOperationMode": {
+      "enum": [
+        0,
+        1
+      ],
+      "title": "MotorOperationMode",
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "describedBy": {
+      "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json",
+      "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json",
+      "title": "Describedby",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1.0",
+      "default": "0.1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "experiment": {
+      "description": "Name of the experiment",
+      "title": "Experiment",
+      "type": "string"
+    },
+    "date": {
+      "description": "Date of the experiment",
+      "format": "date-time",
+      "title": "Date",
+      "type": "string"
+    },
+    "root_path": {
+      "description": "Root path where data will be logged",
+      "title": "Root Path",
+      "type": "string"
+    },
+    "remote_path": {
+      "default": null,
+      "description": "Remote path where data will be attempted to be copied to after experiment is done",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Remote Path"
+    },
+    "subject": {
+      "description": "Name of the subject",
+      "title": "Subject",
+      "type": "string"
+    },
+    "experiment_version": {
+      "description": "Version of the experiment",
+      "title": "Experiment Version",
+      "type": "string"
+    },
+    "rng_seed": {
+      "default": null,
+      "description": "Seed of the random number generator",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Rng Seed"
+    },
+    "notes": {
+      "default": null,
+      "description": "Notes about the experiment",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Notes"
+    },
+    "commit_hash": {
+      "default": null,
+      "description": "Commit hash of the repository",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Commit Hash"
+    },
+    "allow_dirty_repo": {
+      "default": false,
+      "description": "Allow running from a dirty repository",
+      "title": "Allow Dirty Repo",
+      "type": "boolean"
+    },
+    "skip_hardware_validation": {
+      "default": false,
+      "description": "Skip hardware validation",
+      "title": "Skip Hardware Validation",
+      "type": "boolean"
+    },
+    "operation_control": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/AindManipulatorOperationControl"
+        }
+      ],
+      "default": {},
+      "title": "Operation control"
+    },
+    "calibration": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/AindManipulatorCalibration"
+        }
+      ],
+      "description": "Calibration data"
+    }
+  },
+  "required": [
+    "experiment",
+    "root_path",
+    "subject",
+    "experiment_version",
+    "calibration"
+  ],
+  "title": "AindManipulatorCalibrationModel",
+  "type": "object"
+}

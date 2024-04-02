@@ -8,9 +8,9 @@ from enum import Enum
 from typing import Annotated, Any, Literal, Optional, Union
 
 from aind_data_schema.base import AindCoreModel, AindModel
-from pydantic import Field, RootModel
+from pydantic import Field, RootModel, BaseModel
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 
 class SpinnakerCamera(AindModel):
@@ -34,6 +34,7 @@ class HarpDeviceType(str, Enum):
     SOUNDCARD = "soundcard"
     SNIFFDETECTOR = "sniffdetector"
     CUTTLEFISH = "cuttlefish"
+    STEPPERDRIVER = "stepperdriver"
     GENERIC = "generic"
 
 
@@ -42,7 +43,7 @@ class HarpDeviceBase(AindModel):
     device_type: HarpDeviceType = Field(default=HarpDeviceType.GENERIC, description="Device type")
     serial_number: Optional[str] = Field(default=None, description="Device serial number")
     port_name: str = Field(..., description="Device port name")
-    additional_settings: Optional[Any] = Field(default=None, description="Additional settings")
+    additional_settings: Optional[BaseModel] = Field(default=None, description="Additional settings")
 
 
 class HarpBehavior(HarpDeviceBase):
@@ -100,6 +101,11 @@ class HarpCuttlefish(HarpDeviceBase):
     who_am_i: Literal[1403] = 1403
 
 
+class HarpStepperDriver(HarpDeviceBase):
+    device_type: Literal[HarpDeviceType.STEPPERDRIVER] = HarpDeviceType.STEPPERDRIVER
+    who_am_i: Literal[1130] = 1130
+
+
 class HarpDevice(RootModel):
     root: Annotated[
         Union[
@@ -114,6 +120,7 @@ class HarpDevice(RootModel):
             HarpSoundCard,
             HarpSniffDetector,
             HarpClockSynchronizer,
+            HarpStepperDriver,
         ],
         Field(discriminator="device_type"),
     ]

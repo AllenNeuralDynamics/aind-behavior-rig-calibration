@@ -2,11 +2,13 @@
 from datetime import datetime
 from typing import Literal, Optional
 
+from aind_behavior_services.base import get_commit_hash
+
 # Import aind-datas-schema types
 from aind_data_schema.base import AindCoreModel
 from pydantic import Field
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 class AindBehaviorSessionModel(AindCoreModel):

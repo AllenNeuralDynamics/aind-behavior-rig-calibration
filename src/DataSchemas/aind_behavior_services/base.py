@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Callable, get_args
+from os import PathLike
+from typing import Any, Callable, Optional, get_args
 
+import git
 from pydantic import BaseModel, GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
@@ -60,3 +62,15 @@ def coerce_schema_version(cls: BaseModel, v: str) -> str:
         return str(_default_schema_version)
     else:
         return str(v)
+
+
+def get_commit_hash(repository: Optional[PathLike] = None) -> str:
+    """Get the commit hash of the repository."""
+    try:
+        if repository is None:
+            repo = git.Repo(search_parent_directories=True)
+        else:
+            repo = git.Repo(repository)
+        return repo.head.commit.hexsha
+    except git.InvalidGitRepositoryError as e:
+        raise e("Not a git repository. Please run from the root of the repository.") from e

@@ -14,8 +14,9 @@ dynamic = ["version", "readme"]
 
 dependencies = [
     'aind_data_schema == 0.31.8',
-    'harp-python',
-    'scikit-learn'
+    'harp-python==0.2.0',
+    'gitpython==3.1.43',
+    'scikit-learn==1.4.1.post1'
 ]
 
 [project.optional-dependencies]

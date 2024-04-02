@@ -1,10 +1,12 @@
 from datetime import datetime
-
+from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration.water_valve import (
     Measurement,
     WaterValveCalibration,
     WaterValveCalibrationInput,
     WaterValveCalibrationOutput,
+    WaterValveCalibrationModel,
+    WaterValveOperationControl,
 )
 
 _delta_times = [0.1, 0.2, 0.3, 0.4, 0.5]
@@ -33,3 +35,19 @@ calibration = WaterValveCalibration(
     device_name="WaterValve",
     calibration_date=datetime.now(),
 )
+
+
+out_model = WaterValveCalibrationModel(
+    calibration=calibration,
+    operation_control=WaterValveOperationControl(valve_open_time=[0.1, 0.2, 0.3]),
+    root_path="C:\\Data",
+    allow_dirty_repo=False,
+    experiment="WaterValveCalibration",
+    subject="WaterValve",
+    experiment_version="WaterValveCalibration",
+    commit_hash=get_commit_hash()
+)
+
+
+with open("local/water_valve.json", "w") as f:
+    f.write(out_model.model_dump_json(indent=3))
