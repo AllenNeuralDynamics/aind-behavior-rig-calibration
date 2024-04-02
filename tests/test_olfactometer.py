@@ -63,7 +63,7 @@ class OlfactometerTests(unittest.TestCase):
             experiment="OlfactometerCalibration",
             experiment_version="0.0.0",
             subject="Olfactometer",
-            commit_hash=get_commit_hash()
+            commit_hash=get_commit_hash(),
         )
 
         out_model.model_dump_json(indent=3)
