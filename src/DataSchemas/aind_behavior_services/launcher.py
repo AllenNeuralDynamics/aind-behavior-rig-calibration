@@ -9,7 +9,7 @@ from typing import Dict, Optional, Type, Generic, TypeVar, Union, Tuple, List
 import git
 from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionModel, AindBehaviorTaskLogicModel
 from aind_behavior_services.utils import open_bonsai_process
-from pydantic import BaseModel
+from pydantic import ValidationError
 
 _HEADER = r"""
 
@@ -140,7 +140,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         return fpath
 
     @staticmethod
-    def load_json_model(json_path: os.PathLike | str, model: Union[TRig, TSession, TTaskLogic]) -> BaseModel:
+    def load_json_model(
+        json_path: os.PathLike | str, model: Union[Type[TRig], Type[TSession], Type[TTaskLogic]]
+    ) -> Union[TRig, TSession, TTaskLogic]:
         with open(json_path, "r", encoding="utf-8") as file:
             return model.model_validate_json(file.read())
 
@@ -219,7 +221,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             commit_hash=self.repository.head.commit.hexsha,
             allow_dirty_repo=self._dev_mode,
             experiment_version=self.task_logic_schema.model_construct().schema_version,
-    )
+        )
 
     def _get_available_batches(self, folder: str) -> List[str]:
         available_batches = glob.glob(os.path.join(folder, "*.*"))
@@ -268,3 +270,21 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     def _get_notes(self) -> str:
         notes = str(input("Enter notes:"))
         return notes
+
+    def prompt_rig_input(self, folder_name: str = "Rigs") -> TRig:
+        rig_schemas_path = os.path.join(self.config_library_dir, folder_name, self.computer_name)
+        available_rigs = glob.glob(os.path.join(rig_schemas_path, "*.json"))
+        if len(available_rigs) == 1:
+            print(f"Found a single rig config file. Using {available_rigs[0]}.")
+            return self.load_json_model(available_rigs[0], self.rig_schema)
+        else:
+            while True:
+                try:
+                    path = self.pick_file_from_list(available_rigs, prompt="Choose a rig:", override_zero=(None, None))
+                    rig = self.load_json_model(path, self.rig_schema)
+                    print(f"Using {path}.")
+                    return rig
+                except ValidationError:
+                    print("Failed to validate pydantic model. Try again.")
+                except ValueError:
+                    print("Invalid choice. Try again.")
