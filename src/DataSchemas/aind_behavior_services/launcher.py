@@ -8,18 +8,6 @@ from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionMode
 from aind_behavior_services.utils import open_bonsai_process
 from pydantic import ValidationError
 
-_HEADER = r"""
-
- ██████╗██╗      █████╗ ██████╗ ███████╗
-██╔════╝██║     ██╔══██╗██╔══██╗██╔════╝
-██║     ██║     ███████║██████╔╝█████╗  
-██║     ██║     ██╔══██║██╔══██╗██╔══╝  
-╚██████╗███████╗██║  ██║██████╔╝███████╗
- ╚═════╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝
-
-Command-line-interface Launcher for AIND Behavior Experiments
-Press Control+C to exit at any time.
-"""
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
@@ -45,19 +33,37 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         workflow (os.PathLike | str): The path to the bonsai workflow file.
     """
 
+    RIG_DIR = "Rig"
+    SESSION_DIR = "Session"
+    TASK_LOGIC_DIR = "TaskLogic"
+    VISUALIZERS_DIR = "VisualizerLayouts"
+
+    _HEADER = r"""
+
+    ██████╗██╗      █████╗ ██████╗ ███████╗
+    ██╔════╝██║     ██╔══██╗██╔══██╗██╔════╝
+    ██║     ██║     ███████║██████╔╝█████╗  
+    ██║     ██║     ██╔══██║██╔══██╗██╔══╝  
+    ╚██████╗███████╗██║  ██║██████╔╝███████╗
+    ╚═════╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝
+
+    Command-line-interface Launcher for AIND Behavior Experiments
+    Press Control+C to exit at any time.
+    """
+
     def __init__(
         self,
         rig_schema: Type[TRig],
         session_schema: Type[TSession],
         task_logic_schema: Type[TTaskLogic],
         data_dir: os.PathLike | str = r"C:\data",
-        config_library_dir: os.PathLike | str = r"\\allen\aind\scratch\{task}\schemas",
+        config_library_dir: os.PathLike | str = r"\\allen\aind\scratch\AindBehavior.db\{task}",
         temp_dir: os.PathLike | str = "local/.temp",
         log_dir: os.PathLike | str = "local/.dump",
         remote_data_dir: Optional[os.PathLike | str] = None,
         bonsai_executable: os.PathLike | str = "bonsai/bonsai.exe",
         workflow: os.PathLike | str = "src/main.bonsai",
-        repository: Optional[git.Repo] = None,
+        repository_dir: Optional[os.PathLike | str] = None,
     ) -> None:
         """
         Initializes a new instance of the Launcher class.
@@ -67,31 +73,63 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             session_schema (Type[AindBehaviorSessionModel]): The session schema for the behavior services.
             task_logic_schema (Type[AindBehaviorTaskLogicModel]): The task logic schema for the behavior services.
         """
-
-        if repository is None:
-            try:
-                self.repository = git.Repo(search_parent_directories=True)
-            except git.InvalidGitRepositoryError as e:
-                raise e("Not a git repository. Please run from the root of the repository.") from e
-        else:
-            self.repository = repository
+        try:
+            if repository_dir is None:
+                self.repository = git.Repo()
+            else:
+                self.repository = git.Repo(path=repository_dir)
+        except git.InvalidGitRepositoryError as e:
+            raise e("Not a git repository. Please run from the root of the repository.") from e
+        # Always work from the root of the repository
+        self._cwd = self.repository.working_dir
+        os.chdir(self._cwd)
 
         self.rig_schema = rig_schema
         self.session_schema = session_schema
         self.task_logic_schema = task_logic_schema
-        self.temp_dir = temp_dir
-        self.log_dir = log_dir
-        self.data_dir = data_dir
-        self.remote_data_dir = remote_data_dir
-        self.bonsai_executable = bonsai_executable
-        self.default_workflow = workflow
+        self.temp_dir = self.abspath(temp_dir)
+        self.log_dir = self.abspath(log_dir)
+        self.data_dir = self.abspath(data_dir)
+        self.remote_data_dir = self.abspath(remote_data_dir) if remote_data_dir is not None else None
+        self.bonsai_executable = self.abspath(bonsai_executable)
+        self.default_workflow = self.abspath(workflow)
         if not isinstance(config_library_dir, str):
             config_library_dir = str(config_library_dir)
-        self.config_library_dir = config_library_dir.format(task=task_logic_schema.__name__)
+        self.config_library_dir = self.abspath(config_library_dir.format(task=task_logic_schema.__name__))
         self.computer_name = os.environ["COMPUTERNAME"]
-        self._dev_mode = False
 
-        self._cwd = os.getcwd()
+        self._dev_mode = False
+        self._rig_dir = os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name)
+        self._session_dir = os.path.join(self.config_library_dir, self.SESSION_DIR)
+        self._task_logic_dir = os.path.join(self.config_library_dir, self.TASK_LOGIC_DIR)
+        self._visualizer_layouts_dir = os.path.join(self.config_library_dir, self.VISUALIZERS_DIR, self.computer_name)
+
+    def _print_diagnosis(self) -> None:
+        """
+        Prints the diagnosis information for the launcher.
+
+        This method prints the diagnosis information, including the computer name, data directory, and config library directory.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
+        print("-------------------------------")
+        print("Diagnosis:")
+        print("-------------------------------")
+        print(f"Current Directory: {self._cwd}")
+        print(f"Repository: {self.repository.working_dir}")
+        print(f"Computer Name: {self.computer_name}")
+        print(f"Data Directory: {self.data_dir}")
+        print(f"Remote Data Directory: {self.remote_data_dir}")
+        print(f"Config Library Directory: {self.config_library_dir}")
+        print(f"Temporary Directory: {self.temp_dir}")
+        print(f"Log Directory: {self.log_dir}")
+        print(f"Bonsai Executable: {self.bonsai_executable}")
+        print(f"Default Workflow: {self.default_workflow}")
+        print("-------------------------------")
 
     def _print_header(self) -> None:
         """
@@ -107,12 +145,18 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             None
         """
         print("-------------------------------")
-        print(_HEADER)
-        print(f"TaskLogic Schema Version: {self.task_logic_schema.model_construct().schema_version}")
-        print(f"Rig Schema Version: {self.rig_schema.model_construct().schema_version}")
-        print(f"Session Schema Version: {self.session_schema.model_construct().schema_version}")
+        print(self._HEADER)
+        print(
+            f"TaskLogic ({self.task_logic_schema.__name__}) Schema Version: {self.task_logic_schema.model_construct().schema_version}"
+        )
+        print(f"Rig ({self.rig_schema.__name__}) Schema Version: {self.rig_schema.model_construct().schema_version}")
+        print(
+            f"Session ({self.session_schema.__name__}) Schema Version: {self.session_schema.model_construct().schema_version}"
+        )
         print("-------------------------------")
         self._dev_mode = input("Press Enter to continue...") == "42"
+        if self._dev_mode:
+            self._print_diagnosis()
 
     def save_temp_model(self, model: Union[TRig, TSession, TTaskLogic], folder: Optional[os.PathLike | str]) -> str:
         """
@@ -159,9 +203,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             raise FileNotFoundError(f"Bonsai executable (bonsai.exe) not found! Expected {self.bonsai_executable}.")
         if not (os.path.isdir(self.config_library_dir)):
             raise FileNotFoundError(f"Config library not found! Expected {self.config_library_dir}.")
-        if not (os.path.isdir(os.path.join(self.config_library_dir, "Rigs", self.computer_name))):
+        if not (os.path.isdir(os.path.join(self.config_library_dir, "Rig", self.computer_name))):
             raise FileNotFoundError(
-                f"Rig configuration not found! Expected {os.path.join(self.config_library_dir, 'Rigs', self.computer_name)}."
+                f"Rig configuration not found! Expected {os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name)}."
             )
         if not (os.path.isfile(os.path.join(self.default_workflow))):
             raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_workflow}.")
@@ -201,8 +245,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             else:
                 print("Invalid input. Please enter 'Y' or 'N'.")
 
-    def prompt_session_input(self, folder: str = "Subjects") -> TSession:
-        _local_config_folder = os.path.join(self.config_library_dir, folder)
+    def prompt_session_input(self, folder: Optional[str] = None) -> TSession:
+        _local_config_folder = (
+            os.path.join(self.config_library_dir, folder) if folder is not None else self._session_dir
+        )
         available_batches = self._get_available_batches(_local_config_folder)
 
         subject_list = self._get_subject_list(available_batches)
@@ -268,8 +314,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         notes = str(input("Enter notes:"))
         return notes
 
-    def prompt_rig_input(self, folder_name: str = "Rigs") -> TRig:
-        rig_schemas_path = os.path.join(self.config_library_dir, folder_name, self.computer_name)
+    def prompt_rig_input(self, folder_name: Optional[str] = None) -> TRig:
+        rig_schemas_path = (
+            os.path.join(self.config_library_dir, folder_name, self.computer_name)
+            if folder_name is not None
+            else self._rig_dir
+        )
         available_rigs = glob.glob(os.path.join(rig_schemas_path, "*.json"))
         if len(available_rigs) == 1:
             print(f"Found a single rig config file. Using {available_rigs[0]}.")
@@ -286,10 +336,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 except ValueError:
                     print("Invalid choice. Try again.")
 
-    def prompt_task_logic_input(self, folder: str = "TaskLogic") -> TTaskLogic:
-        available_files = glob.glob(
-            os.path.join(self.config_library_dir, folder, self.task_logic_schema.__name__, "*.json")
-        )
+    def prompt_task_logic_input(self, folder: Optional[str] = None) -> TTaskLogic:
+        _path = os.path.join(self.config_library_dir, folder, "*.json") if folder is not None else self._task_logic_dir
+        available_files = glob.glob(_path)
         while True:
             try:
                 path = self.pick_file_from_list(
@@ -308,8 +357,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             except FileNotFoundError:
                 print("Invalid choice. Try again.")
 
-    def prompt_visualizer_layout_input(self, folder_name: str = "VisualizerLayouts") -> Optional[str]:
-        layout_schemas_path = os.path.join(self.config_library_dir, folder_name, self.computer_name)
+    def prompt_visualizer_layout_input(self, folder_name: Optional[str] = None) -> Optional[str]:
+        layout_schemas_path = (
+            os.path.join(self.config_library_dir, folder_name, self.computer_name)
+            if folder_name is not None
+            else self._visualizer_layouts_dir
+        )
         available_layouts = glob.glob(os.path.join(layout_schemas_path, "*.bonsai.layout"))
         while True:
             try:
@@ -338,7 +391,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 settings["is_start_flag"] = self.prompt_yes_no_question("Run with start flag?")
         return settings
 
-    def launch(self) -> None:
+    def run(self) -> None:
         try:
             self._print_header()
             self._validate_dependencies()
@@ -374,3 +427,33 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         except KeyboardInterrupt:
             print("Exiting!")
             return
+
+    def abspath(self, path: os.PathLike | str) -> str:
+        """
+        Returns the absolute path of the given file or directory.
+
+        Args:
+            path (os.PathLike | str): The path to the file or directory.
+
+        Returns:
+            str: The absolute path of the file or directory.
+
+        """
+        if not isinstance(path, str):
+            path = str(path)
+        return os.path.abspath(path)
+
+    def make_folder_structure(self) -> None:
+        try:
+            self._make_folder(self.data_dir)
+            self._make_folder(self._task_logic_dir)
+            self._make_folder(self._rig_dir)
+            self._make_folder(self._session_dir)
+            self._make_folder(self._visualizer_layouts_dir)
+        except OSError as e:
+            print(f"Failed to create folder structure: {e}")
+
+    @staticmethod
+    def _make_folder(folder: os.PathLike | str) -> None:
+        if not os.listdir(os.path.abspath(folder)):
+            os.makedirs(folder)
