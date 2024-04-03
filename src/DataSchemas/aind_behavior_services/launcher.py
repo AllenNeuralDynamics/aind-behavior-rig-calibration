@@ -1,10 +1,7 @@
-import json
+import glob
 import os
 import secrets
-import glob
-import subprocess
-from os import PathLike
-from typing import Dict, Optional, Type, Generic, TypeVar, Union, Tuple, List
+from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union, Dict
 
 import git
 from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionModel, AindBehaviorTaskLogicModel
@@ -310,3 +307,70 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 print("Invalid choice. Try again.")
             except FileNotFoundError:
                 print("Invalid choice. Try again.")
+
+    def prompt_visualizer_layout_input(self, folder_name: str = "VisualizerLayouts") -> Optional[str]:
+        layout_schemas_path = os.path.join(self.config_library_dir, folder_name, self.computer_name)
+        available_layouts = glob.glob(os.path.join(layout_schemas_path, "*.bonsai.layout"))
+        while True:
+            try:
+                print("Pick a visualizer layout:")
+                print("0: Default")
+                print("1: None")
+                _ = [print(f"{i+2}: {os.path.split(file)[1]}") for i, file in enumerate(available_layouts)]
+                choice = int(input("Choice: "))
+                if choice < 0 or choice >= len(available_layouts) + 2:
+                    raise ValueError
+                if choice == 0:
+                    return None
+                if choice == 1:
+                    return ""
+                else:
+                    return available_layouts[choice - 2]
+            except ValueError:
+                print("Invalid choice. Try again.")
+
+    def prompt_bonsai_config_input(self) -> dict[str, bool]:
+        user_input = input("Press any key to continue or type 'bonsai' for advance settings")
+        settings = {}
+        if user_input == "bonsai":
+            settings["is_editor_mode"] = self.prompt_yes_no_question("Run with editor mode?")
+            if settings["is_editor_mode"]:
+                settings["is_start_flag"] = self.prompt_yes_no_question("Run with start flag?")
+        return settings
+
+    def launch(self) -> None:
+        try:
+            self._print_header()
+            self._validate_dependencies()
+            task_logic: TTaskLogic = self.prompt_task_logic_input()
+            session: TSession = self.prompt_session_input()
+            rig: TRig = self.prompt_rig_input()
+            bonsai_visualizer_layout: Optional[str] = self.prompt_visualizer_layout_input()
+            bonsai_config: Dict[str, bool] = self.prompt_bonsai_config_input()
+
+            input("Press enter to launch Bonsai or Control+C to exit...")
+
+            additional_properties = {
+                "TaskLogicPath": os.path.abspath(self.save_temp_model(model=task_logic, folder=self.temp_dir)),
+                "SessionPath": os.path.abspath(self.save_temp_model(model=session, folder=self.temp_dir)),
+                "RigPath": os.path.abspath(self.save_temp_model(model=rig, folder=self.temp_dir)),
+            }
+
+            _date = session.date.strftime("%Y%m%dT%H%M%S")
+            proc = open_bonsai_process(
+                bonsai_exe=self.bonsai_executable,
+                workflow_file=self.default_workflow,
+                additional_properties=additional_properties,
+                layout=bonsai_visualizer_layout,
+                log_file_name=os.path.join(self.log_dir, f"{session.subject}_{session.experiment}_{_date}.log"),
+                is_editor_mode=bonsai_config.get("is_editor_mode", True),
+                is_start_flag=bonsai_config.get("is_start_flag", True),
+                cwd=self._cwd,
+            )
+            print("Bonsai process running...")
+            ret = proc.wait()
+            print(f"Bonsai process finished with return code {ret}.")
+
+        except KeyboardInterrupt:
+            print("Exiting!")
+            return
