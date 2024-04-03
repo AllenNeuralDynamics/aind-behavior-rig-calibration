@@ -1,9 +1,15 @@
+import json
 import os
 import secrets
+import glob
+import subprocess
+from os import PathLike
+from typing import Dict, Optional, Type, Generic, TypeVar, Union, Tuple
+
 import git
-from typing import Optional, Type
-from pydantic import BaseModel
 from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionModel, AindBehaviorTaskLogicModel
+from aind_behavior_services.utils import open_bonsai_process
+from pydantic import BaseModel
 
 _HEADER = r"""
 
@@ -18,8 +24,12 @@ Command-line-interface Launcher for AIND Behavior Experiments
 Press Control+C to exit at any time.
 """
 
+TRig = TypeVar("TRig", bound=AindBehaviorRigModel)
+TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
+TTaskLogic = TypeVar("TTaskLogic", bound=AindBehaviorTaskLogicModel)
 
-class Launcher:
+
+class Launcher(Generic[TRig, TSession, TTaskLogic]):
     """
     The Launcher class is responsible for launching the behavior services.
 
@@ -32,6 +42,7 @@ class Launcher:
         config_library_dir (os.PathLike | str): The directory where the config library is located.
         temp_dir (os.PathLike | str): The directory for temporary files.
         log_dir (os.PathLike | str): The directory for log files.
+        data_dir (os.PathLike | str): The directory for data files.
         remote_data_dir (Optional[os.PathLike | str]): The directory to log remote data.
         bonsai_executable (os.PathLike | str): The path to the Bonsai executable.
         workflow (os.PathLike | str): The path to the bonsai workflow file.
@@ -39,9 +50,10 @@ class Launcher:
 
     def __init__(
         self,
-        rig_schema: Type[AindBehaviorRigModel],
-        session_schema: Type[AindBehaviorSessionModel],
-        task_logic_schema: Type[AindBehaviorTaskLogicModel],
+        rig_schema: Type[TRig],
+        session_schema: Type[TSession],
+        task_logic_schema: Type[TTaskLogic],
+        data_dir: os.PathLike | str = r"C:\data",
         config_library_dir: os.PathLike | str = r"\\allen\aind\scratch\{task}\schemas",
         temp_dir: os.PathLike | str = "local/.temp",
         log_dir: os.PathLike | str = "local/.dump",
@@ -72,6 +84,7 @@ class Launcher:
         self.task_logic_schema = task_logic_schema
         self.temp_dir = temp_dir
         self.log_dir = log_dir
+        self.data_dir = data_dir
         self.remote_data_dir = remote_data_dir
         self.bonsai_executable = bonsai_executable
         self.default_workflow = workflow
@@ -79,6 +92,7 @@ class Launcher:
             config_library_dir = str(config_library_dir)
         self.config_library_dir = config_library_dir.format(task=task_logic_schema.__name__)
         self.computer_name = os.environ["COMPUTERNAME"]
+        self._dev_mode = False
 
         self._cwd = os.getcwd()
 
@@ -101,8 +115,9 @@ class Launcher:
         print(f"Rig Schema Version: {self.rig_schema.model_construct().schema_version}")
         print(f"Session Schema Version: {self.session_schema.model_construct().schema_version}")
         print("-------------------------------")
+        self._dev_mode = input("Press Enter to continue...") == "42"
 
-    def save_temp_model(self, model: BaseModel, folder: Optional[os.PathLike | str]) -> str:
+    def save_temp_model(self, model: Union[TRig, TSession, TTaskLogic], folder: Optional[os.PathLike | str]) -> str:
         """
         Saves the given model as a JSON file in the specified folder or in the default temporary folder.
 
@@ -125,7 +140,7 @@ class Launcher:
         return fpath
 
     @staticmethod
-    def load_json_model(json_path: os.PathLike | str, model: BaseModel) -> BaseModel:
+    def load_json_model(json_path: os.PathLike | str, model: Union[TRig, TSession, TTaskLogic]) -> BaseModel:
         with open(json_path, "r", encoding="utf-8") as file:
             return model.model_validate_json(file.read())
 
@@ -151,3 +166,89 @@ class Launcher:
             )
         if not (os.path.isfile(os.path.join(self.default_workflow))):
             raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_workflow}.")
+
+    @staticmethod
+    def pick_file_from_list(
+        available_files: list[str],
+        prompt: str = "Choose a file:",
+        override_zero: Tuple[Optional[str], Optional[str]] = ("Enter manually", None),
+    ) -> str:
+        print(prompt)
+        if override_zero[0] is not None:
+            print(f"0: {override_zero[0]}")
+        _ = [print(f"{i+1}: {os.path.split(file)[1]}") for i, file in enumerate(available_files)]
+        choice = int(input("Choice: "))
+        if choice < 0 or choice >= len(available_files) + 1:
+            raise ValueError
+        if choice == 0:
+            if override_zero[0] is None:
+                raise ValueError
+            if override_zero[1] is not None:
+                return override_zero[1]
+            else:
+                path = str(input(override_zero[0]))
+            return path
+        else:
+            return available_files[choice - 1]
+
+    @staticmethod
+    def prompt_yes_no_question(prompt: str) -> bool:
+        while True:
+            reply = input(prompt + " (Y\\N): ").upper()
+            if reply == "Y":
+                return True
+            elif reply == "N":
+                return False
+            else:
+                print("Invalid input. Please enter 'Y' or 'N'.")
+
+    def prompt_session_input(self, folder: str = "Subjects") -> TSession:
+        _local_config_folder = os.path.join(self.config_library_dir, folder)
+        available_batches = glob.glob(os.path.join(_local_config_folder, "*.*"))
+
+        available_batches = [batch for batch in available_batches if os.path.isfile(batch)]
+        subject_list = None
+        if len(available_batches) == 0:
+            raise FileNotFoundError(f"No batch files found in {_local_config_folder}")
+        while subject_list is None:
+            try:
+                if len(available_batches) == 1:
+                    batch_file = available_batches[0]
+                    print(f"Found a single session config file. Using {batch_file}.")
+                else:
+                    batch_file = self.pick_file_from_list(
+                        available_batches, prompt="Choose a batch:", override_zero=(None, None)
+                    )
+                    if not os.path.isfile(batch_file):
+                        raise FileNotFoundError(f"File not found: {batch_file}")
+                    print(f"Using {batch_file}.")
+                with open(batch_file, "r", encoding="utf-8") as file:
+                    subject_list = file.readlines()
+                subject_list = [subject.strip() for subject in subject_list if subject.strip()]
+                if len(subject_list) == 0:
+                    print(f"No subjects found in {batch_file}")
+                    raise ValueError()
+            except ValueError:
+                print("Invalid choice. Try again.")
+            except FileNotFoundError:
+                print("Invalid choice. Try again.")
+            except IOError:
+                print("Invalid choice. Try again.")
+        subject = None
+        while subject is None:
+            try:
+                subject = self.pick_file_from_list(subject_list, prompt="Choose a subject:", override_zero=(None, None))
+            except ValueError:
+                print("Invalid choice. Try again.")
+        notes = str(input("Enter notes:"))
+
+        return self.session_schema(
+            experiment=self.session_schema.__name__,
+            root_path=self.data_dir,
+            remote_path=self.remote_data_dir,
+            subject=subject,
+            notes=notes,
+            commit_hash=self.repository.head.commit.hexsha,
+            allow_dirty_repo=self._dev_mode,
+            experiment_version=self.task_logic_schema.model_construct().schema_version,
+    )
