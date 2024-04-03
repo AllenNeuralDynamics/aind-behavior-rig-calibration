@@ -4,7 +4,7 @@ import secrets
 import glob
 import subprocess
 from os import PathLike
-from typing import Dict, Optional, Type, Generic, TypeVar, Union, Tuple
+from typing import Dict, Optional, Type, Generic, TypeVar, Union, Tuple, List
 
 import git
 from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionModel, AindBehaviorTaskLogicModel
@@ -204,12 +204,32 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     def prompt_session_input(self, folder: str = "Subjects") -> TSession:
         _local_config_folder = os.path.join(self.config_library_dir, folder)
-        available_batches = glob.glob(os.path.join(_local_config_folder, "*.*"))
+        available_batches = self._get_available_batches(_local_config_folder)
 
+        subject_list = self._get_subject_list(available_batches)
+        subject = self._choose_subject(subject_list)
+        notes = self._get_notes()
+
+        return self.session_schema(
+            experiment=self.session_schema.__name__,
+            root_path=self.data_dir,
+            remote_path=self.remote_data_dir,
+            subject=subject,
+            notes=notes,
+            commit_hash=self.repository.head.commit.hexsha,
+            allow_dirty_repo=self._dev_mode,
+            experiment_version=self.task_logic_schema.model_construct().schema_version,
+    )
+
+    def _get_available_batches(self, folder: str) -> List[str]:
+        available_batches = glob.glob(os.path.join(folder, "*.*"))
         available_batches = [batch for batch in available_batches if os.path.isfile(batch)]
-        subject_list = None
         if len(available_batches) == 0:
-            raise FileNotFoundError(f"No batch files found in {_local_config_folder}")
+            raise FileNotFoundError(f"No batch files found in {folder}")
+        return available_batches
+
+    def _get_subject_list(self, available_batches: List[str]) -> List[str]:
+        subject_list = None
         while subject_list is None:
             try:
                 if len(available_batches) == 1:
@@ -234,21 +254,17 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 print("Invalid choice. Try again.")
             except IOError:
                 print("Invalid choice. Try again.")
+        return subject_list
+
+    def _choose_subject(self, subject_list: List[str]) -> str:
         subject = None
         while subject is None:
             try:
                 subject = self.pick_file_from_list(subject_list, prompt="Choose a subject:", override_zero=(None, None))
             except ValueError:
                 print("Invalid choice. Try again.")
-        notes = str(input("Enter notes:"))
+        return subject
 
-        return self.session_schema(
-            experiment=self.session_schema.__name__,
-            root_path=self.data_dir,
-            remote_path=self.remote_data_dir,
-            subject=subject,
-            notes=notes,
-            commit_hash=self.repository.head.commit.hexsha,
-            allow_dirty_repo=self._dev_mode,
-            experiment_version=self.task_logic_schema.model_construct().schema_version,
-    )
+    def _get_notes(self) -> str:
+        notes = str(input("Enter notes:"))
+        return notes
