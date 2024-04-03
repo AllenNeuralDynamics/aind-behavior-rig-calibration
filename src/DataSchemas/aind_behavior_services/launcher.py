@@ -34,7 +34,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     """
 
     RIG_DIR = "Rig"
-    SESSION_DIR = "Session"
+    SUBJECT_DIR = "Subjects"
     TASK_LOGIC_DIR = "TaskLogic"
     VISUALIZERS_DIR = "VisualizerLayouts"
 
@@ -100,7 +100,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
         self._dev_mode = False
         self._rig_dir = os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name)
-        self._session_dir = os.path.join(self.config_library_dir, self.SESSION_DIR)
+        self._subject_dir = os.path.join(self.config_library_dir, self.SUBJECT_DIR)
         self._task_logic_dir = os.path.join(self.config_library_dir, self.TASK_LOGIC_DIR)
         self._visualizer_layouts_dir = os.path.join(self.config_library_dir, self.VISUALIZERS_DIR, self.computer_name)
 
@@ -247,7 +247,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     def prompt_session_input(self, folder: Optional[str] = None) -> TSession:
         _local_config_folder = (
-            os.path.join(self.config_library_dir, folder) if folder is not None else self._session_dir
+            os.path.join(self.config_library_dir, folder) if folder is not None else self._subject_dir
         )
         available_batches = self._get_available_batches(_local_config_folder)
 
@@ -337,8 +337,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     print("Invalid choice. Try again.")
 
     def prompt_task_logic_input(self, folder: Optional[str] = None) -> TTaskLogic:
-        _path = os.path.join(self.config_library_dir, folder, "*.json") if folder is not None else self._task_logic_dir
-        available_files = glob.glob(_path)
+        _path = os.path.join(self.config_library_dir, folder) if folder is not None else self._task_logic_dir
+        available_files = glob.glob(os.path.join(_path, "*.json"))
         while True:
             try:
                 path = self.pick_file_from_list(
@@ -419,6 +419,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 is_editor_mode=bonsai_config.get("is_editor_mode", True),
                 is_start_flag=bonsai_config.get("is_start_flag", True),
                 cwd=self._cwd,
+                print_cmd=self._dev_mode,
             )
             print("Bonsai process running...")
             ret = proc.wait()
@@ -451,7 +452,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self._make_folder(self.log_dir)
             self._make_folder(self._task_logic_dir)
             self._make_folder(self._rig_dir)
-            self._make_folder(self._session_dir)
+            self._make_folder(self._subject_dir)
             self._make_folder(self._visualizer_layouts_dir)
         except OSError as e:
             print(f"Failed to create folder structure: {e}")
