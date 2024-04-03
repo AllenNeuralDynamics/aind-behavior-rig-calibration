@@ -1,7 +1,6 @@
 import json
 import os
 import subprocess
-
 from enum import Enum
 from os import PathLike
 from pathlib import Path
