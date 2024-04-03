@@ -446,6 +446,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     def make_folder_structure(self) -> None:
         try:
             self._make_folder(self.data_dir)
+            self._make_folder(self.config_library_dir)
+            self._make_folder(self.temp_dir)
+            self._make_folder(self.log_dir)
             self._make_folder(self._task_logic_dir)
             self._make_folder(self._rig_dir)
             self._make_folder(self._session_dir)
@@ -455,5 +458,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     @staticmethod
     def _make_folder(folder: os.PathLike | str) -> None:
-        if not os.listdir(os.path.abspath(folder)):
+        if not os.path.exists(os.path.abspath(folder)):
+            print(f"Creating {folder}")
             os.makedirs(folder)
