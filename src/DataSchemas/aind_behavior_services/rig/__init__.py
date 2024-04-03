@@ -8,7 +8,7 @@ from enum import Enum
 from typing import Annotated, Any, Literal, Optional, Union
 
 from aind_data_schema.base import AindCoreModel, AindModel
-from pydantic import Field, RootModel, BaseModel
+from pydantic import BaseModel, Field, RootModel
 
 __version__ = "0.1.3"
 

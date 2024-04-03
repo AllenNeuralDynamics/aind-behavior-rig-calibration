@@ -1,7 +1,6 @@
 import json
 import os
 import subprocess
-
 from enum import Enum
 from os import PathLike
 from pathlib import Path
@@ -245,6 +244,7 @@ def run_bonsai_process(
     additional_properties: Optional[Dict[str, str]] = None,
     cwd: Optional[PathLike | str] = None,
     timeout: Optional[float] = None,
+    print_cmd: bool = False,
 ) -> CompletedProcess:
 
     output_cmd = _build_bonsai_process_command(
@@ -253,11 +253,12 @@ def run_bonsai_process(
         is_editor_mode=is_editor_mode,
         is_start_flag=is_start_flag,
         layout=layout,
-        additional_properties=additional_properties,
+        additional_properties=additional_properties
     )
-    print(output_cmd)
     if cwd is None:
         cwd = os.getcwd()
+    if print_cmd:
+        print(output_cmd)
     return subprocess.run(output_cmd, cwd=cwd, check=True, timeout=timeout)
 
 
@@ -271,6 +272,7 @@ def open_bonsai_process(
     log_file_name: Optional[str] = None,
     cwd: Optional[PathLike | str] = None,
     creation_flags: Optional[int] = None,
+    print_cmd: bool = False,
 ) -> subprocess.Popen:
 
     output_cmd = _build_bonsai_process_command(
@@ -288,7 +290,11 @@ def open_bonsai_process(
         creation_flags = subprocess.CREATE_NEW_CONSOLE
 
     if log_file_name is None:
+        if print_cmd:
+            print(output_cmd)
         return subprocess.Popen(output_cmd, cwd=cwd, creationflags=creation_flags)
     else:
         logging_cmd = f'powershell -ep Bypass -c "& {output_cmd} *>&1 | tee -a {log_file_name}"'
+        if print_cmd:
+            print(logging_cmd)
         return subprocess.Popen(logging_cmd, cwd=cwd, creationflags=creation_flags)
