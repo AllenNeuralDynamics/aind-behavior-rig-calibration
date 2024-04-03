@@ -253,7 +253,7 @@ def run_bonsai_process(
         is_editor_mode=is_editor_mode,
         is_start_flag=is_start_flag,
         layout=layout,
-        additional_properties=additional_properties
+        additional_properties=additional_properties,
     )
     if cwd is None:
         cwd = os.getcwd()

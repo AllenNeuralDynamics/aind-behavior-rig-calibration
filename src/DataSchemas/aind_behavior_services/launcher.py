@@ -1,6 +1,7 @@
 import glob
 import os
 import secrets
+import argparse
 from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union, Dict
 
 import git
@@ -64,6 +65,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         bonsai_executable: os.PathLike | str = "bonsai/bonsai.exe",
         workflow: os.PathLike | str = "src/main.bonsai",
         repository_dir: Optional[os.PathLike | str] = None,
+        bonsai_is_editor_mode: bool = True,
+        bonsai_is_start_flag: bool = True,
     ) -> None:
         """
         Initializes a new instance of the Launcher class.
@@ -93,6 +96,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.remote_data_dir = self.abspath(remote_data_dir) if remote_data_dir is not None else None
         self.bonsai_executable = self.abspath(bonsai_executable)
         self.default_workflow = self.abspath(workflow)
+        self.bonsai_is_editor_mode = bonsai_is_editor_mode
+        self.bonsai_is_start_flag = bonsai_is_start_flag
+
         if not isinstance(config_library_dir, str):
             config_library_dir = str(config_library_dir)
         self.config_library_dir = self.abspath(config_library_dir.format(task=task_logic_schema.__name__))
@@ -382,15 +388,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             except ValueError:
                 print("Invalid choice. Try again.")
 
-    def prompt_bonsai_config_input(self) -> dict[str, bool]:
-        user_input = input("Press any key to continue or type 'bonsai' for advance settings")
-        settings = {}
-        if user_input == "bonsai":
-            settings["is_editor_mode"] = self.prompt_yes_no_question("Run with editor mode?")
-            if settings["is_editor_mode"]:
-                settings["is_start_flag"] = self.prompt_yes_no_question("Run with start flag?")
-        return settings
-
     def run(self) -> None:
         try:
             self._print_header()
@@ -399,8 +396,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             session: TSession = self.prompt_session_input()
             rig: TRig = self.prompt_rig_input()
             bonsai_visualizer_layout: Optional[str] = self.prompt_visualizer_layout_input()
-            bonsai_config: Dict[str, bool] = self.prompt_bonsai_config_input()
-
             input("Press enter to launch Bonsai or Control+C to exit...")
 
             additional_properties = {
@@ -416,8 +411,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 additional_properties=additional_properties,
                 layout=bonsai_visualizer_layout,
                 log_file_name=os.path.join(self.log_dir, f"{session.subject}_{session.experiment}_{_date}.log"),
-                is_editor_mode=bonsai_config.get("is_editor_mode", True),
-                is_start_flag=bonsai_config.get("is_start_flag", True),
+                is_editor_mode=self.bonsai_is_editor_mode,
+                is_start_flag=self.bonsai_is_start_flag,
                 cwd=self._cwd,
                 print_cmd=self._dev_mode,
             )
@@ -462,3 +457,58 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         if not os.path.exists(os.path.abspath(folder)):
             print(f"Creating {folder}")
             os.makedirs(folder)
+
+
+class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
+
+    def __init__(
+        self,
+        rig_schema: Type[TRig],
+        session_schema: Type[TSession],
+        task_logic_schema: Type[TTaskLogic],
+        **launcher_kwargs,
+    ) -> None:
+
+        parser = argparse.ArgumentParser()
+
+        parser.add_argument("--data_dir", help="Specify the data directory")
+        parser.add_argument("--remote_data_dir", help="Specify the remote data directory")
+        parser.add_argument("--repository_dir", help="Specify the repository directory")
+        parser.add_argument("--config_library_dir", help="Specify the configuration library directory")
+        parser.add_argument("--workflow", help="Specify the workflow")
+        parser.add_argument(
+            "--force_create_directories", help="Specify whether to force create directories", default=False
+        )
+        args = parser.parse_args()
+
+        data_dir = args.data_dir
+        remote_data_dir = args.remote_data_dir
+        repository_dir = args.repository_dir
+        config_library_dir = args.config_library_dir
+        workflow = args.workflow
+        force_create_directories = args.force_create_directories
+
+        self.launcher = Launcher(
+            rig_schema=rig_schema,
+            session_schema=session_schema,
+            task_logic_schema=task_logic_schema,
+            data_dir=data_dir,
+            remote_data_dir=remote_data_dir,
+            repository_dir=repository_dir,
+            config_library_dir=config_library_dir,
+            workflow=workflow,
+            **launcher_kwargs)
+
+        if force_create_directories:
+            self.make_folder_structure()
+
+        self.run()
+
+    def run(self) -> None:
+        self.launcher.run()
+
+    def make_folder_structure(self) -> None:
+        self.launcher.make_folder_structure()
+
+    def _validate_dependencies(self) -> None:
+        self.launcher._validate_dependencies()
