@@ -288,3 +288,25 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     print("Failed to validate pydantic model. Try again.")
                 except ValueError:
                     print("Invalid choice. Try again.")
+
+    def prompt_task_logic_input(self, folder: str = "TaskLogic") -> TTaskLogic:
+        available_files = glob.glob(
+            os.path.join(self.config_library_dir, folder, self.task_logic_schema.__name__, "*.json")
+        )
+        while True:
+            try:
+                path = self.pick_file_from_list(
+                    available_files, prompt="Choose a task logic:", override_zero=(None, None)
+                )
+                if not os.path.isfile(path):
+                    raise FileNotFoundError(f"File not found: {path}")
+                task_logic = self.load_json_model(path, self.task_logic_schema)
+                print(f"Using {path}.")
+                return task_logic
+            except ValidationError as validation_error:
+                print(validation_error)
+                print("Failed to validate pydantic model. Try again.")
+            except ValueError:
+                print("Invalid choice. Try again.")
+            except FileNotFoundError:
+                print("Invalid choice. Try again.")
