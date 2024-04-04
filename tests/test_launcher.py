@@ -28,6 +28,9 @@ class LauncherTests(unittest.TestCase):
             rig_schema=AindGenericTaskRig,
             session_schema=AindGenericTaskSession,
             task_logic_schema=AindGenericTaskTaskLogic,
+            data_dir="data",
+            config_library_dir="config",
+            workflow="workflow.bonsai",
         )
 
         with self.assertRaises((FileNotFoundError, OSError)) as context:
@@ -50,10 +53,13 @@ class LauncherTests(unittest.TestCase):
             describedBy: Literal[""] = Field("")
             schema_version: Literal[__version__] = __version__
 
-        launcher_cli = Launcher(
+        launcher_cli = LauncherCli(
             rig_schema=AindGenericTaskRig,
             session_schema=AindGenericTaskSession,
             task_logic_schema=AindGenericTaskTaskLogic,
+            data_dir="data",
+            config_library_dir="config",
+            workflow="workflow.bonsai",
         )
 
         with self.assertRaises((FileNotFoundError, OSError)) as context:

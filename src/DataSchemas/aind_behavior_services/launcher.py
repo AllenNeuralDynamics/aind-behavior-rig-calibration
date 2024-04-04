@@ -62,13 +62,13 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         rig_schema: Type[TRig],
         session_schema: Type[TSession],
         task_logic_schema: Type[TTaskLogic],
-        data_dir: os.PathLike | str = r"C:\data",
-        config_library_dir: os.PathLike | str = r"\\allen\aind\scratch\AindBehavior.db\{task}",
+        data_dir: os.PathLike | str,
+        config_library_dir: os.PathLike | str,
+        workflow: os.PathLike | str,
         temp_dir: os.PathLike | str = "local/.temp",
         log_dir: os.PathLike | str = "local/.dump",
         remote_data_dir: Optional[os.PathLike | str] = None,
         bonsai_executable: os.PathLike | str = "bonsai/bonsai.exe",
-        workflow: os.PathLike | str = "src/main.bonsai",
         repository_dir: Optional[os.PathLike | str] = None,
         bonsai_is_editor_mode: bool = True,
         bonsai_is_start_flag: bool = True,
@@ -111,7 +111,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
         if not isinstance(config_library_dir, str):
             config_library_dir = str(config_library_dir)
-        self.config_library_dir = self.abspath(config_library_dir.format(task=task_logic_schema.__name__))
+        self.config_library_dir = self.abspath(config_library_dir)
         self.computer_name = os.environ["COMPUTERNAME"]
 
         self._dev_mode = dev_mode
@@ -207,13 +207,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         Validates the dependencies required for the launcher to run.
         """
 
-        if self.repository.is_dirty():
-            print(
-                "WARNING: Git repository is dirty. Discard changes before continuing unless you know what you are doing!"
-            )
-            print("Press enter to continue...")
-            input()
-
         if not (os.path.isfile(self.bonsai_executable)):
             raise FileNotFoundError(f"Bonsai executable (bonsai.exe) not found! Expected {self.bonsai_executable}.")
         if not (os.path.isdir(self.config_library_dir)):
@@ -224,6 +217,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             )
         if not (os.path.isfile(os.path.join(self.default_workflow))):
             raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_workflow}.")
+
+        if self.repository.is_dirty():
+            print(
+                "WARNING: Git repository is dirty. Discard changes before continuing unless you know what you are doing!"
+            )
+            input("Press enter to continue...")
 
     @staticmethod
     def pick_file_from_list(
@@ -476,6 +475,11 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
         rig_schema: Type[TRig],
         session_schema: Type[TSession],
         task_logic_schema: Type[TTaskLogic],
+        data_dir: os.PathLike | str,
+        config_library_dir: os.PathLike | str,
+        workflow: os.PathLike | str,
+        remote_data_dir: Optional[os.PathLike | str] = None,
+        repository_dir: Optional[os.PathLike | str] = None,
         **launcher_kwargs,
     ) -> None:
 
@@ -517,11 +521,14 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
 
         args = parser.parse_args()
 
-        data_dir = args.data_dir
-        remote_data_dir = args.remote_data_dir
-        repository_dir = args.repository_dir
-        config_library_dir = args.config_library_dir
-        workflow = args.workflow
+        # optional parameters that override the defaults
+        data_dir = args.data_dir if args.data_dir is not None else data_dir
+        workflow = args.workflow if args.workflow is not None else workflow
+        remote_data_dir = args.remote_data_dir if args.remote_data_dir is not None else remote_data_dir
+        repository_dir = args.repository_dir if args.repository_dir is not None else repository_dir
+        config_library_dir = args.config_library_dir if args.config_library_dir is not None else config_library_dir
+
+        # flag-like parameter
         force_create_directories = args.force_create_directories
         dev_mode = args.dev_mode
         bonsai_is_editor_mode = args.bonsai_is_editor_mode
