@@ -6,8 +6,8 @@ from aind_behavior_services.calibration.load_cells import (
     LoadCellCalibration,
     LoadCellsCalibration,
     LoadCellsCalibrationInput,
-    LoadCellsCalibrationOutput,
     LoadCellsCalibrationModel,
+    LoadCellsCalibrationOutput,
     LoadCellsOperationControl,
 )
 

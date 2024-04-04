@@ -1,14 +1,14 @@
 import unittest
 from datetime import datetime
-from aind_behavior_services.base import get_commit_hash
 
+from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration.olfactometer import (
+    ChannelType,
     HarpOlfactometerChannel,
+    OlfactometerCalibrationModel,
     OlfactometerChannel,
     OlfactometerChannelConfig,
     OlfactometerOperationControl,
-    OlfactometerCalibrationModel,
-    ChannelType,
 )
 
 

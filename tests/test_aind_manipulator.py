@@ -1,8 +1,8 @@
 import unittest
 from datetime import datetime
 
-from aind_behavior_services.calibration import aind_manipulator as m
 from aind_behavior_services.base import get_commit_hash
+from aind_behavior_services.calibration import aind_manipulator as m
 
 
 class AindManipulatorTests(unittest.TestCase):

@@ -6,8 +6,8 @@ from aind_behavior_services.calibration.water_valve import (
     Measurement,
     WaterValveCalibration,
     WaterValveCalibrationInput,
-    WaterValveCalibrationOutput,
     WaterValveCalibrationModel,
+    WaterValveCalibrationOutput,
     WaterValveOperationControl,
 )
 from aind_data_schema.models.devices import Calibration

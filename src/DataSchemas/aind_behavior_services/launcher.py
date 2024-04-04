@@ -1,14 +1,13 @@
+import argparse
 import glob
 import os
 import secrets
-import argparse
-from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union, Dict
+from typing import Dict, Generic, List, Optional, Tuple, Type, TypeVar, Union
 
 import git
 from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionModel, AindBehaviorTaskLogicModel
 from aind_behavior_services.utils import open_bonsai_process
 from pydantic import ValidationError
-
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
