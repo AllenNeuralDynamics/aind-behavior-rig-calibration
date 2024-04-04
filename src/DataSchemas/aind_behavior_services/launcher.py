@@ -22,16 +22,22 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     It initializes the Launcher object with the provided rig schema, session schema, and task logic schema.
 
     Attributes:
-        rig_schema (Type[AindBehaviorRigModel]): The rig schema for the behavior services.
-        session_schema (Type[AindBehaviorSessionModel]): The session schema for the behavior services.
-        task_logic_schema (Type[AindBehaviorTaskLogicModel]): The task logic schema for the behavior services.
+        rig_schema (Type[TRig]): The rig schema for the behavior services.
+        session_schema (Type[TSession]): The session schema for the behavior services.
+        task_logic_schema (Type[TTaskLogic]): The task logic schema for the behavior services.
+        data_dir (os.PathLike | str): The directory where the data files are located.
         config_library_dir (os.PathLike | str): The directory where the config library is located.
         temp_dir (os.PathLike | str): The directory for temporary files.
         log_dir (os.PathLike | str): The directory for log files.
-        data_dir (os.PathLike | str): The directory for data files.
         remote_data_dir (Optional[os.PathLike | str]): The directory to log remote data.
         bonsai_executable (os.PathLike | str): The path to the Bonsai executable.
         workflow (os.PathLike | str): The path to the bonsai workflow file.
+        repository_dir (Optional[os.PathLike | str]): The directory of the repository.
+        bonsai_is_editor_mode (bool): Flag indicating whether Bonsai is in editor mode.
+        bonsai_is_start_flag (bool): Flag indicating whether to start Bonsai.
+        allow_dirty_repo (bool): Flag indicating whether to allow a dirty repository.
+        skip_hardware_validation (bool): Flag indicating whether to skip hardware validation.
+        dev_mode (bool): Flag indicating whether to run in development mode.
     """
 
     RIG_DIR = "Rig"
@@ -67,6 +73,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         repository_dir: Optional[os.PathLike | str] = None,
         bonsai_is_editor_mode: bool = True,
         bonsai_is_start_flag: bool = True,
+        allow_dirty_repo: bool = False,
+        skip_hardware_validation: bool = False,
+        dev_mode: bool = False,
     ) -> None:
         """
         Initializes a new instance of the Launcher class.
@@ -98,13 +107,15 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.default_workflow = self.abspath(workflow)
         self.bonsai_is_editor_mode = bonsai_is_editor_mode
         self.bonsai_is_start_flag = bonsai_is_start_flag
+        self.allow_dirty_repo = allow_dirty_repo
+        self.skip_hardware_validation = skip_hardware_validation
 
         if not isinstance(config_library_dir, str):
             config_library_dir = str(config_library_dir)
         self.config_library_dir = self.abspath(config_library_dir.format(task=task_logic_schema.__name__))
         self.computer_name = os.environ["COMPUTERNAME"]
 
-        self._dev_mode = False
+        self._dev_mode = dev_mode
         self._rig_dir = os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name)
         self._subject_dir = os.path.join(self.config_library_dir, self.SUBJECT_DIR)
         self._task_logic_dir = os.path.join(self.config_library_dir, self.TASK_LOGIC_DIR)
@@ -160,7 +171,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             f"Session ({self.session_schema.__name__}) Schema Version: {self.session_schema.model_construct().schema_version}"
         )
         print("-------------------------------")
-        self._dev_mode = input("Press Enter to continue...") == "42"
         if self._dev_mode:
             self._print_diagnosis()
 
@@ -268,7 +278,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             subject=subject,
             notes=notes,
             commit_hash=self.repository.head.commit.hexsha,
-            allow_dirty_repo=self._dev_mode,
+            allow_dirty_repo=self._dev_mode or self.allow_dirty_repo,
+            skip_hardware_validation=self.skip_hardware_validation,
             experiment_version=self.task_logic_schema.model_construct().schema_version,
         )
 
@@ -477,8 +488,34 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
         parser.add_argument("--config_library_dir", help="Specify the configuration library directory")
         parser.add_argument("--workflow", help="Specify the workflow")
         parser.add_argument(
-            "--force_create_directories", help="Specify whether to force create directories", default=False
+            "--force_create_directories",
+            help="Specify whether to force create directories",
+            action="store_true",
+            default=False,
         )
+        parser.add_argument("--dev_mode", help="Specify whether to run in dev mode", action="store_true", default=False)
+        parser.add_argument(
+            "--bonsai_is_editor_mode",
+            help="Specify whether to run in Bonsai editor mode",
+            action="store_false",
+            default=True,
+        )
+        parser.add_argument(
+            "--bonsai_is_start_flag",
+            help="Specify whether to start the Bonsai workflow",
+            action="store_false",
+            default=True,
+        )
+        parser.add_argument(
+            "--allow_dirty_repo", help="Specify whether to allow a dirty repository", action="store_true", default=False
+        )
+        parser.add_argument(
+            "--skip_hardware_validation",
+            help="Specify whether to skip hardware validation",
+            action="store_true",
+            default=False,
+        )
+
         args = parser.parse_args()
 
         data_dir = args.data_dir
@@ -487,6 +524,11 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
         config_library_dir = args.config_library_dir
         workflow = args.workflow
         force_create_directories = args.force_create_directories
+        dev_mode = args.dev_mode
+        bonsai_is_editor_mode = args.bonsai_is_editor_mode
+        bonsai_is_start_flag = args.bonsai_is_start_flag
+        allow_dirty_repo = args.allow_dirty_repo
+        skip_hardware_validation = args.skip_hardware_validation
 
         self.launcher = Launcher(
             rig_schema=rig_schema,
@@ -497,12 +539,16 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
             repository_dir=repository_dir,
             config_library_dir=config_library_dir,
             workflow=workflow,
-            **launcher_kwargs)
+            dev_mode=dev_mode,
+            bonsai_is_editor_mode=bonsai_is_editor_mode,
+            bonsai_is_start_flag=bonsai_is_start_flag,
+            allow_dirty_repo=allow_dirty_repo,
+            skip_hardware_validation=skip_hardware_validation,
+            **launcher_kwargs,
+        )
 
         if force_create_directories:
             self.make_folder_structure()
-
-        self.run()
 
     def run(self) -> None:
         self.launcher.run()
