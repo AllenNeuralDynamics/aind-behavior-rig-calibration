@@ -3,7 +3,7 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:p1="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
-                 xmlns:p2="clr-namespace:AindVrForagingDataSchema.Rig;assembly=Extensions"
+                 xmlns:p2="clr-namespace:AindVrForagingDataSchema.AindVrForagingRig;assembly=Extensions"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:port="clr-namespace:Bonsai.IO.Ports;assembly=Bonsai.System"
                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -47,7 +47,7 @@
           <io:Path>../local/Rigs\rig.yml</io:Path>
         </Combinator>
       </Expression>
-      <Expression xsi:type="p2:DeserializeFromYaml">
+      <Expression xsi:type="p2:DeserializeFromJson">
         <p2:Type xsi:type="TypeMapping" TypeArguments="p2:AindVrForagingRig" />
       </Expression>
       <Expression xsi:type="Combinator">

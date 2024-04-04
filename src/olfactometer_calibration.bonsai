@@ -287,7 +287,7 @@
               <Name>FullModelSchema</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>AllowDirty</Selector>
+              <Selector>AllowDirtyRepo</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Zip" />
@@ -2210,7 +2210,7 @@
               <Name>FullModelSchema</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>RemoteDataPath</Selector>
+              <Selector>RemotePath</Selector>
             </Expression>
             <Expression xsi:type="rx:Condition">
               <Name>NotNull</Name>
@@ -2265,7 +2265,7 @@
               <Name>FullModelSchema</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>RemoteDataPath</Selector>
+              <Selector>RemotePath</Selector>
             </Expression>
             <Expression xsi:type="rx:Condition">
               <Name>NotNull</Name>
