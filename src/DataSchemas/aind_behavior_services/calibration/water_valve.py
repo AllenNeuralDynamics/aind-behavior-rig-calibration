@@ -103,16 +103,19 @@ class WaterValveCalibrationOutput(BaseModel):
 class WaterValveCalibration(Calibration):
     """Water valve calibration class"""
 
+    device_name: str = Field(
+        default="WaterValve", description="Name of the device being calibrated", title="Device name"
+    )
     description: Literal["Calibration of the water valve delivery system"] = (
         "Calibration of the water valve delivery system"
     )
-    input: WaterValveCalibrationInput = Field(default=..., title="Input of the calibration")
-    output: WaterValveCalibrationOutput = Field(default=..., title="Output of the calibration.")
-    notes: Optional[str] = Field(None, title="Notes")
+    input: WaterValveCalibrationInput = Field(..., title="Input of the calibration")
+    output: WaterValveCalibrationOutput = Field(..., title="Output of the calibration.")
 
 
 class WaterValveCalibrationLogic(CalibrationLogicModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
+
     schema_version: Literal[__VERSION__] = __VERSION__
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json"
