@@ -4,7 +4,7 @@ from typing import Dict, Literal, Optional
 from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
 from pydantic import Field, BaseModel
 
-__VERSION__ = "0.2.0"
+__VERSION__ = "0.3.0"
 
 
 class OlfactometerChannel(IntEnum):
@@ -62,6 +62,6 @@ class OlfactometerCalibration(Calibration):
     """Olfactometer calibration class"""
 
     device_name: str = Field("Olfactometer", title="Device name", description="Name of the device being calibrated")
+    description: Literal["Calibration of the harp olfactometer device"] = "Calibration of the harp olfactometer device"
     input: OlfaCalibrationInput = Field(..., title="Input of the calibration")
     output: OlfaCalibrationOutput = Field(..., title="Output of the calibration")
-    description: Literal["Calibration of the harp olfactometer device"] = "Calibration of the harp olfactometer device"
