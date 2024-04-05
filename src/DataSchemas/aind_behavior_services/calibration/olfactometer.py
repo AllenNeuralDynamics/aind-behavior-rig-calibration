@@ -1,6 +1,5 @@
 from enum import Enum, IntEnum
 from typing import Dict, Literal, Optional
-
 from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
 from pydantic import BaseModel, Field
 
@@ -63,5 +62,5 @@ class OlfactometerCalibrationLogic(CalibrationLogicModel):
     )
     full_flow_rate: float = Field(1000, ge=0, le=1000, description="Full flow rate of the olfactometer")
     n_repeats_per_stimulus: int = Field(1, ge=1, description="Number of repeats per stimulus")
-    time_on: float = Field(1, ge=0, description="Time (s) the valve is open during calibration", units="s")
-    time_off: float = Field(1, ge=0, description="Time (s) the valve is close during calibration", units="s")
+    time_on: float = Field(1, ge=0, description="Time (s) the valve is open during calibration")
+    time_off: float = Field(1, ge=0, description="Time (s) the valve is close during calibration")

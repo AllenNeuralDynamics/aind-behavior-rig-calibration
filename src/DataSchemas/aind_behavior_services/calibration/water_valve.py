@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 from typing import Annotated, Dict, List, Literal, Optional
-
 import numpy as np
 from aind_behavior_services import AindBehaviorRigModel
 from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
@@ -20,21 +18,18 @@ class Measurement(BaseModel):
         ...,
         description="Time between two consecutive valve openings (s)",
         title="Valve open interval",
-        units="s",
         gt=0,
     )
     valve_open_time: float = Field(
         ...,
         description="Valve open interval (s)",
         title="Valve open time",
-        units="s",
         gt=0,
     )
     water_weight: List[PositiveFloat] = Field(
         ...,
         description="Weight of water delivered (g)",
         title="Water weight",
-        units="g",
         min_length=1,
     )
     repeat_count: int = Field(..., ge=0, description="Number of times the valve opened.", title="Repeat count")
@@ -77,19 +72,16 @@ class WaterValveCalibrationOutput(BaseModel):
         None,
         description="Dictionary keyed by measured valve interval and corresponding average single event volume.",
         title="Interval average",
-        units="s",
     )
     slope: float = Field(
         ...,
         description="Slope of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)",
         title="Regression slope",
-        units="g/s",
     )
     offset: float = Field(
         ...,
         description="Offset of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)",
         title="Regression offset",
-        units="g",
     )
     r2: Optional[float] = Field(default=None, description="R2 metric from the linear model.", title="R2", ge=0, le=1)
     valid_domain: Optional[List[PositiveFloat]] = Field(
@@ -97,7 +89,6 @@ class WaterValveCalibrationOutput(BaseModel):
         description="The optional time-intervals the calibration curve was calculated on.",
         min_length=2,
         title="Valid domain",
-        units="s",
     )
 
 
@@ -125,13 +116,11 @@ class WaterValveCalibrationLogic(CalibrationLogicModel):
         ...,
         min_length=1,
         description="An array with the times (s) the valve is open during calibration",
-        units="s",
     )
     valve_open_interval: float = Field(
         0.2,
         description="Time between two consecutive valve openings (s)",
         title="Valve open interval",
-        units="s",
         gt=0,
     )
     repeat_count: int = Field(
