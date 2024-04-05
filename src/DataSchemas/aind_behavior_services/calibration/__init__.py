@@ -16,7 +16,7 @@ class CalibrationLogicModel(AindBehaviorTaskLogicModel):
 class Calibration(BaseModel):
     """Base class for all Calibration models. Stores calibration (meta)data."""
 
-    name: str = Field(..., title="Device name", description="Name of the device being calibrated")
+    device_name: str = Field(..., title="Device name", description="Name of the device being calibrated")
     input: Optional[BaseModel] = Field(default=None, title="Input data")
     output: Optional[BaseModel] = Field(default=None, title="Output data")
     date: Optional[datetime.datetime] = Field(default=None, title="Date")
