@@ -1,11 +1,12 @@
 from __future__ import annotations
-import numpy as np
+
 from typing import Annotated, Dict, List, Literal, Optional
+
+import numpy as np
+from aind_behavior_services import AindBehaviorRigModel
+from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
 from pydantic import BaseModel, Field
 from sklearn.linear_model import LinearRegression
-
-from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
-from aind_behavior_services import AindBehaviorRigModel
 
 __VERSION__ = "0.3.0"
 

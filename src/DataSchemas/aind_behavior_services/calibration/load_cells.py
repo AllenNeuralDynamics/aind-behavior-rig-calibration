@@ -47,8 +47,9 @@ class LoadCellsCalibration(Calibration):
     output: LoadCellsCalibrationOutput = Field(default=..., title="Output of the calibration.")
 
 
-class LoadCellsOperationControl(CalibrationLogicModel):
+class LoadCellsCalibrationLogic(CalibrationLogicModel):
     """Load cells operation control model that is used to run a calibration data acquisition workflow"""
+
     schema_version: Literal[__VERSION__] = __VERSION__
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json"
