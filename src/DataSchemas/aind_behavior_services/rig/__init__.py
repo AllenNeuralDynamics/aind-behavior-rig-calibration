@@ -1,25 +1,26 @@
-# Import core types
 from __future__ import annotations
-
 import os
 from enum import Enum
-
-# Import core types
 from typing import Annotated, Any, Literal, Optional, Union
-
 from aind_behavior_services.base import SchemaVersionedModel
 from pydantic import BaseModel, Field, RootModel
 
-__version__ = "0.1.3"
+# Import core types
+
+
+# Import core types
+
+
+__version__ = "0.1.4"
 
 
 class SpinnakerCamera(BaseModel):
     serial_number: str = Field(..., description="Camera serial number")
     binning: int = Field(default=1, ge=1, description="Binning")
     color_processing: Literal["Default", "NoColorProcessing"] = Field(default="Default", description="Color processing")
-    exposure: int = Field(default=1000, ge=100, description="Exposure time", units="us")
-    frame_rate: int = Field(default=30, ge=1, le=350, description="Frame rate", units="Hz")
-    gain: float = Field(default=0, ge=0, description="Gain", units="dB")
+    exposure: int = Field(default=1000, ge=100, description="Exposure time")
+    frame_rate: int = Field(default=30, ge=1, le=350, description="Frame rate")
+    gain: float = Field(default=0, ge=0, description="Gain")
 
 
 class HarpDeviceType(str, Enum):
@@ -139,7 +140,7 @@ class Screen(BaseModel):
 
 
 class Treadmill(BaseModel):
-    wheel_diameter: float = Field(default=15, ge=0, description="Wheel diameter", units="cm")
+    wheel_diameter: float = Field(default=15, ge=0, description="Wheel diameter")
     pulses_per_revolution: int = Field(default=28800, ge=1, description="Pulses per revolution")
     invert_direction: bool = Field(default=False, description="Invert direction")
 
