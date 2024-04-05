@@ -1,228 +1,5 @@
 {
-  "definitions": {
-    "LoadCellCalibration": {
-      "properties": {
-        "measured_offset": {
-          "additionalProperties": {
-            "type": "number"
-          },
-          "default": {},
-          "title": "Load cells offset. Each entry is expected to be in the format of: Channel : (offset, baseline)",
-          "type": "object"
-        },
-        "measured_weight": {
-          "default": {},
-          "items": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "number"
-              }
-            ],
-            "type": "array"
-          },
-          "title": "Load cells measured weight. Each entry is expected to be in the format of: (known weight(g), baseline)",
-          "type": "array"
-        }
-      },
-      "title": "LoadCellCalibration",
-      "type": "object"
-    },
-    "LoadCellsCalibration": {
-      "additionalProperties": false,
-      "description": "Load cells calibration class",
-      "properties": {
-        "calibration_date": {
-          "format": "date-time",
-          "title": "Date and time of calibration",
-          "type": "string"
-        },
-        "device_name": {
-          "default": "LoadCells",
-          "description": "Must match a device name in rig/instrument",
-          "title": "Device name",
-          "type": "string"
-        },
-        "description": {
-          "const": "Calibration of the load cells system",
-          "default": "Calibration of the load cells system",
-          "title": "Description",
-          "type": "string"
-        },
-        "input": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/LoadCellsCalibrationInput"
-            }
-          ],
-          "title": "Input of the calibration"
-        },
-        "output": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/LoadCellsCalibrationOutput"
-            }
-          ],
-          "title": "Output of the calibration."
-        },
-        "notes": {
-          "default": null,
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Notes"
-        }
-      },
-      "required": [
-        "calibration_date",
-        "input",
-        "output"
-      ],
-      "title": "LoadCellsCalibration",
-      "type": "object"
-    },
-    "LoadCellsCalibrationInput": {
-      "properties": {
-        "channels": {
-          "additionalProperties": {
-            "$ref": "#/definitions/LoadCellCalibration"
-          },
-          "default": {},
-          "title": "Load cells calibration data",
-          "type": "object"
-        },
-        "weight_units": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/MassUnit"
-            }
-          ],
-          "default": "gram",
-          "title": "Weight units"
-        }
-      },
-      "title": "LoadCellsCalibrationInput",
-      "type": "object"
-    },
-    "LoadCellsCalibrationOutput": {
-      "properties": {
-        "offset": {
-          "additionalProperties": {
-            "description": "Load cell offset value [-255, 255]",
-            "maximum": 255,
-            "minimum": -255,
-            "type": "integer"
-          },
-          "default": {
-            "0": 0,
-            "1": 0,
-            "2": 0,
-            "3": 0,
-            "4": 0,
-            "5": 0,
-            "6": 0,
-            "7": 0
-          },
-          "title": "Load cells offset",
-          "type": "object"
-        },
-        "baseline": {
-          "additionalProperties": {
-            "type": "number"
-          },
-          "default": {
-            "0": 0,
-            "1": 0,
-            "2": 0,
-            "3": 0,
-            "4": 0,
-            "5": 0,
-            "6": 0,
-            "7": 0
-          },
-          "title": "Load cells baseline to be subtracted from the raw data after applying the offset.",
-          "type": "object"
-        },
-        "weight_lookup": {
-          "additionalProperties": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "number"
-              }
-            ],
-            "type": "array"
-          },
-          "default": {},
-          "title": "Load cells lookup calibration table for each channel: (weight, baseline).",
-          "type": "object"
-        }
-      },
-      "title": "LoadCellsCalibrationOutput",
-      "type": "object"
-    },
-    "LoadCellsOperationControl": {
-      "description": "Load cells operation control model that is used to run a calibration data acquisition workflow",
-      "properties": {
-        "channels": {
-          "default": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7
-          ],
-          "description": "List of channels to calibrate",
-          "items": {
-            "description": "Load cell channel number available",
-            "maximum": 7,
-            "minimum": 0,
-            "type": "integer"
-          },
-          "title": "Channels",
-          "type": "array"
-        },
-        "offset_buffer_size": {
-          "default": 200,
-          "description": "Size of the buffer (in samples) acquired.",
-          "minimum": 1,
-          "title": "Buffer size",
-          "type": "integer"
-        }
-      },
-      "title": "LoadCellsOperationControl",
-      "type": "object"
-    },
-    "MassUnit": {
-      "description": "Enumeration of Mass Measurements",
-      "enum": [
-        "kilogram",
-        "gram",
-        "milligram",
-        "microgram",
-        "nanogram"
-      ],
-      "title": "MassUnit",
-      "type": "string"
-    }
-  },
-  "additionalProperties": false,
+  "description": "Load cells operation control model that is used to run a calibration data acquisition workflow",
   "properties": {
     "describedBy": {
       "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json",
@@ -231,129 +8,40 @@
       "type": "string"
     },
     "schema_version": {
-      "const": "0.2.0",
-      "default": "0.2.0",
+      "const": "0.3.0",
+      "default": "0.3.0",
       "title": "Schema Version",
       "type": "string"
     },
-    "experiment": {
-      "description": "Name of the experiment",
-      "title": "Experiment",
-      "type": "string"
-    },
-    "date": {
-      "description": "Date of the experiment",
-      "format": "date-time",
-      "title": "Date",
-      "type": "string"
-    },
-    "root_path": {
-      "description": "Root path where data will be logged",
-      "title": "Root Path",
-      "type": "string"
-    },
-    "remote_path": {
-      "default": null,
-      "description": "Remote path where data will be attempted to be copied to after experiment is done",
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
+    "channels": {
+      "default": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
       ],
-      "title": "Remote Path"
+      "description": "List of channels to calibrate",
+      "items": {
+        "description": "Load cell channel number available",
+        "maximum": 7,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "title": "Channels",
+      "type": "array"
     },
-    "subject": {
-      "description": "Name of the subject",
-      "title": "Subject",
-      "type": "string"
-    },
-    "experiment_version": {
-      "description": "Version of the experiment",
-      "title": "Experiment Version",
-      "type": "string"
-    },
-    "rng_seed": {
-      "default": null,
-      "description": "Seed of the random number generator",
-      "oneOf": [
-        {
-          "type": "number"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Rng Seed"
-    },
-    "notes": {
-      "default": null,
-      "description": "Notes about the experiment",
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Notes"
-    },
-    "commit_hash": {
-      "default": null,
-      "description": "Commit hash of the repository",
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Commit Hash"
-    },
-    "allow_dirty_repo": {
-      "default": false,
-      "description": "Allow running from a dirty repository",
-      "title": "Allow Dirty Repo",
-      "type": "boolean"
-    },
-    "skip_hardware_validation": {
-      "default": false,
-      "description": "Skip hardware validation",
-      "title": "Skip Hardware Validation",
-      "type": "boolean"
-    },
-    "operation_control": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/LoadCellsOperationControl"
-        }
-      ],
-      "title": "Operation control"
-    },
-    "calibration": {
-      "default": null,
-      "description": "Calibration data",
-      "oneOf": [
-        {
-          "$ref": "#/definitions/LoadCellsCalibration"
-        },
-        {
-          "type": "null"
-        }
-      ]
+    "offset_buffer_size": {
+      "default": 200,
+      "description": "Size of the buffer (in samples) acquired.",
+      "minimum": 1,
+      "title": "Buffer size",
+      "type": "integer"
     }
   },
-  "required": [
-    "experiment",
-    "root_path",
-    "subject",
-    "experiment_version",
-    "operation_control"
-  ],
-  "title": "LoadCellsCalibrationModel",
+  "title": "LoadCellsCalibrationLogic",
   "type": "object"
 }

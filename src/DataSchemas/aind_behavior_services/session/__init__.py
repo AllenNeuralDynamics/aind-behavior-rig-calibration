@@ -2,17 +2,19 @@
 from datetime import datetime
 from typing import Literal, Optional
 
-from aind_behavior_services.base import get_commit_hash
+from aind_behavior_services.base import SchemaVersionedModel, get_commit_hash
 
 # Import aind-datas-schema types
-from aind_data_schema.base import AindCoreModel
 from pydantic import Field
 
 __version__ = "0.1.1"
 
 
-class AindBehaviorSessionModel(AindCoreModel):
+class AindBehaviorSessionModel(SchemaVersionedModel):
     schema_version: Literal[__version__] = __version__
+    describedBy: Literal[
+        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_behavior_session_model.json"
+    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_behavior_session_model.json"
     experiment: str = Field(..., description="Name of the experiment")
     date: datetime = Field(default_factory=datetime.now, description="Date of the experiment")
     root_path: str = Field(..., description="Root path where data will be logged")

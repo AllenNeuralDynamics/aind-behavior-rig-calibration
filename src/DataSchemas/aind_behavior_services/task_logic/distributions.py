@@ -5,17 +5,16 @@ from enum import Enum
 from typing import Annotated, Literal, Optional, Union
 
 # Import aind-datas-schema types
-from aind_data_schema.base import AindModel
-from pydantic import Field, RootModel
+from pydantic import BaseModel, Field, RootModel
 
 
-class TruncationParameters(AindModel):
+class TruncationParameters(BaseModel):
     is_truncated: bool = Field(default=False, description="Whether the distribution is truncated")
     min: float = Field(default=0, description="Minimum value of the sampled distribution")
     max: float = Field(default=0, description="Maximum value of the sampled distribution")
 
 
-class ScalingParameters(AindModel):
+class ScalingParameters(BaseModel):
     scale: float = Field(default=1, description="Scaling factor to apply on the sampled distribution")
     offset: float = Field(default=0, description="Offset factor to apply on the sampled distribution")
 
@@ -32,11 +31,11 @@ class DistributionFamily(str, Enum):
     POISSON = "Poisson"
 
 
-class DistributionParametersBase(AindModel):
+class DistributionParametersBase(BaseModel):
     family: DistributionFamily = Field(..., description="Family of the distribution")
 
 
-class DistributionBase(AindModel):
+class DistributionBase(BaseModel):
     family: DistributionFamily = Field(..., description="Family of the distribution")
     distribution_parameters: DistributionParameters = Field(..., description="Parameters of the distribution")
     truncation_parameters: Optional[TruncationParameters] = Field(

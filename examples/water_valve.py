@@ -1,19 +1,22 @@
-from datetime import datetime
+import datetime
+from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration.water_valve import (
     Measurement,
     WaterValveCalibration,
     WaterValveCalibrationInput,
     WaterValveCalibrationOutput,
-    WaterValveCalibrationModel,
-    WaterValveOperationControl,
-)
+    WaterValveCalibrationLogic)
+
+def linear_model(time, slope, offset):
+    return slope * time + offset
+
 
 _delta_times = [0.1, 0.2, 0.3, 0.4, 0.5]
 _slope = 10.1
 _offset = -0.3
-_linear_model = lambda time: _slope * time + _offset
-_water_weights = [_linear_model(x) for x in _delta_times]
+
+_water_weights = [linear_model(x, _slope, _offset) for x in _delta_times]
 _inputs = [
     Measurement(valve_open_interval=0.5, valve_open_time=t[0], water_weight=[t[1]], repeat_count=1)
     for t in zip(_delta_times, _water_weights)
@@ -29,25 +32,32 @@ _outputs = WaterValveCalibrationOutput(
 )
 
 input = WaterValveCalibrationInput(measurements=_inputs)
+
 calibration = WaterValveCalibration(
     input=input,
     output=input.calibrate_output(),
     device_name="WaterValve",
-    calibration_date=datetime.now(),
+    calibration_date=datetime.datetime.now(),
 )
 
+calibration_logic = WaterValveCalibrationLogic(
+    valve_open_time=_delta_times,
+    valve_open_interval=0.5,
+    repeat_count=200)
 
-out_model = WaterValveCalibrationModel(
-    calibration=calibration,
-    operation_control=WaterValveOperationControl(valve_open_time=[0.1, 0.2, 0.3]),
+calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",
+    remote_path=None,
     allow_dirty_repo=False,
     experiment="WaterValveCalibration",
     subject="WaterValve",
     experiment_version="WaterValveCalibration",
-    commit_hash=get_commit_hash()
+    commit_hash=get_commit_hash(),
+    date=datetime.datetime.now(),
 )
 
-
-with open("local/water_valve.json", "w") as f:
-    f.write(out_model.model_dump_json(indent=3))
+seed_path = "local/water_valve{suffix}.json"
+with open(seed_path.format(suffix="calibration_logic"), "w") as f:
+    f.write(calibration_logic.model_dump_json(indent=3))
+with open(seed_path.format(suffix="session"), "w") as f:
+    f.write(calibration_session.model_dump_json(indent=3))

@@ -1,12 +1,12 @@
-from datetime import datetime
+import datetime
+from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration.load_cells import (
     LoadCellCalibration,
     LoadCellsCalibration,
     LoadCellsCalibrationInput,
     LoadCellsCalibrationOutput,
-    LoadCellsCalibrationModel,
-    LoadCellsOperationControl,
+    LoadCellsCalibrationLogic,
 )
 
 
@@ -20,25 +20,28 @@ lc_calibration_output = LoadCellsCalibrationOutput(
     weight_lookup={0: (0, 0), 1: (0, 0)},
 )
 
-lc_calibration = LoadCellsCalibration(
+calibration = LoadCellsCalibration(
     input=lc_calibration_input,
     output=lc_calibration_output,
     device_name="LoadCells",
-    calibration_date=datetime.now(),
+    calibration_date=datetime.datetime.now(),
 )
 
-lc_op = LoadCellsOperationControl(channels=[0, 1], offset_buffer_size=10)
+calibration_logic = LoadCellsCalibrationLogic(channels=[0, 1], offset_buffer_size=10)
 
-out_model = LoadCellsCalibrationModel(
-    calibration=lc_calibration,
-    operation_control=lc_op,
+calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",
+    remote_path=None,
     allow_dirty_repo=False,
     experiment="LoadCellsCalibration",
+    date=datetime.datetime.now(),
     subject="LoadCells",
-    experiment_version="LoadCellsCalibration",
-    commit_hash=get_commit_hash()
+    experiment_version="load_cells",
+    commit_hash=get_commit_hash(),
 )
 
-with open("local/load_cells.json", "w") as f:
-    f.write(out_model.model_dump_json(indent=3))
+seed_path = "local/load_cells_{suffix}.json"
+with open(seed_path.format(suffix="calibration_logic"), "w") as f:
+    f.write(calibration_logic.model_dump_json(indent=3))
+with open(seed_path.format(suffix="session"), "w") as f:
+    f.write(calibration_session.model_dump_json(indent=3))

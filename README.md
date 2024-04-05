@@ -2,11 +2,12 @@
 
 A repository containing code for data acquisition and processing for AIND behavior rigs.
 
+---
+
 ## Deployment
 
-To deploy the Bonsai code, run `./bonsai/setup.cmd`. This small script will download and regenerate the current bonsai environment ([see tutorial for further details.](https://bonsai-rx.org/docs/articles/environments.html))
-
-To deploy the Python code, regenerate an environment with `requirements.txt`
+Install the [prerequisites](#prerequisites) mentioned below.
+From the root of the repository, run `./scripts/deploy.ps1` to bootstrap both python and bonsai environments.
 
 ---
 
@@ -15,6 +16,7 @@ To deploy the Python code, regenerate an environment with `requirements.txt`
 These should only need to be installed once on a fresh new system, and are not required if simply refreshing the install or deploying to a new folder.
 
 - Windows 10 or 11
+- [Python >3.11](https://www.python.org/downloads/) (Required for the launcher and highly recommended for generating valid data schemas)
 - [Visual Studio Code](https://code.visualstudio.com/) (highly recommended for editing code scripts and git commits)
 - [Git for Windows](https://gitforwindows.org/) (highly recommended for cloning and manipulating this repository)
 - [.NET Framework 4.7.2 Developer Pack](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-developer-pack-offline-installer) (required for intellisense when editing code scripts)
@@ -25,14 +27,35 @@ These should only need to be installed once on a fresh new system, and are not r
 
 ---
 
-## Notes on data-schema regeneration
+## Generating valid JSON input files
 
- 1 - Install [bonsai.sgen dotnet tool](https://github.com/bonsai-rx/sgen) by regenerating from `.config/dotnet-tools.json` by running `dotnet tool restore` in the root of the repository.
+One of the core principles of this repository is the strict adherence to [json-schemas](https://json-schema.org/). We use [Pydantic](https://pydantic.dev/) as a way to write and compile our schemas, but also to generate valid JSON input files. These files can be used by Bonsai (powered by [Bonsai.SGen](https://github.com/bonsai-rx/sgen) code generation tool) or to simply record metadata. Examples of how to interact with the library can be found in the `./examples` folder.
 
- 2 - Run `bonsai.sgen` targeting the root schema in `src\DataSchemas`. E.g.:
+---
 
- 3 - Regenerate by running `src\DataSchemas\regenerate.cmd`
+## Regenerating schemas
 
+Once a Pydantic model is updated, updates to all downstream dependencies must be made to ensure that the ground-truth data schemas (and all dependent interoperability tools) are also updated. This can be achieved by running the `./scripts/renegerate.ps1` script from the root of the repository.
+This script will regenerate all `json-schemas` along with `C#` code (`./scr/Extensions`) used by the Bonsai environment.
+
+---
+
+## Contributors
+
+Contributions to this repository are welcome! However, please ensure that your code adheres to the recommended DevOps practices below:
+
+### Linting
+
+We use [flake8](https://flake8.pycqa.org/), [black](https://black.readthedocs.io/), and [isort](https://pycqa.github.io/isort/) as our linting tools.
+
+### Testing
+
+Attempt to add tests when new features are added.
+To run the currently available tests, run `python -m unittest` from the root of the repository.
+
+### Versioning
+
+Where possible, adhere to [Semantic Versioning](https://semver.org/).
 
 ## Project dependency tree
 
