@@ -9,421 +9,6 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
 {
     #pragma warning disable // Disable all warnings
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class LoadCellCalibration
-    {
-    
-        private System.Collections.Generic.IDictionary<string, double> _measuredOffset;
-    
-        private System.Collections.Generic.List<System.Collections.Generic.List<object>> _measuredWeight = new System.Collections.Generic.List<System.Collections.Generic.List<object>>();
-    
-        public LoadCellCalibration()
-        {
-        }
-    
-        protected LoadCellCalibration(LoadCellCalibration other)
-        {
-            _measuredOffset = other._measuredOffset;
-            _measuredWeight = other._measuredWeight;
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("measured_offset")]
-        public System.Collections.Generic.IDictionary<string, double> MeasuredOffset
-        {
-            get
-            {
-                return _measuredOffset;
-            }
-            set
-            {
-                _measuredOffset = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("measured_weight")]
-        public System.Collections.Generic.List<System.Collections.Generic.List<object>> MeasuredWeight
-        {
-            get
-            {
-                return _measuredWeight;
-            }
-            set
-            {
-                _measuredWeight = value;
-            }
-        }
-    
-        public System.IObservable<LoadCellCalibration> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellCalibration(this)));
-        }
-    
-        public System.IObservable<LoadCellCalibration> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellCalibration(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("measured_offset = " + _measuredOffset + ", ");
-            stringBuilder.Append("measured_weight = " + _measuredWeight);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    /// <summary>
-    /// Load cells calibration class
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Load cells calibration class")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class LoadCellsCalibration
-    {
-    
-        private System.DateTimeOffset _calibrationDate;
-    
-        private string _deviceName = "LoadCells";
-    
-        private string _description = "Calibration of the load cells system";
-    
-        private LoadCellsCalibrationInput _input = new LoadCellsCalibrationInput();
-    
-        private LoadCellsCalibrationOutput _output = new LoadCellsCalibrationOutput();
-    
-        private string _notes;
-    
-        public LoadCellsCalibration()
-        {
-        }
-    
-        protected LoadCellsCalibration(LoadCellsCalibration other)
-        {
-            _calibrationDate = other._calibrationDate;
-            _deviceName = other._deviceName;
-            _description = other._description;
-            _input = other._input;
-            _output = other._output;
-            _notes = other._notes;
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration_date", Required=Newtonsoft.Json.Required.Always)]
-        public System.DateTimeOffset CalibrationDate
-        {
-            get
-            {
-                return _calibrationDate;
-            }
-            set
-            {
-                _calibrationDate = value;
-            }
-        }
-    
-        /// <summary>
-        /// Must match a device name in rig/instrument
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("device_name")]
-        [System.ComponentModel.DescriptionAttribute("Must match a device name in rig/instrument")]
-        public string DeviceName
-        {
-            get
-            {
-                return _deviceName;
-            }
-            set
-            {
-                _deviceName = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("description")]
-        public string Description
-        {
-            get
-            {
-                return _description;
-            }
-            set
-            {
-                _description = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("input", Required=Newtonsoft.Json.Required.Always)]
-        public LoadCellsCalibrationInput Input
-        {
-            get
-            {
-                return _input;
-            }
-            set
-            {
-                _input = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("output", Required=Newtonsoft.Json.Required.Always)]
-        public LoadCellsCalibrationOutput Output
-        {
-            get
-            {
-                return _output;
-            }
-            set
-            {
-                _output = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("notes")]
-        public string Notes
-        {
-            get
-            {
-                return _notes;
-            }
-            set
-            {
-                _notes = value;
-            }
-        }
-    
-        public System.IObservable<LoadCellsCalibration> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellsCalibration(this)));
-        }
-    
-        public System.IObservable<LoadCellsCalibration> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellsCalibration(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("calibration_date = " + _calibrationDate + ", ");
-            stringBuilder.Append("device_name = " + _deviceName + ", ");
-            stringBuilder.Append("description = " + _description + ", ");
-            stringBuilder.Append("input = " + _input + ", ");
-            stringBuilder.Append("output = " + _output + ", ");
-            stringBuilder.Append("notes = " + _notes);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class LoadCellsCalibrationInput
-    {
-    
-        private System.Collections.Generic.IDictionary<string, LoadCellCalibration> _channels;
-    
-        private MassUnit _weightUnits = AindBehaviorRigCalibration.LoadCellsCalibration.MassUnit.Gram;
-    
-        public LoadCellsCalibrationInput()
-        {
-        }
-    
-        protected LoadCellsCalibrationInput(LoadCellsCalibrationInput other)
-        {
-            _channels = other._channels;
-            _weightUnits = other._weightUnits;
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("channels")]
-        public System.Collections.Generic.IDictionary<string, LoadCellCalibration> Channels
-        {
-            get
-            {
-                return _channels;
-            }
-            set
-            {
-                _channels = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("weight_units")]
-        public MassUnit WeightUnits
-        {
-            get
-            {
-                return _weightUnits;
-            }
-            set
-            {
-                _weightUnits = value;
-            }
-        }
-    
-        public System.IObservable<LoadCellsCalibrationInput> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellsCalibrationInput(this)));
-        }
-    
-        public System.IObservable<LoadCellsCalibrationInput> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellsCalibrationInput(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("channels = " + _channels + ", ");
-            stringBuilder.Append("weight_units = " + _weightUnits);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class LoadCellsCalibrationOutput
-    {
-    
-        private System.Collections.Generic.IDictionary<string, int> _offset;
-    
-        private System.Collections.Generic.IDictionary<string, double> _baseline;
-    
-        private System.Collections.Generic.IDictionary<string, System.Collections.Generic.List<object>> _weightLookup;
-    
-        public LoadCellsCalibrationOutput()
-        {
-        }
-    
-        protected LoadCellsCalibrationOutput(LoadCellsCalibrationOutput other)
-        {
-            _offset = other._offset;
-            _baseline = other._baseline;
-            _weightLookup = other._weightLookup;
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("offset")]
-        public System.Collections.Generic.IDictionary<string, int> Offset
-        {
-            get
-            {
-                return _offset;
-            }
-            set
-            {
-                _offset = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("baseline")]
-        public System.Collections.Generic.IDictionary<string, double> Baseline
-        {
-            get
-            {
-                return _baseline;
-            }
-            set
-            {
-                _baseline = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("weight_lookup")]
-        public System.Collections.Generic.IDictionary<string, System.Collections.Generic.List<object>> WeightLookup
-        {
-            get
-            {
-                return _weightLookup;
-            }
-            set
-            {
-                _weightLookup = value;
-            }
-        }
-    
-        public System.IObservable<LoadCellsCalibrationOutput> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellsCalibrationOutput(this)));
-        }
-    
-        public System.IObservable<LoadCellsCalibrationOutput> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellsCalibrationOutput(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("offset = " + _offset + ", ");
-            stringBuilder.Append("baseline = " + _baseline + ", ");
-            stringBuilder.Append("weight_lookup = " + _weightLookup);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
     /// <summary>
     /// Load cells operation control model that is used to run a calibration data acquisition workflow
     /// </summary>
@@ -432,21 +17,53 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
         "tion workflow")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class LoadCellsOperationControl
+    public partial class LoadCellsCalibrationLogic
     {
+    
+        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json";
+    
+        private string _schemaVersion = "0.3.0";
     
         private System.Collections.Generic.List<int> _channels = new System.Collections.Generic.List<int>();
     
         private int _offsetBufferSize = 200;
     
-        public LoadCellsOperationControl()
+        public LoadCellsCalibrationLogic()
         {
         }
     
-        protected LoadCellsOperationControl(LoadCellsOperationControl other)
+        protected LoadCellsCalibrationLogic(LoadCellsCalibrationLogic other)
         {
+            _describedBy = other._describedBy;
+            _schemaVersion = other._schemaVersion;
             _channels = other._channels;
             _offsetBufferSize = other._offsetBufferSize;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
+        public string DescribedBy
+        {
+            get
+            {
+                return _describedBy;
+            }
+            set
+            {
+                _describedBy = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
+        public string SchemaVersion
+        {
+            get
+            {
+                return _schemaVersion;
+            }
+            set
+            {
+                _schemaVersion = value;
+            }
         }
     
         /// <summary>
@@ -484,397 +101,22 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
             }
         }
     
-        public System.IObservable<LoadCellsOperationControl> Process()
+        public System.IObservable<LoadCellsCalibrationLogic> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellsOperationControl(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellsCalibrationLogic(this)));
         }
     
-        public System.IObservable<LoadCellsOperationControl> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<LoadCellsCalibrationLogic> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellsOperationControl(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("channels = " + _channels + ", ");
-            stringBuilder.Append("offset_buffer_size = " + _offsetBufferSize);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    /// <summary>
-    /// Enumeration of Mass Measurements
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    public enum MassUnit
-    {
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="kilogram")]
-        Kilogram = 0,
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="gram")]
-        Gram = 1,
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="milligram")]
-        Milligram = 2,
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="microgram")]
-        Microgram = 3,
-    
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="nanogram")]
-        Nanogram = 4,
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class LoadCellsCalibrationModel
-    {
-    
-        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json";
-    
-        private string _schemaVersion = "0.2.0";
-    
-        private string _experiment;
-    
-        private System.DateTimeOffset _date;
-    
-        private string _rootPath;
-    
-        private string _remotePath;
-    
-        private string _subject;
-    
-        private string _experimentVersion;
-    
-        private double? _rngSeed;
-    
-        private string _notes;
-    
-        private string _commitHash;
-    
-        private bool _allowDirtyRepo = false;
-    
-        private bool _skipHardwareValidation = false;
-    
-        private LoadCellsOperationControl _operationControl = new LoadCellsOperationControl();
-    
-        private LoadCellsCalibration _calibration;
-    
-        public LoadCellsCalibrationModel()
-        {
-        }
-    
-        protected LoadCellsCalibrationModel(LoadCellsCalibrationModel other)
-        {
-            _describedBy = other._describedBy;
-            _schemaVersion = other._schemaVersion;
-            _experiment = other._experiment;
-            _date = other._date;
-            _rootPath = other._rootPath;
-            _remotePath = other._remotePath;
-            _subject = other._subject;
-            _experimentVersion = other._experimentVersion;
-            _rngSeed = other._rngSeed;
-            _notes = other._notes;
-            _commitHash = other._commitHash;
-            _allowDirtyRepo = other._allowDirtyRepo;
-            _skipHardwareValidation = other._skipHardwareValidation;
-            _operationControl = other._operationControl;
-            _calibration = other._calibration;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
-        public string DescribedBy
-        {
-            get
-            {
-                return _describedBy;
-            }
-            set
-            {
-                _describedBy = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
-        public string SchemaVersion
-        {
-            get
-            {
-                return _schemaVersion;
-            }
-            set
-            {
-                _schemaVersion = value;
-            }
-        }
-    
-        /// <summary>
-        /// Name of the experiment
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("experiment", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Name of the experiment")]
-        public string Experiment
-        {
-            get
-            {
-                return _experiment;
-            }
-            set
-            {
-                _experiment = value;
-            }
-        }
-    
-        /// <summary>
-        /// Date of the experiment
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("date")]
-        [System.ComponentModel.DescriptionAttribute("Date of the experiment")]
-        public System.DateTimeOffset Date
-        {
-            get
-            {
-                return _date;
-            }
-            set
-            {
-                _date = value;
-            }
-        }
-    
-        /// <summary>
-        /// Root path where data will be logged
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("root_path", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Root path where data will be logged")]
-        public string RootPath
-        {
-            get
-            {
-                return _rootPath;
-            }
-            set
-            {
-                _rootPath = value;
-            }
-        }
-    
-        /// <summary>
-        /// Remote path where data will be attempted to be copied to after experiment is done
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("remote_path")]
-        [System.ComponentModel.DescriptionAttribute("Remote path where data will be attempted to be copied to after experiment is done" +
-            "")]
-        public string RemotePath
-        {
-            get
-            {
-                return _remotePath;
-            }
-            set
-            {
-                _remotePath = value;
-            }
-        }
-    
-        /// <summary>
-        /// Name of the subject
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("subject", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Name of the subject")]
-        public string Subject
-        {
-            get
-            {
-                return _subject;
-            }
-            set
-            {
-                _subject = value;
-            }
-        }
-    
-        /// <summary>
-        /// Version of the experiment
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("experiment_version", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Version of the experiment")]
-        public string ExperimentVersion
-        {
-            get
-            {
-                return _experimentVersion;
-            }
-            set
-            {
-                _experimentVersion = value;
-            }
-        }
-    
-        /// <summary>
-        /// Seed of the random number generator
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("rng_seed")]
-        [System.ComponentModel.DescriptionAttribute("Seed of the random number generator")]
-        public double? RngSeed
-        {
-            get
-            {
-                return _rngSeed;
-            }
-            set
-            {
-                _rngSeed = value;
-            }
-        }
-    
-        /// <summary>
-        /// Notes about the experiment
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("notes")]
-        [System.ComponentModel.DescriptionAttribute("Notes about the experiment")]
-        public string Notes
-        {
-            get
-            {
-                return _notes;
-            }
-            set
-            {
-                _notes = value;
-            }
-        }
-    
-        /// <summary>
-        /// Commit hash of the repository
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("commit_hash")]
-        [System.ComponentModel.DescriptionAttribute("Commit hash of the repository")]
-        public string CommitHash
-        {
-            get
-            {
-                return _commitHash;
-            }
-            set
-            {
-                _commitHash = value;
-            }
-        }
-    
-        /// <summary>
-        /// Allow running from a dirty repository
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("allow_dirty_repo")]
-        [System.ComponentModel.DescriptionAttribute("Allow running from a dirty repository")]
-        public bool AllowDirtyRepo
-        {
-            get
-            {
-                return _allowDirtyRepo;
-            }
-            set
-            {
-                _allowDirtyRepo = value;
-            }
-        }
-    
-        /// <summary>
-        /// Skip hardware validation
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("skip_hardware_validation")]
-        [System.ComponentModel.DescriptionAttribute("Skip hardware validation")]
-        public bool SkipHardwareValidation
-        {
-            get
-            {
-                return _skipHardwareValidation;
-            }
-            set
-            {
-                _skipHardwareValidation = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("operation_control", Required=Newtonsoft.Json.Required.Always)]
-        public LoadCellsOperationControl OperationControl
-        {
-            get
-            {
-                return _operationControl;
-            }
-            set
-            {
-                _operationControl = value;
-            }
-        }
-    
-        /// <summary>
-        /// Calibration data
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
-        [System.ComponentModel.DescriptionAttribute("Calibration data")]
-        public LoadCellsCalibration Calibration
-        {
-            get
-            {
-                return _calibration;
-            }
-            set
-            {
-                _calibration = value;
-            }
-        }
-    
-        public System.IObservable<LoadCellsCalibrationModel> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellsCalibrationModel(this)));
-        }
-    
-        public System.IObservable<LoadCellsCalibrationModel> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellsCalibrationModel(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellsCalibrationLogic(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("describedBy = " + _describedBy + ", ");
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
-            stringBuilder.Append("experiment = " + _experiment + ", ");
-            stringBuilder.Append("date = " + _date + ", ");
-            stringBuilder.Append("root_path = " + _rootPath + ", ");
-            stringBuilder.Append("remote_path = " + _remotePath + ", ");
-            stringBuilder.Append("subject = " + _subject + ", ");
-            stringBuilder.Append("experiment_version = " + _experimentVersion + ", ");
-            stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
-            stringBuilder.Append("notes = " + _notes + ", ");
-            stringBuilder.Append("commit_hash = " + _commitHash + ", ");
-            stringBuilder.Append("allow_dirty_repo = " + _allowDirtyRepo + ", ");
-            stringBuilder.Append("skip_hardware_validation = " + _skipHardwareValidation + ", ");
-            stringBuilder.Append("operation_control = " + _operationControl + ", ");
-            stringBuilder.Append("calibration = " + _calibration);
+            stringBuilder.Append("channels = " + _channels + ", ");
+            stringBuilder.Append("offset_buffer_size = " + _offsetBufferSize);
             return true;
         }
     
@@ -908,34 +150,9 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.SerializeObject(value));
         }
 
-        public System.IObservable<string> Process(System.IObservable<LoadCellCalibration> source)
+        public System.IObservable<string> Process(System.IObservable<LoadCellsCalibrationLogic> source)
         {
-            return Process<LoadCellCalibration>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<LoadCellsCalibration> source)
-        {
-            return Process<LoadCellsCalibration>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<LoadCellsCalibrationInput> source)
-        {
-            return Process<LoadCellsCalibrationInput>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<LoadCellsCalibrationOutput> source)
-        {
-            return Process<LoadCellsCalibrationOutput>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<LoadCellsOperationControl> source)
-        {
-            return Process<LoadCellsOperationControl>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<LoadCellsCalibrationModel> source)
-        {
-            return Process<LoadCellsCalibrationModel>(source);
+            return Process<LoadCellsCalibrationLogic>(source);
         }
     }
 
@@ -947,18 +164,13 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellCalibration>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellsCalibration>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellsCalibrationInput>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellsCalibrationOutput>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellsOperationControl>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellsCalibrationModel>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellsCalibrationLogic>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
         public DeserializeFromJson()
         {
-            Type = new Bonsai.Expressions.TypeMapping<LoadCellsCalibrationModel>();
+            Type = new Bonsai.Expressions.TypeMapping<LoadCellsCalibrationLogic>();
         }
 
         public Bonsai.Expressions.TypeMapping Type { get; set; }
