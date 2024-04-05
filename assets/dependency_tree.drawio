@@ -1,25 +1,12 @@
-<mxfile host="app.diagrams.net" modified="2024-03-20T20:55:19.856Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="J4MJ_UI5yzA_QK6ZV0ab" version="24.0.7" type="device">
+<mxfile host="app.diagrams.net" modified="2024-04-05T22:36:20.680Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="e11vNAaHQPkEROy-lf7x" version="24.0.7" type="device">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="1221" dy="806" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1430" dy="813" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="9tKmkYN3VSaNVDcuLfuS-33" target="9tKmkYN3VSaNVDcuLfuS-25" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="420" y="157" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <UserObject label="aind-data-schema" link="https://github.com/AllenNeuralDynamics/aind-data-schema" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-0">
-          <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#dae8fc;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#6c8ebf;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-            <mxGeometry x="330" y="5" width="180" height="80" as="geometry" />
-          </mxCell>
-        </UserObject>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-1" value="Core schema grammar&lt;div&gt;Defines &amp;lt;Rig&amp;gt;, &amp;lt;Session&amp;gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-0" vertex="1">
-          <mxGeometry y="26" width="180" height="54" as="geometry" />
-        </mxCell>
         <UserObject label="aind-behavior-curriculum" link="https://github.com/AllenNeuralDynamics/aind-behavior-curriculum" id="9tKmkYN3VSaNVDcuLfuS-4">
           <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#dae8fc;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#6c8ebf;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-            <mxGeometry x="10" y="265" width="180" height="150" as="geometry" />
+            <mxGeometry x="9" y="10" width="180" height="150" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-5" value="Base classes for Tasks and Curriculum:&lt;div&gt;- Task&lt;div&gt;- Stage[T&lt;span style=&quot;background-color: initial;&quot;&gt;Task]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- Metrics[TTask]&lt;/div&gt;&lt;div&gt;- Policy/Transitions[TTask]&lt;/div&gt;&lt;div&gt;- Curriculum&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;imageWidth=46;" parent="9tKmkYN3VSaNVDcuLfuS-4" vertex="1">
@@ -27,39 +14,22 @@
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-71" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="9tKmkYN3VSaNVDcuLfuS-25" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="420" y="455" as="targetPoint" />
+            <mxPoint x="419" y="200" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <UserObject label="aind-behavior-services" link="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-25">
           <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#60a917;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#2D7600;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;fontColor=#ffffff;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-            <mxGeometry x="330" y="265" width="180" height="170" as="geometry" />
+            <mxGeometry x="329" y="10" width="180" height="170" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-26" value="- Constrains Rig, Session&lt;div&gt;- Creates a Task and injects it into Session&lt;/div&gt;&lt;div&gt;- Subclasses Calibration models and injects into rig&lt;/div&gt;&lt;div&gt;- Spec&#39;s different Calibration models&lt;/div&gt;&lt;div&gt;- data-transfer service&lt;/div&gt;&lt;div&gt;- Task Launcher (WIP)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-25" vertex="1">
+        <mxCell id="9tKmkYN3VSaNVDcuLfuS-26" value="- Base classes for:&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- Task (Subclasses)&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- Session&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- Rig&lt;/div&gt;&lt;div&gt;- Calibration classes and code&lt;/div&gt;&lt;div&gt;&lt;div&gt;- Task Launcher/LauncherCli&lt;/div&gt;&lt;/div&gt;&lt;div&gt;- Deployment instructions&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-25" vertex="1">
           <mxGeometry y="26" width="180" height="144" as="geometry" />
-        </mxCell>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-29" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.security.lock_protected;fillColor=#DA4026;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="391" y="228" width="22.65" height="31" as="geometry" />
-        </mxCell>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="9tKmkYN3VSaNVDcuLfuS-0" target="9tKmkYN3VSaNVDcuLfuS-33" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="420" y="85" as="sourcePoint" />
-            <mxPoint x="420" y="265" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-33" value="Subclasses" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="365" y="105" width="110" height="120" as="geometry">
-            <mxRectangle x="100" y="400" width="40" height="90" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-36" value="AindModel&lt;div&gt;Rig&lt;/div&gt;&lt;div&gt;Session&lt;/div&gt;&lt;div&gt;Calibration&lt;/div&gt;&lt;div&gt;...&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="9tKmkYN3VSaNVDcuLfuS-33" vertex="1">
-          <mxGeometry x="30" y="15" width="80" height="90" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-47" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="9tKmkYN3VSaNVDcuLfuS-41" target="9tKmkYN3VSaNVDcuLfuS-26" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-41" value="Subclasses" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="220" y="308" width="70" height="90" as="geometry">
+          <mxGeometry x="219" y="53" width="70" height="90" as="geometry">
             <mxRectangle x="100" y="400" width="40" height="90" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
@@ -70,19 +40,10 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-48" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.security.lock_protected;fillColor=#DA4026;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="298.35" y="319" width="22.65" height="31" as="geometry" />
-        </mxCell>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-49" value="" style="group" parent="WIyWlLk6GJQsqaUBKTNV-1" connectable="0" vertex="1">
-          <mxGeometry x="120" y="75" width="110" height="34" as="geometry" />
-        </mxCell>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-32" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.security.lock_protected;fillColor=#DA4026;" parent="9tKmkYN3VSaNVDcuLfuS-49" vertex="1">
-          <mxGeometry width="22.65" height="31" as="geometry" />
-        </mxCell>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-40" value="version-lock" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="9tKmkYN3VSaNVDcuLfuS-49" vertex="1">
-          <mxGeometry x="20" y="4" width="90" height="30" as="geometry" />
+          <mxGeometry x="297.35" y="64" width="22.65" height="31" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-67" value="" style="group" parent="WIyWlLk6GJQsqaUBKTNV-1" connectable="0" vertex="1">
-          <mxGeometry x="298.35" y="949" width="274" height="90" as="geometry" />
+          <mxGeometry x="297.35" y="694" width="274" height="90" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-63" value="" style="group" parent="9tKmkYN3VSaNVDcuLfuS-67" connectable="0" vertex="1">
           <mxGeometry width="237.65" height="90" as="geometry" />
@@ -103,15 +64,18 @@
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-62" value="Metrics" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="9tKmkYN3VSaNVDcuLfuS-61" vertex="1">
           <mxGeometry x="13.649999999999999" y="30" width="60" height="30" as="geometry" />
         </mxCell>
+        <mxCell id="xOA399cTyoZ_s7aieavf-5" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.security.lock_protected;fillColor=#DA4026;" vertex="1" parent="9tKmkYN3VSaNVDcuLfuS-67">
+          <mxGeometry x="248.69999999999993" y="29.5" width="22.65" height="31" as="geometry" />
+        </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-79" value="" style="group" parent="WIyWlLk6GJQsqaUBKTNV-1" connectable="0" vertex="1">
-          <mxGeometry x="20" y="615" width="781" height="176" as="geometry" />
+          <mxGeometry x="19" y="360" width="781" height="176" as="geometry" />
         </mxCell>
         <UserObject label="vr-foraging" link="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-53">
           <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#fad7ac;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#b46504;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;" parent="9tKmkYN3VSaNVDcuLfuS-79" vertex="1">
             <mxGeometry width="180" height="176" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-64" value="Instantiated via:&lt;div&gt;- Rig&lt;/div&gt;&lt;div&gt;- Session&lt;/div&gt;&lt;div&gt;- Task Logic&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- Saves data in standard format&lt;/div&gt;&lt;div&gt;- data-transfer service&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-53" vertex="1">
+        <mxCell id="9tKmkYN3VSaNVDcuLfuS-64" value="- Instantiated by subclassing:&lt;blockquote style=&quot;margin: 0 0 0 40px; border: none; padding: 0px;&quot;&gt;&lt;div&gt;- Rig&lt;/div&gt;&lt;div&gt;- Session&lt;/div&gt;&lt;div&gt;- Task Logic&lt;/div&gt;&lt;/blockquote&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- Subclasses Launcher&lt;/div&gt;&lt;div&gt;- Maintains task data-schema&lt;/div&gt;&lt;div&gt;- Saves data in standard format&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-53" vertex="1">
           <mxGeometry y="26" width="180" height="150" as="geometry" />
         </mxCell>
         <UserObject label="information-foraging" link="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-72">
@@ -119,7 +83,7 @@
             <mxGeometry x="200.32" width="180" height="176" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-73" value="Instantiated via:&lt;div&gt;- Rig&lt;/div&gt;&lt;div&gt;- Session&lt;/div&gt;&lt;div&gt;- Task Logic&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- Saves data in standard format&lt;/div&gt;&lt;div&gt;- data-transfer service&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-72" vertex="1">
+        <mxCell id="9tKmkYN3VSaNVDcuLfuS-73" value="- Instantiated by subclassing:&lt;blockquote style=&quot;margin: 0px 0px 0px 40px; border: none; padding: 0px;&quot;&gt;&lt;div&gt;- Rig&lt;/div&gt;&lt;div&gt;- Session&lt;/div&gt;&lt;div&gt;- Task Logic&lt;/div&gt;&lt;/blockquote&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- Subclasses Launcher&lt;/div&gt;&lt;div&gt;- Maintains task data-schema&lt;/div&gt;&lt;div&gt;- Saves data in standard format&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-72" vertex="1">
           <mxGeometry y="26" width="180" height="150" as="geometry" />
         </mxCell>
         <UserObject label="bci-no-movement" link="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-74">
@@ -127,7 +91,7 @@
             <mxGeometry x="401" width="180" height="176" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-75" value="Instantiated via:&lt;div&gt;- Rig&lt;/div&gt;&lt;div&gt;- Session&lt;/div&gt;&lt;div&gt;- Task Logic&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- Saves data in standard format&lt;/div&gt;&lt;div&gt;- data-transfer service&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-74" vertex="1">
+        <mxCell id="9tKmkYN3VSaNVDcuLfuS-75" value="- Instantiated by subclassing:&lt;blockquote style=&quot;margin: 0px 0px 0px 40px; border: none; padding: 0px;&quot;&gt;&lt;div&gt;- Rig&lt;/div&gt;&lt;div&gt;- Session&lt;/div&gt;&lt;div&gt;- Task Logic&lt;/div&gt;&lt;/blockquote&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- Subclasses Launcher&lt;/div&gt;&lt;div&gt;- Maintains task data-schema&lt;/div&gt;&lt;div&gt;- Saves data in standard format&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-74" vertex="1">
           <mxGeometry y="26" width="180" height="150" as="geometry" />
         </mxCell>
         <UserObject label="force-foraging" link="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-77">
@@ -135,15 +99,15 @@
             <mxGeometry x="601" width="180" height="176" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="9tKmkYN3VSaNVDcuLfuS-78" value="Instantiated via:&lt;div&gt;- Rig&lt;/div&gt;&lt;div&gt;- Session&lt;/div&gt;&lt;div&gt;- Task Logic&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- Saves data in standard format&lt;/div&gt;&lt;div&gt;- data-transfer service&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-77" vertex="1">
+        <mxCell id="9tKmkYN3VSaNVDcuLfuS-78" value="- Instantiated by subclassing:&lt;blockquote style=&quot;margin: 0px 0px 0px 40px; border: none; padding: 0px;&quot;&gt;&lt;div&gt;- Rig&lt;/div&gt;&lt;div&gt;- Session&lt;/div&gt;&lt;div&gt;- Task Logic&lt;/div&gt;&lt;/blockquote&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- Subclasses Launcher&lt;/div&gt;&lt;div&gt;- Maintains task data-schema&lt;/div&gt;&lt;div&gt;- Saves data in standard format&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-77" vertex="1">
           <mxGeometry y="26" width="180" height="150" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-82" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;rotation=90;size=0.5;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="399.37" y="265" width="41.25" height="627.5" as="geometry" />
+          <mxGeometry x="398.37" y="10" width="41.25" height="627.5" as="geometry" />
         </mxCell>
         <UserObject label="vr-foraging-analysis" link="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-85">
           <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#fad7ac;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#b46504;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-            <mxGeometry x="20" y="833" width="180" height="56" as="geometry" />
+            <mxGeometry x="19" y="578" width="180" height="56" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-87" value="Analysis of vr-foraging" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="9tKmkYN3VSaNVDcuLfuS-85" vertex="1">
@@ -151,7 +115,7 @@
         </mxCell>
         <UserObject label="data-ingestion-primitives" link="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-89">
           <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#b0e3e6;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#0e8088;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-            <mxGeometry x="330.01000000000005" y="1053" width="180" height="100" as="geometry" />
+            <mxGeometry x="329.01000000000005" y="798" width="180" height="100" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-90" value="Core analysis primitives&lt;div&gt;Data ingestion&lt;/div&gt;&lt;div&gt;QC&lt;/div&gt;&lt;div&gt;...&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="9tKmkYN3VSaNVDcuLfuS-89" vertex="1">
@@ -161,17 +125,17 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-92" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;rotation=-90;size=0.5;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="399.38" y="613" width="41.25" height="627.5" as="geometry" />
+          <mxGeometry x="398.38" y="358" width="41.25" height="627.5" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-93" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.security.lock_protected;fillColor=#DA4026;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="238.00000000000003" y="540" width="22.65" height="31" as="geometry" />
+          <mxGeometry x="356.35" y="285" width="22.65" height="31" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-94" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.security.lock_protected;fillColor=#DA4026;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="118.00000000000003" y="796" width="22.65" height="31" as="geometry" />
+          <mxGeometry x="117.00000000000003" y="541" width="22.65" height="31" as="geometry" />
         </mxCell>
         <UserObject label="analysis" link="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-95">
           <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#fad7ac;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#b46504;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-            <mxGeometry x="220" y="833" width="180" height="56" as="geometry" />
+            <mxGeometry x="219" y="578" width="180" height="56" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-96" value="Analysis repo" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="9tKmkYN3VSaNVDcuLfuS-95" vertex="1">
@@ -179,7 +143,7 @@
         </mxCell>
         <UserObject label="analysis" link="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-97">
           <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#fad7ac;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#b46504;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-            <mxGeometry x="421" y="833" width="180" height="56" as="geometry" />
+            <mxGeometry x="420" y="578" width="180" height="56" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-98" value="Analysis repo" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="9tKmkYN3VSaNVDcuLfuS-97" vertex="1">
@@ -187,83 +151,84 @@
         </mxCell>
         <UserObject label="analysis" link="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services" linkTarget="_blank" id="9tKmkYN3VSaNVDcuLfuS-99">
           <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#fad7ac;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#b46504;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-            <mxGeometry x="621" y="833" width="180" height="56" as="geometry" />
+            <mxGeometry x="620" y="578" width="180" height="56" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-100" value="Analysis repo" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="9tKmkYN3VSaNVDcuLfuS-99" vertex="1">
           <mxGeometry y="26" width="180" height="30" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-101" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=2;strokeColor=#f000bc;shadow=0;dashed=0;shape=mxgraph.ios7.icons.tools;pointerEvents=1" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="380" y="815" width="29.7" height="29.7" as="geometry" />
+          <mxGeometry x="379" y="560" width="29.7" height="29.7" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-102" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=2;strokeColor=#f000bc;shadow=0;dashed=0;shape=mxgraph.ios7.icons.tools;pointerEvents=1" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="496.15" y="1035" width="29.7" height="29.7" as="geometry" />
+          <mxGeometry x="495.15" y="780" width="29.7" height="29.7" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-103" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=2;strokeColor=#f000bc;shadow=0;dashed=0;shape=mxgraph.ios7.icons.tools;pointerEvents=1" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="590" y="815" width="29.7" height="29.7" as="geometry" />
+          <mxGeometry x="589" y="560" width="29.7" height="29.7" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-104" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=2;strokeColor=#f000bc;shadow=0;dashed=0;shape=mxgraph.ios7.icons.tools;pointerEvents=1" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="790" y="815" width="29.7" height="29.7" as="geometry" />
+          <mxGeometry x="789" y="560" width="29.7" height="29.7" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-105" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="310" y="791" as="sourcePoint" />
-            <mxPoint x="310" y="833" as="targetPoint" />
+            <mxPoint x="309" y="536" as="sourcePoint" />
+            <mxPoint x="309" y="578" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-106" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.security.lock_protected;fillColor=#DA4026;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="318" y="796" width="22.65" height="31" as="geometry" />
+          <mxGeometry x="317" y="541" width="22.65" height="31" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-107" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="510.01" y="790.5" as="sourcePoint" />
-            <mxPoint x="510.01" y="832.5" as="targetPoint" />
+            <mxPoint x="509.01" y="535.5" as="sourcePoint" />
+            <mxPoint x="509.01" y="577.5" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-108" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.security.lock_protected;fillColor=#DA4026;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="518.01" y="795.5" width="22.65" height="31" as="geometry" />
+          <mxGeometry x="517.01" y="540.5" width="22.65" height="31" as="geometry" />
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-110" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="720" y="790" as="sourcePoint" />
-            <mxPoint x="720" y="832" as="targetPoint" />
+            <mxPoint x="719" y="535" as="sourcePoint" />
+            <mxPoint x="719" y="577" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="9tKmkYN3VSaNVDcuLfuS-111" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.security.lock_protected;fillColor=#DA4026;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="728" y="795" width="22.65" height="31" as="geometry" />
-        </mxCell>
-        <mxCell id="0joXK_ut1vHUTasrbawd-0" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=2;strokeColor=#f000bc;shadow=0;dashed=0;shape=mxgraph.ios7.icons.tools;pointerEvents=1" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="120" y="125.29999999999995" width="29.7" height="29.7" as="geometry" />
-        </mxCell>
-        <mxCell id="0joXK_ut1vHUTasrbawd-4" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;planned feature&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="151.7" y="128.3" width="100" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="8X8C2J1BXfrNzYYVbqU8-0" value="" style="group" connectable="0" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="275.33" y="475" width="234" height="90" as="geometry" />
-        </mxCell>
-        <mxCell id="8X8C2J1BXfrNzYYVbqU8-1" value="Imports" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=23;" vertex="1" parent="8X8C2J1BXfrNzYYVbqU8-0">
-          <mxGeometry width="150" height="90" as="geometry">
-            <mxRectangle x="100" y="400" width="40" height="90" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="8X8C2J1BXfrNzYYVbqU8-2" value="Session&lt;div&gt;Rig (Constrained)&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="8X8C2J1BXfrNzYYVbqU8-1">
-          <mxGeometry x="30" y="24" width="120" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="8X8C2J1BXfrNzYYVbqU8-3" value="Subclasses" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;" vertex="1" parent="8X8C2J1BXfrNzYYVbqU8-0">
-          <mxGeometry x="164" width="70" height="90" as="geometry">
-            <mxRectangle x="100" y="400" width="40" height="90" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="8X8C2J1BXfrNzYYVbqU8-4" value="Task" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="8X8C2J1BXfrNzYYVbqU8-3">
-          <mxGeometry x="18.65" y="30" width="50" height="30" as="geometry" />
+          <mxGeometry x="727" y="540" width="22.65" height="31" as="geometry" />
         </mxCell>
         <UserObject label="aind-behavior-curriculum" link="https://github.com/AllenNeuralDynamics/aind-behavior-curriculum" id="8X8C2J1BXfrNzYYVbqU8-5">
-          <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#dae8fc;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#6c8ebf;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-            <mxGeometry x="510.01" y="1080" width="180" height="50" as="geometry" />
+          <mxCell style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#dae8fc;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;strokeColor=#6c8ebf;strokeWidth=1;rounded=1;shadow=0;glass=0;fontFamily=Tahoma;fontSize=12;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+            <mxGeometry x="509.01" y="825" width="180" height="50" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="8X8C2J1BXfrNzYYVbqU8-6" value="&lt;div&gt;&lt;div&gt;&lt;div&gt;Metriics[TTask]&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;imageWidth=46;" vertex="1" parent="8X8C2J1BXfrNzYYVbqU8-5">
+        <mxCell id="8X8C2J1BXfrNzYYVbqU8-6" value="&lt;div&gt;&lt;div&gt;&lt;div&gt;Metrics[TTask]&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;imageWidth=46;" parent="8X8C2J1BXfrNzYYVbqU8-5" vertex="1">
           <mxGeometry y="26" width="180" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="xOA399cTyoZ_s7aieavf-1" value="" style="group" vertex="1" connectable="0" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="539" y="55" width="131.7" height="93.30000000000001" as="geometry" />
+        </mxCell>
+        <mxCell id="9tKmkYN3VSaNVDcuLfuS-49" value="" style="group" parent="xOA399cTyoZ_s7aieavf-1" connectable="0" vertex="1">
+          <mxGeometry width="115" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="9tKmkYN3VSaNVDcuLfuS-32" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.security.lock_protected;fillColor=#DA4026;" parent="9tKmkYN3VSaNVDcuLfuS-49" vertex="1">
+          <mxGeometry width="22.65" height="31" as="geometry" />
+        </mxCell>
+        <mxCell id="9tKmkYN3VSaNVDcuLfuS-40" value="Pinned version" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="9tKmkYN3VSaNVDcuLfuS-49" vertex="1">
+          <mxGeometry x="15" y="4" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0joXK_ut1vHUTasrbawd-0" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=2;strokeColor=#f000bc;shadow=0;dashed=0;shape=mxgraph.ios7.icons.tools;pointerEvents=1" parent="xOA399cTyoZ_s7aieavf-1" vertex="1">
+          <mxGeometry y="50.299999999999955" width="29.7" height="29.7" as="geometry" />
+        </mxCell>
+        <mxCell id="0joXK_ut1vHUTasrbawd-4" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;WIP&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" parent="xOA399cTyoZ_s7aieavf-1" vertex="1">
+          <mxGeometry x="31.69999999999999" y="53.30000000000001" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xOA399cTyoZ_s7aieavf-2" value="Subclasses" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="384.99" y="205" width="83.65" height="90" as="geometry">
+            <mxRectangle x="100" y="400" width="40" height="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xOA399cTyoZ_s7aieavf-3" value="Task&lt;div&gt;Rig&lt;/div&gt;&lt;div&gt;Session&lt;/div&gt;&lt;div&gt;Launcher&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="xOA399cTyoZ_s7aieavf-2">
+          <mxGeometry x="15.649999999999999" y="10" width="70" height="70" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
