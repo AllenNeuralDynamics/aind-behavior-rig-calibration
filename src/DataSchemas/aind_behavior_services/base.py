@@ -5,10 +5,17 @@ from os import PathLike
 from typing import Any, Callable, Optional, get_args
 
 import git
-from pydantic import BaseModel, GetJsonSchemaHandler
+from pydantic import BaseModel, Field, GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 from semver import Version
+
+
+class SchemaVersionedModel(BaseModel):
+    describedBy: str = Field(..., frozen=True)
+    schema_version: str = Field(
+        ..., pattern=r"^\d+.\d+.\d+$", description="schema version", title="Version", frozen=True
+    )
 
 
 class SemVerAnnotation:

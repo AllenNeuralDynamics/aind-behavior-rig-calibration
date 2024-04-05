@@ -10,519 +10,6 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     #pragma warning disable // Disable all warnings
 
     /// <summary>
-    /// Input for water valve calibration class
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Input for water valve calibration class")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class Measurement
-    {
-    
-        private double _valveOpenInterval;
-    
-        private double _valveOpenTime;
-    
-        private System.Collections.Generic.List<double> _waterWeight = new System.Collections.Generic.List<double>();
-    
-        private int _repeatCount;
-    
-        public Measurement()
-        {
-        }
-    
-        protected Measurement(Measurement other)
-        {
-            _valveOpenInterval = other._valveOpenInterval;
-            _valveOpenTime = other._valveOpenTime;
-            _waterWeight = other._waterWeight;
-            _repeatCount = other._repeatCount;
-        }
-    
-        /// <summary>
-        /// Time between two consecutive valve openings (s)
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("valve_open_interval", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Time between two consecutive valve openings (s)")]
-        public double ValveOpenInterval
-        {
-            get
-            {
-                return _valveOpenInterval;
-            }
-            set
-            {
-                _valveOpenInterval = value;
-            }
-        }
-    
-        /// <summary>
-        /// Valve open interval (s)
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("valve_open_time", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Valve open interval (s)")]
-        public double ValveOpenTime
-        {
-            get
-            {
-                return _valveOpenTime;
-            }
-            set
-            {
-                _valveOpenTime = value;
-            }
-        }
-    
-        /// <summary>
-        /// Weight of water delivered (g)
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("water_weight", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Weight of water delivered (g)")]
-        public System.Collections.Generic.List<double> WaterWeight
-        {
-            get
-            {
-                return _waterWeight;
-            }
-            set
-            {
-                _waterWeight = value;
-            }
-        }
-    
-        /// <summary>
-        /// Number of times the valve opened.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("repeat_count", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Number of times the valve opened.")]
-        public int RepeatCount
-        {
-            get
-            {
-                return _repeatCount;
-            }
-            set
-            {
-                _repeatCount = value;
-            }
-        }
-    
-        public System.IObservable<Measurement> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Measurement(this)));
-        }
-    
-        public System.IObservable<Measurement> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new Measurement(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
-            stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
-            stringBuilder.Append("water_weight = " + _waterWeight + ", ");
-            stringBuilder.Append("repeat_count = " + _repeatCount);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    /// <summary>
-    /// Water valve calibration class
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Water valve calibration class")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class WaterValveCalibration
-    {
-    
-        private System.DateTimeOffset _calibrationDate;
-    
-        private string _deviceName = "WaterValve";
-    
-        private string _description = "Calibration of the water valve delivery system";
-    
-        private WaterValveCalibrationInput _input = new WaterValveCalibrationInput();
-    
-        private WaterValveCalibrationOutput _output = new WaterValveCalibrationOutput();
-    
-        private string _notes;
-    
-        public WaterValveCalibration()
-        {
-        }
-    
-        protected WaterValveCalibration(WaterValveCalibration other)
-        {
-            _calibrationDate = other._calibrationDate;
-            _deviceName = other._deviceName;
-            _description = other._description;
-            _input = other._input;
-            _output = other._output;
-            _notes = other._notes;
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration_date", Required=Newtonsoft.Json.Required.Always)]
-        public System.DateTimeOffset CalibrationDate
-        {
-            get
-            {
-                return _calibrationDate;
-            }
-            set
-            {
-                _calibrationDate = value;
-            }
-        }
-    
-        /// <summary>
-        /// Must match a device name in rig/instrument
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("device_name")]
-        [System.ComponentModel.DescriptionAttribute("Must match a device name in rig/instrument")]
-        public string DeviceName
-        {
-            get
-            {
-                return _deviceName;
-            }
-            set
-            {
-                _deviceName = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("description")]
-        public string Description
-        {
-            get
-            {
-                return _description;
-            }
-            set
-            {
-                _description = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("input", Required=Newtonsoft.Json.Required.Always)]
-        public WaterValveCalibrationInput Input
-        {
-            get
-            {
-                return _input;
-            }
-            set
-            {
-                _input = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("output", Required=Newtonsoft.Json.Required.Always)]
-        public WaterValveCalibrationOutput Output
-        {
-            get
-            {
-                return _output;
-            }
-            set
-            {
-                _output = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("notes")]
-        public string Notes
-        {
-            get
-            {
-                return _notes;
-            }
-            set
-            {
-                _notes = value;
-            }
-        }
-    
-        public System.IObservable<WaterValveCalibration> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WaterValveCalibration(this)));
-        }
-    
-        public System.IObservable<WaterValveCalibration> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new WaterValveCalibration(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("calibration_date = " + _calibrationDate + ", ");
-            stringBuilder.Append("device_name = " + _deviceName + ", ");
-            stringBuilder.Append("description = " + _description + ", ");
-            stringBuilder.Append("input = " + _input + ", ");
-            stringBuilder.Append("output = " + _output + ", ");
-            stringBuilder.Append("notes = " + _notes);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class WaterValveCalibrationInput
-    {
-    
-        private System.Collections.Generic.List<Measurement> _measurements = new System.Collections.Generic.List<Measurement>();
-    
-        public WaterValveCalibrationInput()
-        {
-        }
-    
-        protected WaterValveCalibrationInput(WaterValveCalibrationInput other)
-        {
-            _measurements = other._measurements;
-        }
-    
-        /// <summary>
-        /// List of measurements
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("measurements")]
-        [System.ComponentModel.DescriptionAttribute("List of measurements")]
-        public System.Collections.Generic.List<Measurement> Measurements
-        {
-            get
-            {
-                return _measurements;
-            }
-            set
-            {
-                _measurements = value;
-            }
-        }
-    
-        public System.IObservable<WaterValveCalibrationInput> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WaterValveCalibrationInput(this)));
-        }
-    
-        public System.IObservable<WaterValveCalibrationInput> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new WaterValveCalibrationInput(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("measurements = " + _measurements);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    /// <summary>
-    /// Output for water valve calibration class
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Output for water valve calibration class")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class WaterValveCalibrationOutput
-    {
-    
-        private System.Collections.Generic.IDictionary<string, double> _intervalAverage;
-    
-        private double _slope;
-    
-        private double _offset;
-    
-        private double? _r2;
-    
-        private System.Collections.Generic.List<double> _validDomain;
-    
-        public WaterValveCalibrationOutput()
-        {
-        }
-    
-        protected WaterValveCalibrationOutput(WaterValveCalibrationOutput other)
-        {
-            _intervalAverage = other._intervalAverage;
-            _slope = other._slope;
-            _offset = other._offset;
-            _r2 = other._r2;
-            _validDomain = other._validDomain;
-        }
-    
-        /// <summary>
-        /// Dictionary keyed by measured valve interval and corresponding average single event volume.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("interval_average")]
-        [System.ComponentModel.DescriptionAttribute("Dictionary keyed by measured valve interval and corresponding average single even" +
-            "t volume.")]
-        public System.Collections.Generic.IDictionary<string, double> IntervalAverage
-        {
-            get
-            {
-                return _intervalAverage;
-            }
-            set
-            {
-                _intervalAverage = value;
-            }
-        }
-    
-        /// <summary>
-        /// Slope of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("slope", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Slope of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)")]
-        public double Slope
-        {
-            get
-            {
-                return _slope;
-            }
-            set
-            {
-                _slope = value;
-            }
-        }
-    
-        /// <summary>
-        /// Offset of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("offset", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Offset of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)")]
-        public double Offset
-        {
-            get
-            {
-                return _offset;
-            }
-            set
-            {
-                _offset = value;
-            }
-        }
-    
-        /// <summary>
-        /// R2 metric from the linear model.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("r2")]
-        [System.ComponentModel.DescriptionAttribute("R2 metric from the linear model.")]
-        public double? R2
-        {
-            get
-            {
-                return _r2;
-            }
-            set
-            {
-                _r2 = value;
-            }
-        }
-    
-        /// <summary>
-        /// The optional time-intervals the calibration curve was calculated on.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("valid_domain")]
-        [System.ComponentModel.DescriptionAttribute("The optional time-intervals the calibration curve was calculated on.")]
-        public System.Collections.Generic.List<double> ValidDomain
-        {
-            get
-            {
-                return _validDomain;
-            }
-            set
-            {
-                _validDomain = value;
-            }
-        }
-    
-        public System.IObservable<WaterValveCalibrationOutput> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WaterValveCalibrationOutput(this)));
-        }
-    
-        public System.IObservable<WaterValveCalibrationOutput> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new WaterValveCalibrationOutput(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("interval_average = " + _intervalAverage + ", ");
-            stringBuilder.Append("slope = " + _slope + ", ");
-            stringBuilder.Append("offset = " + _offset + ", ");
-            stringBuilder.Append("r2 = " + _r2 + ", ");
-            stringBuilder.Append("valid_domain = " + _validDomain);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    /// <summary>
     /// Olfactometer operation control model that is used to run a calibration data acquisition workflow
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -530,8 +17,12 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         "sition workflow")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class WaterValveOperationControl
+    public partial class WaterValveCalibrationLogic
     {
+    
+        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json";
+    
+        private string _schemaVersion = "0.3.0";
     
         private System.Collections.Generic.List<double> _valveOpenTime = new System.Collections.Generic.List<double>();
     
@@ -539,15 +30,43 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     
         private int _repeatCount = 200;
     
-        public WaterValveOperationControl()
+        public WaterValveCalibrationLogic()
         {
         }
     
-        protected WaterValveOperationControl(WaterValveOperationControl other)
+        protected WaterValveCalibrationLogic(WaterValveCalibrationLogic other)
         {
+            _describedBy = other._describedBy;
+            _schemaVersion = other._schemaVersion;
             _valveOpenTime = other._valveOpenTime;
             _valveOpenInterval = other._valveOpenInterval;
             _repeatCount = other._repeatCount;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
+        public string DescribedBy
+        {
+            get
+            {
+                return _describedBy;
+            }
+            set
+            {
+                _describedBy = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
+        public string SchemaVersion
+        {
+            get
+            {
+                return _schemaVersion;
+            }
+            set
+            {
+                _schemaVersion = value;
+            }
         }
     
         /// <summary>
@@ -602,373 +121,23 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
             }
         }
     
-        public System.IObservable<WaterValveOperationControl> Process()
+        public System.IObservable<WaterValveCalibrationLogic> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WaterValveOperationControl(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WaterValveCalibrationLogic(this)));
         }
     
-        public System.IObservable<WaterValveOperationControl> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<WaterValveCalibrationLogic> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new WaterValveOperationControl(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
-            stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
-            stringBuilder.Append("repeat_count = " + _repeatCount);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.CombinatorAttribute()]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class WaterValveCalibrationModel
-    {
-    
-        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json";
-    
-        private string _schemaVersion = "0.2.0";
-    
-        private string _experiment;
-    
-        private System.DateTimeOffset _date;
-    
-        private string _rootPath;
-    
-        private string _remotePath;
-    
-        private string _subject;
-    
-        private string _experimentVersion;
-    
-        private double? _rngSeed;
-    
-        private string _notes;
-    
-        private string _commitHash;
-    
-        private bool _allowDirtyRepo = false;
-    
-        private bool _skipHardwareValidation = false;
-    
-        private WaterValveOperationControl _operationControl = new WaterValveOperationControl();
-    
-        private WaterValveCalibration _calibration;
-    
-        public WaterValveCalibrationModel()
-        {
-        }
-    
-        protected WaterValveCalibrationModel(WaterValveCalibrationModel other)
-        {
-            _describedBy = other._describedBy;
-            _schemaVersion = other._schemaVersion;
-            _experiment = other._experiment;
-            _date = other._date;
-            _rootPath = other._rootPath;
-            _remotePath = other._remotePath;
-            _subject = other._subject;
-            _experimentVersion = other._experimentVersion;
-            _rngSeed = other._rngSeed;
-            _notes = other._notes;
-            _commitHash = other._commitHash;
-            _allowDirtyRepo = other._allowDirtyRepo;
-            _skipHardwareValidation = other._skipHardwareValidation;
-            _operationControl = other._operationControl;
-            _calibration = other._calibration;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
-        public string DescribedBy
-        {
-            get
-            {
-                return _describedBy;
-            }
-            set
-            {
-                _describedBy = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
-        public string SchemaVersion
-        {
-            get
-            {
-                return _schemaVersion;
-            }
-            set
-            {
-                _schemaVersion = value;
-            }
-        }
-    
-        /// <summary>
-        /// Name of the experiment
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("experiment", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Name of the experiment")]
-        public string Experiment
-        {
-            get
-            {
-                return _experiment;
-            }
-            set
-            {
-                _experiment = value;
-            }
-        }
-    
-        /// <summary>
-        /// Date of the experiment
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("date")]
-        [System.ComponentModel.DescriptionAttribute("Date of the experiment")]
-        public System.DateTimeOffset Date
-        {
-            get
-            {
-                return _date;
-            }
-            set
-            {
-                _date = value;
-            }
-        }
-    
-        /// <summary>
-        /// Root path where data will be logged
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("root_path", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Root path where data will be logged")]
-        public string RootPath
-        {
-            get
-            {
-                return _rootPath;
-            }
-            set
-            {
-                _rootPath = value;
-            }
-        }
-    
-        /// <summary>
-        /// Remote path where data will be attempted to be copied to after experiment is done
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("remote_path")]
-        [System.ComponentModel.DescriptionAttribute("Remote path where data will be attempted to be copied to after experiment is done" +
-            "")]
-        public string RemotePath
-        {
-            get
-            {
-                return _remotePath;
-            }
-            set
-            {
-                _remotePath = value;
-            }
-        }
-    
-        /// <summary>
-        /// Name of the subject
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("subject", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Name of the subject")]
-        public string Subject
-        {
-            get
-            {
-                return _subject;
-            }
-            set
-            {
-                _subject = value;
-            }
-        }
-    
-        /// <summary>
-        /// Version of the experiment
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("experiment_version", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Version of the experiment")]
-        public string ExperimentVersion
-        {
-            get
-            {
-                return _experimentVersion;
-            }
-            set
-            {
-                _experimentVersion = value;
-            }
-        }
-    
-        /// <summary>
-        /// Seed of the random number generator
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("rng_seed")]
-        [System.ComponentModel.DescriptionAttribute("Seed of the random number generator")]
-        public double? RngSeed
-        {
-            get
-            {
-                return _rngSeed;
-            }
-            set
-            {
-                _rngSeed = value;
-            }
-        }
-    
-        /// <summary>
-        /// Notes about the experiment
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("notes")]
-        [System.ComponentModel.DescriptionAttribute("Notes about the experiment")]
-        public string Notes
-        {
-            get
-            {
-                return _notes;
-            }
-            set
-            {
-                _notes = value;
-            }
-        }
-    
-        /// <summary>
-        /// Commit hash of the repository
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("commit_hash")]
-        [System.ComponentModel.DescriptionAttribute("Commit hash of the repository")]
-        public string CommitHash
-        {
-            get
-            {
-                return _commitHash;
-            }
-            set
-            {
-                _commitHash = value;
-            }
-        }
-    
-        /// <summary>
-        /// Allow running from a dirty repository
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("allow_dirty_repo")]
-        [System.ComponentModel.DescriptionAttribute("Allow running from a dirty repository")]
-        public bool AllowDirtyRepo
-        {
-            get
-            {
-                return _allowDirtyRepo;
-            }
-            set
-            {
-                _allowDirtyRepo = value;
-            }
-        }
-    
-        /// <summary>
-        /// Skip hardware validation
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("skip_hardware_validation")]
-        [System.ComponentModel.DescriptionAttribute("Skip hardware validation")]
-        public bool SkipHardwareValidation
-        {
-            get
-            {
-                return _skipHardwareValidation;
-            }
-            set
-            {
-                _skipHardwareValidation = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("operation_control", Required=Newtonsoft.Json.Required.Always)]
-        public WaterValveOperationControl OperationControl
-        {
-            get
-            {
-                return _operationControl;
-            }
-            set
-            {
-                _operationControl = value;
-            }
-        }
-    
-        /// <summary>
-        /// Calibration data
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
-        [System.ComponentModel.DescriptionAttribute("Calibration data")]
-        public WaterValveCalibration Calibration
-        {
-            get
-            {
-                return _calibration;
-            }
-            set
-            {
-                _calibration = value;
-            }
-        }
-    
-        public System.IObservable<WaterValveCalibrationModel> Process()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WaterValveCalibrationModel(this)));
-        }
-    
-        public System.IObservable<WaterValveCalibrationModel> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new WaterValveCalibrationModel(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new WaterValveCalibrationLogic(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("describedBy = " + _describedBy + ", ");
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
-            stringBuilder.Append("experiment = " + _experiment + ", ");
-            stringBuilder.Append("date = " + _date + ", ");
-            stringBuilder.Append("root_path = " + _rootPath + ", ");
-            stringBuilder.Append("remote_path = " + _remotePath + ", ");
-            stringBuilder.Append("subject = " + _subject + ", ");
-            stringBuilder.Append("experiment_version = " + _experimentVersion + ", ");
-            stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
-            stringBuilder.Append("notes = " + _notes + ", ");
-            stringBuilder.Append("commit_hash = " + _commitHash + ", ");
-            stringBuilder.Append("allow_dirty_repo = " + _allowDirtyRepo + ", ");
-            stringBuilder.Append("skip_hardware_validation = " + _skipHardwareValidation + ", ");
-            stringBuilder.Append("operation_control = " + _operationControl + ", ");
-            stringBuilder.Append("calibration = " + _calibration);
+            stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
+            stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
+            stringBuilder.Append("repeat_count = " + _repeatCount);
             return true;
         }
     
@@ -1002,34 +171,9 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.SerializeObject(value));
         }
 
-        public System.IObservable<string> Process(System.IObservable<Measurement> source)
+        public System.IObservable<string> Process(System.IObservable<WaterValveCalibrationLogic> source)
         {
-            return Process<Measurement>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<WaterValveCalibration> source)
-        {
-            return Process<WaterValveCalibration>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<WaterValveCalibrationInput> source)
-        {
-            return Process<WaterValveCalibrationInput>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<WaterValveCalibrationOutput> source)
-        {
-            return Process<WaterValveCalibrationOutput>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<WaterValveOperationControl> source)
-        {
-            return Process<WaterValveOperationControl>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<WaterValveCalibrationModel> source)
-        {
-            return Process<WaterValveCalibrationModel>(source);
+            return Process<WaterValveCalibrationLogic>(source);
         }
     }
 
@@ -1041,18 +185,13 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Measurement>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibration>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibrationInput>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibrationOutput>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveOperationControl>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibrationModel>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibrationLogic>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
         public DeserializeFromJson()
         {
-            Type = new Bonsai.Expressions.TypeMapping<WaterValveCalibrationModel>();
+            Type = new Bonsai.Expressions.TypeMapping<WaterValveCalibrationLogic>();
         }
 
         public Bonsai.Expressions.TypeMapping Type { get; set; }

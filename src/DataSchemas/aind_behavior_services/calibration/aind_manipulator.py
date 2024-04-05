@@ -1,7 +1,7 @@
 from enum import IntEnum
-from typing import List, Literal, Optional
+from typing import List, Literal
 
-from aind_behavior_services.calibration import CalibrationBase, CalibrationBaseModel, RigCalibrationFullModel
+from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
 from pydantic import BaseModel, Field
 
 __version__ = "0.1.0"
@@ -64,7 +64,7 @@ class AxisConfiguration(BaseModel):
     min_limit: int = Field(default=-1, title="Minimum limit. A value of 0 disables this limit.")
 
 
-class AindManipulatorCalibrationInput(CalibrationBaseModel):
+class AindManipulatorCalibrationInput(BaseModel):
     full_step_to_mm: ManipulatorPosition = Field(
         default=(ManipulatorPosition(x=0.010, y1=0.010, y2=0.010, z=0.010)), title="Full step to mm"
     )
@@ -86,12 +86,12 @@ class AindManipulatorCalibrationInput(CalibrationBaseModel):
     )
 
 
-class AindManipulatorCalibrationOutput(CalibrationBaseModel):
+class AindManipulatorCalibrationOutput(BaseModel):
     pass
 
 
-class AindManipulatorCalibration(CalibrationBase):
-    """Load cells calibration class"""
+class AindManipulatorCalibration(Calibration):
+    """Aind manipulator calibration class"""
 
     device_name: str = Field(
         "AindManipulator", title="Device name", description="Must match a device name in rig/instrument"
@@ -99,19 +99,10 @@ class AindManipulatorCalibration(CalibrationBase):
     description: Literal["Calibration of the load cells system"] = "Calibration of the load cells system"
     input: AindManipulatorCalibrationInput = Field(default=..., title="Input of the calibration")
     output: AindManipulatorCalibrationOutput = Field(default=..., title="Output of the calibration.")
-    notes: Optional[str] = Field(None, title="Notes")
 
 
-class AindManipulatorOperationControl(CalibrationBaseModel):
-    pass
-
-
-class AindManipulatorCalibrationModel(RigCalibrationFullModel):
+class AindManipulatorCalibrationLogic(CalibrationLogicModel):
     schema_version: Literal[__version__] = __version__
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json"
     ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json"
-    operation_control: AindManipulatorOperationControl = Field(
-        default=AindManipulatorOperationControl(), validate_default=True, title="Operation control"
-    )
-    calibration: AindManipulatorCalibration = Field(..., description="Calibration data")

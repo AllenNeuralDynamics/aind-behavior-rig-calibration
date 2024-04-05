@@ -13,10 +13,11 @@ classifiers = [
 dynamic = ["version", "readme"]
 
 dependencies = [
-    'aind_data_schema == 0.31.8',
-    'harp-python==0.2.0',
-    'gitpython==3.1.43',
-    'scikit-learn==1.4.1.post1'
+    'pydantic>=2.6.4, <3.0',
+    'harp-python>=0.2',
+    'gitpython>=3.1, <4.0',
+    'scikit-learn',
+    'semver'
 ]
 
 [project.optional-dependencies]
