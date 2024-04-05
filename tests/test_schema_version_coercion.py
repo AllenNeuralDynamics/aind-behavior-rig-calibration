@@ -25,7 +25,7 @@ class SchemaVersionCoercionTest(unittest.TestCase):
 
         pre_instance = AindBehaviorRigModelPre()
         post_instance = AindBehaviorRigModelPost()
-        with warnings.catch_warnings:
+        with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             try:
                 pre_updated = AindBehaviorRigModelPost.model_validate_json(pre_instance.model_dump_json())
