@@ -26,7 +26,7 @@ class OlfactometerChannelType(str, Enum):
 class OlfactometerChannelConfig(BaseModel):
     channel_index: int = Field(..., title="Channel index")
     channel_type: OlfactometerChannelType = Field(default=OlfactometerChannelType.ODOR, title="Channel type")
-    flow_rate_capacity: Literal[100, 1000] = Field(default=Literal[100], title="Flow capacity. mL/min")
+    flow_rate_capacity: Literal[100, 1000] = Field(default=100, title="Flow capacity. mL/min")
     flow_rate: float = Field(
         default=100, le=100, title="Target flow rate. mL/min. If channel_type == CARRIER, this value is ignored."
     )
@@ -58,7 +58,7 @@ class OlfactometerCalibrationLogic(CalibrationLogicModel):
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json"
     ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json"
-    channel_config: Dict[OlfactometerChannel, OlfactometerChannel] = Field(
+    channel_config: Dict[OlfactometerChannel, OlfactometerChannelConfig] = Field(
         {}, description="Configuration of olfactometer channels"
     )
     full_flow_rate: float = Field(1000, ge=0, le=1000, description="Full flow rate of the olfactometer")
