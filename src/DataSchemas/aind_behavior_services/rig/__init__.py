@@ -7,13 +7,13 @@ from enum import Enum
 # Import core types
 from typing import Annotated, Any, Literal, Optional, Union
 
-from aind_data_schema.base import AindCoreModel, AindModel
+from aind_behavior_services.base import SchemaVersionedModel
 from pydantic import BaseModel, Field, RootModel
 
 __version__ = "0.1.3"
 
 
-class SpinnakerCamera(AindModel):
+class SpinnakerCamera(BaseModel):
     serial_number: str = Field(..., description="Camera serial number")
     binning: int = Field(default=1, ge=1, description="Binning")
     color_processing: Literal["Default", "NoColorProcessing"] = Field(default="Default", description="Color processing")
@@ -38,7 +38,7 @@ class HarpDeviceType(str, Enum):
     GENERIC = "generic"
 
 
-class HarpDeviceBase(AindModel):
+class HarpDeviceBase(BaseModel):
     who_am_i: Optional[int] = Field(default=None, le=9999, ge=0, description="Device WhoAmI")
     device_type: HarpDeviceType = Field(default=HarpDeviceType.GENERIC, description="Device type")
     serial_number: Optional[str] = Field(default=None, description="Device serial number")
@@ -126,11 +126,11 @@ class HarpDevice(RootModel):
     ]
 
 
-class WebCamera(AindModel):
+class WebCamera(BaseModel):
     index: int = Field(default=0, ge=0, description="Camera index")
 
 
-class Screen(AindModel):
+class Screen(BaseModel):
     display_index: int = Field(default=1, description="Display index")
     target_render_frequency: float = Field(default=60, description="Target render frequency")
     target_update_frequency: float = Field(default=120, description="Target update frequency")
@@ -138,18 +138,18 @@ class Screen(AindModel):
     texture_assets_directory: str = Field(default="Textures", description="Calibration directory")
 
 
-class Treadmill(AindModel):
+class Treadmill(BaseModel):
     wheel_diameter: float = Field(default=15, ge=0, description="Wheel diameter", units="cm")
     pulses_per_revolution: int = Field(default=28800, ge=1, description="Pulses per revolution")
     invert_direction: bool = Field(default=False, description="Invert direction")
 
 
-class Valve(AindModel):
+class Valve(BaseModel):
     calibration_intercept: float = Field(default=0, description="Calibration intercept")
     calibration_slope: float = Field(default=1, description="Calibration slope")
 
 
-class AindBehaviorRigModel(AindCoreModel):
+class AindBehaviorRigModel(SchemaVersionedModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
     schema_version: Literal[__version__] = __version__
