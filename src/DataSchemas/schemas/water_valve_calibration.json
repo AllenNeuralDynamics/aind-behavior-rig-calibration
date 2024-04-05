@@ -21,16 +21,14 @@
       },
       "minItems": 1,
       "title": "Valve Open Time",
-      "type": "array",
-      "units": "s"
+      "type": "array"
     },
     "valve_open_interval": {
       "default": 0.2,
       "description": "Time between two consecutive valve openings (s)",
       "exclusiveMinimum": 0.0,
       "title": "Valve open interval",
-      "type": "number",
-      "units": "s"
+      "type": "number"
     },
     "repeat_count": {
       "default": 200,
