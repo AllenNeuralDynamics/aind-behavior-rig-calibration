@@ -2,7 +2,7 @@
 <WorkflowBuilder Version="2.8.1"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
-                 xmlns:p1="clr-namespace:AindBehaviorRigCalibration.AindManipulatorCalibration;assembly=Extensions"
+                 xmlns:p1="clr-namespace:AindBehaviorServices.AindManipulatorCalibrationRig;assembly=Extensions"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns:p2="clr-namespace:Harp.StepperDriver;assembly=Harp.StepperDriver"
@@ -22,10 +22,10 @@
         </Combinator>
       </Expression>
       <Expression xsi:type="p1:DeserializeFromJson">
-        <p1:Type xsi:type="TypeMapping" TypeArguments="p1:AindManipulatorCalibrationModel" />
+        <p1:Type xsi:type="TypeMapping" TypeArguments="p1:CalibrationRig" />
       </Expression>
       <Expression xsi:type="MemberSelector">
-        <Selector>Calibration.Input</Selector>
+        <Selector>Manipulator.Calibration.Input</Selector>
       </Expression>
       <Expression xsi:type="rx:AsyncSubject">
         <Name>Settings</Name>
@@ -297,7 +297,7 @@
                     <Selector>Item1</Selector>
                   </Expression>
                   <Expression xsi:type="LeftShift">
-                    <Value>3</Value>
+                    <Value>0</Value>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Merge" />
