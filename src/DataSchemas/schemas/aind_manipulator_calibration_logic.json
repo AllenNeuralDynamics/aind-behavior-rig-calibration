@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0",
+      "default": "0.1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "title": "CalibrationLogic",
+  "type": "object"
+}

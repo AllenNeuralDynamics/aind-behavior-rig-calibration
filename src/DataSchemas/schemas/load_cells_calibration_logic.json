@@ -1,12 +1,6 @@
 {
   "description": "Load cells operation control model that is used to run a calibration data acquisition workflow",
   "properties": {
-    "describedBy": {
-      "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json",
-      "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json",
-      "title": "Describedby",
-      "type": "string"
-    },
     "schema_version": {
       "const": "0.3.0",
       "default": "0.3.0",
@@ -42,6 +36,6 @@
       "type": "integer"
     }
   },
-  "title": "LoadCellsCalibrationLogic",
+  "title": "CalibrationLogic",
   "type": "object"
 }

@@ -5,55 +5,31 @@
 //----------------------
 
 
-namespace AindBehaviorRigCalibration.WaterValveCalibration
+namespace AindBehaviorServices.WaterValveCalibrationRig
 {
     #pragma warning disable // Disable all warnings
 
-    /// <summary>
-    /// Olfactometer operation control model that is used to run a calibration data acquisition workflow
-    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Olfactometer operation control model that is used to run a calibration data acqui" +
-        "sition workflow")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class WaterValveCalibrationLogic
+    public partial class CalibrationRig
     {
     
-        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json";
+        private string _schemaVersion = "0.0.0";
     
-        private string _schemaVersion = "0.3.0";
+        private string _computerName;
     
-        private System.Collections.Generic.List<double> _valveOpenTime = new System.Collections.Generic.List<double>();
+        private string _rigName;
     
-        private double _valveOpenInterval = 0.2D;
-    
-        private int _repeatCount = 200;
-    
-        public WaterValveCalibrationLogic()
+        public CalibrationRig()
         {
         }
     
-        protected WaterValveCalibrationLogic(WaterValveCalibrationLogic other)
+        protected CalibrationRig(CalibrationRig other)
         {
-            _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
-            _valveOpenTime = other._valveOpenTime;
-            _valveOpenInterval = other._valveOpenInterval;
-            _repeatCount = other._repeatCount;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
-        public string DescribedBy
-        {
-            get
-            {
-                return _describedBy;
-            }
-            set
-            {
-                _describedBy = value;
-            }
+            _computerName = other._computerName;
+            _rigName = other._rigName;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
@@ -70,74 +46,54 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
         }
     
         /// <summary>
-        /// An array with the times (s) the valve is open during calibration
+        /// Computer name
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("valve_open_time", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("An array with the times (s) the valve is open during calibration")]
-        public System.Collections.Generic.List<double> ValveOpenTime
+        [Newtonsoft.Json.JsonPropertyAttribute("computer_name")]
+        [System.ComponentModel.DescriptionAttribute("Computer name")]
+        public string ComputerName
         {
             get
             {
-                return _valveOpenTime;
+                return _computerName;
             }
             set
             {
-                _valveOpenTime = value;
+                _computerName = value;
             }
         }
     
         /// <summary>
-        /// Time between two consecutive valve openings (s)
+        /// Rig name
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("valve_open_interval")]
-        [System.ComponentModel.DescriptionAttribute("Time between two consecutive valve openings (s)")]
-        public double ValveOpenInterval
+        [Newtonsoft.Json.JsonPropertyAttribute("rig_name", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Rig name")]
+        public string RigName
         {
             get
             {
-                return _valveOpenInterval;
+                return _rigName;
             }
             set
             {
-                _valveOpenInterval = value;
+                _rigName = value;
             }
         }
     
-        /// <summary>
-        /// Number of times the valve opened per measure valve_open_time entry
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("repeat_count")]
-        [System.ComponentModel.DescriptionAttribute("Number of times the valve opened per measure valve_open_time entry")]
-        public int RepeatCount
+        public System.IObservable<CalibrationRig> Process()
         {
-            get
-            {
-                return _repeatCount;
-            }
-            set
-            {
-                _repeatCount = value;
-            }
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationRig(this)));
         }
     
-        public System.IObservable<WaterValveCalibrationLogic> Process()
+        public System.IObservable<CalibrationRig> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WaterValveCalibrationLogic(this)));
-        }
-    
-        public System.IObservable<WaterValveCalibrationLogic> Process<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new WaterValveCalibrationLogic(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new CalibrationRig(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("describedBy = " + _describedBy + ", ");
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
-            stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
-            stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
-            stringBuilder.Append("repeat_count = " + _repeatCount);
+            stringBuilder.Append("computer_name = " + _computerName + ", ");
+            stringBuilder.Append("rig_name = " + _rigName);
             return true;
         }
     
@@ -171,9 +127,9 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.SerializeObject(value));
         }
 
-        public System.IObservable<string> Process(System.IObservable<WaterValveCalibrationLogic> source)
+        public System.IObservable<string> Process(System.IObservable<CalibrationRig> source)
         {
-            return Process<WaterValveCalibrationLogic>(source);
+            return Process<CalibrationRig>(source);
         }
     }
 
@@ -185,13 +141,13 @@ namespace AindBehaviorRigCalibration.WaterValveCalibration
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibrationLogic>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationRig>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
         public DeserializeFromJson()
         {
-            Type = new Bonsai.Expressions.TypeMapping<WaterValveCalibrationLogic>();
+            Type = new Bonsai.Expressions.TypeMapping<CalibrationRig>();
         }
 
         public Bonsai.Expressions.TypeMapping Type { get; set; }

@@ -1,12 +1,9 @@
 import datetime
-from aind_behavior_services.session import AindBehaviorSessionModel
+
 from aind_behavior_services.base import get_commit_hash
-from aind_behavior_services.calibration.water_valve import (
-    Measurement,
-    WaterValveCalibration,
-    WaterValveCalibrationInput,
-    WaterValveCalibrationOutput,
-    WaterValveCalibrationLogic)
+from aind_behavior_services.calibration import water_valve as wv
+from aind_behavior_services.session import AindBehaviorSessionModel
+
 
 def linear_model(time, slope, offset):
     return slope * time + offset
@@ -18,12 +15,12 @@ _offset = -0.3
 
 _water_weights = [linear_model(x, _slope, _offset) for x in _delta_times]
 _inputs = [
-    Measurement(valve_open_interval=0.5, valve_open_time=t[0], water_weight=[t[1]], repeat_count=1)
+    wv.Measurement(valve_open_interval=0.5, valve_open_time=t[0], water_weight=[t[1]], repeat_count=1)
     for t in zip(_delta_times, _water_weights)
 ]
 
 
-_outputs = WaterValveCalibrationOutput(
+_outputs = wv.WaterValveCalibrationOutput(
     interval_average={interval: volume for interval, volume in zip(_delta_times, _water_weights)},
     slope=_slope,
     offset=_offset,
@@ -31,19 +28,16 @@ _outputs = WaterValveCalibrationOutput(
     valid_domain=[value for value in _delta_times],
 )
 
-input = WaterValveCalibrationInput(measurements=_inputs)
+input = wv.WaterValveCalibrationInput(measurements=_inputs)
 
-calibration = WaterValveCalibration(
+calibration = wv.WaterValveCalibration(
     input=input,
     output=input.calibrate_output(),
     device_name="WaterValve",
     calibration_date=datetime.datetime.now(),
 )
 
-calibration_logic = WaterValveCalibrationLogic(
-    valve_open_time=_delta_times,
-    valve_open_interval=0.5,
-    repeat_count=200)
+calibration_logic = wv.CalibrationLogic(valve_open_time=_delta_times, valve_open_interval=0.5, repeat_count=200)
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",

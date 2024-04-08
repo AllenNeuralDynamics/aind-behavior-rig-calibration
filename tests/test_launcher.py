@@ -13,15 +13,12 @@ class LauncherTests(unittest.TestCase):
         __version__ = "0.1.0"
 
         class AindGenericTaskRig(AindBehaviorRigModel):
-            describedBy: Literal[""] = Field("")
             schema_version: Literal[__version__] = __version__
 
         class AindGenericTaskSession(AindBehaviorSessionModel):
-            describedBy: Literal[""] = Field("")
             schema_version: Literal[__version__] = __version__
 
         class AindGenericTaskTaskLogic(AindBehaviorTaskLogicModel):
-            describedBy: Literal[""] = Field("")
             schema_version: Literal[__version__] = __version__
 
         launcher = Launcher(
@@ -42,15 +39,12 @@ class LauncherTests(unittest.TestCase):
         __version__ = "0.1.0"
 
         class AindGenericTaskRig(AindBehaviorRigModel):
-            describedBy: Literal[""] = Field("")
             schema_version: Literal[__version__] = __version__
 
         class AindGenericTaskSession(AindBehaviorSessionModel):
-            describedBy: Literal[""] = Field("")
             schema_version: Literal[__version__] = __version__
 
         class AindGenericTaskTaskLogic(AindBehaviorTaskLogicModel):
-            describedBy: Literal[""] = Field("")
             schema_version: Literal[__version__] = __version__
 
         launcher_cli = LauncherCli(

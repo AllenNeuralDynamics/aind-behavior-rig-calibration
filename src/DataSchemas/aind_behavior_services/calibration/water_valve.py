@@ -1,12 +1,15 @@
 from __future__ import annotations
+
 from typing import Annotated, Dict, List, Literal, Optional
+
 import numpy as np
-from aind_behavior_services import AindBehaviorRigModel
 from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
+from aind_behavior_services.rig import AindBehaviorRigModel
 from pydantic import BaseModel, Field
 from sklearn.linear_model import LinearRegression
 
-__VERSION__ = "0.3.0"
+TASK_LOGIC_VERSION = "0.3.0"
+RIG_VERSION = "0.0.0"
 
 PositiveFloat = Annotated[float, Field(gt=0)]
 
@@ -105,13 +108,10 @@ class WaterValveCalibration(Calibration):
     output: WaterValveCalibrationOutput = Field(..., title="Output of the calibration.")
 
 
-class WaterValveCalibrationLogic(CalibrationLogicModel):
+class CalibrationLogic(CalibrationLogicModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
 
-    schema_version: Literal[__VERSION__] = __VERSION__
-    describedBy: Literal[
-        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json"
-    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json"
+    schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
     valve_open_time: list[PositiveFloat] = Field(
         ...,
         min_length=1,
@@ -129,3 +129,7 @@ class WaterValveCalibrationLogic(CalibrationLogicModel):
         description="Number of times the valve opened per measure valve_open_time entry",
         title="Repeat count",
     )
+
+
+class CalibrationRig(AindBehaviorRigModel):
+    schema_version: Literal[RIG_VERSION] = RIG_VERSION

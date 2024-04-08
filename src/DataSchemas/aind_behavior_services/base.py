@@ -12,7 +12,6 @@ from semver import Version
 
 
 class SchemaVersionedModel(BaseModel):
-    describedBy: str = Field(..., frozen=True)
     schema_version: str = Field(
         ..., pattern=r"^\d+.\d+.\d+$", description="schema version", title="Version", frozen=True
     )

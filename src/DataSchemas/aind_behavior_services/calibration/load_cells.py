@@ -1,9 +1,11 @@
 from typing import Annotated, Dict, List, Literal, Optional, Tuple
 
 from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
+from aind_behavior_services.rig import AindBehaviorRigModel, HarpLoadCells
 from pydantic import BaseModel, Field
 
-__VERSION__ = "0.3.0"
+TASK_LOGIC_VERSION = "0.3.0"
+RIG_VERSION = "0.0.0"
 
 LoadCellChannel = Annotated[int, Field(ge=0, le=7, description="Load cell channel number available")]
 
@@ -47,13 +49,10 @@ class LoadCellsCalibration(Calibration):
     output: LoadCellsCalibrationOutput = Field(default=..., title="Output of the calibration.")
 
 
-class LoadCellsCalibrationLogic(CalibrationLogicModel):
+class CalibrationLogic(CalibrationLogicModel):
     """Load cells operation control model that is used to run a calibration data acquisition workflow"""
 
-    schema_version: Literal[__VERSION__] = __VERSION__
-    describedBy: Literal[
-        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json"
-    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json"
+    schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
     channels: List[LoadCellChannel] = Field(list(range(8)), description="List of channels to calibrate")
     offset_buffer_size: int = Field(
         default=200,
@@ -61,3 +60,12 @@ class LoadCellsCalibrationLogic(CalibrationLogicModel):
         title="Buffer size",
         ge=1,
     )
+
+
+class LoadCells(HarpLoadCells):
+    calibration: LoadCellsCalibration = Field(..., title="Calibration of the load cells")
+
+
+class CalibrationRig(AindBehaviorRigModel):
+    schema_version: Literal[RIG_VERSION] = RIG_VERSION
+    load_cells: LoadCells = Field(..., title="Load Cells acquisition device")

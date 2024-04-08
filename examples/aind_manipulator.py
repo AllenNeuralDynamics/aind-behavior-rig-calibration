@@ -1,8 +1,8 @@
-from aind_behavior_services.calibration import aind_manipulator as m
-from aind_behavior_services.base import get_commit_hash
-from aind_behavior_services.session import AindBehaviorSessionModel
 import datetime
 
+from aind_behavior_services.base import get_commit_hash
+from aind_behavior_services.calibration import aind_manipulator as m
+from aind_behavior_services.session import AindBehaviorSessionModel
 
 calibration_data = m.AindManipulatorCalibration(
     name="AindManipulatorCalibration",
@@ -21,7 +21,7 @@ calibration_data = m.AindManipulatorCalibration(
     calibration_date=datetime.datetime.now(),
 )
 
-calibration_logic = m.AindManipulatorCalibrationLogic()
+calibration_logic = m.CalibrationLogic()
 
 
 calibration_session = AindBehaviorSessionModel(

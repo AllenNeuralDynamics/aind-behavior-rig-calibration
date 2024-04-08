@@ -1,20 +1,26 @@
 from __future__ import annotations
+
 import os
 from enum import Enum
 from typing import Annotated, Any, Literal, Optional, Union
+
 from aind_behavior_services.base import SchemaVersionedModel
 from pydantic import BaseModel, Field, RootModel
 
 # Import core types
 
 
-# Import core types
+__version__ = "0.2.0"
 
 
-__version__ = "0.1.4"
+class Device(BaseModel):
+    device_type: str = Field(..., description="Device type")
+    additional_settings: Optional[BaseModel] = Field(default=None, description="Additional settings")
+    calibration: Optional[BaseModel] = Field(default=None, description="Calibration")
 
 
-class SpinnakerCamera(BaseModel):
+class SpinnakerCamera(Device):
+    device_type: Literal["SpinnakerCamera"] = Field(default="SpinnakerCamera", description="Device type")
     serial_number: str = Field(..., description="Camera serial number")
     binning: int = Field(default=1, ge=1, description="Binning")
     color_processing: Literal["Default", "NoColorProcessing"] = Field(default="Default", description="Color processing")
@@ -44,7 +50,6 @@ class HarpDeviceBase(BaseModel):
     device_type: HarpDeviceType = Field(default=HarpDeviceType.GENERIC, description="Device type")
     serial_number: Optional[str] = Field(default=None, description="Device serial number")
     port_name: str = Field(..., description="Device port name")
-    additional_settings: Optional[BaseModel] = Field(default=None, description="Additional settings")
 
 
 class HarpBehavior(HarpDeviceBase):
@@ -127,11 +132,13 @@ class HarpDevice(RootModel):
     ]
 
 
-class WebCamera(BaseModel):
+class WebCamera(Device):
+    device_type: Literal["WebCamera"] = Field(default="WebCamera", description="Device type")
     index: int = Field(default=0, ge=0, description="Camera index")
 
 
-class Screen(BaseModel):
+class Screen(Device):
+    device_type: Literal["Screen"] = Field(default="Screen", description="Device type")
     display_index: int = Field(default=1, description="Display index")
     target_render_frequency: float = Field(default=60, description="Target render frequency")
     target_update_frequency: float = Field(default=120, description="Target update frequency")
@@ -143,11 +150,6 @@ class Treadmill(BaseModel):
     wheel_diameter: float = Field(default=15, ge=0, description="Wheel diameter")
     pulses_per_revolution: int = Field(default=28800, ge=1, description="Pulses per revolution")
     invert_direction: bool = Field(default=False, description="Invert direction")
-
-
-class Valve(BaseModel):
-    calibration_intercept: float = Field(default=0, description="Calibration intercept")
-    calibration_slope: float = Field(default=1, description="Calibration slope")
 
 
 class AindBehaviorRigModel(SchemaVersionedModel):

@@ -73,12 +73,6 @@
   },
   "description": "Olfactometer operation control model that is used to run a calibration data acquisition workflow",
   "properties": {
-    "describedBy": {
-      "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json",
-      "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json",
-      "title": "Describedby",
-      "type": "string"
-    },
     "schema_version": {
       "const": "0.3.0",
       "default": "0.3.0",
@@ -124,6 +118,6 @@
       "type": "number"
     }
   },
-  "title": "OlfactometerCalibrationLogic",
+  "title": "CalibrationLogic",
   "type": "object"
 }
