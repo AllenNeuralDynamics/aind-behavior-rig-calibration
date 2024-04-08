@@ -88,7 +88,7 @@
         <Selector>ChannelType</Selector>
       </Expression>
       <Expression xsi:type="Equal">
-        <Operand xsi:type="WorkflowProperty" TypeArguments="p2:ChannelType">
+        <Operand xsi:type="WorkflowProperty" TypeArguments="p2:OlfactometerChannelType">
           <Value>Carrier</Value>
         </Operand>
       </Expression>
