@@ -1,9 +1,12 @@
 from enum import Enum, IntEnum
 from typing import Dict, Literal, Optional
+
 from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
+from aind_behavior_services.rig import AindBehaviorRigModel, HarpOlfactometer
 from pydantic import BaseModel, Field
 
-__VERSION__ = "0.3.0"
+TASK_LOGIC_VERSION = "0.3.0"
+RIG_VERSION = "0.0.0"
 
 
 class OlfactometerChannel(IntEnum):
@@ -53,7 +56,7 @@ class OlfactometerCalibration(Calibration):
 class OlfactometerCalibrationLogic(CalibrationLogicModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
 
-    schema_version: Literal[__VERSION__] = __VERSION__
+    schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json"
     ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json"
@@ -64,3 +67,15 @@ class OlfactometerCalibrationLogic(CalibrationLogicModel):
     n_repeats_per_stimulus: int = Field(1, ge=1, description="Number of repeats per stimulus")
     time_on: float = Field(1, ge=0, description="Time (s) the valve is open during calibration")
     time_off: float = Field(1, ge=0, description="Time (s) the valve is close during calibration")
+
+
+class Olfactometer(HarpOlfactometer):
+    calibration: OlfactometerCalibration = Field(..., title="Calibration of the olfactometer")
+
+
+class OlfactometerCalibrationRig(AindBehaviorRigModel):
+    schema_version: Literal[RIG_VERSION] = RIG_VERSION
+    describedBy: Literal[
+        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json"
+    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json"
+    olfactometer: Olfactometer = Field(..., title="Olfactometer device")

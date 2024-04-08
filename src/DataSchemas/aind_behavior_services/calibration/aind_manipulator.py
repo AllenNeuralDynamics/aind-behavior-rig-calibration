@@ -2,9 +2,11 @@ from enum import IntEnum
 from typing import List, Literal
 
 from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
+from aind_behavior_services.rig import AindBehaviorRigModel, HarpStepperDriver
 from pydantic import BaseModel, Field
 
-__version__ = "0.1.0"
+TASK_LOGIC_VERSION = "0.1.0"
+RIG_VERSION = "0.0.0"
 
 
 class Axis(IntEnum):
@@ -102,7 +104,22 @@ class AindManipulatorCalibration(Calibration):
 
 
 class AindManipulatorCalibrationLogic(CalibrationLogicModel):
-    schema_version: Literal[__version__] = __version__
+    schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json"
     ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json"
+
+
+# Rig model
+
+
+class AindManipulatorDevice(HarpStepperDriver):
+    calibration: AindManipulatorCalibration = Field(..., title="Calibration of the manipulator")
+
+
+class AindManipulatorCalibrationRig(AindBehaviorRigModel):
+    schema_version: Literal[RIG_VERSION] = RIG_VERSION
+    describedBy: Literal[
+        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration_rig.json"
+    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration_rig.json"
+    manipulator: AindManipulatorDevice = Field(..., title="Manipulator device")
