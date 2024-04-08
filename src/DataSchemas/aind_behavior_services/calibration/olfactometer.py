@@ -2,7 +2,7 @@ from enum import Enum, IntEnum
 from typing import Dict, Literal, Optional
 
 from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
-from aind_behavior_services.rig import AindBehaviorRigModel, HarpOlfactometer
+from aind_behavior_services.rig import AindBehaviorRigModel, HarpOlfactometer, HarpAnalogInput, HarpClockGenerator
 from pydantic import BaseModel, Field
 
 TASK_LOGIC_VERSION = "0.3.0"
@@ -78,4 +78,6 @@ class OlfactometerCalibrationRig(AindBehaviorRigModel):
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json"
     ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json"
-    olfactometer: Olfactometer = Field(..., title="Olfactometer device")
+    harp_olfactometer: Olfactometer = Field(..., title="Olfactometer device")
+    harp_analog_input: HarpAnalogInput = Field(..., title="Analog input device")
+    harp_clock_generator: HarpOlfactometer = Field(..., title="Clock generator device")

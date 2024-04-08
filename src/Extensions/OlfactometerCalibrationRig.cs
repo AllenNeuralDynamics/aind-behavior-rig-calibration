@@ -12,6 +12,246 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class HarpAnalogInput
+    {
+    
+        private int _whoAmI = 1236;
+    
+        private string _deviceType = "analoginput";
+    
+        private string _serialNumber;
+    
+        private string _portName;
+    
+        public HarpAnalogInput()
+        {
+        }
+    
+        protected HarpAnalogInput(HarpAnalogInput other)
+        {
+            _whoAmI = other._whoAmI;
+            _deviceType = other._deviceType;
+            _serialNumber = other._serialNumber;
+            _portName = other._portName;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("who_am_i")]
+        public int WhoAmI
+        {
+            get
+            {
+                return _whoAmI;
+            }
+            set
+            {
+                _whoAmI = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
+        public string DeviceType
+        {
+            get
+            {
+                return _deviceType;
+            }
+            set
+            {
+                _deviceType = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device serial number
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("serial_number")]
+        [System.ComponentModel.DescriptionAttribute("Device serial number")]
+        public string SerialNumber
+        {
+            get
+            {
+                return _serialNumber;
+            }
+            set
+            {
+                _serialNumber = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device port name
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("port_name", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Device port name")]
+        public string PortName
+        {
+            get
+            {
+                return _portName;
+            }
+            set
+            {
+                _portName = value;
+            }
+        }
+    
+        public System.IObservable<HarpAnalogInput> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new HarpAnalogInput(this)));
+        }
+    
+        public System.IObservable<HarpAnalogInput> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new HarpAnalogInput(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("who_am_i = " + _whoAmI + ", ");
+            stringBuilder.Append("device_type = " + _deviceType + ", ");
+            stringBuilder.Append("serial_number = " + _serialNumber + ", ");
+            stringBuilder.Append("port_name = " + _portName);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class HarpOlfactometer
+    {
+    
+        private int _whoAmI = 1140;
+    
+        private string _deviceType = "olfactometer";
+    
+        private string _serialNumber;
+    
+        private string _portName;
+    
+        public HarpOlfactometer()
+        {
+        }
+    
+        protected HarpOlfactometer(HarpOlfactometer other)
+        {
+            _whoAmI = other._whoAmI;
+            _deviceType = other._deviceType;
+            _serialNumber = other._serialNumber;
+            _portName = other._portName;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("who_am_i")]
+        public int WhoAmI
+        {
+            get
+            {
+                return _whoAmI;
+            }
+            set
+            {
+                _whoAmI = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
+        public string DeviceType
+        {
+            get
+            {
+                return _deviceType;
+            }
+            set
+            {
+                _deviceType = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device serial number
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("serial_number")]
+        [System.ComponentModel.DescriptionAttribute("Device serial number")]
+        public string SerialNumber
+        {
+            get
+            {
+                return _serialNumber;
+            }
+            set
+            {
+                _serialNumber = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device port name
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("port_name", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Device port name")]
+        public string PortName
+        {
+            get
+            {
+                return _portName;
+            }
+            set
+            {
+                _portName = value;
+            }
+        }
+    
+        public System.IObservable<HarpOlfactometer> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new HarpOlfactometer(this)));
+        }
+    
+        public System.IObservable<HarpOlfactometer> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new HarpOlfactometer(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("who_am_i = " + _whoAmI + ", ");
+            stringBuilder.Append("device_type = " + _deviceType + ", ");
+            stringBuilder.Append("serial_number = " + _serialNumber + ", ");
+            stringBuilder.Append("port_name = " + _portName);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     public partial class Olfactometer
     {
     
@@ -406,7 +646,11 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
     
         private string _rigName;
     
-        private Olfactometer _olfactometer = new Olfactometer();
+        private Olfactometer _harpOlfactometer = new Olfactometer();
+    
+        private HarpAnalogInput _harpAnalogInput = new HarpAnalogInput();
+    
+        private HarpOlfactometer _harpClockGenerator = new HarpOlfactometer();
     
         public OlfactometerCalibrationRig()
         {
@@ -418,7 +662,9 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
             _schemaVersion = other._schemaVersion;
             _computerName = other._computerName;
             _rigName = other._rigName;
-            _olfactometer = other._olfactometer;
+            _harpOlfactometer = other._harpOlfactometer;
+            _harpAnalogInput = other._harpAnalogInput;
+            _harpClockGenerator = other._harpClockGenerator;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
@@ -482,16 +728,44 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("olfactometer", Required=Newtonsoft.Json.Required.Always)]
-        public Olfactometer Olfactometer
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_olfactometer", Required=Newtonsoft.Json.Required.Always)]
+        public Olfactometer HarpOlfactometer
         {
             get
             {
-                return _olfactometer;
+                return _harpOlfactometer;
             }
             set
             {
-                _olfactometer = value;
+                _harpOlfactometer = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_analog_input", Required=Newtonsoft.Json.Required.Always)]
+        public HarpAnalogInput HarpAnalogInput
+        {
+            get
+            {
+                return _harpAnalogInput;
+            }
+            set
+            {
+                _harpAnalogInput = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_clock_generator", Required=Newtonsoft.Json.Required.Always)]
+        public HarpOlfactometer HarpClockGenerator
+        {
+            get
+            {
+                return _harpClockGenerator;
+            }
+            set
+            {
+                _harpClockGenerator = value;
             }
         }
     
@@ -511,7 +785,9 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
             stringBuilder.Append("computer_name = " + _computerName + ", ");
             stringBuilder.Append("rig_name = " + _rigName + ", ");
-            stringBuilder.Append("olfactometer = " + _olfactometer);
+            stringBuilder.Append("harp_olfactometer = " + _harpOlfactometer + ", ");
+            stringBuilder.Append("harp_analog_input = " + _harpAnalogInput + ", ");
+            stringBuilder.Append("harp_clock_generator = " + _harpClockGenerator);
             return true;
         }
     
@@ -543,6 +819,16 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
         private System.IObservable<string> Process<T>(System.IObservable<T> source)
         {
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.SerializeObject(value));
+        }
+
+        public System.IObservable<string> Process(System.IObservable<HarpAnalogInput> source)
+        {
+            return Process<HarpAnalogInput>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<HarpOlfactometer> source)
+        {
+            return Process<HarpOlfactometer>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<Olfactometer> source)
@@ -579,6 +865,8 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpAnalogInput>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpOlfactometer>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Olfactometer>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationInput>))]
