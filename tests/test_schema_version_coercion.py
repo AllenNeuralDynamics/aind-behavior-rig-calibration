@@ -1,9 +1,9 @@
 import unittest
+import warnings
 from typing import Literal
 
 from aind_behavior_services import AindBehaviorTaskLogicModel
 from pydantic import ValidationError
-import warnings
 
 version_pre: str = "0.0.1"
 version_post: str = "0.0.2"

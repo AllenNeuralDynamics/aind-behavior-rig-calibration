@@ -1,8 +1,8 @@
 import datetime
-from aind_behavior_services.session import AindBehaviorSessionModel
+
 from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration import load_cells as lc
-
+from aind_behavior_services.session import AindBehaviorSessionModel
 
 lc0 = lc.LoadCellCalibration(measured_offset={0: 0.1, 1: 0.2}, measured_weight=[(0.1, 0.1), (0.2, 0.2)])
 lc1 = lc.LoadCellCalibration(measured_offset={0: 0.1, 1: 0.2}, measured_weight=[(0.1, 0.1), (0.2, 0.2)])

@@ -1,9 +1,8 @@
 import datetime
 
-from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.base import get_commit_hash
-
 from aind_behavior_services.calibration import olfactometer as olf
+from aind_behavior_services.session import AindBehaviorSessionModel
 
 channels_config = [
     olf.OlfactometerChannelConfig(

@@ -1,7 +1,8 @@
 import datetime
-from aind_behavior_services.session import AindBehaviorSessionModel
+
 from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration import water_valve as wv
+from aind_behavior_services.session import AindBehaviorSessionModel
 
 
 def linear_model(time, slope, offset):

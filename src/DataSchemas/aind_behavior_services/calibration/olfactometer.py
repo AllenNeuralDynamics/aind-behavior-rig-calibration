@@ -2,7 +2,7 @@ from enum import Enum, IntEnum
 from typing import Dict, Literal, Optional
 
 from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
-from aind_behavior_services.rig import AindBehaviorRigModel, HarpOlfactometer, HarpAnalogInput, HarpClockGenerator
+from aind_behavior_services.rig import AindBehaviorRigModel, HarpAnalogInput, HarpClockGenerator, HarpOlfactometer
 from pydantic import BaseModel, Field
 
 TASK_LOGIC_VERSION = "0.3.0"
