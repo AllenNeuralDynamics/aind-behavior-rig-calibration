@@ -53,9 +53,6 @@ class CalibrationLogic(CalibrationLogicModel):
     """Load cells operation control model that is used to run a calibration data acquisition workflow"""
 
     schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
-    describedBy: Literal[
-        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json"
-    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json"
     channels: List[LoadCellChannel] = Field(list(range(8)), description="List of channels to calibrate")
     offset_buffer_size: int = Field(
         default=200,
@@ -71,7 +68,4 @@ class LoadCells(HarpLoadCells):
 
 class CalibrationRig(AindBehaviorRigModel):
     schema_version: Literal[RIG_VERSION] = RIG_VERSION
-    describedBy: Literal[
-        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration_rig.json"
-    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration_rig.json"
     load_cells: LoadCells = Field(..., title="Load Cells acquisition device")

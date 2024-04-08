@@ -831,8 +831,6 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     public partial class CalibrationRig
     {
     
-        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration_rig.json";
-    
         private string _schemaVersion = "0.0.0";
     
         private string _computerName;
@@ -847,24 +845,10 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     
         protected CalibrationRig(CalibrationRig other)
         {
-            _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
             _computerName = other._computerName;
             _rigName = other._rigName;
             _manipulator = other._manipulator;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
-        public string DescribedBy
-        {
-            get
-            {
-                return _describedBy;
-            }
-            set
-            {
-                _describedBy = value;
-            }
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
@@ -940,7 +924,6 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("describedBy = " + _describedBy + ", ");
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
             stringBuilder.Append("computer_name = " + _computerName + ", ");
             stringBuilder.Append("rig_name = " + _rigName + ", ");

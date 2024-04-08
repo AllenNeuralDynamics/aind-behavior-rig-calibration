@@ -20,8 +20,6 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     public partial class CalibrationLogic
     {
     
-        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration.json";
-    
         private string _schemaVersion = "0.3.0";
     
         private System.Collections.Generic.List<double> _valveOpenTime = new System.Collections.Generic.List<double>();
@@ -36,24 +34,10 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     
         protected CalibrationLogic(CalibrationLogic other)
         {
-            _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
             _valveOpenTime = other._valveOpenTime;
             _valveOpenInterval = other._valveOpenInterval;
             _repeatCount = other._repeatCount;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
-        public string DescribedBy
-        {
-            get
-            {
-                return _describedBy;
-            }
-            set
-            {
-                _describedBy = value;
-            }
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
@@ -133,7 +117,6 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("describedBy = " + _describedBy + ", ");
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
             stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
             stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");

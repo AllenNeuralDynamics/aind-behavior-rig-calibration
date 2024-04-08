@@ -15,8 +15,6 @@ namespace AindBehaviorServices.AindBehaviorSession
     public partial class AindBehaviorSessionModel
     {
     
-        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_behavior_session_model.json";
-    
         private string _schemaVersion = "0.1.1";
     
         private string _experiment;
@@ -47,7 +45,6 @@ namespace AindBehaviorServices.AindBehaviorSession
     
         protected AindBehaviorSessionModel(AindBehaviorSessionModel other)
         {
-            _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
             _experiment = other._experiment;
             _date = other._date;
@@ -60,19 +57,6 @@ namespace AindBehaviorServices.AindBehaviorSession
             _commitHash = other._commitHash;
             _allowDirtyRepo = other._allowDirtyRepo;
             _skipHardwareValidation = other._skipHardwareValidation;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
-        public string DescribedBy
-        {
-            get
-            {
-                return _describedBy;
-            }
-            set
-            {
-                _describedBy = value;
-            }
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
@@ -290,7 +274,6 @@ namespace AindBehaviorServices.AindBehaviorSession
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("describedBy = " + _describedBy + ", ");
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
             stringBuilder.Append("experiment = " + _experiment + ", ");
             stringBuilder.Append("date = " + _date + ", ");

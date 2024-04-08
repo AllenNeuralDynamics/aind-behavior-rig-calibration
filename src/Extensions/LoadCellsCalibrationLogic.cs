@@ -20,8 +20,6 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
     public partial class CalibrationLogic
     {
     
-        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json";
-    
         private string _schemaVersion = "0.3.0";
     
         private System.Collections.Generic.List<int> _channels = new System.Collections.Generic.List<int>();
@@ -34,23 +32,9 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
     
         protected CalibrationLogic(CalibrationLogic other)
         {
-            _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
             _channels = other._channels;
             _offsetBufferSize = other._offsetBufferSize;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
-        public string DescribedBy
-        {
-            get
-            {
-                return _describedBy;
-            }
-            set
-            {
-                _describedBy = value;
-            }
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
@@ -113,7 +97,6 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("describedBy = " + _describedBy + ", ");
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
             stringBuilder.Append("channels = " + _channels + ", ");
             stringBuilder.Append("offset_buffer_size = " + _offsetBufferSize);

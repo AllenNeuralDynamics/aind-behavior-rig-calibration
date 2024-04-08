@@ -15,8 +15,6 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     public partial class CalibrationLogic
     {
     
-        private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json";
-    
         private string _schemaVersion = "0.1.0";
     
         public CalibrationLogic()
@@ -25,21 +23,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         protected CalibrationLogic(CalibrationLogic other)
         {
-            _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("describedBy")]
-        public string DescribedBy
-        {
-            get
-            {
-                return _describedBy;
-            }
-            set
-            {
-                _describedBy = value;
-            }
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
@@ -67,7 +51,6 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("describedBy = " + _describedBy + ", ");
             stringBuilder.Append("schema_version = " + _schemaVersion);
             return true;
         }

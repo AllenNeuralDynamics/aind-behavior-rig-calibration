@@ -57,9 +57,6 @@ class CalibrationLogic(CalibrationLogicModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
 
     schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
-    describedBy: Literal[
-        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json"
-    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json"
     channel_config: Dict[OlfactometerChannel, OlfactometerChannelConfig] = Field(
         {}, description="Configuration of olfactometer channels"
     )
@@ -75,9 +72,6 @@ class Olfactometer(HarpOlfactometer):
 
 class CalibrationRig(AindBehaviorRigModel):
     schema_version: Literal[RIG_VERSION] = RIG_VERSION
-    describedBy: Literal[
-        "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json"
-    ] = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json"
     harp_olfactometer: Olfactometer = Field(..., title="Olfactometer device")
     harp_analog_input: HarpAnalogInput = Field(..., title="Analog input device")
     harp_clock_generator: HarpOlfactometer = Field(..., title="Clock generator device")

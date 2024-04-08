@@ -202,12 +202,6 @@
     }
   },
   "properties": {
-    "describedBy": {
-      "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json",
-      "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json",
-      "title": "Describedby",
-      "type": "string"
-    },
     "schema_version": {
       "const": "0.0.0",
       "default": "0.0.0",

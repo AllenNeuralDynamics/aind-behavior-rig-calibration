@@ -11,12 +11,10 @@ version_post: str = "0.0.2"
 
 class AindBehaviorRigModelPre(AindBehaviorTaskLogicModel):
     schema_version: Literal[version_pre] = version_pre
-    describedBy: str = "Foo"
 
 
 class AindBehaviorRigModelPost(AindBehaviorTaskLogicModel):
     schema_version: Literal[version_post] = version_post
-    describedBy: str = "Foo"
 
 
 class SchemaVersionCoercionTest(unittest.TestCase):
