@@ -1,0 +1,261 @@
+{
+  "definitions": {
+    "LoadCellCalibration": {
+      "properties": {
+        "measured_offset": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "default": {},
+          "title": "Load cells offset. Each entry is expected to be in the format of: Channel : (offset, baseline)",
+          "type": "object"
+        },
+        "measured_weight": {
+          "default": {},
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Load cells measured weight. Each entry is expected to be in the format of: (known weight(g), baseline)",
+          "type": "array"
+        }
+      },
+      "title": "LoadCellCalibration",
+      "type": "object"
+    },
+    "LoadCells": {
+      "properties": {
+        "who_am_i": {
+          "const": 1232,
+          "default": 1232,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "device_type": {
+          "const": "loadcells",
+          "default": "loadcells",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        },
+        "calibration": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/LoadCellsCalibration"
+            }
+          ],
+          "title": "Calibration of the load cells"
+        }
+      },
+      "required": [
+        "port_name",
+        "calibration"
+      ],
+      "title": "LoadCells",
+      "type": "object"
+    },
+    "LoadCellsCalibration": {
+      "description": "Load cells calibration class",
+      "properties": {
+        "device_name": {
+          "default": "LoadCells",
+          "description": "Must match a device name in rig/instrument",
+          "title": "Device name",
+          "type": "string"
+        },
+        "input": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/LoadCellsCalibrationInput"
+            }
+          ],
+          "title": "Input of the calibration"
+        },
+        "output": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/LoadCellsCalibrationOutput"
+            }
+          ],
+          "title": "Output of the calibration."
+        },
+        "date": {
+          "default": null,
+          "oneOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Date"
+        },
+        "description": {
+          "const": "Calibration of the load cells system",
+          "default": "Calibration of the load cells system",
+          "title": "Description",
+          "type": "string"
+        },
+        "notes": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "input",
+        "output"
+      ],
+      "title": "LoadCellsCalibration",
+      "type": "object"
+    },
+    "LoadCellsCalibrationInput": {
+      "properties": {
+        "channels": {
+          "additionalProperties": {
+            "$ref": "#/definitions/LoadCellCalibration"
+          },
+          "default": {},
+          "title": "Load cells calibration data",
+          "type": "object"
+        }
+      },
+      "title": "LoadCellsCalibrationInput",
+      "type": "object"
+    },
+    "LoadCellsCalibrationOutput": {
+      "properties": {
+        "offset": {
+          "additionalProperties": {
+            "description": "Load cell offset value [-255, 255]",
+            "maximum": 255,
+            "minimum": -255,
+            "type": "integer"
+          },
+          "default": {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "title": "Load cells offset",
+          "type": "object"
+        },
+        "baseline": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "default": {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "title": "Load cells baseline to be subtracted from the raw data after applying the offset.",
+          "type": "object"
+        },
+        "weight_lookup": {
+          "additionalProperties": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "default": {},
+          "title": "Load cells lookup calibration table for each channel: (weight, baseline).",
+          "type": "object"
+        }
+      },
+      "title": "LoadCellsCalibrationOutput",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "describedBy": {
+      "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration_rig.json",
+      "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration_rig.json",
+      "title": "Describedby",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.0.0",
+      "default": "0.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "computer_name": {
+      "description": "Computer name",
+      "title": "Computer Name",
+      "type": "string"
+    },
+    "rig_name": {
+      "description": "Rig name",
+      "title": "Rig Name",
+      "type": "string"
+    },
+    "load_cells": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/LoadCells"
+        }
+      ],
+      "title": "Load Cells acquisition device"
+    }
+  },
+  "required": [
+    "rig_name",
+    "load_cells"
+  ],
+  "title": "LoadCellsCalibrationRig",
+  "type": "object"
+}

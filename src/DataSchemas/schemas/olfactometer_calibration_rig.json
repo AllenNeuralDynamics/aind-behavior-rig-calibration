@@ -1,0 +1,164 @@
+{
+  "definitions": {
+    "Olfactometer": {
+      "properties": {
+        "who_am_i": {
+          "const": 1140,
+          "default": 1140,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "device_type": {
+          "const": "olfactometer",
+          "default": "olfactometer",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        },
+        "calibration": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OlfactometerCalibration"
+            }
+          ],
+          "title": "Calibration of the olfactometer"
+        }
+      },
+      "required": [
+        "port_name",
+        "calibration"
+      ],
+      "title": "Olfactometer",
+      "type": "object"
+    },
+    "OlfactometerCalibration": {
+      "description": "Olfactometer calibration class",
+      "properties": {
+        "device_name": {
+          "default": "Olfactometer",
+          "description": "Name of the device being calibrated",
+          "title": "Device name",
+          "type": "string"
+        },
+        "input": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OlfactometerCalibrationInput"
+            }
+          ],
+          "title": "Input of the calibration"
+        },
+        "output": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OlfactometerCalibrationOutput"
+            }
+          ],
+          "title": "Output of the calibration"
+        },
+        "date": {
+          "default": null,
+          "oneOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Date"
+        },
+        "description": {
+          "const": "Calibration of the harp olfactometer device",
+          "default": "Calibration of the harp olfactometer device",
+          "title": "Description",
+          "type": "string"
+        },
+        "notes": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "input",
+        "output"
+      ],
+      "title": "OlfactometerCalibration",
+      "type": "object"
+    },
+    "OlfactometerCalibrationInput": {
+      "properties": {},
+      "title": "OlfactometerCalibrationInput",
+      "type": "object"
+    },
+    "OlfactometerCalibrationOutput": {
+      "properties": {},
+      "title": "OlfactometerCalibrationOutput",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "describedBy": {
+      "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json",
+      "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json",
+      "title": "Describedby",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.0.0",
+      "default": "0.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "computer_name": {
+      "description": "Computer name",
+      "title": "Computer Name",
+      "type": "string"
+    },
+    "rig_name": {
+      "description": "Rig name",
+      "title": "Rig Name",
+      "type": "string"
+    },
+    "olfactometer": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Olfactometer"
+        }
+      ],
+      "title": "Olfactometer device"
+    }
+  },
+  "required": [
+    "rig_name",
+    "olfactometer"
+  ],
+  "title": "OlfactometerCalibrationRig",
+  "type": "object"
+}
