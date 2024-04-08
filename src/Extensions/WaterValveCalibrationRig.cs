@@ -5,14 +5,14 @@
 //----------------------
 
 
-namespace AindBehaviorRigCalibration.WaterValveCalibrationRig
+namespace AindBehaviorServices.WaterValveCalibrationRig
 {
     #pragma warning disable // Disable all warnings
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class WaterValveCalibrationRig
+    public partial class CalibrationRig
     {
     
         private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration_rig.json";
@@ -23,11 +23,11 @@ namespace AindBehaviorRigCalibration.WaterValveCalibrationRig
     
         private string _rigName;
     
-        public WaterValveCalibrationRig()
+        public CalibrationRig()
         {
         }
     
-        protected WaterValveCalibrationRig(WaterValveCalibrationRig other)
+        protected CalibrationRig(CalibrationRig other)
         {
             _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
@@ -95,14 +95,14 @@ namespace AindBehaviorRigCalibration.WaterValveCalibrationRig
             }
         }
     
-        public System.IObservable<WaterValveCalibrationRig> Process()
+        public System.IObservable<CalibrationRig> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WaterValveCalibrationRig(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationRig(this)));
         }
     
-        public System.IObservable<WaterValveCalibrationRig> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<CalibrationRig> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new WaterValveCalibrationRig(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new CalibrationRig(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -144,9 +144,9 @@ namespace AindBehaviorRigCalibration.WaterValveCalibrationRig
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.SerializeObject(value));
         }
 
-        public System.IObservable<string> Process(System.IObservable<WaterValveCalibrationRig> source)
+        public System.IObservable<string> Process(System.IObservable<CalibrationRig> source)
         {
-            return Process<WaterValveCalibrationRig>(source);
+            return Process<CalibrationRig>(source);
         }
     }
 
@@ -158,13 +158,13 @@ namespace AindBehaviorRigCalibration.WaterValveCalibrationRig
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibrationRig>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationRig>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
         public DeserializeFromJson()
         {
-            Type = new Bonsai.Expressions.TypeMapping<WaterValveCalibrationRig>();
+            Type = new Bonsai.Expressions.TypeMapping<CalibrationRig>();
         }
 
         public Bonsai.Expressions.TypeMapping Type { get; set; }

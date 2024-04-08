@@ -5,25 +5,25 @@
 //----------------------
 
 
-namespace AindBehaviorRigCalibration.AindManipulatorCalibration
+namespace AindBehaviorServices.AindManipulatorCalibrationLogic
 {
     #pragma warning disable // Disable all warnings
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class AindManipulatorCalibrationLogic
+    public partial class CalibrationLogic
     {
     
         private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json";
     
         private string _schemaVersion = "0.1.0";
     
-        public AindManipulatorCalibrationLogic()
+        public CalibrationLogic()
         {
         }
     
-        protected AindManipulatorCalibrationLogic(AindManipulatorCalibrationLogic other)
+        protected CalibrationLogic(CalibrationLogic other)
         {
             _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
@@ -55,14 +55,14 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
             }
         }
     
-        public System.IObservable<AindManipulatorCalibrationLogic> Process()
+        public System.IObservable<CalibrationLogic> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AindManipulatorCalibrationLogic(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationLogic(this)));
         }
     
-        public System.IObservable<AindManipulatorCalibrationLogic> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<CalibrationLogic> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new AindManipulatorCalibrationLogic(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new CalibrationLogic(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -102,9 +102,9 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.SerializeObject(value));
         }
 
-        public System.IObservable<string> Process(System.IObservable<AindManipulatorCalibrationLogic> source)
+        public System.IObservable<string> Process(System.IObservable<CalibrationLogic> source)
         {
-            return Process<AindManipulatorCalibrationLogic>(source);
+            return Process<CalibrationLogic>(source);
         }
     }
 
@@ -116,13 +116,13 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibration
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindManipulatorCalibrationLogic>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationLogic>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
         public DeserializeFromJson()
         {
-            Type = new Bonsai.Expressions.TypeMapping<AindManipulatorCalibrationLogic>();
+            Type = new Bonsai.Expressions.TypeMapping<CalibrationLogic>();
         }
 
         public Bonsai.Expressions.TypeMapping Type { get; set; }

@@ -42,6 +42,6 @@
       "type": "integer"
     }
   },
-  "title": "LoadCellsCalibrationLogic",
+  "title": "CalibrationLogic",
   "type": "object"
 }

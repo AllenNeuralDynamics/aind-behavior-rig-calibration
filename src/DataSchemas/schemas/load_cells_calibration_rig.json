@@ -256,6 +256,6 @@
     "rig_name",
     "load_cells"
   ],
-  "title": "LoadCellsCalibrationRig",
+  "title": "CalibrationRig",
   "type": "object"
 }

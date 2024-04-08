@@ -5,7 +5,7 @@
 //----------------------
 
 
-namespace AindBehaviorRigCalibration.OlfactometerCalibration
+namespace AindBehaviorServices.OlfactometerCalibrationLogic
 {
     #pragma warning disable // Disable all warnings
 
@@ -17,9 +17,9 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         private int _channelIndex;
     
-        private OlfactometerChannelType _channelType = AindBehaviorRigCalibration.OlfactometerCalibration.OlfactometerChannelType.Odor;
+        private OlfactometerChannelType _channelType = AindBehaviorServices.OlfactometerCalibrationLogic.OlfactometerChannelType.Odor;
     
-        private OlfactometerChannelConfigFlowRateCapacity _flowRateCapacity = AindBehaviorRigCalibration.OlfactometerCalibration.OlfactometerChannelConfigFlowRateCapacity._100;
+        private OlfactometerChannelConfigFlowRateCapacity _flowRateCapacity = AindBehaviorServices.OlfactometerCalibrationLogic.OlfactometerChannelConfigFlowRateCapacity._100;
     
         private double _flowRate = 100D;
     
@@ -182,7 +182,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
         "sition workflow")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class OlfactometerCalibrationLogic
+    public partial class CalibrationLogic
     {
     
         private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration.json";
@@ -199,11 +199,11 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     
         private double _timeOff = 1D;
     
-        public OlfactometerCalibrationLogic()
+        public CalibrationLogic()
         {
         }
     
-        protected OlfactometerCalibrationLogic(OlfactometerCalibrationLogic other)
+        protected CalibrationLogic(CalibrationLogic other)
         {
             _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
@@ -326,14 +326,14 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
             }
         }
     
-        public System.IObservable<OlfactometerCalibrationLogic> Process()
+        public System.IObservable<CalibrationLogic> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new OlfactometerCalibrationLogic(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationLogic(this)));
         }
     
-        public System.IObservable<OlfactometerCalibrationLogic> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<CalibrationLogic> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new OlfactometerCalibrationLogic(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new CalibrationLogic(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -395,9 +395,9 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
             return Process<OlfactometerChannelConfig>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<OlfactometerCalibrationLogic> source)
+        public System.IObservable<string> Process(System.IObservable<CalibrationLogic> source)
         {
-            return Process<OlfactometerCalibrationLogic>(source);
+            return Process<CalibrationLogic>(source);
         }
     }
 
@@ -410,13 +410,13 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibration
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerChannelConfig>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationLogic>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationLogic>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
         public DeserializeFromJson()
         {
-            Type = new Bonsai.Expressions.TypeMapping<OlfactometerCalibrationLogic>();
+            Type = new Bonsai.Expressions.TypeMapping<CalibrationLogic>();
         }
 
         public Bonsai.Expressions.TypeMapping Type { get; set; }

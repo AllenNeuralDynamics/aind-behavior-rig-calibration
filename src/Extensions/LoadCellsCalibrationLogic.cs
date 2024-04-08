@@ -5,7 +5,7 @@
 //----------------------
 
 
-namespace AindBehaviorRigCalibration.LoadCellsCalibration
+namespace AindBehaviorServices.LoadCellsCalibrationLogic
 {
     #pragma warning disable // Disable all warnings
 
@@ -17,7 +17,7 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
         "tion workflow")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class LoadCellsCalibrationLogic
+    public partial class CalibrationLogic
     {
     
         private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration.json";
@@ -28,11 +28,11 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
     
         private int _offsetBufferSize = 200;
     
-        public LoadCellsCalibrationLogic()
+        public CalibrationLogic()
         {
         }
     
-        protected LoadCellsCalibrationLogic(LoadCellsCalibrationLogic other)
+        protected CalibrationLogic(CalibrationLogic other)
         {
             _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
@@ -101,14 +101,14 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
             }
         }
     
-        public System.IObservable<LoadCellsCalibrationLogic> Process()
+        public System.IObservable<CalibrationLogic> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellsCalibrationLogic(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationLogic(this)));
         }
     
-        public System.IObservable<LoadCellsCalibrationLogic> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<CalibrationLogic> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellsCalibrationLogic(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new CalibrationLogic(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -150,9 +150,9 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.SerializeObject(value));
         }
 
-        public System.IObservable<string> Process(System.IObservable<LoadCellsCalibrationLogic> source)
+        public System.IObservable<string> Process(System.IObservable<CalibrationLogic> source)
         {
-            return Process<LoadCellsCalibrationLogic>(source);
+            return Process<CalibrationLogic>(source);
         }
     }
 
@@ -164,13 +164,13 @@ namespace AindBehaviorRigCalibration.LoadCellsCalibration
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellsCalibrationLogic>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationLogic>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
         public DeserializeFromJson()
         {
-            Type = new Bonsai.Expressions.TypeMapping<LoadCellsCalibrationLogic>();
+            Type = new Bonsai.Expressions.TypeMapping<CalibrationLogic>();
         }
 
         public Bonsai.Expressions.TypeMapping Type { get; set; }

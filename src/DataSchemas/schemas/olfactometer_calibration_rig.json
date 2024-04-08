@@ -255,6 +255,6 @@
     "harp_analog_input",
     "harp_clock_generator"
   ],
-  "title": "OlfactometerCalibrationRig",
+  "title": "CalibrationRig",
   "type": "object"
 }

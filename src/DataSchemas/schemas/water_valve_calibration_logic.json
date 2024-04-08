@@ -41,6 +41,6 @@
   "required": [
     "valve_open_time"
   ],
-  "title": "WaterValveCalibrationLogic",
+  "title": "CalibrationLogic",
   "type": "object"
 }

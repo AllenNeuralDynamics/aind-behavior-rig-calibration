@@ -13,6 +13,6 @@
       "type": "string"
     }
   },
-  "title": "AindManipulatorCalibrationLogic",
+  "title": "CalibrationLogic",
   "type": "object"
 }

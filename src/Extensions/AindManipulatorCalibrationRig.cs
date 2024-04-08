@@ -5,7 +5,7 @@
 //----------------------
 
 
-namespace AindBehaviorRigCalibration.AindManipulatorCalibrationRig
+namespace AindBehaviorServices.AindManipulatorCalibrationRig
 {
     #pragma warning disable // Disable all warnings
 
@@ -504,11 +504,11 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibrationRig
     
         private int _stepInterval = 100;
     
-        private MicrostepResolution _microstepResolution = AindBehaviorRigCalibration.AindManipulatorCalibrationRig.MicrostepResolution._0;
+        private MicrostepResolution _microstepResolution = AindBehaviorServices.AindManipulatorCalibrationRig.MicrostepResolution._0;
     
         private int _maximumStepInterval = 2000;
     
-        private MotorOperationMode _motorOperationMode = AindBehaviorRigCalibration.AindManipulatorCalibrationRig.MotorOperationMode._0;
+        private MotorOperationMode _motorOperationMode = AindBehaviorServices.AindManipulatorCalibrationRig.MotorOperationMode._0;
     
         private int _maxLimit = 24000;
     
@@ -828,7 +828,7 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibrationRig
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class AindManipulatorCalibrationRig
+    public partial class CalibrationRig
     {
     
         private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration_rig.json";
@@ -841,11 +841,11 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibrationRig
     
         private AindManipulatorDevice _manipulator = new AindManipulatorDevice();
     
-        public AindManipulatorCalibrationRig()
+        public CalibrationRig()
         {
         }
     
-        protected AindManipulatorCalibrationRig(AindManipulatorCalibrationRig other)
+        protected CalibrationRig(CalibrationRig other)
         {
             _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
@@ -928,14 +928,14 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibrationRig
             }
         }
     
-        public System.IObservable<AindManipulatorCalibrationRig> Process()
+        public System.IObservable<CalibrationRig> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AindManipulatorCalibrationRig(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationRig(this)));
         }
     
-        public System.IObservable<AindManipulatorCalibrationRig> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<CalibrationRig> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new AindManipulatorCalibrationRig(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new CalibrationRig(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -1008,9 +1008,9 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibrationRig
             return Process<ManipulatorPosition>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<AindManipulatorCalibrationRig> source)
+        public System.IObservable<string> Process(System.IObservable<CalibrationRig> source)
         {
-            return Process<AindManipulatorCalibrationRig>(source);
+            return Process<CalibrationRig>(source);
         }
     }
 
@@ -1028,13 +1028,13 @@ namespace AindBehaviorRigCalibration.AindManipulatorCalibrationRig
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindManipulatorDevice>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AxisConfiguration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ManipulatorPosition>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindManipulatorCalibrationRig>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationRig>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
         public DeserializeFromJson()
         {
-            Type = new Bonsai.Expressions.TypeMapping<AindManipulatorCalibrationRig>();
+            Type = new Bonsai.Expressions.TypeMapping<CalibrationRig>();
         }
 
         public Bonsai.Expressions.TypeMapping Type { get; set; }

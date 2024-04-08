@@ -124,6 +124,6 @@
       "type": "number"
     }
   },
-  "title": "OlfactometerCalibrationLogic",
+  "title": "CalibrationLogic",
   "type": "object"
 }

@@ -26,6 +26,6 @@
   "required": [
     "rig_name"
   ],
-  "title": "WaterValveCalibrationRig",
+  "title": "CalibrationRig",
   "type": "object"
 }

@@ -376,6 +376,6 @@
     "rig_name",
     "manipulator"
   ],
-  "title": "AindManipulatorCalibrationRig",
+  "title": "CalibrationRig",
   "type": "object"
 }

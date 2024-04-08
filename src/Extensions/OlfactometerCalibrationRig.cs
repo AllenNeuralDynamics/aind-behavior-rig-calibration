@@ -5,7 +5,7 @@
 //----------------------
 
 
-namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
+namespace AindBehaviorServices.OlfactometerCalibrationRig
 {
     #pragma warning disable // Disable all warnings
 
@@ -635,7 +635,7 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class OlfactometerCalibrationRig
+    public partial class CalibrationRig
     {
     
         private string _describedBy = "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json";
@@ -652,11 +652,11 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
     
         private HarpOlfactometer _harpClockGenerator = new HarpOlfactometer();
     
-        public OlfactometerCalibrationRig()
+        public CalibrationRig()
         {
         }
     
-        protected OlfactometerCalibrationRig(OlfactometerCalibrationRig other)
+        protected CalibrationRig(CalibrationRig other)
         {
             _describedBy = other._describedBy;
             _schemaVersion = other._schemaVersion;
@@ -769,14 +769,14 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
             }
         }
     
-        public System.IObservable<OlfactometerCalibrationRig> Process()
+        public System.IObservable<CalibrationRig> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new OlfactometerCalibrationRig(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationRig(this)));
         }
     
-        public System.IObservable<OlfactometerCalibrationRig> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<CalibrationRig> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new OlfactometerCalibrationRig(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new CalibrationRig(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -851,9 +851,9 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
             return Process<OlfactometerCalibrationOutput>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<OlfactometerCalibrationRig> source)
+        public System.IObservable<string> Process(System.IObservable<CalibrationRig> source)
         {
-            return Process<OlfactometerCalibrationRig>(source);
+            return Process<CalibrationRig>(source);
         }
     }
 
@@ -871,13 +871,13 @@ namespace AindBehaviorRigCalibration.OlfactometerCalibrationRig
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationInput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationOutput>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationRig>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationRig>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
         public DeserializeFromJson()
         {
-            Type = new Bonsai.Expressions.TypeMapping<OlfactometerCalibrationRig>();
+            Type = new Bonsai.Expressions.TypeMapping<CalibrationRig>();
         }
 
         public Bonsai.Expressions.TypeMapping Type { get; set; }
