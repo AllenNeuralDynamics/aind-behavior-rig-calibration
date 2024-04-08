@@ -1,36 +1,46 @@
 from pathlib import Path
+import inspect
 
 from aind_behavior_services.session import AindBehaviorSessionModel
-from aind_behavior_services.calibration.load_cells import LoadCellsCalibrationLogic, LoadCellsCalibrationRig
-from aind_behavior_services.calibration.olfactometer import OlfactometerCalibrationLogic, OlfactometerCalibrationRig
-from aind_behavior_services.calibration.water_valve import WaterValveCalibrationLogic, WaterValveCalibrationRig
-from aind_behavior_services.calibration.aind_manipulator import AindManipulatorCalibrationLogic, AindManipulatorCalibrationRig
-from aind_behavior_services.utils import convert_pydantic_to_bonsai
+from aind_behavior_services.calibration import load_cells as lc
+from aind_behavior_services.calibration import olfactometer as olf
+from aind_behavior_services.calibration import water_valve as wv
+from aind_behavior_services.calibration import aind_manipulator as m
+from aind_behavior_services.utils import convert_pydantic_to_bonsai, pascal_to_snake_case, snake_to_pascal_case
 
 
 SCHEMA_ROOT = Path("./src/DataSchemas/schemas")
 EXTENSIONS_ROOT = Path("./src/Extensions/")
-NAMESPACE_PREFIX = "AindBehaviorRigCalibration"
+NAMESPACE_PREFIX = "AindBehaviorServices"
 
 
 def main():
-    models = {
-        "olfactometer_calibration": OlfactometerCalibrationLogic,
-        "water_valve_calibration": WaterValveCalibrationLogic,
-        "load_cells_calibration": LoadCellsCalibrationLogic,
-        "aind_manipulator_calibration": AindManipulatorCalibrationLogic,
-        "olfactometer_calibration_rig": OlfactometerCalibrationRig,
-        "water_valve_calibration_rig": WaterValveCalibrationRig,
-        "load_cells_calibration_rig": LoadCellsCalibrationRig,
-        "aind_manipulator_calibration_rig": AindManipulatorCalibrationRig,
-    }
-    convert_pydantic_to_bonsai(
-        models, schema_path=SCHEMA_ROOT, output_path=EXTENSIONS_ROOT, namespace_prefix=NAMESPACE_PREFIX
-    )
+    models = [
+        olf.CalibrationLogic,
+        wv.CalibrationLogic,
+        lc.CalibrationLogic,
+        m.CalibrationLogic,
+        olf.CalibrationRig,
+        wv.CalibrationRig,
+        lc.CalibrationRig,
+        m.CalibrationRig,
+    ]
 
-    core_models = {"aind_behavior_session": AindBehaviorSessionModel}
+    for model in models:
+        module_name = inspect.getmodule(model).__name__
+        module_name = module_name.split(".")[-1]
+        schema_name = f"{module_name}_{pascal_to_snake_case(model.__name__)}"
+        namespace = f"{NAMESPACE_PREFIX}.{snake_to_pascal_case(schema_name)}"
+
+        convert_pydantic_to_bonsai(
+            {schema_name: model}, schema_path=SCHEMA_ROOT, output_path=EXTENSIONS_ROOT, namespace=namespace
+        )
+
     convert_pydantic_to_bonsai(
-        core_models, schema_path=SCHEMA_ROOT, output_path=EXTENSIONS_ROOT, namespace_prefix="AindBehaviorServices"
+        {"aind_behavior_session": AindBehaviorSessionModel},
+        schema_path=SCHEMA_ROOT,
+        output_path=EXTENSIONS_ROOT,
+        namespace=f"{NAMESPACE_PREFIX}.AindBehaviorSession",
     )
 
 
