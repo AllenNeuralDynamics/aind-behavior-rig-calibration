@@ -7,7 +7,7 @@
                  xmlns:p2="clr-namespace:AllenNeuralDynamics.Core.Design;assembly=AllenNeuralDynamics.Core.Design"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:p3="clr-namespace:AindBehaviorRigCalibration.OlfactometerCalibration;assembly=Extensions"
-                 xmlns:p4="clr-namespace:AindVrForagingDataSchema.AindVrForagingRig;assembly=Extensions"
+                 xmlns:p4="clr-namespace:AindBehaviorRigCalibration.OlfactometerCalibrationRig;assembly=Extensions"
                  xmlns:p5="clr-namespace:AindBehaviorServices.AindBehaviorSession;assembly=Extensions"
                  xmlns:p6="clr-namespace:System.Reactive;assembly=System.Reactive.Core"
                  xmlns:p7="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
@@ -170,7 +170,7 @@
         <Name>RawRigSchema</Name>
       </Expression>
       <Expression xsi:type="p4:DeserializeFromJson">
-        <p4:Type xsi:type="TypeMapping" TypeArguments="p4:AindVrForagingRig" />
+        <p4:Type xsi:type="TypeMapping" TypeArguments="p4:OlfactometerCalibrationRig" />
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Take">
@@ -293,33 +293,6 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>RigSchema</Name>
-            </Expression>
-            <Expression xsi:type="MemberSelector">
-              <Selector>WaterValve</Selector>
-            </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>it == null</scr:Expression>
-            </Expression>
-            <Expression xsi:type="rx:Condition">
-              <Workflow>
-                <Nodes>
-                  <Expression xsi:type="WorkflowInput">
-                    <Name>Source1</Name>
-                  </Expression>
-                  <Expression xsi:type="WorkflowOutput" />
-                </Nodes>
-                <Edges>
-                  <Edge From="0" To="1" Label="Source1" />
-                </Edges>
-              </Workflow>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:ThrowException">
-                <p7:Message>No water valve calibration settings found!</p7:Message>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="SubscribeSubject">
               <Name>Channel3AsCarrier</Name>
             </Expression>
             <Expression xsi:type="rx:SelectMany">
@@ -412,10 +385,6 @@
             <Edge From="14" To="15" Label="Source1" />
             <Edge From="15" To="16" Label="Source1" />
             <Edge From="16" To="17" Label="Source1" />
-            <Edge From="18" To="19" Label="Source1" />
-            <Edge From="19" To="20" Label="Source1" />
-            <Edge From="20" To="21" Label="Source1" />
-            <Edge From="21" To="22" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
