@@ -178,20 +178,20 @@ def bonsai_sgen(
 
 def convert_pydantic_to_bonsai(
     models: Dict[str, BaseModel],
+    namespace: str = "DataSchema",
     schema_path: PathLike = Path("./src/DataSchemas/"),
     output_path: PathLike = Path("./src/Extensions/"),
-    namespace_prefix: str = "DataSchema",
     serializer: Optional[List[BonsaiSgenSerializers]] = None,
 ) -> None:
 
     for output_model_name, model in models.items():
-        with open(schema_path / f"{output_model_name}.json", "w") as f:
+        with open(os.path.join(schema_path, f"{output_model_name}.json"), "w", encoding="utf-8") as f:
             json_model = export_schema(model)
             f.write(json_model)
         cmd_return = bonsai_sgen(
-            schema_path=schema_path / f"{output_model_name}.json",
-            output_path=output_path / f"{snake_to_pascal_case(output_model_name)}.cs",
-            namespace=f"{namespace_prefix}.{snake_to_pascal_case(output_model_name)}",
+            schema_path=Path(os.path.join(schema_path, f"{output_model_name}.json")),
+            output_path=Path(os.path.join(output_path, f"{snake_to_pascal_case(output_model_name)}.cs")),
+            namespace=namespace,
             serializer=serializer,
         )
         print(cmd_return.stdout)
