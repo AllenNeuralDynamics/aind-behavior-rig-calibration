@@ -103,7 +103,7 @@ class AindManipulatorCalibration(Calibration):
     output: AindManipulatorCalibrationOutput = Field(default=..., title="Output of the calibration.")
 
 
-class AindManipulatorCalibrationLogic(CalibrationLogicModel):
+class CalibrationLogic(CalibrationLogicModel):
     schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration.json"
@@ -117,7 +117,7 @@ class AindManipulatorDevice(HarpStepperDriver):
     calibration: AindManipulatorCalibration = Field(..., title="Calibration of the manipulator")
 
 
-class AindManipulatorCalibrationRig(AindBehaviorRigModel):
+class CalibrationRig(AindBehaviorRigModel):
     schema_version: Literal[RIG_VERSION] = RIG_VERSION
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration_rig.json"

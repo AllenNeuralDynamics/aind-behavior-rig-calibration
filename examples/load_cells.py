@@ -1,33 +1,27 @@
 import datetime
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.base import get_commit_hash
-from aind_behavior_services.calibration.load_cells import (
-    LoadCellCalibration,
-    LoadCellsCalibration,
-    LoadCellsCalibrationInput,
-    LoadCellsCalibrationOutput,
-    LoadCellsCalibrationLogic,
-)
+from aind_behavior_services.calibration import load_cells as lc
 
 
-lc0 = LoadCellCalibration(measured_offset={0: 0.1, 1: 0.2}, measured_weight=[(0.1, 0.1), (0.2, 0.2)])
-lc1 = LoadCellCalibration(measured_offset={0: 0.1, 1: 0.2}, measured_weight=[(0.1, 0.1), (0.2, 0.2)])
+lc0 = lc.LoadCellCalibration(measured_offset={0: 0.1, 1: 0.2}, measured_weight=[(0.1, 0.1), (0.2, 0.2)])
+lc1 = lc.LoadCellCalibration(measured_offset={0: 0.1, 1: 0.2}, measured_weight=[(0.1, 0.1), (0.2, 0.2)])
 
-lc_calibration_input = LoadCellsCalibrationInput(channels={0: lc0, 1: lc1})
-lc_calibration_output = LoadCellsCalibrationOutput(
+lc_calibration_input = lc.LoadCellsCalibrationInput(channels={0: lc0, 1: lc1})
+lc_calibration_output = lc.LoadCellsCalibrationOutput(
     offset={0: 0, 1: 0},
     baseline={0: 0, 1: 0},
     weight_lookup={0: (0, 0), 1: (0, 0)},
 )
 
-calibration = LoadCellsCalibration(
+calibration = lc.LoadCellsCalibration(
     input=lc_calibration_input,
     output=lc_calibration_output,
     device_name="LoadCells",
     calibration_date=datetime.datetime.now(),
 )
 
-calibration_logic = LoadCellsCalibrationLogic(channels=[0, 1], offset_buffer_size=10)
+calibration_logic = lc.CalibrationLogic(channels=[0, 1], offset_buffer_size=10)
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",

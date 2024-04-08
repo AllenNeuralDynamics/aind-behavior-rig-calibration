@@ -53,7 +53,7 @@ class OlfactometerCalibration(Calibration):
     output: OlfactometerCalibrationOutput = Field(..., title="Output of the calibration")
 
 
-class OlfactometerCalibrationLogic(CalibrationLogicModel):
+class CalibrationLogic(CalibrationLogicModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
 
     schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
@@ -73,7 +73,7 @@ class Olfactometer(HarpOlfactometer):
     calibration: OlfactometerCalibration = Field(..., title="Calibration of the olfactometer")
 
 
-class OlfactometerCalibrationRig(AindBehaviorRigModel):
+class CalibrationRig(AindBehaviorRigModel):
     schema_version: Literal[RIG_VERSION] = RIG_VERSION
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/olfactometer_calibration_rig.json"

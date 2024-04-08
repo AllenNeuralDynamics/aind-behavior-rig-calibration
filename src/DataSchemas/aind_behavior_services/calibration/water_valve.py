@@ -108,7 +108,7 @@ class WaterValveCalibration(Calibration):
     output: WaterValveCalibrationOutput = Field(..., title="Output of the calibration.")
 
 
-class WaterValveCalibrationLogic(CalibrationLogicModel):
+class CalibrationLogic(CalibrationLogicModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
 
     schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
@@ -134,7 +134,7 @@ class WaterValveCalibrationLogic(CalibrationLogicModel):
     )
 
 
-class WaterValveCalibrationRig(AindBehaviorRigModel):
+class CalibrationRig(AindBehaviorRigModel):
     schema_version: Literal[RIG_VERSION] = RIG_VERSION
     describedBy: Literal[
         "https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration_rig.json"
