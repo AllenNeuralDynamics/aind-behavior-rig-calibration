@@ -184,10 +184,13 @@ def convert_pydantic_to_bonsai(
     serializer: Optional[List[BonsaiSgenSerializers]] = None,
 ) -> None:
 
-    for output_model_name, model in models.items():
+    def _write_json(schema_path: PathLike, output_model_name: str, model: BaseModel) -> None:
         with open(os.path.join(schema_path, f"{output_model_name}.json"), "w", encoding="utf-8") as f:
             json_model = export_schema(model)
             f.write(json_model)
+
+    for output_model_name, model in models.items():
+        _write_json(schema_path, output_model_name, model)
         cmd_return = bonsai_sgen(
             schema_path=Path(os.path.join(schema_path, f"{output_model_name}.json")),
             output_path=Path(os.path.join(output_path, f"{snake_to_pascal_case(output_model_name)}.cs")),
@@ -208,6 +211,27 @@ def snake_to_pascal_case(s: str) -> str:
         str: The PascalCase string.
     """
     return "".join(map(capwords, s.split("_")))
+
+
+def pascal_to_snake_case(s: str) -> str:
+    """
+    Converts a PascalCase string to snake_case.
+
+    Args:
+        s (str): The PascalCase string to be converted.
+
+    Returns:
+        str: The snake_case string.
+    """
+    result = ""
+    for i, char in enumerate(s):
+        if char.isupper():
+            if i != 0:
+                result += "_"
+            result += char.lower()
+        else:
+            result += char
+    return result
 
 
 def _build_bonsai_process_command(
