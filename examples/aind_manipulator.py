@@ -35,8 +35,15 @@ calibration_session = AindBehaviorSessionModel(
     commit_hash=get_commit_hash(),
 )
 
+rig = m.CalibrationRig(
+    manipulator=m.AindManipulatorDevice(port_name="COM8", calibration=calibration_data),
+    rig_name="AindManipulatorRig",
+)
+
 seed_path = "local/aind_manipulator_{suffix}.json"
 with open(seed_path.format(suffix="calibration_logic"), "w") as f:
     f.write(calibration_logic.model_dump_json(indent=3))
 with open(seed_path.format(suffix="session"), "w") as f:
     f.write(calibration_session.model_dump_json(indent=3))
+with open(seed_path.format(suffix="rig"), "w") as f:
+    f.write(rig.model_dump_json(indent=3))
