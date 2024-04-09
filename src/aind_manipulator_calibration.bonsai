@@ -177,7 +177,7 @@
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="IntProperty">
-                            <Value>4</Value>
+                            <Value>3</Value>
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="GreaterThan">
@@ -228,7 +228,7 @@
                           </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="IncludeWorkflow" Path="Extensions\ConfigureMotor.bonsai">
-                          <Motor>Motor2</Motor>
+                          <Motor>Motor0 Motor1</Motor>
                           <MicrostepResolution>Microstep8</MicrostepResolution>
                           <StepInterval>100</StepInterval>
                           <StepIntervalAcceleration>100</StepIntervalAcceleration>
@@ -315,7 +315,7 @@
                     <Selector>Item1</Selector>
                   </Expression>
                   <Expression xsi:type="LeftShift">
-                    <Value>3</Value>
+                    <Value>2</Value>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Merge" />
@@ -395,7 +395,7 @@
               <harp:MessageType>Write</harp:MessageType>
               <harp:Payload xsi:type="p2:CreateMoveAbsolutePayload">
                 <p2:Motor0>0</p2:Motor0>
-                <p2:Motor1>-1000</p2:Motor1>
+                <p2:Motor1>0</p2:Motor1>
                 <p2:Motor2>0</p2:Motor2>
                 <p2:Motor3>0</p2:Motor3>
               </harp:Payload>
@@ -513,13 +513,45 @@
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
-                            <Property Name="Motor" Selector="Axis" />
                             <Property Name="MinLimit" Selector="MinLimit" />
                             <Property Name="MaxLimit" Selector="MaxLimit" />
                           </PropertyMappings>
                         </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>Motor</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Axis</Selector>
+                        </Expression>
+                        <Expression xsi:type="Subtract">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p1:Axis">
+                            <Value>_1</Value>
+                          </Operand>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="ByteProperty">
+                            <Value>1</Value>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Zip" />
+                        </Expression>
+                        <Expression xsi:type="InputMapping">
+                          <PropertyMappings>
+                            <Property Name="Value" Selector="Item2" />
+                          </PropertyMappings>
+                          <Selector>Item1</Selector>
+                        </Expression>
+                        <Expression xsi:type="LeftShift">
+                          <Value>2</Value>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="Motor" />
+                          </PropertyMappings>
+                        </Expression>
                         <Expression xsi:type="IncludeWorkflow" Path="Extensions\HomeAxis.bonsai">
-                          <Motor>Motor0</Motor>
+                          <Motor>Motor2</Motor>
                           <MinLimit>-1</MinLimit>
                           <MaxLimit>24000</MaxLimit>
                         </Expression>
@@ -528,10 +560,19 @@
                       <Edges>
                         <Edge From="0" To="1" Label="Source1" />
                         <Edge From="1" To="2" Label="Source1" />
-                        <Edge From="3" To="6" Label="Source1" />
+                        <Edge From="3" To="14" Label="Source1" />
                         <Edge From="4" To="5" Label="Source1" />
-                        <Edge From="5" To="6" Label="Source2" />
+                        <Edge From="5" To="14" Label="Source2" />
                         <Edge From="6" To="7" Label="Source1" />
+                        <Edge From="7" To="8" Label="Source1" />
+                        <Edge From="8" To="9" Label="Source1" />
+                        <Edge From="8" To="10" Label="Source2" />
+                        <Edge From="9" To="10" Label="Source1" />
+                        <Edge From="10" To="11" Label="Source1" />
+                        <Edge From="11" To="12" Label="Source1" />
+                        <Edge From="12" To="13" Label="Source1" />
+                        <Edge From="13" To="14" Label="Source3" />
+                        <Edge From="14" To="15" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -635,8 +676,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p1:ManipulatorPosition">
-                <p1:X>0</p1:X>
-                <p1:Y1>-11</p1:Y1>
+                <p1:X>363</p1:X>
+                <p1:Y1>12</p1:Y1>
                 <p1:Y2>0</p1:Y2>
                 <p1:Z>0</p1:Z>
               </Combinator>
@@ -900,7 +941,7 @@
                   </Expression>
                   <Expression xsi:type="gui:TableLayoutPanelBuilder">
                     <gui:Name>ManipulatorOffset</gui:Name>
-                    <gui:Enabled>false</gui:Enabled>
+                    <gui:Enabled>true</gui:Enabled>
                     <gui:Visible>true</gui:Visible>
                     <gui:ColumnCount>1</gui:ColumnCount>
                     <gui:RowCount>2</gui:RowCount>
@@ -1090,7 +1131,7 @@ Item2 == "Z" ? Item1 * Item3.Z: 0 as Z)
                   </Expression>
                   <Expression xsi:type="gui:PropertyGridBuilder">
                     <gui:Name>CurrentPosition</gui:Name>
-                    <gui:Enabled>true</gui:Enabled>
+                    <gui:Enabled>false</gui:Enabled>
                     <gui:Visible>true</gui:Visible>
                     <gui:Font>Microsoft Sans Serif, 22pt</gui:Font>
                     <gui:HelpVisible>false</gui:HelpVisible>
@@ -1110,7 +1151,7 @@ Item2 == "Z" ? Item1 * Item3.Z: 0 as Z)
                   </Expression>
                   <Expression xsi:type="gui:ButtonBuilder">
                     <gui:Name>SetPosition</gui:Name>
-                    <gui:Enabled>false</gui:Enabled>
+                    <gui:Enabled>true</gui:Enabled>
                     <gui:Visible>true</gui:Visible>
                     <gui:Font>Microsoft Sans Serif, 36pt</gui:Font>
                     <gui:Text>Set position</gui:Text>
@@ -1138,7 +1179,7 @@ Item2 == "Z" ? Item1 * Item3.Z: 0 as Z)
                     <gui:Enabled>false</gui:Enabled>
                     <gui:Visible>true</gui:Visible>
                     <gui:Font>Microsoft Sans Serif, 36pt</gui:Font>
-                    <gui:Text>Idle</gui:Text>
+                    <gui:Text>Moving...</gui:Text>
                   </Expression>
                   <Expression xsi:type="VisualizerMapping">
                     <VisualizerType xsi:type="TypeMapping" TypeArguments="gui:ButtonVisualizer" />
@@ -1176,8 +1217,8 @@ Item2 == "Z" ? Item1 * Item3.Z: 0 as Z)
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="p1:ManipulatorPosition">
-                      <p1:X>0</p1:X>
-                      <p1:Y1>-11</p1:Y1>
+                      <p1:X>363</p1:X>
+                      <p1:Y1>12</p1:Y1>
                       <p1:Y2>0</p1:Y2>
                       <p1:Z>0</p1:Z>
                     </Combinator>
