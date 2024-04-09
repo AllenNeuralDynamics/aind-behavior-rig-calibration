@@ -36,7 +36,7 @@ calibration_session = AindBehaviorSessionModel(
 )
 
 rig = m.CalibrationRig(
-    manipulator=m.AindManipulatorDevice(port_name="COM8", calibration=calibration_data),
+    manipulator=m.AindManipulatorDevice(port_name="COM4", calibration=calibration_data),
     rig_name="AindManipulatorRig",
 )
 
