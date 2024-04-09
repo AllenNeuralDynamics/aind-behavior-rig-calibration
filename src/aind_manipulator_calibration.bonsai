@@ -18,15 +18,18 @@
         <Property Name="SessionPath" />
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\LoadSchemas.bonsai">
-        <TaskLogicPath />
-        <RigPath />
-        <SessionPath />
+        <TaskLogicPath>..\local\aind_manipulator_rig.json</TaskLogicPath>
+        <RigPath>..\local\aind_manipulator_rig.json</RigPath>
+        <SessionPath>..\local\aind_manipulator_rig.json</SessionPath>
       </Expression>
       <Expression xsi:type="SubscribeSubject">
         <Name>RawRigSchema</Name>
       </Expression>
       <Expression xsi:type="p1:DeserializeFromJson">
         <p1:Type xsi:type="TypeMapping" TypeArguments="p1:CalibrationRig" />
+      </Expression>
+      <Expression xsi:type="rx:AsyncSubject">
+        <Name>RigSchema</Name>
       </Expression>
       <Expression xsi:type="MemberSelector">
         <Selector>Manipulator.Calibration.Input</Selector>
@@ -48,6 +51,17 @@
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:HarpMessage">
         <rx:Name>StepperDriverCommands</rx:Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>RigSchema</Name>
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Manipulator.PortName</Selector>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="PortName" />
+        </PropertyMappings>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p2:Device">
@@ -1244,9 +1258,13 @@ Item2 == "Z" ? Item1 * Item3.Z: 0 as Z)
       <Edge From="6" To="7" Label="Source1" />
       <Edge From="7" To="8" Label="Source1" />
       <Edge From="8" To="9" Label="Source1" />
-      <Edge From="10" To="11" Label="Source1" />
-      <Edge From="11" To="12" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="11" To="15" Label="Source1" />
       <Edge From="12" To="13" Label="Source1" />
+      <Edge From="13" To="14" Label="Source1" />
+      <Edge From="14" To="15" Label="Source2" />
+      <Edge From="15" To="16" Label="Source1" />
+      <Edge From="16" To="17" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
