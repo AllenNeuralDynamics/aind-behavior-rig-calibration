@@ -6,6 +6,7 @@ from typing import Dict, Generic, List, Optional, Tuple, Type, TypeVar, Union
 
 import git
 from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionModel, AindBehaviorTaskLogicModel
+from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
 from aind_behavior_services.utils import open_bonsai_process
 from pydantic import ValidationError
 
@@ -119,6 +120,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self._subject_dir = os.path.join(self.config_library_dir, self.SUBJECT_DIR)
         self._task_logic_dir = os.path.join(self.config_library_dir, self.TASK_LOGIC_DIR)
         self._visualizer_layouts_dir = os.path.join(self.config_library_dir, self.VISUALIZERS_DIR, self.computer_name)
+
+        self._subject_db_data: Optional[SubjectEntry] = None
 
     def _print_diagnosis(self) -> None:
         """
@@ -267,6 +270,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
         subject_list = self._get_subject_list(available_batches)
         subject = self._choose_subject(subject_list)
+        self._subject_db_data = subject_list.get_subject(subject)
         notes = self._get_notes()
 
         return self.session_schema(
@@ -282,13 +286,13 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         )
 
     def _get_available_batches(self, folder: str) -> List[str]:
-        available_batches = glob.glob(os.path.join(folder, "*.*"))
+        available_batches = glob.glob(os.path.join(folder, "*.json"))
         available_batches = [batch for batch in available_batches if os.path.isfile(batch)]
         if len(available_batches) == 0:
             raise FileNotFoundError(f"No batch files found in {folder}")
         return available_batches
 
-    def _get_subject_list(self, available_batches: List[str]) -> List[str]:
+    def _get_subject_list(self, available_batches: List[str]) -> SubjectDataBase:
         subject_list = None
         while subject_list is None:
             try:
@@ -303,24 +307,26 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                         raise FileNotFoundError(f"File not found: {batch_file}")
                     print(f"Using {batch_file}.")
                 with open(batch_file, "r", encoding="utf-8") as file:
-                    subject_list = file.readlines()
-                subject_list = [subject.strip() for subject in subject_list if subject.strip()]
-                if len(subject_list) == 0:
+                    subject_list = SubjectDataBase.model_validate_json(file.read())
+                if len(subject_list.subjects) == 0:
                     print(f"No subjects found in {batch_file}")
                     raise ValueError()
+            except ValidationError:
+                print("Failed to validate pydantic model. Try again.")
             except ValueError:
                 print("Invalid choice. Try again.")
             except FileNotFoundError:
                 print("Invalid choice. Try again.")
             except IOError:
                 print("Invalid choice. Try again.")
+
         return subject_list
 
-    def _choose_subject(self, subject_list: List[str]) -> str:
+    def _choose_subject(self, subject_list: SubjectDataBase) -> str:
         subject = None
         while subject is None:
             try:
-                subject = self.pick_file_from_list(subject_list, prompt="Choose a subject:", override_zero=(None, None))
+                subject = self.pick_file_from_list(list(subject_list.subjects.keys()), prompt="Choose a subject:", override_zero=(None, None))
             except ValueError:
                 print("Invalid choice. Try again.")
         return subject
@@ -351,19 +357,33 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 except ValueError:
                     print("Invalid choice. Try again.")
 
-    def prompt_task_logic_input(self, folder: Optional[str] = None) -> TTaskLogic:
+    def prompt_task_logic_input(self, folder: Optional[str] = None, hint_input: Optional[SubjectEntry] = None) -> TTaskLogic:
         _path = os.path.join(self.config_library_dir, folder) if folder is not None else self._task_logic_dir
-        available_files = glob.glob(os.path.join(_path, "*.json"))
-        while True:
+
+        task_logic: TTaskLogic = None
+        while task_logic is None:
             try:
-                path = self.pick_file_from_list(
-                    available_files, prompt="Choose a task logic:", override_zero=(None, None)
-                )
-                if not os.path.isfile(path):
-                    raise FileNotFoundError(f"File not found: {path}")
-                task_logic = self.load_json_model(path, self.task_logic_schema)
-                print(f"Using {path}.")
-                return task_logic
+                if hint_input is None:
+                    available_files = glob.glob(os.path.join(_path, "*.json"))
+                    path = self.pick_file_from_list(
+                        available_files, prompt="Choose a task logic:", override_zero=(None, None)
+                    )
+                    if not os.path.isfile(path):
+                        raise FileNotFoundError(f"File not found: {path}")
+                    task_logic = self.load_json_model(path, self.task_logic_schema)
+                    print(f"Using {path}.")
+
+                else:
+                    hinted_path = os.path.join(_path, hint_input + ".json")
+                    if not os.path.isfile(path):
+                        hint_input = None
+                        raise FileNotFoundError(f"Hinted file not found: {path}. Try entering manually.")
+                    use_hint = self.prompt_yes_no_question(f"Would you like to go with the task file: {hinted_path}?")
+                    if use_hint:
+                        task_logic = self.load_json_model(hinted_path, self.task_logic_schema)
+                    else:
+                        hint_input = None
+
             except ValidationError as validation_error:
                 print(validation_error)
                 print("Failed to validate pydantic model. Try again.")
@@ -371,6 +391,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 print("Invalid choice. Try again.")
             except FileNotFoundError:
                 print("Invalid choice. Try again.")
+        return task_logic
 
     def prompt_visualizer_layout_input(self, folder_name: Optional[str] = None) -> Optional[str]:
         layout_schemas_path = (
@@ -401,8 +422,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         try:
             self._print_header()
             self._validate_dependencies()
-            task_logic: TTaskLogic = self.prompt_task_logic_input()
             session: TSession = self.prompt_session_input()
+            task_logic: TTaskLogic = self.prompt_task_logic_input(hint_input=self._subject_db_data)
             rig: TRig = self.prompt_rig_input()
             bonsai_visualizer_layout: Optional[str] = self.prompt_visualizer_layout_input()
             input("Press enter to launch Bonsai or Control+C to exit...")
