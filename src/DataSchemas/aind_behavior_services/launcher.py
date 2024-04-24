@@ -374,7 +374,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     print(f"Using {path}.")
 
                 else:
-                    hinted_path = os.path.join(_path, hint_input + ".json")
+                    hinted_path = os.path.join(_path, hint_input.task_logic_target + ".json")
                     if not os.path.isfile(path):
                         hint_input = None
                         raise FileNotFoundError(f"Hinted file not found: {path}. Try entering manually.")
