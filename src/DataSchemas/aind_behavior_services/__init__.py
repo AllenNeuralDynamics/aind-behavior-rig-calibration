@@ -1,4 +1,4 @@
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 
 from .rig import AindBehaviorRigModel
 from .session import AindBehaviorSessionModel

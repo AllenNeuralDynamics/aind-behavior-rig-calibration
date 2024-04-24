@@ -2,7 +2,7 @@
 from datetime import datetime
 from typing import Literal, Optional
 
-from aind_behavior_services.base import SchemaVersionedModel, get_commit_hash
+from aind_behavior_services.base import SchemaVersionedModel
 
 # Import aind-datas-schema types
 from pydantic import Field

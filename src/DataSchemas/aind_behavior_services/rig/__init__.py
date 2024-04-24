@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from enum import Enum
-from typing import Annotated, Any, Literal, Optional, Union
+from typing import Annotated, Literal, Optional, Union
 
 from aind_behavior_services.base import SchemaVersionedModel
 from pydantic import BaseModel, Field, RootModel
