@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from typing import Literal, Optional, Dict
+from typing import Dict, Literal, Optional
 
 from aind_behavior_services.base import SchemaVersionedModel
 from pydantic import BaseModel, Field
-
 
 # Import core types
 
@@ -18,7 +17,9 @@ class SubjectEntry(BaseModel):
 
 class SubjectDataBase(SchemaVersionedModel):
     schema_version: Literal[__version__] = __version__
-    subjects: Dict[str, Optional[SubjectEntry]] = Field(default_factory=dict, description="List of subjects and their task logic targets")
+    subjects: Dict[str, Optional[SubjectEntry]] = Field(
+        default_factory=dict, description="List of subjects and their task logic targets"
+    )
 
     def add_subject(self, subject: str, subject_entry: Optional[SubjectEntry] = None):
         if subject in self.subjects:

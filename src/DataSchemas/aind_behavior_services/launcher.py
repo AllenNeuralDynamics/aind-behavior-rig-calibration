@@ -2,7 +2,7 @@ import argparse
 import glob
 import os
 import secrets
-from typing import Dict, Generic, List, Optional, Tuple, Type, TypeVar, Union
+from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union
 
 import git
 from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionModel, AindBehaviorTaskLogicModel
@@ -49,8 +49,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     ██████╗██╗      █████╗ ██████╗ ███████╗
     ██╔════╝██║     ██╔══██╗██╔══██╗██╔════╝
-    ██║     ██║     ███████║██████╔╝█████╗  
-    ██║     ██║     ██╔══██║██╔══██╗██╔══╝  
+    ██║     ██║     ███████║██████╔╝█████╗
+    ██║     ██║     ██╔══██║██╔══██╗██╔══╝
     ╚██████╗███████╗██║  ██║██████╔╝███████╗
     ╚═════╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝
 
@@ -326,7 +326,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         subject = None
         while subject is None:
             try:
-                subject = self.pick_file_from_list(list(subject_list.subjects.keys()), prompt="Choose a subject:", override_zero=(None, None))
+                subject = self.pick_file_from_list(
+                    list(subject_list.subjects.keys()), prompt="Choose a subject:", override_zero=(None, None)
+                )
             except ValueError:
                 print("Invalid choice. Try again.")
         return subject
@@ -357,7 +359,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 except ValueError:
                     print("Invalid choice. Try again.")
 
-    def prompt_task_logic_input(self, folder: Optional[str] = None, hint_input: Optional[SubjectEntry] = None) -> TTaskLogic:
+    def prompt_task_logic_input(
+        self, folder: Optional[str] = None, hint_input: Optional[SubjectEntry] = None
+    ) -> TTaskLogic:
         _path = os.path.join(self.config_library_dir, folder) if folder is not None else self._task_logic_dir
 
         task_logic: TTaskLogic = None
