@@ -40,7 +40,8 @@ docs = [
     'sphinx-jinja',
     'autodoc_pydantic',
     'myst_parser',
-    'sphinx-jsonschema'
+    'sphinx-jsonschema',
+    'sphinx-copybutton'
 ]
 
 [tool.setuptools.packages.find]
