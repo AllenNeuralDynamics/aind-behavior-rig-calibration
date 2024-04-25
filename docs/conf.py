@@ -12,6 +12,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../src/DataSchemas"))
 from aind_behavior_services import __version__
+import glob
 
 SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/tree/main/src/DataSchemas/"
 
@@ -20,6 +21,44 @@ project = 'AIND Behavior Services'
 copyright = "2024, Allen Institute for Neural Dynamics"
 author = 'Bruno Cruz'
 release = __version__
+
+
+# -- Generate jsons --------------------------------------------------------------
+
+json_root_path = os.path.abspath("../src/DataSchemas/schemas")
+json_files = glob.glob(os.path.join(json_root_path, "*.json"))
+rst_target_path = os.path.abspath("json-schemas")
+
+root_template = """
+json-schemas
+-------------
+.. toctree::
+   :maxdepth: 4
+
+"""
+
+leaf_template = """
+{json_file_name}
+-------------
+
+`Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/{json_file_name}.json>`_
+
+.. jsonschema:: https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/{json_file_name}.json
+   :lift_definitions:
+   :auto_reference:
+
+"""
+
+for json_file in json_files:
+    json_file_name = os.path.basename(json_file)
+    root_template += f"   json-schemas/{json_file_name.replace('.json', '')}\n"
+    with open(os.path.join(rst_target_path, f"{json_file_name.replace('.json', '')}.rst"), "w") as f:
+        f.write(leaf_template.format(json_file_name=json_file_name.replace('.json', '')))
+
+with open("json-schemas.rst", "w") as f:
+    f.write(root_template)
+
+
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -71,3 +110,6 @@ def linkcode_resolve(domain, info):
         return None
     filename = info["module"].replace(".", "/")
     return f"{SOURCE_ROOT}/{filename}.py"
+
+
+
