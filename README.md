@@ -57,6 +57,8 @@ To run the currently available tests, run `python -m unittest` from the root of 
 
 Where possible, adhere to [Semantic Versioning](https://semver.org/).
 
+---
+
 ## Project dependency tree
 
 ![Dependency tree](https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/raw/main/assets/dependency_tree.drawio.svg)
