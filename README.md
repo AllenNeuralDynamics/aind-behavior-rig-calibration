@@ -59,4 +59,4 @@ Where possible, adhere to [Semantic Versioning](https://semver.org/).
 
 ## Project dependency tree
 
-![Dependency tree](./assets/dependency_tree.drawio.svg)
+![Dependency tree](https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/raw/main/assets/dependency_tree.drawio.svg)
