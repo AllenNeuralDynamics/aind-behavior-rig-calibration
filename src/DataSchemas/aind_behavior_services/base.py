@@ -54,7 +54,7 @@ class SemVerAnnotation:
         return handler(core_schema.str_schema())
 
 
-def coerce_schema_version(cls: BaseModel, v: str) -> str:
+def coerce_schema_version(cls: SchemaVersionedModel, v: str) -> str:
     _default_schema_version = Version.parse(get_args(cls.model_fields["schema_version"].annotation)[0])
     v = Version.parse(v)
     if v > _default_schema_version:
