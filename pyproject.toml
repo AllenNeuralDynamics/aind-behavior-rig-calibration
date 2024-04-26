@@ -21,8 +21,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    'aind_behavior_services[linters]'
+
+aind-data-schema-mapper = [
+    'aind-data-schema==0.33.9'
 ]
 
 linters = [
