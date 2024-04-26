@@ -13,9 +13,6 @@ from pydantic import BaseModel, Field, RootModel, field_validator
 __version__ = "0.3.0"
 
 
-
-
-
 class Device(BaseModel):
     device_type: str = Field(..., description="Device type")
     additional_settings: Optional[BaseModel] = Field(default=None, description="Additional settings")
@@ -23,9 +20,12 @@ class Device(BaseModel):
 
 
 class VideoWriterFfmpeg(BaseModel):
-    video_writer_type: Literal["FFMPEG"] 
+    video_writer_type: Literal["FFMPEG"]
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
-    output_arguments: str = Field(default="-c:v h264_nvenc -vsync 0 -2pass 1 -bf:v 0 -qp 13-preset medium -b:v 20M -rc:v cbr", description="Output arguments")
+    output_arguments: str = Field(
+        default="-c:v h264_nvenc -vsync 0 -2pass 1 -bf:v 0 -qp 13-preset medium -b:v 20M -rc:v cbr",
+        description="Output arguments",
+    )
 
 
 class VideoWriterOpenCv(BaseModel):
@@ -41,7 +41,9 @@ class VideoWriter(RootModel):
 class WebCamera(Device):
     device_type: Literal["WebCamera"] = Field(default="WebCamera", description="Device type")
     index: int = Field(default=0, ge=0, description="Camera index")
-    video_writer: Optional[VideoWriter] = Field(default=None, description="Video writer. If not provided, no video will be saved.")
+    video_writer: Optional[VideoWriter] = Field(
+        default=None, description="Video writer. If not provided, no video will be saved."
+    )
 
 
 class SpinnakerCamera(Device):
@@ -51,7 +53,9 @@ class SpinnakerCamera(Device):
     color_processing: Literal["Default", "NoColorProcessing"] = Field(default="Default", description="Color processing")
     exposure: int = Field(default=1000, ge=100, description="Exposure time")
     gain: float = Field(default=0, ge=0, description="Gain")
-    video_writer: Optional[VideoWriter] = Field(default=None, description="Video writer. If not provided, no video will be saved.")
+    video_writer: Optional[VideoWriter] = Field(
+        default=None, description="Video writer. If not provided, no video will be saved."
+    )
 
 
 class Camera(RootModel):
@@ -165,7 +169,6 @@ class HarpDevice(RootModel):
         ],
         Field(discriminator="device_type"),
     ]
-
 
 
 class Screen(Device):
