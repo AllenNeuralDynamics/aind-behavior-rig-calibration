@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-from typing import Type, TypeVar, Union
+import json
+from typing import Type, TypeVar, Union, Optional, Dict, Any
 
 from aind_data_schema.core.session import Session, Stream, Modality, StimulusEpoch, Software
 from aind_behavior_services import AindBehaviorSessionModel, AindBehaviorRigModel, AindBehaviorTaskLogicModel
@@ -12,9 +13,9 @@ TSchema = TypeVar("TSchema", bound=Union[AindBehaviorSessionModel, AindBehaviorR
 
 
 def map_to_aind_data_schema(session_root: Path,
-                            session: Type[TSession],
-                            rig: Type[TRig],
-                            task_logic: type[TTaskLogic]) -> Session:
+                            session: Type[TSession] = AindBehaviorSessionModel,
+                            rig: Type[TRig] = AindBehaviorRigModel,
+                            task_logic: Optional[type[TTaskLogic]] = None) -> Session:
     """
     Maps the input session found in `session_root` to the aind-data-schema Session object.
 
@@ -32,17 +33,24 @@ def map_to_aind_data_schema(session_root: Path,
     task_logic_path = session_root / "Config" / "tasklogic_input.json"
     rig_path = session_root / "Config" / "rig_input.json"
 
-    return mapper(
-        model_from_json_file(session_path, session),
-        model_from_json_file(rig_path, rig),
-        model_from_json_file(task_logic_path, task_logic)
-    )
+    if task_logic is None:
+        return mapper(
+            model_from_json_file(session_path, session),
+            model_from_json_file(rig_path, rig),
+            json.loads((task_logic_path.read_text()))
+        )
+    else:
+        return mapper(
+            model_from_json_file(session_path, session),
+            model_from_json_file(rig_path, rig),
+            model_from_json_file(task_logic_path, task_logic)
+        )
 
 
 def mapper(
     session: TSession,
     rig: TRig,
-    task_logic: TTaskLogic,
+    task_logic: TTaskLogic | Dict[str, Any],
 ) -> Session:
     """
     Maps the input session, rig, and task logic to an aind-data-schema Session object.
@@ -55,6 +63,13 @@ def mapper(
     Returns:
         Session: The mapped aind-data-schema Session object.
     """
+
+    if isinstance(task_logic, dict):
+        pass
+    elif isinstance(task_logic, AindBehaviorTaskLogicModel):
+        task_logic = task_logic.model_dump()
+    else:
+        raise ValueError("task_logic must be a dict or AindBehaviorTaskLogicModel")
 
     ads_session = Session(
         experimenter_full_name=session.experimenter,
