@@ -7,11 +7,6 @@ from typing import Annotated, Literal, Optional, Union, Dict
 from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
 from pydantic import BaseModel, Field, RootModel, field_validator
 
-# Import core types
-
-
-__version__ = "0.3.0"
-
 
 class Device(BaseModel):
     device_type: str = Field(..., description="Device type")
@@ -189,7 +184,6 @@ class Treadmill(BaseModel):
 class AindBehaviorRigModel(SchemaVersionedModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
-    schema_version: Literal[__version__] = __version__
 
     @field_validator("schema_version", mode="before")
     @classmethod
