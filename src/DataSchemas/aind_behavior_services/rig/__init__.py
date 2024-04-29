@@ -8,9 +8,6 @@ from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_vers
 from pydantic import BaseModel, Field, RootModel, field_validator
 
 
-__version__ = "0.2.0"
-
-
 class Device(BaseModel):
     device_type: str = Field(..., description="Device type")
     additional_settings: Optional[BaseModel] = Field(default=None, description="Additional settings")
@@ -153,7 +150,6 @@ class Treadmill(BaseModel):
 class AindBehaviorRigModel(SchemaVersionedModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
-    schema_version: Literal[__version__] = __version__
 
     @field_validator("schema_version", mode="before")
     @classmethod
