@@ -106,7 +106,7 @@ def mapper(
                 url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/src/vr-foraging.bonsai".format(
                     sha=session.commit_hash
                 ),
-                parameters=task_logic.model_dump(),
+                parameters=task_logic,
             ),
         )],
     )
