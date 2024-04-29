@@ -3,10 +3,6 @@ from datetime import datetime
 from typing import Literal, Optional, List
 
 from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
-
-# Import aind-datas-schema types
-from pydantic import Field, field_validator
-from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
 from pydantic import Field, field_validator
 
 __version__ = "0.2.0"
