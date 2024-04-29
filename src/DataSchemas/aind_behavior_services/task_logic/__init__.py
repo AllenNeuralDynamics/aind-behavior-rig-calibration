@@ -3,7 +3,7 @@ from typing import Literal, Optional
 from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
 from pydantic import field_validator, Field
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 
 class AindBehaviorTaskLogicModel(SchemaVersionedModel):
