@@ -2,10 +2,8 @@
 from datetime import datetime
 from typing import Literal, Optional, List
 
-from aind_behavior_services.base import SchemaVersionedModel
-
-# Import aind-datas-schema types
-from pydantic import Field
+from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
+from pydantic import Field, field_validator
 
 __version__ = "0.2.0"
 
@@ -25,3 +23,8 @@ class AindBehaviorSessionModel(SchemaVersionedModel):
     commit_hash: Optional[str] = Field(default=None, description="Commit hash of the repository")
     allow_dirty_repo: bool = Field(default=False, description="Allow running from a dirty repository")
     skip_hardware_validation: bool = Field(default=False, description="Skip hardware validation")
+
+    @field_validator("schema_version", mode="before")
+    @classmethod
+    def coerce_version(cls, v: str) -> str:
+        return coerce_schema_version(cls, v)
