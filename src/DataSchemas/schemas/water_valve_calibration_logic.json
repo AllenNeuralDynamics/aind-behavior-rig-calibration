@@ -7,6 +7,19 @@
       "title": "Schema Version",
       "type": "string"
     },
+    "rng_seed": {
+      "default": null,
+      "description": "Seed of the random number generator",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Rng Seed"
+    },
     "valve_open_time": {
       "description": "An array with the times (s) the valve is open during calibration",
       "items": {

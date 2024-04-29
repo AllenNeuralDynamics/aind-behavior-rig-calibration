@@ -22,6 +22,8 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     
         private string _schemaVersion = "0.3.0";
     
+        private double? _rngSeed;
+    
         private System.Collections.Generic.List<double> _valveOpenTime = new System.Collections.Generic.List<double>();
     
         private double _valveOpenInterval = 0.2D;
@@ -35,6 +37,7 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
         protected CalibrationLogic(CalibrationLogic other)
         {
             _schemaVersion = other._schemaVersion;
+            _rngSeed = other._rngSeed;
             _valveOpenTime = other._valveOpenTime;
             _valveOpenInterval = other._valveOpenInterval;
             _repeatCount = other._repeatCount;
@@ -50,6 +53,24 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
             set
             {
                 _schemaVersion = value;
+            }
+        }
+    
+        /// <summary>
+        /// Seed of the random number generator
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("rng_seed")]
+        [System.ComponentModel.DescriptionAttribute("Seed of the random number generator")]
+        public double? RngSeed
+        {
+            get
+            {
+                return _rngSeed;
+            }
+            set
+            {
+                _rngSeed = value;
             }
         }
     
@@ -118,6 +139,7 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
+            stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
             stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
             stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
             stringBuilder.Append("repeat_count = " + _repeatCount);

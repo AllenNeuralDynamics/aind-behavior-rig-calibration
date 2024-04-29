@@ -5,6 +5,19 @@
       "default": "0.1.0",
       "title": "Schema Version",
       "type": "string"
+    },
+    "rng_seed": {
+      "default": null,
+      "description": "Seed of the random number generator",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Rng Seed"
     }
   },
   "title": "CalibrationLogic",

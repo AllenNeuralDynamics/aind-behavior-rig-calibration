@@ -79,6 +79,19 @@
       "title": "Schema Version",
       "type": "string"
     },
+    "rng_seed": {
+      "default": null,
+      "description": "Seed of the random number generator",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Rng Seed"
+    },
     "channel_config": {
       "additionalProperties": {
         "$ref": "#/definitions/OlfactometerChannelConfig"

@@ -17,6 +17,8 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         private string _schemaVersion = "0.1.0";
     
+        private double? _rngSeed;
+    
         public CalibrationLogic()
         {
         }
@@ -24,6 +26,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
         protected CalibrationLogic(CalibrationLogic other)
         {
             _schemaVersion = other._schemaVersion;
+            _rngSeed = other._rngSeed;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
@@ -39,6 +42,24 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
             }
         }
     
+        /// <summary>
+        /// Seed of the random number generator
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("rng_seed")]
+        [System.ComponentModel.DescriptionAttribute("Seed of the random number generator")]
+        public double? RngSeed
+        {
+            get
+            {
+                return _rngSeed;
+            }
+            set
+            {
+                _rngSeed = value;
+            }
+        }
+    
         public System.IObservable<CalibrationLogic> Process()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationLogic(this)));
@@ -51,7 +72,8 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("schema_version = " + _schemaVersion);
+            stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
+            stringBuilder.Append("rng_seed = " + _rngSeed);
             return true;
         }
     

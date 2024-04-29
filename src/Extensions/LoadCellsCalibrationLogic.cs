@@ -22,6 +22,8 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
     
         private string _schemaVersion = "0.3.0";
     
+        private double? _rngSeed;
+    
         private System.Collections.Generic.List<int> _channels = new System.Collections.Generic.List<int>();
     
         private int _offsetBufferSize = 200;
@@ -33,6 +35,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
         protected CalibrationLogic(CalibrationLogic other)
         {
             _schemaVersion = other._schemaVersion;
+            _rngSeed = other._rngSeed;
             _channels = other._channels;
             _offsetBufferSize = other._offsetBufferSize;
         }
@@ -47,6 +50,24 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
             set
             {
                 _schemaVersion = value;
+            }
+        }
+    
+        /// <summary>
+        /// Seed of the random number generator
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("rng_seed")]
+        [System.ComponentModel.DescriptionAttribute("Seed of the random number generator")]
+        public double? RngSeed
+        {
+            get
+            {
+                return _rngSeed;
+            }
+            set
+            {
+                _rngSeed = value;
             }
         }
     
@@ -98,6 +119,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
+            stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
             stringBuilder.Append("channels = " + _channels + ", ");
             stringBuilder.Append("offset_buffer_size = " + _offsetBufferSize);
             return true;

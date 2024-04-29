@@ -187,6 +187,8 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
     
         private string _schemaVersion = "0.3.0";
     
+        private double? _rngSeed;
+    
         private System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> _channelConfig;
     
         private double _fullFlowRate = 1000D;
@@ -204,6 +206,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
         protected CalibrationLogic(CalibrationLogic other)
         {
             _schemaVersion = other._schemaVersion;
+            _rngSeed = other._rngSeed;
             _channelConfig = other._channelConfig;
             _fullFlowRate = other._fullFlowRate;
             _nRepeatsPerStimulus = other._nRepeatsPerStimulus;
@@ -221,6 +224,24 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
             set
             {
                 _schemaVersion = value;
+            }
+        }
+    
+        /// <summary>
+        /// Seed of the random number generator
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("rng_seed")]
+        [System.ComponentModel.DescriptionAttribute("Seed of the random number generator")]
+        public double? RngSeed
+        {
+            get
+            {
+                return _rngSeed;
+            }
+            set
+            {
+                _rngSeed = value;
             }
         }
     
@@ -323,6 +344,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
+            stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
             stringBuilder.Append("channel_config = " + _channelConfig + ", ");
             stringBuilder.Append("full_flow_rate = " + _fullFlowRate + ", ");
             stringBuilder.Append("n_repeats_per_stimulus = " + _nRepeatsPerStimulus + ", ");
