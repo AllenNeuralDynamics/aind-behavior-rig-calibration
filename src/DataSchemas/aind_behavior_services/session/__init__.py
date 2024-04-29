@@ -1,6 +1,6 @@
 # Import core types
 from datetime import datetime
-from typing import Literal, Optional, List
+from typing import List, Literal, Optional
 
 from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
 from pydantic import Field, field_validator

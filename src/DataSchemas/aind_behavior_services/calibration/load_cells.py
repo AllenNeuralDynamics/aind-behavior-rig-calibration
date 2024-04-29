@@ -1,4 +1,4 @@
-from typing import Annotated, Dict, List, Literal, Optional, Tuple
+from typing import Annotated, Dict, List, Literal, Tuple
 
 from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
 from aind_behavior_services.rig import AindBehaviorRigModel, HarpLoadCells

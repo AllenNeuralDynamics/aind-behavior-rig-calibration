@@ -1,7 +1,7 @@
-from typing import Literal, Optional
+from typing import Optional
 
 from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
-from pydantic import field_validator, Field
+from pydantic import Field, field_validator
 
 
 class AindBehaviorTaskLogicModel(SchemaVersionedModel):

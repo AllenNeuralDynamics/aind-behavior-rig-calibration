@@ -1,10 +1,10 @@
+import json
 import os
 from pathlib import Path
-import json
-from typing import Type, TypeVar, Union, Optional, Dict, Any
+from typing import Any, Dict, Optional, Type, TypeVar, Union
 
-from aind_data_schema.core.session import Session, Stream, Modality, StimulusEpoch, Software
-from aind_behavior_services import AindBehaviorSessionModel, AindBehaviorRigModel, AindBehaviorTaskLogicModel
+from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionModel, AindBehaviorTaskLogicModel
+from aind_data_schema.core.session import Modality, Session, Software, StimulusEpoch, Stream
 
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)
@@ -12,10 +12,12 @@ TTaskLogic = TypeVar("TTaskLogic", bound=AindBehaviorTaskLogicModel)
 TSchema = TypeVar("TSchema", bound=Union[AindBehaviorSessionModel, AindBehaviorRigModel, AindBehaviorTaskLogicModel])
 
 
-def map_to_aind_data_schema(session_root: Path,
-                            session: Type[TSession] = AindBehaviorSessionModel,
-                            rig: Type[TRig] = AindBehaviorRigModel,
-                            task_logic: Optional[type[TTaskLogic]] = None) -> Session:
+def map_to_aind_data_schema(
+    session_root: Path,
+    session: Type[TSession] = AindBehaviorSessionModel,
+    rig: Type[TRig] = AindBehaviorRigModel,
+    task_logic: Optional[type[TTaskLogic]] = None,
+) -> Session:
     """
     Maps the input session found in `session_root` to the aind-data-schema Session object.
 
@@ -37,13 +39,13 @@ def map_to_aind_data_schema(session_root: Path,
         return mapper(
             model_from_json_file(session_path, session),
             model_from_json_file(rig_path, rig),
-            json.loads((task_logic_path.read_text()))
+            json.loads((task_logic_path.read_text())),
         )
     else:
         return mapper(
             model_from_json_file(session_path, session),
             model_from_json_file(rig_path, rig),
-            model_from_json_file(task_logic_path, task_logic)
+            model_from_json_file(task_logic_path, task_logic),
         )
 
 
@@ -88,27 +90,31 @@ def mapper(
         ],
         mouse_platform_name="Mouse platform",
         active_mouse_platform=True,
-        stimulus_epochs=[StimulusEpoch(
-            stimulus_name="vr-foraging task",
-            stimulus_start_time=session.date,
-            stimulus_end_time=session.date,
-            stimulus_modalities=["None"],
-            software=[Software(
-                name="Bonsai",
-                version=session.commit_hash,
-                url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/bonsai/Bonsai.config".format(
-                    sha=session.commit_hash
+        stimulus_epochs=[
+            StimulusEpoch(
+                stimulus_name="vr-foraging task",
+                stimulus_start_time=session.date,
+                stimulus_end_time=session.date,
+                stimulus_modalities=["None"],
+                software=[
+                    Software(
+                        name="Bonsai",
+                        version=session.commit_hash,
+                        url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/bonsai/Bonsai.config".format(
+                            sha=session.commit_hash
+                        ),
+                    )
+                ],
+                script=Software(
+                    name="vr-foraging.bonsai",
+                    version=session.commit_hash,
+                    url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/src/vr-foraging.bonsai".format(
+                        sha=session.commit_hash
+                    ),
+                    parameters=task_logic,
                 ),
-            )],
-            script=Software(
-                name="vr-foraging.bonsai",
-                version=session.commit_hash,
-                url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/src/vr-foraging.bonsai".format(
-                    sha=session.commit_hash
-                ),
-                parameters=task_logic,
-            ),
-        )],
+            )
+        ],
     )
     return ads_session
 
