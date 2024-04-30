@@ -41,6 +41,7 @@ class OlfactometerCalibrationInput(BaseModel):
         {}, description="Configuration of olfactometer channels"
     )
 
+
 class OlfactometerCalibrationOutput(BaseModel):
     pass
 
