@@ -37,8 +37,9 @@ class OlfactometerChannelConfig(BaseModel):
 
 
 class OlfactometerCalibrationInput(BaseModel):
-    pass
-
+    channel_config: Dict[OlfactometerChannel, OlfactometerChannelConfig] = Field(
+        {}, description="Configuration of olfactometer channels"
+    )
 
 class OlfactometerCalibrationOutput(BaseModel):
     pass
