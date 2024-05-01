@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from enum import Enum
-from typing import Annotated, Dict, Literal, Optional, Union
+from typing import Annotated, Dict, Literal, Optional, Union, Generic, TypeVar
 
 from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
 from pydantic import BaseModel, Field, RootModel, field_validator
@@ -52,14 +52,11 @@ class SpinnakerCamera(Device):
         default=None, description="Video writer. If not provided, no video will be saved."
     )
 
+TCamera = TypeVar("TCamera", bound=Union[WebCamera, SpinnakerCamera])
 
-class Camera(RootModel):
-    root: Annotated[Union[WebCamera, SpinnakerCamera], Field(discriminator="device_type")]
-
-
-class CameraController(Device):
+class CameraController(Device, Generic[TCamera]):
     device_type: Literal["CameraController"] = "CameraController"
-    cameras: Dict[str, Camera] = Field(..., description="Cameras to be instantiated")
+    cameras: Dict[str, TCamera] = Field(..., description="Cameras to be instantiated")
     frame_rate: Optional[int] = Field(default=30, ge=0, description="Frame rate of the trigger to all cameras")
 
 
