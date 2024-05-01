@@ -189,6 +189,8 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
     
         private double? _rngSeed;
     
+        private string _name;
+    
         private System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> _channelConfig;
     
         private double _fullFlowRate = 1000D;
@@ -207,6 +209,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
         {
             _schemaVersion = other._schemaVersion;
             _rngSeed = other._rngSeed;
+            _name = other._name;
             _channelConfig = other._channelConfig;
             _fullFlowRate = other._fullFlowRate;
             _nRepeatsPerStimulus = other._nRepeatsPerStimulus;
@@ -242,6 +245,23 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
             set
             {
                 _rngSeed = value;
+            }
+        }
+    
+        /// <summary>
+        /// Optional name of the task or stage
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("name")]
+        [System.ComponentModel.DescriptionAttribute("Optional name of the task or stage")]
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
             }
         }
     
@@ -345,6 +365,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
         {
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
             stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("name = " + _name + ", ");
             stringBuilder.Append("channel_config = " + _channelConfig + ", ");
             stringBuilder.Append("full_flow_rate = " + _fullFlowRate + ", ");
             stringBuilder.Append("n_repeats_per_stimulus = " + _nRepeatsPerStimulus + ", ");

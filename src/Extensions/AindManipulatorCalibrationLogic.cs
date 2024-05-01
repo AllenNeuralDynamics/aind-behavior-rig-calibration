@@ -19,6 +19,8 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         private double? _rngSeed;
     
+        private string _name;
+    
         public CalibrationLogic()
         {
         }
@@ -27,6 +29,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
         {
             _schemaVersion = other._schemaVersion;
             _rngSeed = other._rngSeed;
+            _name = other._name;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
@@ -60,6 +63,23 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
             }
         }
     
+        /// <summary>
+        /// Optional name of the task or stage
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("name")]
+        [System.ComponentModel.DescriptionAttribute("Optional name of the task or stage")]
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+            }
+        }
+    
         public System.IObservable<CalibrationLogic> Process()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationLogic(this)));
@@ -73,7 +93,8 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
-            stringBuilder.Append("rng_seed = " + _rngSeed);
+            stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("name = " + _name);
             return true;
         }
     

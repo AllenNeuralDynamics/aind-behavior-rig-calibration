@@ -550,12 +550,33 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     public partial class OlfactometerCalibrationInput
     {
     
+        private System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> _channelConfig;
+    
         public OlfactometerCalibrationInput()
         {
         }
     
         protected OlfactometerCalibrationInput(OlfactometerCalibrationInput other)
         {
+            _channelConfig = other._channelConfig;
+        }
+    
+        /// <summary>
+        /// Configuration of olfactometer channels
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("channel_config")]
+        [System.ComponentModel.DescriptionAttribute("Configuration of olfactometer channels")]
+        public System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> ChannelConfig
+        {
+            get
+            {
+                return _channelConfig;
+            }
+            set
+            {
+                _channelConfig = value;
+            }
         }
     
         public System.IObservable<OlfactometerCalibrationInput> Process()
@@ -570,7 +591,8 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            return false;
+            stringBuilder.Append("channel_config = " + _channelConfig);
+            return true;
         }
     
         public override string ToString()
@@ -629,6 +651,171 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class OlfactometerChannelConfig
+    {
+    
+        private int _channelIndex;
+    
+        private OlfactometerChannelType _channelType = AindBehaviorServices.OlfactometerCalibrationRig.OlfactometerChannelType.Odor;
+    
+        private OlfactometerChannelConfigFlowRateCapacity _flowRateCapacity = AindBehaviorServices.OlfactometerCalibrationRig.OlfactometerChannelConfigFlowRateCapacity._100;
+    
+        private double _flowRate = 100D;
+    
+        private string _odorant;
+    
+        private double? _odorantDilution;
+    
+        public OlfactometerChannelConfig()
+        {
+        }
+    
+        protected OlfactometerChannelConfig(OlfactometerChannelConfig other)
+        {
+            _channelIndex = other._channelIndex;
+            _channelType = other._channelType;
+            _flowRateCapacity = other._flowRateCapacity;
+            _flowRate = other._flowRate;
+            _odorant = other._odorant;
+            _odorantDilution = other._odorantDilution;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("channel_index", Required=Newtonsoft.Json.Required.Always)]
+        public int ChannelIndex
+        {
+            get
+            {
+                return _channelIndex;
+            }
+            set
+            {
+                _channelIndex = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("channel_type")]
+        public OlfactometerChannelType ChannelType
+        {
+            get
+            {
+                return _channelType;
+            }
+            set
+            {
+                _channelType = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("flow_rate_capacity")]
+        public OlfactometerChannelConfigFlowRateCapacity FlowRateCapacity
+        {
+            get
+            {
+                return _flowRateCapacity;
+            }
+            set
+            {
+                _flowRateCapacity = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("flow_rate")]
+        public double FlowRate
+        {
+            get
+            {
+                return _flowRate;
+            }
+            set
+            {
+                _flowRate = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("odorant")]
+        public string Odorant
+        {
+            get
+            {
+                return _odorant;
+            }
+            set
+            {
+                _odorant = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("odorant_dilution")]
+        public double? OdorantDilution
+        {
+            get
+            {
+                return _odorantDilution;
+            }
+            set
+            {
+                _odorantDilution = value;
+            }
+        }
+    
+        public System.IObservable<OlfactometerChannelConfig> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new OlfactometerChannelConfig(this)));
+        }
+    
+        public System.IObservable<OlfactometerChannelConfig> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new OlfactometerChannelConfig(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("channel_index = " + _channelIndex + ", ");
+            stringBuilder.Append("channel_type = " + _channelType + ", ");
+            stringBuilder.Append("flow_rate_capacity = " + _flowRateCapacity + ", ");
+            stringBuilder.Append("flow_rate = " + _flowRate + ", ");
+            stringBuilder.Append("odorant = " + _odorant + ", ");
+            stringBuilder.Append("odorant_dilution = " + _odorantDilution);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
+    /// Channel type
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    public enum OlfactometerChannelType
+    {
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="Odor")]
+        Odor = 0,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="Carrier")]
+        Carrier = 1,
     }
 
 
@@ -789,6 +976,18 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    public enum OlfactometerChannelConfigFlowRateCapacity
+    {
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="100")]
+        _100 = 100,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="1000")]
+        _1000 = 1000,
+    }
+
+
     /// <summary>
     /// Serializes a sequence of data model objects into JSON strings.
     /// </summary>
@@ -834,6 +1033,11 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
             return Process<OlfactometerCalibrationOutput>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<OlfactometerChannelConfig> source)
+        {
+            return Process<OlfactometerChannelConfig>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<CalibrationRig> source)
         {
             return Process<CalibrationRig>(source);
@@ -854,6 +1058,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationInput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationOutput>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerChannelConfig>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationRig>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {

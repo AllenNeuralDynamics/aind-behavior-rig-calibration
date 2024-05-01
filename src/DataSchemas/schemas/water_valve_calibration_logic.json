@@ -20,6 +20,19 @@
       ],
       "title": "Rng Seed"
     },
+    "name": {
+      "default": null,
+      "description": "Optional name of the task or stage",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Name"
+    },
     "valve_open_time": {
       "description": "An array with the times (s) the valve is open during calibration",
       "items": {

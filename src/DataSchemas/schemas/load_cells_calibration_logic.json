@@ -20,6 +20,19 @@
       ],
       "title": "Rng Seed"
     },
+    "name": {
+      "default": null,
+      "description": "Optional name of the task or stage",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Name"
+    },
     "channels": {
       "default": [
         0,
