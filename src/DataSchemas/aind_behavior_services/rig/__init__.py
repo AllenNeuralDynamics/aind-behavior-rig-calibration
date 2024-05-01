@@ -17,6 +17,7 @@ class Device(BaseModel):
 class VideoWriterFfmpeg(BaseModel):
     video_writer_type: Literal["FFMPEG"]
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
+    container_extension: str = Field(default="mp4", description="Container extension")
     output_arguments: str = Field(
         default="-c:v h264_nvenc -vsync 0 -2pass 1 -bf:v 0 -qp 13-preset medium -b:v 20M -rc:v cbr",
         description="Output arguments",
@@ -26,6 +27,7 @@ class VideoWriterFfmpeg(BaseModel):
 class VideoWriterOpenCv(BaseModel):
     video_writer_type: Literal["OPENCV"]
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
+    container_extension: str = Field(default="avi", description="Container extension")
     four_cc: str = Field(default="FMP4", description="Four character code")
 
 
@@ -52,7 +54,9 @@ class SpinnakerCamera(Device):
         default=None, description="Video writer. If not provided, no video will be saved."
     )
 
+
 TCamera = TypeVar("TCamera", bound=Union[WebCamera, SpinnakerCamera])
+
 
 class CameraController(Device, Generic[TCamera]):
     device_type: Literal["CameraController"] = "CameraController"
