@@ -11,7 +11,6 @@ Winget install "Microsoft Visual C++ 2012 Redistributable (x64)" --force @autoac
 winget install -e --id Nvidia.GeForceExperience -v 3.26.0.160 @autoaccept
 winget install -e --id Notepad++.Notepad++ @autoaccept
 winget install -e --id dotPDNLLC.paintdotnet @autoaccept
-winget install -e --id VideoLAN.VLC @autoaccept
 
 ## Install vscode extensions
 $extensions =
