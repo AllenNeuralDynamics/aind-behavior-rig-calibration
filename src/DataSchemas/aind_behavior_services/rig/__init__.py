@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from enum import Enum
-from typing import Annotated, Dict, Literal, Optional, Union, Generic, TypeVar
+from typing import Annotated, Dict, Generic, Literal, Optional, TypeVar, Union
 
 from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
 from pydantic import BaseModel, Field, RootModel, field_validator
@@ -186,7 +186,7 @@ class AindBehaviorRigModel(SchemaVersionedModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
 
-    @field_validator("schema_version", mode="before")
+    @field_validator("version", mode="before")
     @classmethod
     def coerce_version(cls, v: str) -> str:
         return coerce_schema_version(cls, v)

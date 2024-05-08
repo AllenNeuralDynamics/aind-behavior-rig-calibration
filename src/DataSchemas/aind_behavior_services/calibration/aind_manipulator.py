@@ -1,11 +1,12 @@
 from enum import IntEnum
 from typing import List, Literal
 
-from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
+from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import AindBehaviorRigModel, HarpStepperDriver
+from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
 from pydantic import BaseModel, Field
 
-TASK_LOGIC_VERSION = "0.1.0"
+TASK_LOGIC_VERSION = "0.2.0"
 RIG_VERSION = "0.0.0"
 
 
@@ -103,8 +104,13 @@ class AindManipulatorCalibration(Calibration):
     output: AindManipulatorCalibrationOutput = Field(default=..., title="Output of the calibration.")
 
 
-class CalibrationLogic(CalibrationLogicModel):
-    schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
+class CalibrationParameters(TaskParameters):
+    pass
+
+
+class CalibrationLogic(AindBehaviorTaskLogicModel):
+    version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
+    task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
 
 
 # Rig model
@@ -115,5 +121,5 @@ class AindManipulatorDevice(HarpStepperDriver):
 
 
 class CalibrationRig(AindBehaviorRigModel):
-    schema_version: Literal[RIG_VERSION] = RIG_VERSION
+    version: Literal[RIG_VERSION] = RIG_VERSION
     manipulator: AindManipulatorDevice = Field(..., title="Manipulator device")

@@ -16,7 +16,7 @@ class SubjectEntry(BaseModel):
 
 
 class SubjectDataBase(SchemaVersionedModel):
-    schema_version: Literal[__version__] = __version__
+    version: Literal[__version__] = __version__
     subjects: Dict[str, Optional[SubjectEntry]] = Field(
         default_factory=dict, description="List of subjects and their task logic targets"
     )
