@@ -15,7 +15,7 @@ namespace AindBehaviorServices.WaterValveCalibrationRig
     public partial class CalibrationRig
     {
     
-        private string _schemaVersion = "0.0.0";
+        private string _version = "0.0.0";
     
         private string _computerName;
     
@@ -27,21 +27,21 @@ namespace AindBehaviorServices.WaterValveCalibrationRig
     
         protected CalibrationRig(CalibrationRig other)
         {
-            _schemaVersion = other._schemaVersion;
+            _version = other._version;
             _computerName = other._computerName;
             _rigName = other._rigName;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
-        public string SchemaVersion
+        [Newtonsoft.Json.JsonPropertyAttribute("version")]
+        public string Version
         {
             get
             {
-                return _schemaVersion;
+                return _version;
             }
             set
             {
-                _schemaVersion = value;
+                _version = value;
             }
         }
     
@@ -91,7 +91,7 @@ namespace AindBehaviorServices.WaterValveCalibrationRig
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
+            stringBuilder.Append("version = " + _version + ", ");
             stringBuilder.Append("computer_name = " + _computerName + ", ");
             stringBuilder.Append("rig_name = " + _rigName);
             return true;

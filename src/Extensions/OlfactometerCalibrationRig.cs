@@ -825,7 +825,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     public partial class CalibrationRig
     {
     
-        private string _schemaVersion = "0.0.0";
+        private string _version = "0.0.0";
     
         private string _computerName;
     
@@ -843,7 +843,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     
         protected CalibrationRig(CalibrationRig other)
         {
-            _schemaVersion = other._schemaVersion;
+            _version = other._version;
             _computerName = other._computerName;
             _rigName = other._rigName;
             _harpOlfactometer = other._harpOlfactometer;
@@ -851,16 +851,16 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
             _harpClockGenerator = other._harpClockGenerator;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
-        public string SchemaVersion
+        [Newtonsoft.Json.JsonPropertyAttribute("version")]
+        public string Version
         {
             get
             {
-                return _schemaVersion;
+                return _version;
             }
             set
             {
-                _schemaVersion = value;
+                _version = value;
             }
         }
     
@@ -952,7 +952,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
+            stringBuilder.Append("version = " + _version + ", ");
             stringBuilder.Append("computer_name = " + _computerName + ", ");
             stringBuilder.Append("rig_name = " + _rigName + ", ");
             stringBuilder.Append("harp_olfactometer = " + _harpOlfactometer + ", ");

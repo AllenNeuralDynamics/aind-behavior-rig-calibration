@@ -1,5 +1,63 @@
 {
   "definitions": {
+    "CalibrationParameters": {
+      "additionalProperties": true,
+      "properties": {
+        "rng_seed": {
+          "default": null,
+          "description": "Seed of the random number generator",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rng Seed"
+        },
+        "channel_config": {
+          "additionalProperties": {
+            "$ref": "#/definitions/OlfactometerChannelConfig"
+          },
+          "default": {},
+          "description": "Configuration of olfactometer channels",
+          "title": "Channel Config",
+          "type": "object"
+        },
+        "full_flow_rate": {
+          "default": 1000,
+          "description": "Full flow rate of the olfactometer",
+          "maximum": 1000.0,
+          "minimum": 0.0,
+          "title": "Full Flow Rate",
+          "type": "number"
+        },
+        "n_repeats_per_stimulus": {
+          "default": 1,
+          "description": "Number of repeats per stimulus",
+          "minimum": 1,
+          "title": "N Repeats Per Stimulus",
+          "type": "integer"
+        },
+        "time_on": {
+          "default": 1,
+          "description": "Time (s) the valve is open during calibration",
+          "minimum": 0.0,
+          "title": "Time On",
+          "type": "number"
+        },
+        "time_off": {
+          "default": 1,
+          "description": "Time (s) the valve is close during calibration",
+          "minimum": 0.0,
+          "title": "Time Off",
+          "type": "number"
+        }
+      },
+      "title": "CalibrationParameters",
+      "type": "object"
+    },
     "OlfactometerChannelConfig": {
       "properties": {
         "channel_index": {
@@ -71,79 +129,39 @@
       "type": "string"
     }
   },
+  "additionalProperties": false,
   "description": "Olfactometer operation control model that is used to run a calibration data acquisition workflow",
   "properties": {
-    "schema_version": {
-      "const": "0.3.0",
-      "default": "0.3.0",
-      "title": "Schema Version",
+    "name": {
+      "description": "Name of the task.",
+      "title": "Name",
       "type": "string"
     },
-    "rng_seed": {
-      "default": null,
-      "description": "Seed of the random number generator",
-      "oneOf": [
+    "description": {
+      "default": "",
+      "description": "Description of the task.",
+      "title": "Description",
+      "type": "string"
+    },
+    "version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "task_parameters": {
+      "allOf": [
         {
-          "type": "number"
-        },
-        {
-          "type": "null"
+          "$ref": "#/definitions/CalibrationParameters"
         }
       ],
-      "title": "Rng Seed"
-    },
-    "name": {
-      "default": null,
-      "description": "Optional name of the task or stage",
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Name"
-    },
-    "channel_config": {
-      "additionalProperties": {
-        "$ref": "#/definitions/OlfactometerChannelConfig"
-      },
-      "default": {},
-      "description": "Configuration of olfactometer channels",
-      "title": "Channel Config",
-      "type": "object"
-    },
-    "full_flow_rate": {
-      "default": 1000,
-      "description": "Full flow rate of the olfactometer",
-      "maximum": 1000.0,
-      "minimum": 0.0,
-      "title": "Full Flow Rate",
-      "type": "number"
-    },
-    "n_repeats_per_stimulus": {
-      "default": 1,
-      "description": "Number of repeats per stimulus",
-      "minimum": 1,
-      "title": "N Repeats Per Stimulus",
-      "type": "integer"
-    },
-    "time_on": {
-      "default": 1,
-      "description": "Time (s) the valve is open during calibration",
-      "minimum": 0.0,
-      "title": "Time On",
-      "type": "number"
-    },
-    "time_off": {
-      "default": 1,
-      "description": "Time (s) the valve is close during calibration",
-      "minimum": 0.0,
-      "title": "Time Off",
-      "type": "number"
+      "title": "Task parameters"
     }
   },
+  "required": [
+    "name",
+    "task_parameters"
+  ],
   "title": "CalibrationLogic",
   "type": "object"
 }

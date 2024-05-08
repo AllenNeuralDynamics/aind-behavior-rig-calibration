@@ -1,38 +1,58 @@
 {
-  "properties": {
-    "schema_version": {
-      "const": "0.1.0",
-      "default": "0.1.0",
-      "title": "Schema Version",
-      "type": "string"
-    },
-    "rng_seed": {
-      "default": null,
-      "description": "Seed of the random number generator",
-      "oneOf": [
-        {
-          "type": "number"
-        },
-        {
-          "type": "null"
+  "definitions": {
+    "CalibrationParameters": {
+      "additionalProperties": true,
+      "properties": {
+        "rng_seed": {
+          "default": null,
+          "description": "Seed of the random number generator",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rng Seed"
         }
-      ],
-      "title": "Rng Seed"
-    },
-    "name": {
-      "default": null,
-      "description": "Optional name of the task or stage",
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Name"
+      },
+      "title": "CalibrationParameters",
+      "type": "object"
     }
   },
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "description": "Name of the task.",
+      "title": "Name",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "description": "Description of the task.",
+      "title": "Description",
+      "type": "string"
+    },
+    "version": {
+      "const": "0.2.0",
+      "default": "0.2.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "task_parameters": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/CalibrationParameters"
+        }
+      ],
+      "title": "Task parameters"
+    }
+  },
+  "required": [
+    "name",
+    "task_parameters"
+  ],
   "title": "CalibrationLogic",
   "type": "object"
 }
