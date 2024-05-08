@@ -166,11 +166,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         print("-------------------------------")
         print(self._HEADER)
         print(
-            f"TaskLogic ({self.task_logic_schema.__name__}) Schema Version: {self.task_logic_schema.model_construct().schema_version}"
+            f"TaskLogic ({self.task_logic_schema.__name__}) Schema Version: {self.task_logic_schema.model_construct().version}"
         )
-        print(f"Rig ({self.rig_schema.__name__}) Schema Version: {self.rig_schema.model_construct().schema_version}")
+        print(f"Rig ({self.rig_schema.__name__}) Schema Version: {self.rig_schema.model_construct().version}")
         print(
-            f"Session ({self.session_schema.__name__}) Schema Version: {self.session_schema.model_construct().schema_version}"
+            f"Session ({self.session_schema.__name__}) Schema Version: {self.session_schema.model_construct().version}"
         )
         print("-------------------------------")
         if self._dev_mode:
@@ -282,7 +282,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             commit_hash=self.repository.head.commit.hexsha,
             allow_dirty_repo=self._dev_mode or self.allow_dirty_repo,
             skip_hardware_validation=self.skip_hardware_validation,
-            experiment_version=self.task_logic_schema.model_construct().schema_version,
+            experiment_version=self.task_logic_schema.model_construct().version,
         )
 
     def _get_available_batches(self, folder: str) -> List[str]:

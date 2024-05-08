@@ -21,7 +21,7 @@ calibration_data = m.AindManipulatorCalibration(
     calibration_date=datetime.datetime.now(),
 )
 
-calibration_logic = m.CalibrationLogic()
+calibration_logic = m.CalibrationLogic(task_parameters=m.CalibrationParameters())
 
 
 calibration_session = AindBehaviorSessionModel(

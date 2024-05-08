@@ -109,6 +109,7 @@ class CalibrationParameters(TaskParameters):
 
 
 class CalibrationLogic(AindBehaviorTaskLogicModel):
+    name: str = Field(default="AindManipulatorCalibrationLogic", title="Task name")
     version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
     task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
 
