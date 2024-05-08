@@ -274,7 +274,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         notes = self._get_notes()
 
         return self.session_schema(
-            experiment=self.session_schema.__name__,
+            experiment=self.task_logic_schema.name,
             root_path=self.data_dir,
             remote_path=self.remote_data_dir,
             subject=subject,
