@@ -12,10 +12,82 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class CalibrationParameters
+    {
+    
+        private double? _rngSeed;
+    
+        public CalibrationParameters()
+        {
+        }
+    
+        protected CalibrationParameters(CalibrationParameters other)
+        {
+            _rngSeed = other._rngSeed;
+        }
+    
+        /// <summary>
+        /// Seed of the random number generator
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("rng_seed")]
+        [System.ComponentModel.DescriptionAttribute("Seed of the random number generator")]
+        public double? RngSeed
+        {
+            get
+            {
+                return _rngSeed;
+            }
+            set
+            {
+                _rngSeed = value;
+            }
+        }
+    
+        public System.IObservable<CalibrationParameters> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationParameters(this)));
+        }
+    
+        public System.IObservable<CalibrationParameters> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new CalibrationParameters(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("rng_seed = " + _rngSeed);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     public partial class CalibrationLogic
     {
     
-        private string _schemaVersion = "0.1.0";
+        private string _name;
+    
+        private string _description = "";
+    
+        private string _version = "0.2.0";
+    
+        private CalibrationParameters _taskParameters = new CalibrationParameters();
     
         public CalibrationLogic()
         {
@@ -23,19 +95,70 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         protected CalibrationLogic(CalibrationLogic other)
         {
-            _schemaVersion = other._schemaVersion;
+            _name = other._name;
+            _description = other._description;
+            _version = other._version;
+            _taskParameters = other._taskParameters;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
-        public string SchemaVersion
+        /// <summary>
+        /// Name of the task.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("name", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Name of the task.")]
+        public string Name
         {
             get
             {
-                return _schemaVersion;
+                return _name;
             }
             set
             {
-                _schemaVersion = value;
+                _name = value;
+            }
+        }
+    
+        /// <summary>
+        /// Description of the task.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("description")]
+        [System.ComponentModel.DescriptionAttribute("Description of the task.")]
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                _description = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("version")]
+        public string Version
+        {
+            get
+            {
+                return _version;
+            }
+            set
+            {
+                _version = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("task_parameters", Required=Newtonsoft.Json.Required.Always)]
+        public CalibrationParameters TaskParameters
+        {
+            get
+            {
+                return _taskParameters;
+            }
+            set
+            {
+                _taskParameters = value;
             }
         }
     
@@ -51,7 +174,10 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("schema_version = " + _schemaVersion);
+            stringBuilder.Append("name = " + _name + ", ");
+            stringBuilder.Append("description = " + _description + ", ");
+            stringBuilder.Append("version = " + _version + ", ");
+            stringBuilder.Append("task_parameters = " + _taskParameters);
             return true;
         }
     
@@ -85,6 +211,11 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.SerializeObject(value));
         }
 
+        public System.IObservable<string> Process(System.IObservable<CalibrationParameters> source)
+        {
+            return Process<CalibrationParameters>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<CalibrationLogic> source)
         {
             return Process<CalibrationLogic>(source);
@@ -99,6 +230,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationLogic>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {

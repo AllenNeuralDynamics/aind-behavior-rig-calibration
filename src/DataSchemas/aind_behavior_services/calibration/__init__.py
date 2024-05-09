@@ -3,14 +3,7 @@ from __future__ import annotations
 import datetime
 from typing import Optional
 
-from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel
 from pydantic import BaseModel, Field
-
-
-class CalibrationLogicModel(AindBehaviorTaskLogicModel):
-    """Base class for all CalibrationLogicModel models"""
-
-    pass
 
 
 class Calibration(BaseModel):

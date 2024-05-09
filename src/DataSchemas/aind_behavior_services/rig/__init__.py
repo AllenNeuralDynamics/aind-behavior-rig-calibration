@@ -2,15 +2,10 @@ from __future__ import annotations
 
 import os
 from enum import Enum
-from typing import Annotated, Literal, Optional, Union
+from typing import Annotated, Dict, Generic, Literal, Optional, TypeVar, Union
 
-from aind_behavior_services.base import SchemaVersionedModel
-from pydantic import BaseModel, Field, RootModel
-
-# Import core types
-
-
-__version__ = "0.2.0"
+from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
+from pydantic import BaseModel, Field, RootModel, field_validator
 
 
 class Device(BaseModel):
@@ -19,14 +14,54 @@ class Device(BaseModel):
     calibration: Optional[BaseModel] = Field(default=None, description="Calibration")
 
 
+class VideoWriterFfmpeg(BaseModel):
+    video_writer_type: Literal["FFMPEG"]
+    frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
+    container_extension: str = Field(default="mp4", description="Container extension")
+    output_arguments: str = Field(
+        default="-c:v h264_nvenc -vsync 0 -2pass 1 -bf:v 0 -qp 13-preset medium -b:v 20M -rc:v cbr",
+        description="Output arguments",
+    )
+
+
+class VideoWriterOpenCv(BaseModel):
+    video_writer_type: Literal["OPENCV"]
+    frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
+    container_extension: str = Field(default="avi", description="Container extension")
+    four_cc: str = Field(default="FMP4", description="Four character code")
+
+
+class VideoWriter(RootModel):
+    root: Annotated[Union[VideoWriterFfmpeg, VideoWriterOpenCv], Field(discriminator="video_writer_type")]
+
+
+class WebCamera(Device):
+    device_type: Literal["WebCamera"] = Field(default="WebCamera", description="Device type")
+    index: int = Field(default=0, ge=0, description="Camera index")
+    video_writer: Optional[VideoWriter] = Field(
+        default=None, description="Video writer. If not provided, no video will be saved."
+    )
+
+
 class SpinnakerCamera(Device):
     device_type: Literal["SpinnakerCamera"] = Field(default="SpinnakerCamera", description="Device type")
     serial_number: str = Field(..., description="Camera serial number")
     binning: int = Field(default=1, ge=1, description="Binning")
     color_processing: Literal["Default", "NoColorProcessing"] = Field(default="Default", description="Color processing")
     exposure: int = Field(default=1000, ge=100, description="Exposure time")
-    frame_rate: int = Field(default=30, ge=1, le=350, description="Frame rate")
     gain: float = Field(default=0, ge=0, description="Gain")
+    video_writer: Optional[VideoWriter] = Field(
+        default=None, description="Video writer. If not provided, no video will be saved."
+    )
+
+
+TCamera = TypeVar("TCamera", bound=Union[WebCamera, SpinnakerCamera])
+
+
+class CameraController(Device, Generic[TCamera]):
+    device_type: Literal["CameraController"] = "CameraController"
+    cameras: Dict[str, TCamera] = Field(..., description="Cameras to be instantiated")
+    frame_rate: Optional[int] = Field(default=30, ge=0, description="Frame rate of the trigger to all cameras")
 
 
 class HarpDeviceType(str, Enum):
@@ -132,11 +167,6 @@ class HarpDevice(RootModel):
     ]
 
 
-class WebCamera(Device):
-    device_type: Literal["WebCamera"] = Field(default="WebCamera", description="Device type")
-    index: int = Field(default=0, ge=0, description="Camera index")
-
-
 class Screen(Device):
     device_type: Literal["Screen"] = Field(default="Screen", description="Device type")
     display_index: int = Field(default=1, description="Display index")
@@ -155,4 +185,8 @@ class Treadmill(BaseModel):
 class AindBehaviorRigModel(SchemaVersionedModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
-    schema_version: Literal[__version__] = __version__
+
+    @field_validator("version", mode="before")
+    @classmethod
+    def coerce_version(cls, v: str) -> str:
+        return coerce_schema_version(cls, v)

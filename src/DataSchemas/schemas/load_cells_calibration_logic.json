@@ -1,41 +1,87 @@
 {
-  "description": "Load cells operation control model that is used to run a calibration data acquisition workflow",
-  "properties": {
-    "schema_version": {
-      "const": "0.3.0",
-      "default": "0.3.0",
-      "title": "Schema Version",
-      "type": "string"
-    },
-    "channels": {
-      "default": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7
-      ],
-      "description": "List of channels to calibrate",
-      "items": {
-        "description": "Load cell channel number available",
-        "maximum": 7,
-        "minimum": 0,
-        "type": "integer"
+  "definitions": {
+    "CalibrationParameters": {
+      "additionalProperties": true,
+      "properties": {
+        "rng_seed": {
+          "default": null,
+          "description": "Seed of the random number generator",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rng Seed"
+        },
+        "channels": {
+          "default": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "description": "List of channels to calibrate",
+          "items": {
+            "description": "Load cell channel number available",
+            "maximum": 7,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Channels",
+          "type": "array"
+        },
+        "offset_buffer_size": {
+          "default": 200,
+          "description": "Size of the buffer (in samples) acquired.",
+          "minimum": 1,
+          "title": "Buffer size",
+          "type": "integer"
+        }
       },
-      "title": "Channels",
-      "type": "array"
-    },
-    "offset_buffer_size": {
-      "default": 200,
-      "description": "Size of the buffer (in samples) acquired.",
-      "minimum": 1,
-      "title": "Buffer size",
-      "type": "integer"
+      "title": "CalibrationParameters",
+      "type": "object"
     }
   },
+  "additionalProperties": false,
+  "description": "Load cells operation control model that is used to run a calibration data acquisition workflow",
+  "properties": {
+    "name": {
+      "description": "Name of the task.",
+      "title": "Name",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "description": "Description of the task.",
+      "title": "Description",
+      "type": "string"
+    },
+    "version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "task_parameters": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/CalibrationParameters"
+        }
+      ],
+      "title": "Task parameters"
+    }
+  },
+  "required": [
+    "name",
+    "task_parameters"
+  ],
   "title": "CalibrationLogic",
   "type": "object"
 }

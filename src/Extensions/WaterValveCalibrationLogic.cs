@@ -9,18 +9,13 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
 {
     #pragma warning disable // Disable all warnings
 
-    /// <summary>
-    /// Olfactometer operation control model that is used to run a calibration data acquisition workflow
-    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Olfactometer operation control model that is used to run a calibration data acqui" +
-        "sition workflow")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class CalibrationLogic
+    public partial class CalibrationParameters
     {
     
-        private string _schemaVersion = "0.3.0";
+        private double? _rngSeed;
     
         private System.Collections.Generic.List<double> _valveOpenTime = new System.Collections.Generic.List<double>();
     
@@ -28,28 +23,33 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     
         private int _repeatCount = 200;
     
-        public CalibrationLogic()
+        public CalibrationParameters()
         {
         }
     
-        protected CalibrationLogic(CalibrationLogic other)
+        protected CalibrationParameters(CalibrationParameters other)
         {
-            _schemaVersion = other._schemaVersion;
+            _rngSeed = other._rngSeed;
             _valveOpenTime = other._valveOpenTime;
             _valveOpenInterval = other._valveOpenInterval;
             _repeatCount = other._repeatCount;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("schema_version")]
-        public string SchemaVersion
+        /// <summary>
+        /// Seed of the random number generator
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("rng_seed")]
+        [System.ComponentModel.DescriptionAttribute("Seed of the random number generator")]
+        public double? RngSeed
         {
             get
             {
-                return _schemaVersion;
+                return _rngSeed;
             }
             set
             {
-                _schemaVersion = value;
+                _rngSeed = value;
             }
         }
     
@@ -105,6 +105,132 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
             }
         }
     
+        public System.IObservable<CalibrationParameters> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationParameters(this)));
+        }
+    
+        public System.IObservable<CalibrationParameters> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new CalibrationParameters(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
+            stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
+            stringBuilder.Append("repeat_count = " + _repeatCount);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
+    /// Olfactometer operation control model that is used to run a calibration data acquisition workflow
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Olfactometer operation control model that is used to run a calibration data acqui" +
+        "sition workflow")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class CalibrationLogic
+    {
+    
+        private string _name;
+    
+        private string _description = "";
+    
+        private string _version = "0.4.0";
+    
+        private CalibrationParameters _taskParameters = new CalibrationParameters();
+    
+        public CalibrationLogic()
+        {
+        }
+    
+        protected CalibrationLogic(CalibrationLogic other)
+        {
+            _name = other._name;
+            _description = other._description;
+            _version = other._version;
+            _taskParameters = other._taskParameters;
+        }
+    
+        /// <summary>
+        /// Name of the task.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("name", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Name of the task.")]
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+            }
+        }
+    
+        /// <summary>
+        /// Description of the task.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("description")]
+        [System.ComponentModel.DescriptionAttribute("Description of the task.")]
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                _description = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("version")]
+        public string Version
+        {
+            get
+            {
+                return _version;
+            }
+            set
+            {
+                _version = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("task_parameters", Required=Newtonsoft.Json.Required.Always)]
+        public CalibrationParameters TaskParameters
+        {
+            get
+            {
+                return _taskParameters;
+            }
+            set
+            {
+                _taskParameters = value;
+            }
+        }
+    
         public System.IObservable<CalibrationLogic> Process()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationLogic(this)));
@@ -117,10 +243,10 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("schema_version = " + _schemaVersion + ", ");
-            stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
-            stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
-            stringBuilder.Append("repeat_count = " + _repeatCount);
+            stringBuilder.Append("name = " + _name + ", ");
+            stringBuilder.Append("description = " + _description + ", ");
+            stringBuilder.Append("version = " + _version + ", ");
+            stringBuilder.Append("task_parameters = " + _taskParameters);
             return true;
         }
     
@@ -154,6 +280,11 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
             return System.Reactive.Linq.Observable.Select(source, value => Newtonsoft.Json.JsonConvert.SerializeObject(value));
         }
 
+        public System.IObservable<string> Process(System.IObservable<CalibrationParameters> source)
+        {
+            return Process<CalibrationParameters>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<CalibrationLogic> source)
         {
             return Process<CalibrationLogic>(source);
@@ -168,6 +299,7 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationLogic>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {

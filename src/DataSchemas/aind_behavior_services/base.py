@@ -12,9 +12,7 @@ from semver import Version
 
 
 class SchemaVersionedModel(BaseModel):
-    schema_version: str = Field(
-        ..., pattern=r"^\d+.\d+.\d+$", description="schema version", title="Version", frozen=True
-    )
+    version: str = Field(..., pattern=r"^\d+.\d+.\d+$", description="schema version", title="Version", frozen=True)
 
 
 class SemVerAnnotation:
@@ -55,19 +53,24 @@ class SemVerAnnotation:
 
 
 def coerce_schema_version(cls: BaseModel, v: str) -> str:
-    _default_schema_version = Version.parse(get_args(cls.model_fields["schema_version"].annotation)[0])
-    v = Version.parse(v)
-    if v > _default_schema_version:
+
+    try:  # Get the default schema version from the model literal field
+        _default_schema_version = Version.parse(get_args(cls.model_fields["version"].annotation)[0])
+    except IndexError:  # This handles the case where the base class does not define a literal schema_version value
+        return v
+
+    semver = Version.parse(v)
+    if semver > _default_schema_version:
         raise ValueError(
-            f"Deserialized schema version ({v}) is greater than the current version({_default_schema_version})."
+            f"Deserialized schema version ({semver}) is greater than the current version({_default_schema_version})."
         )
-    elif v < _default_schema_version:
+    elif semver < _default_schema_version:
         warnings.warn(
-            f"Deserialized schema version ({v}) is less than the current version({_default_schema_version}). Will attempt to coerce the conversion."
+            f"Deserialized schema version ({semver}) is less than the current version({_default_schema_version}). Will attempt to coerce the conversion."
         )
         return str(_default_schema_version)
     else:
-        return str(v)
+        return str(semver)
 
 
 def get_commit_hash(repository: Optional[PathLike] = None) -> str:

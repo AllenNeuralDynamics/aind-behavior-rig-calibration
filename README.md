@@ -24,7 +24,8 @@ These should only need to be installed once on a fresh new system, and are not r
 - [FTDI CDM Driver 2.12.28](https://www.ftdichip.com/Drivers/CDM/CDM21228_Setup.zip) (serial port drivers for HARP devices)
 - [Spinnaker SDK 1.29.0.5](https://www.flir.co.uk/support/products/spinnaker-sdk/#Downloads) (device drivers for FLIR cameras)
   - On FLIR website: `Download > archive > 1.29.0.5 > SpinnakerSDK_FULL_1.29.0.5_x64.exe`
-
+- [ffmpeg 7.0](https://www.gyan.dev/ffmpeg/builds/) (necessary to run GPU-accelerated video encoding)
+  - run `winget install ffmpeg -v 7.0` to install.
 ---
 
 ## Generating valid JSON input files

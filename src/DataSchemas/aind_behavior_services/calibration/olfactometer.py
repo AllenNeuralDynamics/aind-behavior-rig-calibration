@@ -1,11 +1,12 @@
 from enum import Enum, IntEnum
 from typing import Dict, Literal, Optional
 
-from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
+from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import AindBehaviorRigModel, HarpAnalogInput, HarpClockGenerator, HarpOlfactometer
+from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
 from pydantic import BaseModel, Field
 
-TASK_LOGIC_VERSION = "0.3.0"
+TASK_LOGIC_VERSION = "0.4.0"
 RIG_VERSION = "0.0.0"
 
 
@@ -37,7 +38,9 @@ class OlfactometerChannelConfig(BaseModel):
 
 
 class OlfactometerCalibrationInput(BaseModel):
-    pass
+    channel_config: Dict[OlfactometerChannel, OlfactometerChannelConfig] = Field(
+        {}, description="Configuration of olfactometer channels"
+    )
 
 
 class OlfactometerCalibrationOutput(BaseModel):
@@ -53,10 +56,7 @@ class OlfactometerCalibration(Calibration):
     output: OlfactometerCalibrationOutput = Field(..., title="Output of the calibration")
 
 
-class CalibrationLogic(CalibrationLogicModel):
-    """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
-
-    schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
+class CalibrationParameters(TaskParameters):
     channel_config: Dict[OlfactometerChannel, OlfactometerChannelConfig] = Field(
         {}, description="Configuration of olfactometer channels"
     )
@@ -66,12 +66,19 @@ class CalibrationLogic(CalibrationLogicModel):
     time_off: float = Field(1, ge=0, description="Time (s) the valve is close during calibration")
 
 
+class CalibrationLogic(AindBehaviorTaskLogicModel):
+    """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
+    name: str = Field(default="OlfactometerCalibrationLogic", title="Task name")
+    version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
+    task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
+
+
 class Olfactometer(HarpOlfactometer):
     calibration: OlfactometerCalibration = Field(..., title="Calibration of the olfactometer")
 
 
 class CalibrationRig(AindBehaviorRigModel):
-    schema_version: Literal[RIG_VERSION] = RIG_VERSION
+    version: Literal[RIG_VERSION] = RIG_VERSION
     harp_olfactometer: Olfactometer = Field(..., title="Olfactometer device")
     harp_analog_input: HarpAnalogInput = Field(..., title="Analog input device")
     harp_clock_generator: HarpOlfactometer = Field(..., title="Clock generator device")

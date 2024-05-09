@@ -37,7 +37,9 @@ calibration = wv.WaterValveCalibration(
     calibration_date=datetime.datetime.now(),
 )
 
-calibration_logic = wv.CalibrationLogic(valve_open_time=_delta_times, valve_open_interval=0.5, repeat_count=200)
+calibration_logic = wv.CalibrationLogic(
+    task_parameters=wv.CalibrationParameters(valve_open_time=_delta_times, valve_open_interval=0.5, repeat_count=200)
+)
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",

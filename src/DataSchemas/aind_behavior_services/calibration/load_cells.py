@@ -1,10 +1,11 @@
-from typing import Annotated, Dict, List, Literal, Optional, Tuple
+from typing import Annotated, Dict, List, Literal, Tuple
 
-from aind_behavior_services.calibration import Calibration, CalibrationLogicModel
+from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import AindBehaviorRigModel, HarpLoadCells
+from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
 from pydantic import BaseModel, Field
 
-TASK_LOGIC_VERSION = "0.3.0"
+TASK_LOGIC_VERSION = "0.4.0"
 RIG_VERSION = "0.0.0"
 
 LoadCellChannel = Annotated[int, Field(ge=0, le=7, description="Load cell channel number available")]
@@ -49,10 +50,7 @@ class LoadCellsCalibration(Calibration):
     output: LoadCellsCalibrationOutput = Field(default=..., title="Output of the calibration.")
 
 
-class CalibrationLogic(CalibrationLogicModel):
-    """Load cells operation control model that is used to run a calibration data acquisition workflow"""
-
-    schema_version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
+class CalibrationParameters(TaskParameters):
     channels: List[LoadCellChannel] = Field(list(range(8)), description="List of channels to calibrate")
     offset_buffer_size: int = Field(
         default=200,
@@ -62,10 +60,17 @@ class CalibrationLogic(CalibrationLogicModel):
     )
 
 
+class CalibrationLogic(AindBehaviorTaskLogicModel):
+    """Load cells operation control model that is used to run a calibration data acquisition workflow"""
+    name: str = Field(default="LoadCellsCalibrationLogic", title="Task name")
+    version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
+    task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
+
+
 class LoadCells(HarpLoadCells):
     calibration: LoadCellsCalibration = Field(..., title="Calibration of the load cells")
 
 
 class CalibrationRig(AindBehaviorRigModel):
-    schema_version: Literal[RIG_VERSION] = RIG_VERSION
+    version: Literal[RIG_VERSION] = RIG_VERSION
     load_cells: LoadCells = Field(..., title="Load Cells acquisition device")

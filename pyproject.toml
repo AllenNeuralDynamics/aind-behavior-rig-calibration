@@ -17,12 +17,15 @@ dependencies = [
     'harp-python>=0.2',
     'gitpython>=3.1, <4.0',
     'scikit-learn',
-    'semver'
+    'semver',
+    'aind-behavior-curriculum@git+https://github.com/AllenNeuralDynamics/aind-behavior-curriculum@v0.0.2',
+
 ]
 
 [project.optional-dependencies]
-dev = [
-    'aind_behavior_services[linters]'
+
+aind-data-schema-mapper = [
+    'aind-data-schema==0.33.9'
 ]
 
 linters = [

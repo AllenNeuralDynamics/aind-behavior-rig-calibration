@@ -21,7 +21,9 @@ calibration = lc.LoadCellsCalibration(
     calibration_date=datetime.datetime.now(),
 )
 
-calibration_logic = lc.CalibrationLogic(channels=[0, 1], offset_buffer_size=10)
+calibration_logic = lc.CalibrationLogic(
+    task_parameters=lc.CalibrationParameters(channels=[0, 1], offset_buffer_size=10)
+)
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",
