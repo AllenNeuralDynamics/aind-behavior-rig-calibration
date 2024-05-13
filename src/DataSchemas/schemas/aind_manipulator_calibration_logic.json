@@ -24,8 +24,8 @@
   "additionalProperties": false,
   "properties": {
     "name": {
-      "description": "Name of the task.",
-      "title": "Name",
+      "default": "AindManipulatorCalibrationLogic",
+      "title": "Task name",
       "type": "string"
     },
     "description": {
@@ -50,7 +50,6 @@
     }
   },
   "required": [
-    "name",
     "task_parameters"
   ],
   "title": "CalibrationLogic",

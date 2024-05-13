@@ -150,7 +150,7 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     public partial class CalibrationLogic
     {
     
-        private string _name;
+        private string _name = "WaterValveCalibrationLogic";
     
         private string _description = "";
     
@@ -170,11 +170,7 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
             _taskParameters = other._taskParameters;
         }
     
-        /// <summary>
-        /// Name of the task.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("name", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Name of the task.")]
+        [Newtonsoft.Json.JsonPropertyAttribute("name")]
         public string Name
         {
             get

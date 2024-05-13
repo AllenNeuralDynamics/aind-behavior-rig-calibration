@@ -133,8 +133,8 @@
   "description": "Olfactometer operation control model that is used to run a calibration data acquisition workflow",
   "properties": {
     "name": {
-      "description": "Name of the task.",
-      "title": "Name",
+      "default": "OlfactometerCalibrationLogic",
+      "title": "Task name",
       "type": "string"
     },
     "description": {
@@ -159,7 +159,6 @@
     }
   },
   "required": [
-    "name",
     "task_parameters"
   ],
   "title": "CalibrationLogic",
