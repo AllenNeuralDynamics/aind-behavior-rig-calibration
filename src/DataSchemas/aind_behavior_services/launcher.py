@@ -274,7 +274,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         notes = self._get_notes()
 
         return self.session_schema(
-            experiment=self.task_logic_schema.name,
+            experiment="", # Will be set later
             root_path=self.data_dir,
             remote_path=self.remote_data_dir,
             subject=subject,
@@ -282,7 +282,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             commit_hash=self.repository.head.commit.hexsha,
             allow_dirty_repo=self._dev_mode or self.allow_dirty_repo,
             skip_hardware_validation=self.skip_hardware_validation,
-            experiment_version=self.task_logic_schema.model_construct().version,
+            experiment_version="",  # Will be set later
         )
 
     def _get_available_batches(self, folder: str) -> List[str]:
@@ -430,6 +430,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             task_logic: TTaskLogic = self.prompt_task_logic_input(hint_input=self._subject_db_data)
             rig: TRig = self.prompt_rig_input()
             bonsai_visualizer_layout: Optional[str] = self.prompt_visualizer_layout_input()
+
+            # Handle some cross-schema references
+            session.experiment = task_logic.name
+            session.experiment_version = task_logic.version
+
             input("Press enter to launch Bonsai or Control+C to exit...")
 
             additional_properties = {
