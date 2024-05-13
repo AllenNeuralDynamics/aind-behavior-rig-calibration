@@ -15,7 +15,7 @@ class Device(BaseModel):
 
 
 class VideoWriterFfmpeg(BaseModel):
-    video_writer_type: Literal["FFMPEG"]
+    video_writer_type: Literal["FFMPEG"] = Field(default="FFMPEG")
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
     container_extension: str = Field(default="mp4", description="Container extension")
     output_arguments: str = Field(
@@ -25,7 +25,7 @@ class VideoWriterFfmpeg(BaseModel):
 
 
 class VideoWriterOpenCv(BaseModel):
-    video_writer_type: Literal["OPENCV"]
+    video_writer_type: Literal["OPENCV"] = Field(default="OPENCV")
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
     container_extension: str = Field(default="avi", description="Container extension")
     four_cc: str = Field(default="FMP4", description="Four character code")
