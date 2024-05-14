@@ -19,7 +19,7 @@ class VideoWriterFfmpeg(BaseModel):
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
     container_extension: str = Field(default="mp4", description="Container extension")
     output_arguments: str = Field(
-        default="-c:v h264_nvenc -vsync 0 -2pass 1 -bf:v 0 -qp 13-preset medium -b:v 20M -rc:v cbr",
+        default="-c:v h264_nvenc -vsync 0 -2pass 1 -bf:v 0 -qp 13 -preset medium -b:v 20M -rc:v cbr",
         description="Output arguments",
     )
 
