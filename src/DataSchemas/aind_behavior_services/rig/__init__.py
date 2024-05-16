@@ -174,6 +174,8 @@ class Screen(Device):
     target_update_frequency: float = Field(default=120, description="Target update frequency")
     calibration_directory: str = Field(default="Calibration\\Monitors\\", description="Calibration directory")
     texture_assets_directory: str = Field(default="Textures", description="Calibration directory")
+    brightness: float = Field(default=1, le=1, ge=0, description="Brightness")
+    contrast: float = Field(default=1, le=1, ge=0, description="Contrast")
 
 
 class Treadmill(BaseModel):
