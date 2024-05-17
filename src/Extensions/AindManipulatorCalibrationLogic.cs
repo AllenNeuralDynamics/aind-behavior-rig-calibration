@@ -17,6 +17,8 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         private double? _rngSeed;
     
+        private string _stageAlias;
+    
         public CalibrationParameters()
         {
         }
@@ -24,6 +26,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
         protected CalibrationParameters(CalibrationParameters other)
         {
             _rngSeed = other._rngSeed;
+            _stageAlias = other._stageAlias;
         }
     
         /// <summary>
@@ -44,6 +47,23 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
             }
         }
     
+        /// <summary>
+        /// Alias name used for the task stage
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("stage_alias")]
+        [System.ComponentModel.DescriptionAttribute("Alias name used for the task stage")]
+        public string StageAlias
+        {
+            get
+            {
+                return _stageAlias;
+            }
+            set
+            {
+                _stageAlias = value;
+            }
+        }
+    
         public System.IObservable<CalibrationParameters> Process()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationParameters(this)));
@@ -56,7 +76,8 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("rng_seed = " + _rngSeed);
+            stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("stage_alias = " + _stageAlias);
             return true;
         }
     

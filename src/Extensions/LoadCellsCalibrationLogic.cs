@@ -17,6 +17,8 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
     
         private double? _rngSeed;
     
+        private string _stageAlias;
+    
         private System.Collections.Generic.List<int> _channels = new System.Collections.Generic.List<int>();
     
         private int _offsetBufferSize = 200;
@@ -28,6 +30,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
         protected CalibrationParameters(CalibrationParameters other)
         {
             _rngSeed = other._rngSeed;
+            _stageAlias = other._stageAlias;
             _channels = other._channels;
             _offsetBufferSize = other._offsetBufferSize;
         }
@@ -47,6 +50,23 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
             set
             {
                 _rngSeed = value;
+            }
+        }
+    
+        /// <summary>
+        /// Alias name used for the task stage
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("stage_alias")]
+        [System.ComponentModel.DescriptionAttribute("Alias name used for the task stage")]
+        public string StageAlias
+        {
+            get
+            {
+                return _stageAlias;
+            }
+            set
+            {
+                _stageAlias = value;
             }
         }
     
@@ -98,6 +118,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("stage_alias = " + _stageAlias + ", ");
             stringBuilder.Append("channels = " + _channels + ", ");
             stringBuilder.Append("offset_buffer_size = " + _offsetBufferSize);
             return true;

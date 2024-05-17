@@ -16,6 +16,19 @@
           ],
           "title": "Rng Seed"
         },
+        "stage_alias": {
+          "default": null,
+          "description": "Alias name used for the task stage",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Stage Alias"
+        },
         "valve_open_time": {
           "description": "An array with the times (s) the valve is open during calibration",
           "items": {

@@ -17,6 +17,8 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     
         private double? _rngSeed;
     
+        private string _stageAlias;
+    
         private System.Collections.Generic.List<double> _valveOpenTime = new System.Collections.Generic.List<double>();
     
         private double _valveOpenInterval = 0.2D;
@@ -30,6 +32,7 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
         protected CalibrationParameters(CalibrationParameters other)
         {
             _rngSeed = other._rngSeed;
+            _stageAlias = other._stageAlias;
             _valveOpenTime = other._valveOpenTime;
             _valveOpenInterval = other._valveOpenInterval;
             _repeatCount = other._repeatCount;
@@ -50,6 +53,23 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
             set
             {
                 _rngSeed = value;
+            }
+        }
+    
+        /// <summary>
+        /// Alias name used for the task stage
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("stage_alias")]
+        [System.ComponentModel.DescriptionAttribute("Alias name used for the task stage")]
+        public string StageAlias
+        {
+            get
+            {
+                return _stageAlias;
+            }
+            set
+            {
+                _stageAlias = value;
             }
         }
     
@@ -118,6 +138,7 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("stage_alias = " + _stageAlias + ", ");
             stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
             stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
             stringBuilder.Append("repeat_count = " + _repeatCount);
