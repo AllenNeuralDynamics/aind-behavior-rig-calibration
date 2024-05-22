@@ -3,8 +3,18 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Optional, Type, TypeVar, Union
 
-from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionModel, AindBehaviorTaskLogicModel
-from aind_data_schema.core.session import Modality, Session, Software, StimulusEpoch, Stream
+from aind_behavior_services import (
+    AindBehaviorRigModel,
+    AindBehaviorSessionModel,
+    AindBehaviorTaskLogicModel,
+)
+from aind_data_schema.core.session import (
+    Modality,
+    Session,
+    Software,
+    StimulusEpoch,
+    Stream,
+)
 
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)

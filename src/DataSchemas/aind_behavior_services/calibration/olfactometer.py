@@ -2,7 +2,12 @@ from enum import Enum, IntEnum
 from typing import Dict, Literal, Optional
 
 from aind_behavior_services.calibration import Calibration
-from aind_behavior_services.rig import AindBehaviorRigModel, HarpAnalogInput, HarpClockGenerator, HarpOlfactometer
+from aind_behavior_services.rig import (
+    AindBehaviorRigModel,
+    HarpAnalogInput,
+    HarpClockGenerator,
+    HarpOlfactometer,
+)
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
 from pydantic import BaseModel, Field
 
@@ -68,6 +73,7 @@ class CalibrationParameters(TaskParameters):
 
 class CalibrationLogic(AindBehaviorTaskLogicModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
+
     name: str = Field(default="OlfactometerCalibrationLogic", title="Task name")
     version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
     task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)

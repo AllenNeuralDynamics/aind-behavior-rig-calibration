@@ -28,7 +28,7 @@ channels_config = {
     ),
     olf.OlfactometerChannel.Channel3: olf.OlfactometerChannelConfig(
         channel_index=olf.OlfactometerChannel.Channel3, channel_type=olf.OlfactometerChannelType.CARRIER, odorant="Air"
-    )
+    ),
 }
 
 calibration = olf.OlfactometerCalibration(

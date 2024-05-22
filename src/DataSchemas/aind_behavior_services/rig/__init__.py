@@ -80,69 +80,69 @@ class HarpDeviceType(str, Enum):
     GENERIC = "generic"
 
 
-class HarpDeviceBase(BaseModel):
+class HarpDeviceGeneric(Device):
     who_am_i: Optional[int] = Field(default=None, le=9999, ge=0, description="Device WhoAmI")
-    device_type: HarpDeviceType = Field(default=HarpDeviceType.GENERIC, description="Device type")
+    device_type: Literal[HarpDeviceType.GENERIC] = HarpDeviceType.GENERIC
     serial_number: Optional[str] = Field(default=None, description="Device serial number")
     port_name: str = Field(..., description="Device port name")
 
 
-class HarpBehavior(HarpDeviceBase):
+class HarpBehavior(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.BEHAVIOR] = HarpDeviceType.BEHAVIOR
     who_am_i: Literal[1216] = 1216
 
 
-class HarpSoundCard(HarpDeviceBase):
+class HarpSoundCard(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.SOUNDCARD] = HarpDeviceType.SOUNDCARD
     who_am_i: Literal[1280] = 1280
 
 
-class HarpLoadCells(HarpDeviceBase):
+class HarpLoadCells(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.LOADCELLS] = HarpDeviceType.LOADCELLS
     who_am_i: Literal[1232] = 1232
 
 
-class HarpOlfactometer(HarpDeviceBase):
+class HarpOlfactometer(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.OLFACTOMETER] = HarpDeviceType.OLFACTOMETER
     who_am_i: Literal[1140] = 1140
 
 
-class HarpClockGenerator(HarpDeviceBase):
+class HarpClockGenerator(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.CLOCKGENERATOR] = HarpDeviceType.CLOCKGENERATOR
     who_am_i: Literal[1158] = 1158
 
 
-class HarpClockSynchronizer(HarpDeviceBase):
+class HarpClockSynchronizer(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.CLOCKSYNCHRONIZER] = HarpDeviceType.CLOCKSYNCHRONIZER
     who_am_i: Literal[1152] = 1152
 
 
-class HarpAnalogInput(HarpDeviceBase):
+class HarpAnalogInput(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.ANALOGINPUT] = HarpDeviceType.ANALOGINPUT
     who_am_i: Literal[1236] = 1236
 
 
-class HarpLickometer(HarpDeviceBase):
+class HarpLickometer(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.LICKOMETER] = HarpDeviceType.LICKOMETER
     who_am_i: Literal[1400] = 1400
 
 
-class HarpSniffDetector(HarpDeviceBase):
+class HarpSniffDetector(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.SNIFFDETECTOR] = HarpDeviceType.SNIFFDETECTOR
     who_am_i: Literal[1401] = 1401
 
 
-class HarpTreadmill(HarpDeviceBase):
+class HarpTreadmill(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.TREADMILL] = HarpDeviceType.TREADMILL
     who_am_i: Literal[1402] = 1402
 
 
-class HarpCuttlefish(HarpDeviceBase):
+class HarpCuttlefish(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.CUTTLEFISH] = HarpDeviceType.CUTTLEFISH
     who_am_i: Literal[1403] = 1403
 
 
-class HarpStepperDriver(HarpDeviceBase):
+class HarpStepperDriver(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.STEPPERDRIVER] = HarpDeviceType.STEPPERDRIVER
     who_am_i: Literal[1130] = 1130
 

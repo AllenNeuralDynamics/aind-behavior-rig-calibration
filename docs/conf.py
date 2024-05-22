@@ -11,8 +11,9 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../src/DataSchemas"))
-from aind_behavior_services import __version__
 import glob
+
+from aind_behavior_services import __version__
 
 SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/tree/main/src/DataSchemas/"
 
