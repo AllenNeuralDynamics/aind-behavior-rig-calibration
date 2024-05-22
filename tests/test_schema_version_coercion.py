@@ -4,7 +4,7 @@ from typing import Literal
 
 from aind_behavior_services import AindBehaviorTaskLogicModel
 from aind_behavior_services.task_logic import TaskParameters
-from pydantic import ValidationError, Field
+from pydantic import Field, ValidationError
 
 version_pre: str = "0.0.1"
 version_post: str = "0.0.2"
@@ -14,6 +14,7 @@ class AindBehaviorRigModelPre(AindBehaviorTaskLogicModel):
     version: Literal[version_pre] = version_pre
     name: str = Field(default="Pre")
     task_parameters: TaskParameters = Field(default=TaskParameters(), validate_default=True)
+
 
 class AindBehaviorRigModelPost(AindBehaviorTaskLogicModel):
     version: Literal[version_post] = version_post
@@ -34,9 +35,7 @@ class SchemaVersionCoercionTest(unittest.TestCase):
             except ValidationError as e:
                 self.fail(f"Validation failed with error: {e}")
 
-            self.assertEqual(
-                pre_updated.version, post_instance.version, "Schema version was not coerced correctly."
-            )
+            self.assertEqual(pre_updated.version, post_instance.version, "Schema version was not coerced correctly.")
 
 
 if __name__ == "__main__":

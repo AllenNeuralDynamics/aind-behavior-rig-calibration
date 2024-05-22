@@ -68,6 +68,7 @@ class CalibrationParameters(TaskParameters):
 
 class CalibrationLogic(AindBehaviorTaskLogicModel):
     """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
+
     name: str = Field(default="OlfactometerCalibrationLogic", title="Task name")
     version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
     task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
