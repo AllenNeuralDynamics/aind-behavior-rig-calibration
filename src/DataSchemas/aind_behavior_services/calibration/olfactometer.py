@@ -2,7 +2,12 @@ from enum import Enum, IntEnum
 from typing import Dict, Literal, Optional
 
 from aind_behavior_services.calibration import Calibration
-from aind_behavior_services.rig import AindBehaviorRigModel, HarpAnalogInput, HarpClockGenerator, HarpOlfactometer
+from aind_behavior_services.rig import (
+    AindBehaviorRigModel,
+    HarpAnalogInput,
+    HarpClockGenerator,
+    HarpOlfactometer,
+)
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
 from pydantic import BaseModel, Field
 

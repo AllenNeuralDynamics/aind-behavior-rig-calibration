@@ -9,7 +9,12 @@ from subprocess import CompletedProcess, run
 from typing import Dict, List, Optional, TypeVar
 
 from pydantic import BaseModel, PydanticInvalidForJsonSchema
-from pydantic.json_schema import GenerateJsonSchema, JsonSchemaMode, JsonSchemaValue, _deduplicate_schemas
+from pydantic.json_schema import (
+    GenerateJsonSchema,
+    JsonSchemaMode,
+    JsonSchemaValue,
+    _deduplicate_schemas,
+)
 from pydantic_core import PydanticOmit, core_schema, to_jsonable_python
 
 

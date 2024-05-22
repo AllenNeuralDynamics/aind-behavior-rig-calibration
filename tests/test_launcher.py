@@ -1,7 +1,11 @@
 import unittest
 from typing import Literal
 
-from aind_behavior_services import AindBehaviorRigModel, AindBehaviorSessionModel, AindBehaviorTaskLogicModel
+from aind_behavior_services import (
+    AindBehaviorRigModel,
+    AindBehaviorSessionModel,
+    AindBehaviorTaskLogicModel,
+)
 from aind_behavior_services.launcher import Launcher, LauncherCli
 from pydantic import Field
 
