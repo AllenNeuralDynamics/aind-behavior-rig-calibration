@@ -1,18 +1,47 @@
 {
   "definitions": {
+    "BaseModel": {
+      "properties": {},
+      "title": "BaseModel",
+      "type": "object"
+    },
     "HarpAnalogInput": {
       "properties": {
-        "who_am_i": {
-          "const": 1236,
-          "default": 1236,
-          "title": "Who Am I",
-          "type": "integer"
-        },
         "device_type": {
           "const": "analoginput",
           "default": "analoginput",
           "title": "Device Type",
           "type": "string"
+        },
+        "additional_settings": {
+          "default": null,
+          "description": "Additional settings",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "who_am_i": {
+          "const": 1236,
+          "default": 1236,
+          "title": "Who Am I",
+          "type": "integer"
         },
         "serial_number": {
           "default": null,
@@ -41,17 +70,41 @@
     },
     "HarpOlfactometer": {
       "properties": {
-        "who_am_i": {
-          "const": 1140,
-          "default": 1140,
-          "title": "Who Am I",
-          "type": "integer"
-        },
         "device_type": {
           "const": "olfactometer",
           "default": "olfactometer",
           "title": "Device Type",
           "type": "string"
+        },
+        "additional_settings": {
+          "default": null,
+          "description": "Additional settings",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "who_am_i": {
+          "const": 1140,
+          "default": 1140,
+          "title": "Who Am I",
+          "type": "integer"
         },
         "serial_number": {
           "default": null,
@@ -80,17 +133,37 @@
     },
     "Olfactometer": {
       "properties": {
-        "who_am_i": {
-          "const": 1140,
-          "default": 1140,
-          "title": "Who Am I",
-          "type": "integer"
-        },
         "device_type": {
           "const": "olfactometer",
           "default": "olfactometer",
           "title": "Device Type",
           "type": "string"
+        },
+        "additional_settings": {
+          "default": null,
+          "description": "Additional settings",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "calibration": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OlfactometerCalibration"
+            }
+          ],
+          "title": "Calibration of the olfactometer"
+        },
+        "who_am_i": {
+          "const": 1140,
+          "default": 1140,
+          "title": "Who Am I",
+          "type": "integer"
         },
         "serial_number": {
           "default": null,
@@ -109,19 +182,11 @@
           "description": "Device port name",
           "title": "Port Name",
           "type": "string"
-        },
-        "calibration": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/OlfactometerCalibration"
-            }
-          ],
-          "title": "Calibration of the olfactometer"
         }
       },
       "required": [
-        "port_name",
-        "calibration"
+        "calibration",
+        "port_name"
       ],
       "title": "Olfactometer",
       "type": "object"

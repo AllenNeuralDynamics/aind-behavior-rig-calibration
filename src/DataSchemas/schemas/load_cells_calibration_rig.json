@@ -1,5 +1,10 @@
 {
   "definitions": {
+    "BaseModel": {
+      "properties": {},
+      "title": "BaseModel",
+      "type": "object"
+    },
     "LoadCellCalibration": {
       "properties": {
         "measured_offset": {
@@ -34,17 +39,37 @@
     },
     "LoadCells": {
       "properties": {
-        "who_am_i": {
-          "const": 1232,
-          "default": 1232,
-          "title": "Who Am I",
-          "type": "integer"
-        },
         "device_type": {
           "const": "loadcells",
           "default": "loadcells",
           "title": "Device Type",
           "type": "string"
+        },
+        "additional_settings": {
+          "default": null,
+          "description": "Additional settings",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "calibration": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/LoadCellsCalibration"
+            }
+          ],
+          "title": "Calibration of the load cells"
+        },
+        "who_am_i": {
+          "const": 1232,
+          "default": 1232,
+          "title": "Who Am I",
+          "type": "integer"
         },
         "serial_number": {
           "default": null,
@@ -63,19 +88,11 @@
           "description": "Device port name",
           "title": "Port Name",
           "type": "string"
-        },
-        "calibration": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/LoadCellsCalibration"
-            }
-          ],
-          "title": "Calibration of the load cells"
         }
       },
       "required": [
-        "port_name",
-        "calibration"
+        "calibration",
+        "port_name"
       ],
       "title": "LoadCells",
       "type": "object"

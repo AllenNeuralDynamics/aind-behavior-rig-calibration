@@ -166,17 +166,37 @@
     },
     "AindManipulatorDevice": {
       "properties": {
-        "who_am_i": {
-          "const": 1130,
-          "default": 1130,
-          "title": "Who Am I",
-          "type": "integer"
-        },
         "device_type": {
           "const": "stepperdriver",
           "default": "stepperdriver",
           "title": "Device Type",
           "type": "string"
+        },
+        "additional_settings": {
+          "default": null,
+          "description": "Additional settings",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "calibration": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/AindManipulatorCalibration"
+            }
+          ],
+          "title": "Calibration of the manipulator"
+        },
+        "who_am_i": {
+          "const": 1130,
+          "default": 1130,
+          "title": "Who Am I",
+          "type": "integer"
         },
         "serial_number": {
           "default": null,
@@ -195,19 +215,11 @@
           "description": "Device port name",
           "title": "Port Name",
           "type": "string"
-        },
-        "calibration": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/AindManipulatorCalibration"
-            }
-          ],
-          "title": "Calibration of the manipulator"
         }
       },
       "required": [
-        "port_name",
-        "calibration"
+        "calibration",
+        "port_name"
       ],
       "title": "AindManipulatorDevice",
       "type": "object"
@@ -291,6 +303,11 @@
         "axis"
       ],
       "title": "AxisConfiguration",
+      "type": "object"
+    },
+    "BaseModel": {
+      "properties": {},
+      "title": "BaseModel",
       "type": "object"
     },
     "ManipulatorPosition": {
