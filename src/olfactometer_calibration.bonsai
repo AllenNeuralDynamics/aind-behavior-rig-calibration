@@ -14,7 +14,7 @@
                  xmlns:p8="clr-namespace:AllenNeuralDynamics.VersionControl;assembly=AllenNeuralDynamics.VersionControl"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:p9="clr-namespace:Harp.Olfactometer;assembly=Harp.Olfactometer"
-                 xmlns:p10="clr-namespace:;assembly=Extensions"
+                 xmlns:p10="clr-namespace:AllenNeuralDynamics.HarpUtils;assembly=AllenNeuralDynamics.HarpUtils"
                  xmlns:p11="clr-namespace:AllenNeuralDynamics.Core.Logging;assembly=AllenNeuralDynamics.Core"
                  xmlns:p12="clr-namespace:Harp.Olfactometer;assembly=Extensions"
                  xmlns:p13="clr-namespace:Harp.TimestampGeneratorGen3;assembly=Harp.TimestampGeneratorGen3"
@@ -277,8 +277,9 @@
                 <Property Name="PortName" />
               </PropertyMappings>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\HarpAnalogInputDevice.bonsai">
+            <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.HarpUtils:HarpAnalogInputDevice.bonsai">
               <PortName>COMx</PortName>
+              <StartExperimentSubjectName>StartExperiment</StartExperimentSubjectName>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>RigSchema</Name>
@@ -294,8 +295,9 @@
                 <Property Name="PortName" />
               </PropertyMappings>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\HarpClockSynchronizerDevice.bonsai">
+            <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.HarpUtils:HarpTimestampGeneratorGen3Device.bonsai">
               <PortName>COMx</PortName>
+              <StartExperimentSubjectName>StartExperiment</StartExperimentSubjectName>
             </Expression>
           </Nodes>
           <Edges>
@@ -683,6 +685,13 @@
                   <Edge From="10" To="11" Label="Source1" />
                   <Edge From="11" To="12" Label="Source1" />
                 </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>InitialState</Name>
+              <Workflow>
+                <Nodes />
+                <Edges />
               </Workflow>
             </Expression>
           </Nodes>
@@ -1913,8 +1922,10 @@
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
+                    <Modality>Behavior</Modality>
                     <LogName>Olfactometer.harp</LogName>
                     <Extension>bin</Extension>
+                    <HarpDevice>HarpDevice</HarpDevice>
                   </Expression>
                   <Expression xsi:type="PropertyMapping">
                     <PropertyMappings>
@@ -1939,8 +1950,10 @@
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
+                    <Modality>Behavior</Modality>
                     <LogName>ClockGenerator.harp</LogName>
                     <Extension>bin</Extension>
+                    <HarpDevice>HarpDevice</HarpDevice>
                   </Expression>
                   <Expression xsi:type="PropertyMapping">
                     <PropertyMappings>
@@ -1971,8 +1984,10 @@
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
+                    <Modality>Behavior</Modality>
                     <LogName>AnalogInput.harp</LogName>
                     <Extension>bin</Extension>
+                    <HarpDevice>HarpDevice</HarpDevice>
                   </Expression>
                   <Expression xsi:type="PropertyMapping">
                     <PropertyMappings>
@@ -1995,7 +2010,7 @@
                   <Expression xsi:type="MemberSelector">
                     <Selector>HarpAnalogInput</Selector>
                   </Expression>
-                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\IsNotNull.bonsai" />
+                  <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:SubscribeWhen" />
                   </Expression>
@@ -2056,6 +2071,7 @@
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogDataSchema.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
+                    <Modality xsi:nil="true" />
                     <LogName>EndSession</LogName>
                     <DeviceName>config</DeviceName>
                     <Extension>json</Extension>
@@ -2141,6 +2157,7 @@
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogDataSchema.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
+                    <Modality xsi:nil="true" />
                     <LogName>Session.json</LogName>
                     <DeviceName>Config</DeviceName>
                     <Extension>json</Extension>
@@ -2153,6 +2170,7 @@
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogDataSchema.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
+                    <Modality xsi:nil="true" />
                     <LogName>Rig</LogName>
                     <DeviceName>Config</DeviceName>
                     <Extension>json</Extension>
@@ -2165,6 +2183,7 @@
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogDataSchema.bonsai">
                     <SubjectName>LoggingRootPath</SubjectName>
+                    <Modality xsi:nil="true" />
                     <LogName>TaskLogic</LogName>
                     <DeviceName>Config</DeviceName>
                     <Extension>json</Extension>
@@ -2233,6 +2252,7 @@
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogSoftwareEventsDemux.bonsai">
                     <LoggerName>SoftwareEvents</LoggerName>
                     <SubjectName>LoggingRootPath</SubjectName>
+                    <Modality>Behavior</Modality>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
                 </Nodes>
