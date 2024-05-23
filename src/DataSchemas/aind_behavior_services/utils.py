@@ -288,7 +288,7 @@ def run_bonsai_process(
         cwd = os.getcwd()
     if print_cmd:
         print(output_cmd)
-    return subprocess.run(output_cmd, cwd=cwd, check=True, timeout=timeout)
+    return subprocess.run(output_cmd, cwd=cwd, check=True, timeout=timeout, capture_output=True)
 
 
 def open_bonsai_process(
