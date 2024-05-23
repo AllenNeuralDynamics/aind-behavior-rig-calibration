@@ -52,7 +52,7 @@ calibration_session = AindBehaviorSessionModel(
     date=datetime.datetime.now(),
 )
 
-seed_path = "local/water_valve{suffix}.json"
+seed_path = "local/water_valve_{suffix}.json"
 with open(seed_path.format(suffix="calibration_logic"), "w") as f:
     f.write(calibration_logic.model_dump_json(indent=3))
 with open(seed_path.format(suffix="session"), "w") as f:
