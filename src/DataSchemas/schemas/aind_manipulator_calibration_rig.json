@@ -185,9 +185,13 @@
           ]
         },
         "calibration": {
-          "allOf": [
+          "default": null,
+          "oneOf": [
             {
               "$ref": "#/definitions/AindManipulatorCalibration"
+            },
+            {
+              "type": "null"
             }
           ],
           "title": "Calibration of the manipulator"
@@ -218,7 +222,6 @@
         }
       },
       "required": [
-        "calibration",
         "port_name"
       ],
       "title": "AindManipulatorDevice",
@@ -380,12 +383,12 @@
           "$ref": "#/definitions/AindManipulatorDevice"
         }
       ],
+      "default": null,
       "title": "Manipulator device"
     }
   },
   "required": [
-    "rig_name",
-    "manipulator"
+    "rig_name"
   ],
   "title": "CalibrationRig",
   "type": "object"

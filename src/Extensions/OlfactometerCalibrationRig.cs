@@ -220,26 +220,26 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class HarpOlfactometer
+    public partial class HarpClockGenerator
     {
     
-        private string _deviceType = "olfactometer";
+        private string _deviceType = "clockgenerator";
     
         private BaseModel _additionalSettings;
     
         private BaseModel _calibration;
     
-        private int _whoAmI = 1140;
+        private int _whoAmI = 1158;
     
         private string _serialNumber;
     
         private string _portName;
     
-        public HarpOlfactometer()
+        public HarpClockGenerator()
         {
         }
     
-        protected HarpOlfactometer(HarpOlfactometer other)
+        protected HarpClockGenerator(HarpClockGenerator other)
         {
             _deviceType = other._deviceType;
             _additionalSettings = other._additionalSettings;
@@ -345,14 +345,14 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
             }
         }
     
-        public System.IObservable<HarpOlfactometer> Process()
+        public System.IObservable<HarpClockGenerator> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new HarpOlfactometer(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new HarpClockGenerator(this)));
         }
     
-        public System.IObservable<HarpOlfactometer> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<HarpClockGenerator> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new HarpOlfactometer(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new HarpClockGenerator(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -391,7 +391,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     
         private BaseModel _additionalSettings;
     
-        private OlfactometerCalibration _calibration = new OlfactometerCalibration();
+        private OlfactometerCalibration _calibration;
     
         private int _whoAmI = 1140;
     
@@ -445,7 +445,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration", Required=Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
         public OlfactometerCalibration Calibration
         {
             get
@@ -989,7 +989,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     
         private HarpAnalogInput _harpAnalogInput = new HarpAnalogInput();
     
-        private HarpOlfactometer _harpClockGenerator = new HarpOlfactometer();
+        private HarpClockGenerator _harpClockGenerator = new HarpClockGenerator();
     
         public CalibrationRig()
         {
@@ -1082,7 +1082,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("harp_clock_generator", Required=Newtonsoft.Json.Required.Always)]
-        public HarpOlfactometer HarpClockGenerator
+        public HarpClockGenerator HarpClockGenerator
         {
             get
             {
@@ -1167,9 +1167,9 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
             return Process<HarpAnalogInput>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<HarpOlfactometer> source)
+        public System.IObservable<string> Process(System.IObservable<HarpClockGenerator> source)
         {
-            return Process<HarpOlfactometer>(source);
+            return Process<HarpClockGenerator>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<Olfactometer> source)
@@ -1213,7 +1213,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationRig
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BaseModel>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpAnalogInput>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpOlfactometer>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpClockGenerator>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Olfactometer>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<OlfactometerCalibrationInput>))]

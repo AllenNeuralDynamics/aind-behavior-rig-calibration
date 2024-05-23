@@ -68,11 +68,11 @@
       "title": "HarpAnalogInput",
       "type": "object"
     },
-    "HarpOlfactometer": {
+    "HarpClockGenerator": {
       "properties": {
         "device_type": {
-          "const": "olfactometer",
-          "default": "olfactometer",
+          "const": "clockgenerator",
+          "default": "clockgenerator",
           "title": "Device Type",
           "type": "string"
         },
@@ -101,8 +101,8 @@
           ]
         },
         "who_am_i": {
-          "const": 1140,
-          "default": 1140,
+          "const": 1158,
+          "default": 1158,
           "title": "Who Am I",
           "type": "integer"
         },
@@ -128,7 +128,7 @@
       "required": [
         "port_name"
       ],
-      "title": "HarpOlfactometer",
+      "title": "HarpClockGenerator",
       "type": "object"
     },
     "Olfactometer": {
@@ -152,9 +152,13 @@
           ]
         },
         "calibration": {
-          "allOf": [
+          "default": null,
+          "oneOf": [
             {
               "$ref": "#/definitions/OlfactometerCalibration"
+            },
+            {
+              "type": "null"
             }
           ],
           "title": "Calibration of the olfactometer"
@@ -185,7 +189,6 @@
         }
       },
       "required": [
-        "calibration",
         "port_name"
       ],
       "title": "Olfactometer",
@@ -382,7 +385,7 @@
     "harp_clock_generator": {
       "allOf": [
         {
-          "$ref": "#/definitions/HarpOlfactometer"
+          "$ref": "#/definitions/HarpClockGenerator"
         }
       ],
       "title": "Clock generator device"

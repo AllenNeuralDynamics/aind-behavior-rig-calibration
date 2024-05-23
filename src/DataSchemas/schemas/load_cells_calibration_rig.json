@@ -58,9 +58,13 @@
           ]
         },
         "calibration": {
-          "allOf": [
+          "default": null,
+          "oneOf": [
             {
               "$ref": "#/definitions/LoadCellsCalibration"
+            },
+            {
+              "type": "null"
             }
           ],
           "title": "Calibration of the load cells"
@@ -91,7 +95,6 @@
         }
       },
       "required": [
-        "calibration",
         "port_name"
       ],
       "title": "LoadCells",

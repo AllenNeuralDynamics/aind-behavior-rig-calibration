@@ -143,7 +143,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     
         private BaseModel _additionalSettings;
     
-        private LoadCellsCalibration _calibration = new LoadCellsCalibration();
+        private LoadCellsCalibration _calibration;
     
         private int _whoAmI = 1232;
     
@@ -197,7 +197,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration", Required=Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
         public LoadCellsCalibration Calibration
         {
             get

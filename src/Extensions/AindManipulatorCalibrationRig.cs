@@ -336,7 +336,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     
         private BaseModel _additionalSettings;
     
-        private AindManipulatorCalibration _calibration = new AindManipulatorCalibration();
+        private AindManipulatorCalibration _calibration;
     
         private int _whoAmI = 1130;
     
@@ -390,7 +390,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration", Required=Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
         public AindManipulatorCalibration Calibration
         {
             get
@@ -903,7 +903,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     
         private string _rigName;
     
-        private AindManipulatorDevice _manipulator = new AindManipulatorDevice();
+        private AindManipulatorDevice _manipulator;
     
         public CalibrationRig()
         {
@@ -965,7 +965,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("manipulator", Required=Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonPropertyAttribute("manipulator")]
         public AindManipulatorDevice Manipulator
         {
             get
