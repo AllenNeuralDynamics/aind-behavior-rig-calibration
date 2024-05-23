@@ -58,7 +58,7 @@ calibration_session = AindBehaviorSessionModel(
 
 rig = olf.CalibrationRig(
     rig_name="OlfactometerRig",
-    harp_olfactometer=olf.HarpOlfactometer(port_name="COM4"),
+    harp_olfactometer=olf.Olfactometer(port_name="COM4"),
     harp_analog_input=olf.HarpAnalogInput(port_name="COM5"),
     harp_clock_generator=olf.HarpClockGenerator(port_name="COM6"))
 

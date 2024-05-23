@@ -37,7 +37,7 @@ calibration_session = AindBehaviorSessionModel(
 )
 
 rig = lc.CalibrationRig(
-    load_cells=lc.HarpLoadCells(port_name="COM4", calibration=calibration),
+    load_cells=lc.LoadCells(port_name="COM4"),
     rig_name="LoadCellsRig",
 )
 
