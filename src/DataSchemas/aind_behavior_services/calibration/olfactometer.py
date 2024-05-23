@@ -79,8 +79,12 @@ class CalibrationLogic(AindBehaviorTaskLogicModel):
     task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
 
 
+class Olfactometer(HarpOlfactometer):
+    calibration: Optional[OlfactometerCalibration] = Field(default=None, title="Calibration of the olfactometer")
+
+
 class CalibrationRig(AindBehaviorRigModel):
     version: Literal[RIG_VERSION] = RIG_VERSION
-    harp_olfactometer: HarpOlfactometer = Field(..., title="Olfactometer device")
+    harp_olfactometer: Olfactometer = Field(..., title="Olfactometer device")
     harp_analog_input: HarpAnalogInput = Field(..., title="Analog input device")
     harp_clock_generator: HarpClockGenerator = Field(..., title="Clock generator device")

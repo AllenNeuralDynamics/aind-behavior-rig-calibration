@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import List, Literal
+from typing import List, Literal, Optional
 
 from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import AindBehaviorRigModel, HarpStepperDriver
@@ -114,6 +114,10 @@ class CalibrationLogic(AindBehaviorTaskLogicModel):
     task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
 
 
+class AindManipulatorDevice(HarpStepperDriver):
+    calibration: Optional[AindManipulatorCalibration] = Field(default=None, title="Calibration of the manipulator")
+
+
 class CalibrationRig(AindBehaviorRigModel):
     version: Literal[RIG_VERSION] = RIG_VERSION
-    harp_manipulator: HarpStepperDriver = Field(..., title="Manipulator device")
+    manipulator: AindManipulatorDevice = Field(default=None, title="Manipulator device")

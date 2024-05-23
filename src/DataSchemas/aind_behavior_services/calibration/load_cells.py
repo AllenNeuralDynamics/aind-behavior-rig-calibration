@@ -1,4 +1,4 @@
-from typing import Annotated, Dict, List, Literal, Tuple
+from typing import Annotated, Dict, List, Literal, Optional, Tuple
 
 from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import AindBehaviorRigModel, HarpLoadCells
@@ -68,6 +68,10 @@ class CalibrationLogic(AindBehaviorTaskLogicModel):
     task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
 
 
+class LoadCells(HarpLoadCells):
+    calibration: Optional[LoadCellsCalibration] = Field(default=None, title="Calibration of the load cells")
+
+
 class CalibrationRig(AindBehaviorRigModel):
     version: Literal[RIG_VERSION] = RIG_VERSION
-    load_cells: HarpLoadCells = Field(..., title="Load Cells acquisition device")
+    load_cells: LoadCells = Field(..., title="Load Cells acquisition device")
