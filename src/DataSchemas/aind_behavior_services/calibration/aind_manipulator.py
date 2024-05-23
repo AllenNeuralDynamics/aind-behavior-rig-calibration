@@ -114,13 +114,6 @@ class CalibrationLogic(AindBehaviorTaskLogicModel):
     task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
 
 
-# Rig model
-
-
-class AindManipulatorDevice(HarpStepperDriver):
-    calibration: AindManipulatorCalibration = Field(..., title="Calibration of the manipulator")
-
-
 class CalibrationRig(AindBehaviorRigModel):
     version: Literal[RIG_VERSION] = RIG_VERSION
-    manipulator: AindManipulatorDevice = Field(..., title="Manipulator device")
+    harp_manipulator: HarpStepperDriver = Field(..., title="Manipulator device")

@@ -68,10 +68,6 @@ class CalibrationLogic(AindBehaviorTaskLogicModel):
     task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
 
 
-class LoadCells(HarpLoadCells):
-    calibration: LoadCellsCalibration = Field(..., title="Calibration of the load cells")
-
-
 class CalibrationRig(AindBehaviorRigModel):
     version: Literal[RIG_VERSION] = RIG_VERSION
-    load_cells: LoadCells = Field(..., title="Load Cells acquisition device")
+    load_cells: HarpLoadCells = Field(..., title="Load Cells acquisition device")
