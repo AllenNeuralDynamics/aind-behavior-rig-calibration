@@ -36,8 +36,15 @@ calibration_session = AindBehaviorSessionModel(
     commit_hash=get_commit_hash(),
 )
 
+rig = lc.CalibrationRig(
+    load_cells=lc.HarpLoadCells(port_name="COM4", calibration=calibration),
+    rig_name="LoadCellsRig",
+)
+
 seed_path = "local/load_cells_{suffix}.json"
 with open(seed_path.format(suffix="calibration_logic"), "w") as f:
     f.write(calibration_logic.model_dump_json(indent=3))
 with open(seed_path.format(suffix="session"), "w") as f:
     f.write(calibration_session.model_dump_json(indent=3))
+with open(seed_path.format(suffix="rig"), "w") as f:
+    f.write(rig.model_dump_json(indent=3))

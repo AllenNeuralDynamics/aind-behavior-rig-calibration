@@ -36,7 +36,7 @@ calibration_session = AindBehaviorSessionModel(
 )
 
 rig = m.CalibrationRig(
-    manipulator=m.AindManipulatorDevice(port_name="COM4", calibration=calibration_data),
+    harp_manipulator=m.HarpStepperDriver(port_name="COM4"),
     rig_name="AindManipulatorRig",
 )
 

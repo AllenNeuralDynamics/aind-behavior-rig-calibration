@@ -56,8 +56,17 @@ calibration_session = AindBehaviorSessionModel(
     commit_hash=get_commit_hash(),
 )
 
+rig = olf.CalibrationRig(
+    rig_name="OlfactometerRig",
+    harp_olfactometer=olf.HarpOlfactometer(port_name="COM4"),
+    harp_analog_input=olf.HarpAnalogInput(port_name="COM5"),
+    harp_clock_generator=olf.HarpClockGenerator(port_name="COM6"))
+
+
 seed_path = "local/olfactometer_{suffix}.json"
 with open(seed_path.format(suffix="calibration_logic"), "w") as f:
     f.write(calibration_logic.model_dump_json(indent=3))
 with open(seed_path.format(suffix="session"), "w") as f:
     f.write(calibration_session.model_dump_json(indent=3))
+with open(seed_path.format(suffix="rig"), "w") as f:
+    f.write(rig.model_dump_json(indent=3))

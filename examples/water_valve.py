@@ -52,8 +52,12 @@ calibration_session = AindBehaviorSessionModel(
     date=datetime.datetime.now(),
 )
 
+rig = wv.CalibrationRig(rig_name="WaterValveRig")
+
 seed_path = "local/water_valve_{suffix}.json"
 with open(seed_path.format(suffix="calibration_logic"), "w") as f:
     f.write(calibration_logic.model_dump_json(indent=3))
 with open(seed_path.format(suffix="session"), "w") as f:
     f.write(calibration_session.model_dump_json(indent=3))
+with open(seed_path.format(suffix="rig"), "w") as f:
+    f.write(rig.model_dump_json(indent=3))
