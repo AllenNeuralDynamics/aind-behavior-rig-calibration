@@ -60,7 +60,8 @@ rig = olf.CalibrationRig(
     rig_name="OlfactometerRig",
     harp_olfactometer=olf.Olfactometer(port_name="COM4"),
     harp_analog_input=olf.HarpAnalogInput(port_name="COM5"),
-    harp_clock_generator=olf.HarpClockGenerator(port_name="COM6"))
+    harp_clock_generator=olf.HarpClockGenerator(port_name="COM6"),
+)
 
 
 seed_path = "local/olfactometer_{suffix}.json"
