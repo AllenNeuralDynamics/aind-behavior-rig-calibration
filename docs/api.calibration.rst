@@ -2,7 +2,7 @@ api.calibration
 -------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    api.calibration/aind_manipulator
    api.calibration/load_cells
