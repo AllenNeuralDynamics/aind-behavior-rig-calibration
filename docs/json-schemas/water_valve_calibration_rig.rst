@@ -1,6 +1,6 @@
 
 water_valve_calibration_rig
--------------
+----------------------------------------------------
 
 `Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration_rig.json>`_
 

@@ -1,6 +1,6 @@
 
 aind_behavior_subject_database
--------------
+----------------------------------------------------
 
 `Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_behavior_subject_database.json>`_
 

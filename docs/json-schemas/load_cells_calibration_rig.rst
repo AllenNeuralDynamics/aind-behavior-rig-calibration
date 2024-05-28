@@ -1,6 +1,6 @@
 
 load_cells_calibration_rig
--------------
+----------------------------------------------------
 
 `Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration_rig.json>`_
 

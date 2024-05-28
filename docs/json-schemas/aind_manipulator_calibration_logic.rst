@@ -1,6 +1,6 @@
 
 aind_manipulator_calibration_logic
--------------
+----------------------------------------------------
 
 `Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/aind_manipulator_calibration_logic.json>`_
 
