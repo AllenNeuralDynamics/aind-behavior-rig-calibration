@@ -9,11 +9,12 @@
 
 import os
 import sys
-
-sys.path.insert(0, os.path.abspath("../src/DataSchemas"))
+import erdantic as erd
+from pydantic import BaseModel
 import glob
 
-from aind_behavior_services import __version__
+sys.path.insert(0, os.path.abspath("../src/DataSchemas"))
+import aind_behavior_services
 
 SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/tree/main/src/DataSchemas/"
 
@@ -21,7 +22,7 @@ SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/tre
 project = "AIND Behavior Services"
 copyright = "2024, Allen Institute for Neural Dynamics"
 author = "Bruno Cruz"
-release = __version__
+release = aind_behavior_services.__version__
 
 
 # -- Generate jsons --------------------------------------------------------------
@@ -40,7 +41,7 @@ json-schemas
 
 leaf_template = """
 {json_file_name}
--------------
+----------------------------------------------------
 
 `Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/{json_file_name}.json>`_
 
@@ -111,3 +112,14 @@ def linkcode_resolve(domain, info):
         return None
     filename = info["module"].replace(".", "/")
     return f"{SOURCE_ROOT}/{filename}.py"
+
+
+# -- Class diagram generation
+
+def export_model_diagram(model: BaseModel, root: str = "_static") -> None:
+    diagram = erd.create(model)
+    diagram.draw(f"{root}/{model.__name__}.svg")
+
+
+_diagram_root = "_static"
+export_model_diagram(aind_behavior_services.session.AindBehaviorSessionModel, _diagram_root)
