@@ -1,5 +1,5 @@
 
-json-schemas
+JsonSchema
 -------------
 .. toctree::
    :maxdepth: 4

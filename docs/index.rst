@@ -13,8 +13,10 @@ Welcome to AIND Behavior Services's documentation!
    :maxdepth: 4
    :caption: Contents:
 
+   self
    api
    json-schemas
+   GitHub Source Code <https://github.com/AllenNeuralDynamics/Aind.Behavior.Services>
 
 Indices and tables
 ==================

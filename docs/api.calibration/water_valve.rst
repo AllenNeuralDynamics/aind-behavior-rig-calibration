@@ -7,7 +7,7 @@ water_valve
    :show-inheritance:
 
 Example
---------
+########
 
 .. literalinclude:: ../../examples/water_valve.py
       :language: python

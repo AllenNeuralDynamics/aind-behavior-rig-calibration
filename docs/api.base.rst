@@ -1,4 +1,4 @@
-api.base
+Base
 -------------
 
 .. toctree::

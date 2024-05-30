@@ -32,7 +32,7 @@ json_files = glob.glob(os.path.join(json_root_path, "*.json"))
 rst_target_path = os.path.abspath("json-schemas")
 
 root_template = """
-json-schemas
+JsonSchema
 -------------
 .. toctree::
    :maxdepth: 4
@@ -75,6 +75,7 @@ extensions = [
     "sphinx.ext.linkcode",
     "myst_parser",
     "sphinxcontrib.autodoc_pydantic",
+    'sphinx_copybutton'
 ]
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]

@@ -7,7 +7,7 @@ olfactometer
    :show-inheritance:
 
 Example
---------
+########
 
 .. literalinclude:: ../../examples/olfactometer.py
       :language: python

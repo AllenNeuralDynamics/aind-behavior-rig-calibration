@@ -7,7 +7,7 @@ load_cells
    :show-inheritance:
 
 Example
---------
+########
 
 .. literalinclude:: ../../examples/load_cells.py
       :language: python

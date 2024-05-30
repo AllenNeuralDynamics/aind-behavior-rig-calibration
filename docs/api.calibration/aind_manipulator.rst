@@ -7,7 +7,7 @@ aind_manipulator
    :show-inheritance:
 
 Example
---------
+##########
 
 .. literalinclude:: ../../examples/aind_manipulator.py
       :language: python
