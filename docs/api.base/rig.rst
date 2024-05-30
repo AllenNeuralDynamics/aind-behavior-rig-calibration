@@ -1,5 +1,5 @@
 AindBehaviorRigModel
--------------
+-------------------------
 
 .. autopydantic_model:: aind_behavior_services.AindBehaviorRigModel
    :members:
