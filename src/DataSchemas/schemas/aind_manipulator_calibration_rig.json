@@ -83,16 +83,6 @@
         "axis_configuration": {
           "default": [
             {
-              "axis": 1,
-              "step_acceleration_interval": 100,
-              "step_interval": 100,
-              "microstep_resolution": 0,
-              "maximum_step_interval": 2000,
-              "motor_operation_mode": 0,
-              "max_limit": 24000,
-              "min_limit": -1
-            },
-            {
               "axis": 2,
               "step_acceleration_interval": 100,
               "step_interval": 100,
@@ -104,6 +94,16 @@
             },
             {
               "axis": 3,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 24000,
+              "min_limit": -1
+            },
+            {
+              "axis": 1,
               "step_acceleration_interval": 100,
               "step_interval": 100,
               "microstep_resolution": 0,
@@ -131,9 +131,9 @@
         },
         "homing_order": {
           "default": [
-            1,
             2,
             3,
+            1,
             4
           ],
           "items": {
@@ -240,9 +240,9 @@
       "type": "integer",
       "x-enumNames": [
         "None",
+        "X",
         "Y1",
         "Y2",
-        "X",
         "Z"
       ]
     },
