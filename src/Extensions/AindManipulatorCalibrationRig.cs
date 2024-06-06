@@ -494,19 +494,19 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     {
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="0")]
-        _0 = 0,
+        None = 0,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="1")]
-        _1 = 1,
+        Y1 = 1,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="2")]
-        _2 = 2,
+        Y2 = 2,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="3")]
-        _3 = 3,
+        X = 3,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="4")]
-        _4 = 4,
+        Z = 4,
     }
 
 
@@ -526,11 +526,11 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     
         private int _stepInterval = 100;
     
-        private MicrostepResolution _microstepResolution = AindBehaviorServices.AindManipulatorCalibrationRig.MicrostepResolution._0;
+        private MicrostepResolution _microstepResolution = AindBehaviorServices.AindManipulatorCalibrationRig.MicrostepResolution.Microstep8;
     
         private int _maximumStepInterval = 2000;
     
-        private MotorOperationMode _motorOperationMode = AindBehaviorServices.AindManipulatorCalibrationRig.MotorOperationMode._0;
+        private MotorOperationMode _motorOperationMode = AindBehaviorServices.AindManipulatorCalibrationRig.MotorOperationMode.Quiet;
     
         private int _maxLimit = 24000;
     
@@ -866,16 +866,16 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     {
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="0")]
-        _0 = 0,
+        Microstep8 = 0,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="1")]
-        _1 = 1,
+        Microstep16 = 1,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="2")]
-        _2 = 2,
+        Microstep32 = 2,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="3")]
-        _3 = 3,
+        Microstep64 = 3,
     }
 
 
@@ -884,10 +884,10 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     {
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="0")]
-        _0 = 0,
+        Quiet = 0,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="1")]
-        _1 = 1,
+        Dynamic = 1,
     }
 
 
