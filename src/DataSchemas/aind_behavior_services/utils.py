@@ -6,7 +6,8 @@ from os import PathLike
 from pathlib import Path
 from string import capwords
 from subprocess import CompletedProcess, run
-from typing import Dict, List, Optional, TypeVar
+from typing import Dict, List, Optional, TypeVar, Any
+import inspect
 
 from pydantic import BaseModel, PydanticInvalidForJsonSchema
 from pydantic.json_schema import (
@@ -23,6 +24,7 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
         super().__init__(*args, **kwargs)
         self.nullable_as_oneof = kwargs.get("nullable_as_oneof", True)
         self.unions_as_oneof = kwargs.get("unions_as_oneof", True)
+        self.render_xenum_names = kwargs.get("render_xenum_names", True)
 
     def nullable_schema(self, schema: core_schema.NullableSchema) -> JsonSchemaValue:
         null_schema = {"type": "null"}
@@ -47,6 +49,47 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
         if len(members) == 1:
             return members[0]
         return {"oneOf": members}
+
+    def enum_schema(self, schema: core_schema.EnumSchema) -> JsonSchemaValue:
+        """Generates a JSON schema that matches an Enum value.
+
+        Args:
+            schema: The core schema.
+
+        Returns:
+            The generated JSON schema.
+        """
+        enum_type = schema['cls']
+        description = None if not enum_type.__doc__ else inspect.cleandoc(enum_type.__doc__)
+        if (
+            description == 'An enumeration.'
+        ):  # This is the default value provided by enum.EnumMeta.__new__; don't use it
+            description = None
+        result: dict[str, Any] = {'title': enum_type.__name__, 'description': description}
+        result = {k: v for k, v in result.items() if v is not None}
+
+        expected = [to_jsonable_python(v.value) for v in schema['members']]
+
+        result['enum'] = expected
+        if len(expected) == 1:
+            result['const'] = expected[0]
+
+        types = {type(e) for e in expected}
+        if isinstance(enum_type, str) or types == {str}:
+            result['type'] = 'string'
+        elif isinstance(enum_type, int) or types == {int}:
+            result['type'] = 'integer'
+        elif isinstance(enum_type, float) or types == {float}:
+            result['type'] = 'numeric'
+        elif types == {bool}:
+            result['type'] = 'boolean'
+        elif types == {list}:
+            result['type'] = 'array'
+
+        if self.render_xenum_names:
+            result['x-enumNames'] = [screaming_snake_case_to_pascal_case(v.name) for v in schema['members']]
+
+        return result
 
     def literal_schema(self, schema: core_schema.LiteralSchema) -> JsonSchemaValue:
         """Generates a JSON schema that matches a literal value.
@@ -237,6 +280,20 @@ def pascal_to_snake_case(s: str) -> str:
         else:
             result += char
     return result
+
+
+def screaming_snake_case_to_pascal_case(s: str) -> str:
+    """
+    Converts a SCREAMING_SNAKE_CASE string to PascalCase.
+
+    Args:
+        s (str): The SCREAMING_SNAKE_CASE string to be converted.
+
+    Returns:
+        str: The PascalCase string.
+    """
+    words = s.split('_')
+    return ''.join(word.capitalize() for word in words)
 
 
 def _build_bonsai_process_command(
