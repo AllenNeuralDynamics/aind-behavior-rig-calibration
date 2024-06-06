@@ -14,9 +14,9 @@ class Axis(IntEnum):
     """Motor axis available"""
 
     NONE = 0
-    Y1 = 1
-    Y2 = 2
-    X = 3
+    X = 1
+    Y1 = 2
+    Y2 = 3
     Z = 4
 
 
