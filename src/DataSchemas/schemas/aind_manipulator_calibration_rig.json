@@ -237,7 +237,14 @@
         4
       ],
       "title": "Axis",
-      "type": "integer"
+      "type": "integer",
+      "x-enumNames": [
+        "None",
+        "Y1",
+        "Y2",
+        "X",
+        "Z"
+      ]
     },
     "AxisConfiguration": {
       "description": "Axis configuration",
@@ -349,7 +356,13 @@
         3
       ],
       "title": "MicrostepResolution",
-      "type": "integer"
+      "type": "integer",
+      "x-enumNames": [
+        "Microstep8",
+        "Microstep16",
+        "Microstep32",
+        "Microstep64"
+      ]
     },
     "MotorOperationMode": {
       "enum": [
@@ -357,7 +370,11 @@
         1
       ],
       "title": "MotorOperationMode",
-      "type": "integer"
+      "type": "integer",
+      "x-enumNames": [
+        "Quiet",
+        "Dynamic"
+      ]
     }
   },
   "properties": {
