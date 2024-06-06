@@ -86,7 +86,7 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
         elif types == {list}:
             result['type'] = 'array'
 
-        if self.render_xenum_names:
+        if (self.render_xenum_names) and (result['type'] != 'string'):
             result['x-enumNames'] = [screaming_snake_case_to_pascal_case(v.name) for v in schema['members']]
 
         return result
