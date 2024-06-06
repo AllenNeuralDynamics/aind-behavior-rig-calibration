@@ -497,13 +497,13 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
         None = 0,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="1")]
-        Y1 = 1,
+        X = 1,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="2")]
-        Y2 = 2,
+        Y1 = 2,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="3")]
-        X = 3,
+        Y2 = 3,
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="4")]
         Z = 4,
