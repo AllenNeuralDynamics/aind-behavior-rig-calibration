@@ -85,6 +85,7 @@ fail_under = 100
 
 [tool.isort]
 profile = "black"
+skip = [".venv", "build"]
 
 [tool.interrogate]
 exclude = ["setup.py", "docs", "build"]

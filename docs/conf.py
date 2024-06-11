@@ -7,14 +7,15 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 
+import glob
 import os
 import sys
+
 import erdantic as erd
 from pydantic import BaseModel
-import glob
 
 sys.path.insert(0, os.path.abspath("../src/DataSchemas"))
-import aind_behavior_services
+import aind_behavior_services  # noqa: E402
 
 SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/tree/main/src/DataSchemas/"
 
@@ -75,7 +76,7 @@ extensions = [
     "sphinx.ext.linkcode",
     "myst_parser",
     "sphinxcontrib.autodoc_pydantic",
-    'sphinx_copybutton'
+    "sphinx_copybutton",
 ]
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -116,6 +117,7 @@ def linkcode_resolve(domain, info):
 
 
 # -- Class diagram generation
+
 
 def export_model_diagram(model: BaseModel, root: str = "_static") -> None:
     diagram = erd.create(model)

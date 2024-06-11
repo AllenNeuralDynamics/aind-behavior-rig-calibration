@@ -2,9 +2,10 @@ import unittest
 import warnings
 from typing import Literal
 
-from aind_behavior_services import AindBehaviorTaskLogicModel
 from aind_behavior_services.task_logic import TaskParameters
 from pydantic import Field, ValidationError
+
+from aind_behavior_services import AindBehaviorTaskLogicModel
 
 version_pre: str = "0.0.1"
 version_post: str = "0.0.2"

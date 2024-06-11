@@ -62,11 +62,14 @@ def coerce_schema_version(cls: BaseModel, v: str) -> str:
     semver = Version.parse(v)
     if semver > _default_schema_version:
         raise ValueError(
-            f"Deserialized schema version ({semver}) is greater than the current version({_default_schema_version})."
+            f"Deserialized schema version ({semver}) \
+                is greater than the current version({_default_schema_version})."
         )
     elif semver < _default_schema_version:
         warnings.warn(
-            f"Deserialized schema version ({semver}) is less than the current version({_default_schema_version}). Will attempt to coerce the conversion."
+            f"Deserialized schema version ({semver}) \
+                is less than the current version({_default_schema_version}). \
+                    Will attempt to coerce the conversion."
         )
         return str(_default_schema_version)
     else:

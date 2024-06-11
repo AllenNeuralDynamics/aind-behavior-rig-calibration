@@ -1,3 +1,4 @@
+import inspect
 import json
 import os
 import subprocess
@@ -6,8 +7,7 @@ from os import PathLike
 from pathlib import Path
 from string import capwords
 from subprocess import CompletedProcess, run
-from typing import Dict, List, Optional, TypeVar, Any
-import inspect
+from typing import Any, Dict, List, Optional, TypeVar
 
 from pydantic import BaseModel, PydanticInvalidForJsonSchema
 from pydantic.json_schema import (
@@ -59,39 +59,39 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
         Returns:
             The generated JSON schema.
         """
-        enum_type = schema['cls']
+        enum_type = schema["cls"]
         description = None if not enum_type.__doc__ else inspect.cleandoc(enum_type.__doc__)
         if (
-            description == 'An enumeration.'
+            description == "An enumeration."
         ):  # This is the default value provided by enum.EnumMeta.__new__; don't use it
             description = None
-        result: dict[str, Any] = {'title': enum_type.__name__, 'description': description}
+        result: dict[str, Any] = {"title": enum_type.__name__, "description": description}
         result = {k: v for k, v in result.items() if v is not None}
 
-        expected = [to_jsonable_python(v.value) for v in schema['members']]
+        expected = [to_jsonable_python(v.value) for v in schema["members"]]
 
-        result['enum'] = expected
+        result["enum"] = expected
         if len(expected) == 1:
-            result['const'] = expected[0]
+            result["const"] = expected[0]
 
         types = {type(e) for e in expected}
         if isinstance(enum_type, str) or types == {str}:
-            result['type'] = 'string'
+            result["type"] = "string"
         elif isinstance(enum_type, int) or types == {int}:
-            result['type'] = 'integer'
+            result["type"] = "integer"
         elif isinstance(enum_type, float) or types == {float}:
-            result['type'] = 'numeric'
+            result["type"] = "numeric"
         elif types == {bool}:
-            result['type'] = 'boolean'
+            result["type"] = "boolean"
         elif types == {list}:
-            result['type'] = 'array'
+            result["type"] = "array"
 
-        if (self.render_xenum_names) and (result['type'] != 'string'):
-            result['x-enumNames'] = [screaming_snake_case_to_pascal_case(v.name) for v in schema['members']]
+        if (self.render_xenum_names) and (result["type"] != "string"):
+            result["x-enumNames"] = [screaming_snake_case_to_pascal_case(v.name) for v in schema["members"]]
 
         return result
 
-    def literal_schema(self, schema: core_schema.LiteralSchema) -> JsonSchemaValue:
+    def literal_schema(self, schema: core_schema.LiteralSchema) -> JsonSchemaValue:  # noqa: C901
         """Generates a JSON schema that matches a literal value.
 
         Args:
@@ -292,8 +292,8 @@ def screaming_snake_case_to_pascal_case(s: str) -> str:
     Returns:
         str: The PascalCase string.
     """
-    words = s.split('_')
-    return ''.join(word.capitalize() for word in words)
+    words = s.split("_")
+    return "".join(word.capitalize() for word in words)
 
 
 def _build_bonsai_process_command(

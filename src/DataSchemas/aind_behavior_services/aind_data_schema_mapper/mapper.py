@@ -3,17 +3,18 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Optional, Type, TypeVar, Union
 
-from aind_behavior_services import (
-    AindBehaviorRigModel,
-    AindBehaviorSessionModel,
-    AindBehaviorTaskLogicModel,
-)
 from aind_data_schema.core.session import (
     Modality,
     Session,
     Software,
     StimulusEpoch,
     Stream,
+)
+
+from aind_behavior_services import (
+    AindBehaviorRigModel,
+    AindBehaviorSessionModel,
+    AindBehaviorTaskLogicModel,
 )
 
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
@@ -110,7 +111,7 @@ def mapper(
                     Software(
                         name="Bonsai",
                         version=session.commit_hash,
-                        url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/bonsai/Bonsai.config".format(
+                        url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/bonsai/Bonsai.config".format(  # noqa: E501
                             sha=session.commit_hash
                         ),
                     )
@@ -118,7 +119,7 @@ def mapper(
                 script=Software(
                     name="vr-foraging.bonsai",
                     version=session.commit_hash,
-                    url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/src/vr-foraging.bonsai".format(
+                    url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/src/vr-foraging.bonsai".format(  # noqa: E501
                         sha=session.commit_hash
                     ),
                     parameters=task_logic,
