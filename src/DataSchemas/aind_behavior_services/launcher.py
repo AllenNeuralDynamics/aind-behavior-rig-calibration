@@ -5,14 +5,15 @@ import secrets
 from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union
 
 import git
+from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
+from aind_behavior_services.utils import open_bonsai_process
+from pydantic import ValidationError
+
 from aind_behavior_services import (
     AindBehaviorRigModel,
     AindBehaviorSessionModel,
     AindBehaviorTaskLogicModel,
 )
-from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
-from aind_behavior_services.utils import open_bonsai_process
-from pydantic import ValidationError
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
@@ -227,7 +228,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
         if self.repository.is_dirty():
             print(
-                "WARNING: Git repository is dirty. Discard changes before continuing unless you know what you are doing!"
+                "WARNING: Git repository is dirty. \
+                    Discard changes before continuing unless you know what you are doing!"
             )
             input("Press enter to continue...")
 

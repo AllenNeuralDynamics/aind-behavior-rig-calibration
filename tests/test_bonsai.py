@@ -1,11 +1,11 @@
-import unittest
 import os
-from typing import Dict
+import unittest
 from pathlib import Path
-
-from aind_behavior_services.utils import run_bonsai_process
+from typing import Dict
 
 import test_examples
+from aind_behavior_services.utils import run_bonsai_process
+
 
 class BonsaiTests(unittest.TestCase):
 
