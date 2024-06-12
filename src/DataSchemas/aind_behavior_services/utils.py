@@ -24,7 +24,7 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
         super().__init__(*args, **kwargs)
         self.nullable_as_oneof = kwargs.get("nullable_as_oneof", True)
         self.unions_as_oneof = kwargs.get("unions_as_oneof", True)
-        self.render_xenum_names = kwargs.get("render_xenum_names", True)
+        self.render_x_enum_names = kwargs.get("render_x_enum_names", True)
 
     def nullable_schema(self, schema: core_schema.NullableSchema) -> JsonSchemaValue:
         null_schema = {"type": "null"}
@@ -86,7 +86,8 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
         elif types == {list}:
             result["type"] = "array"
 
-        if (self.render_xenum_names) and (result["type"] != "string"):
+        _type = result.get("type", None)
+        if (self.render_x_enum_names) and (_type != "string"):
             result["x-enumNames"] = [screaming_snake_case_to_pascal_case(v.name) for v in schema["members"]]
 
         return result
