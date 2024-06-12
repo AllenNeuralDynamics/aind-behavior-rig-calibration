@@ -87,7 +87,7 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
             result["type"] = "array"
 
         _type = result.get("type", None)
-        if (self.render_x_enum_names) and (_type != "string") and (_type is not None):
+        if (self.render_x_enum_names) and (_type != "string"):
             result["x-enumNames"] = [screaming_snake_case_to_pascal_case(v.name) for v in schema["members"]]
 
         return result
