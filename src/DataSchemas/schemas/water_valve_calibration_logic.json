@@ -75,12 +75,6 @@
       "title": "Description",
       "type": "string"
     },
-    "version": {
-      "const": "0.4.0",
-      "default": "0.4.0",
-      "title": "Version",
-      "type": "string"
-    },
     "task_parameters": {
       "allOf": [
         {
@@ -88,6 +82,25 @@
         }
       ],
       "title": "Task parameters"
+    },
+    "version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "stage_name": {
+      "default": null,
+      "description": "Optional stage name the `Task` object instance represents.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Stage Name"
     }
   },
   "required": [
