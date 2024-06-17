@@ -203,10 +203,17 @@ def bonsai_sgen(
         CompletedProcess: The result of running the command.
     Args:
         schema_path (PathLike): Target Json Schema file
-        output_path (PathLike): Specifies the name of the file containing the generated code.
-        namespace (Optional[str], optional): Specifies the namespace to use for all generated serialization classes. Defaults to DataSchema.
-        root_element (Optional[str], optional):  Specifies the name of the class used to represent the schema root element. If None, it will use the json schema root element. Defaults to None.
-        serializer (Optional[List[BonsaiSgenSerializers]], optional): Specifies the serializer data annotations to include in the generated classes. Defaults to None.
+        output_path (PathLike): Specifies the name of the
+          file containing the generated code.
+        namespace (Optional[str], optional): Specifies the
+          namespace to use for all generated serialization
+          classes. Defaults to DataSchema.
+        root_element (Optional[str], optional):  Specifies the
+          name of the class used to represent the schema root element.
+          If None, it will use the json schema root element. Defaults to None.
+        serializer (Optional[List[BonsaiSgenSerializers]], optional):
+          Specifies the serializer data annotations to include in the generated classes.
+          Defaults to None.
     """
 
     if serializer is None:
