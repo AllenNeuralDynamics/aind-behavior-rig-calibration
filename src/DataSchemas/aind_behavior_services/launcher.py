@@ -176,8 +176,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             f"TaskLogic ({self.task_logic_schema.__name__}) \
                 Schema Version: {self.task_logic_schema.model_construct().version}"
         )
-        print(f"Rig ({self.rig_schema.__name__}) \
-              Schema Version: {self.rig_schema.model_construct().version}")
+        print(
+            f"Rig ({self.rig_schema.__name__}) \
+              Schema Version: {self.rig_schema.model_construct().version}"
+        )
         print(
             f"Session ({self.session_schema.__name__}) \
                 Schema Version: {self.session_schema.model_construct().version}"

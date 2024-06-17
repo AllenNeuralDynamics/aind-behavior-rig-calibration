@@ -3,8 +3,9 @@ import unittest
 from pathlib import Path
 from typing import Dict
 
-import test_examples
 from aind_behavior_services.utils import run_bonsai_process
+
+from . import build_examples
 
 
 class BonsaiTests(unittest.TestCase):
@@ -18,6 +19,7 @@ class BonsaiTests(unittest.TestCase):
             "water_valve",
         ]
 
+        build_examples()
         JSON_ROOT = Path("./local").resolve()
 
         workflow_props: Dict[str, str] = {}

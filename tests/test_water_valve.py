@@ -19,8 +19,7 @@ class WaterValveTests(unittest.TestCase):
         _delta_times = [0.1, 0.2, 0.3, 0.4, 0.5]
         _slope = 10.1
         _offset = -0.3
-        _linear_model = lambda time: _slope * time + _offset
-        _water_weights = [_linear_model(x) for x in _delta_times]
+        _water_weights = [water_mock_model(x, _slope, _offset) for x in _delta_times]
         _inputs = [
             Measurement(valve_open_interval=0.5, valve_open_time=t[0], water_weight=[t[1]], repeat_count=1)
             for t in zip(_delta_times, _water_weights)
@@ -52,8 +51,7 @@ class WaterValveTests(unittest.TestCase):
         _delta_times = [0.1, 0.2, 0.3, 0.4, 0.5]
         _slope = 10.1
         _offset = -0.3
-        _linear_model = lambda time: _slope * time + _offset
-        _water_weights = [_linear_model(x) for x in _delta_times]
+        _water_weights = [water_mock_model(x, _slope, _offset) for x in _delta_times]
         _inputs = WaterValveCalibrationInput(
             measurements=[
                 Measurement(valve_open_interval=0.5, valve_open_time=t[0], water_weight=[t[1]], repeat_count=1)
@@ -71,6 +69,10 @@ class WaterValveTests(unittest.TestCase):
         self.assertAlmostEqual(_slope, calibration.output.slope, 2, "Slope is not almost equal")
         self.assertAlmostEqual(_offset, calibration.output.offset, 2, "Offset is not almost equal")
         self.assertAlmostEqual(1.0, calibration.output.r2, 2, "R2 is not almost equal")
+
+
+def water_mock_model(time: float, slope: float, offset: float) -> float:
+    return slope * time + offset
 
 
 if __name__ == "__main__":
