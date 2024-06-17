@@ -18,7 +18,7 @@ dependencies = [
     'gitpython>=3.1, <4.0',
     'scikit-learn',
     'semver',
-    'aind-behavior-curriculum@git+https://github.com/AllenNeuralDynamics/aind-behavior-curriculum@v0.0.2',
+    'aind-behavior-curriculum@git+https://github.com/AllenNeuralDynamics/aind-behavior-curriculum@v0.0.27',
 
 ]
 

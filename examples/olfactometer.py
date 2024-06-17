@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration import olfactometer as olf
@@ -65,6 +66,8 @@ rig = olf.CalibrationRig(
 
 
 seed_path = "local/olfactometer_{suffix}.json"
+os.makedirs(os.path.dirname(seed_path), exist_ok=True)
+
 with open(seed_path.format(suffix="calibration_logic"), "w") as f:
     f.write(calibration_logic.model_dump_json(indent=3))
 with open(seed_path.format(suffix="session"), "w") as f:

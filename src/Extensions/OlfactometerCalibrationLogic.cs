@@ -382,9 +382,11 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
     
         private string _description = "";
     
+        private CalibrationParameters _taskParameters = new CalibrationParameters();
+    
         private string _version = "0.4.0";
     
-        private CalibrationParameters _taskParameters = new CalibrationParameters();
+        private string _stageName;
     
         public CalibrationLogic()
         {
@@ -394,8 +396,9 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
         {
             _name = other._name;
             _description = other._description;
-            _version = other._version;
             _taskParameters = other._taskParameters;
+            _version = other._version;
+            _stageName = other._stageName;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("name")]
@@ -428,6 +431,20 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
             }
         }
     
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("task_parameters", Required=Newtonsoft.Json.Required.Always)]
+        public CalibrationParameters TaskParameters
+        {
+            get
+            {
+                return _taskParameters;
+            }
+            set
+            {
+                _taskParameters = value;
+            }
+        }
+    
         [Newtonsoft.Json.JsonPropertyAttribute("version")]
         public string Version
         {
@@ -441,17 +458,20 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("task_parameters", Required=Newtonsoft.Json.Required.Always)]
-        public CalibrationParameters TaskParameters
+        /// <summary>
+        /// Optional stage name the `Task` object instance represents.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("stage_name")]
+        [System.ComponentModel.DescriptionAttribute("Optional stage name the `Task` object instance represents.")]
+        public string StageName
         {
             get
             {
-                return _taskParameters;
+                return _stageName;
             }
             set
             {
-                _taskParameters = value;
+                _stageName = value;
             }
         }
     
@@ -469,8 +489,9 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
         {
             stringBuilder.Append("name = " + _name + ", ");
             stringBuilder.Append("description = " + _description + ", ");
+            stringBuilder.Append("task_parameters = " + _taskParameters + ", ");
             stringBuilder.Append("version = " + _version + ", ");
-            stringBuilder.Append("task_parameters = " + _taskParameters);
+            stringBuilder.Append("stage_name = " + _stageName);
             return true;
         }
     
