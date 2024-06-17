@@ -526,43 +526,8 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
         **launcher_kwargs,
     ) -> None:
 
-        parser = argparse.ArgumentParser()
-
-        parser.add_argument("--data_dir", help="Specify the data directory")
-        parser.add_argument("--remote_data_dir", help="Specify the remote data directory")
-        parser.add_argument("--repository_dir", help="Specify the repository directory")
-        parser.add_argument("--config_library_dir", help="Specify the configuration library directory")
-        parser.add_argument("--workflow", help="Specify the workflow")
-        parser.add_argument(
-            "--force_create_directories",
-            help="Specify whether to force create directories",
-            action="store_true",
-            default=False,
-        )
-        parser.add_argument("--dev_mode", help="Specify whether to run in dev mode", action="store_true", default=False)
-        parser.add_argument(
-            "--bonsai_is_editor_mode",
-            help="Specify whether to run in Bonsai editor mode",
-            action="store_false",
-            default=True,
-        )
-        parser.add_argument(
-            "--bonsai_is_start_flag",
-            help="Specify whether to start the Bonsai workflow",
-            action="store_false",
-            default=True,
-        )
-        parser.add_argument(
-            "--allow_dirty_repo", help="Specify whether to allow a dirty repository", action="store_true", default=False
-        )
-        parser.add_argument(
-            "--skip_hardware_validation",
-            help="Specify whether to skip hardware validation",
-            action="store_true",
-            default=False,
-        )
-
-        args = parser.parse_args()
+        parser = self._get_default_arg_parser()
+        args, _ = parser.parse_known_args()
 
         # optional parameters that override the defaults
         data_dir = args.data_dir if args.data_dir is not None else data_dir
@@ -607,3 +572,44 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
 
     def _validate_dependencies(self) -> None:
         self.launcher._validate_dependencies()
+
+    @staticmethod
+    def _get_default_arg_parser() -> argparse.ArgumentParser:
+
+        parser = argparse.ArgumentParser()
+
+        parser.add_argument("--data_dir", help="Specify the data directory")
+        parser.add_argument("--remote_data_dir", help="Specify the remote data directory")
+        parser.add_argument("--repository_dir", help="Specify the repository directory")
+        parser.add_argument("--config_library_dir", help="Specify the configuration library directory")
+        parser.add_argument("--workflow", help="Specify the workflow")
+        parser.add_argument(
+            "--force_create_directories",
+            help="Specify whether to force create directories",
+            action="store_true",
+            default=False,
+        )
+        parser.add_argument("--dev_mode", help="Specify whether to run in dev mode", action="store_true", default=False)
+        parser.add_argument(
+            "--bonsai_is_editor_mode",
+            help="Specify whether to run in Bonsai editor mode",
+            action="store_false",
+            default=True,
+        )
+        parser.add_argument(
+            "--bonsai_is_start_flag",
+            help="Specify whether to start the Bonsai workflow",
+            action="store_false",
+            default=True,
+        )
+        parser.add_argument(
+            "--allow_dirty_repo", help="Specify whether to allow a dirty repository", action="store_true", default=False
+        )
+        parser.add_argument(
+            "--skip_hardware_validation",
+            help="Specify whether to skip hardware validation",
+            action="store_true",
+            default=False,
+        )
+
+        return parser
