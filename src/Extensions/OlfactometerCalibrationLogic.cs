@@ -17,8 +17,6 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
     
         private double? _rngSeed;
     
-        private string _stageAlias;
-    
         private System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> _channelConfig;
     
         private double _fullFlowRate = 1000D;
@@ -36,7 +34,6 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
         protected CalibrationParameters(CalibrationParameters other)
         {
             _rngSeed = other._rngSeed;
-            _stageAlias = other._stageAlias;
             _channelConfig = other._channelConfig;
             _fullFlowRate = other._fullFlowRate;
             _nRepeatsPerStimulus = other._nRepeatsPerStimulus;
@@ -59,23 +56,6 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
             set
             {
                 _rngSeed = value;
-            }
-        }
-    
-        /// <summary>
-        /// Alias name used for the task stage
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("stage_alias")]
-        [System.ComponentModel.DescriptionAttribute("Alias name used for the task stage")]
-        public string StageAlias
-        {
-            get
-            {
-                return _stageAlias;
-            }
-            set
-            {
-                _stageAlias = value;
             }
         }
     
@@ -178,7 +158,6 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
-            stringBuilder.Append("stage_alias = " + _stageAlias + ", ");
             stringBuilder.Append("channel_config = " + _channelConfig + ", ");
             stringBuilder.Append("full_flow_rate = " + _fullFlowRate + ", ");
             stringBuilder.Append("n_repeats_per_stimulus = " + _nRepeatsPerStimulus + ", ");
