@@ -7,7 +7,6 @@ from pydantic import Field, field_validator
 
 class TaskParameters(curriculum_task.TaskParameters):
     rng_seed: Optional[float] = Field(default=None, description="Seed of the random number generator")
-    stage_alias: Optional[str] = Field(default=None, description="Alias name used for the task stage")
 
 
 class AindBehaviorTaskLogicModel(curriculum_task.Task):
