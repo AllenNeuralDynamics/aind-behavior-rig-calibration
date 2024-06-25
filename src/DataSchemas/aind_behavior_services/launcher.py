@@ -15,9 +15,9 @@ from aind_behavior_services import (
     AindBehaviorTaskLogicModel,
 )
 
-TRig = TypeVar("TRig", bound=AindBehaviorRigModel)
-TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
-TTaskLogic = TypeVar("TTaskLogic", bound=AindBehaviorTaskLogicModel)
+TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
+TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disable=invalid-name
+TTaskLogic = TypeVar("TTaskLogic", bound=AindBehaviorTaskLogicModel)  # pylint: disable=invalid-name
 
 
 class Launcher(Generic[TRig, TSession, TTaskLogic]):
