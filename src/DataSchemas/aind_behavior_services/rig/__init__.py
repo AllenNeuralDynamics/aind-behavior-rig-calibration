@@ -19,7 +19,7 @@ class VideoWriterFfmpeg(BaseModel):
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
     container_extension: str = Field(default="mp4", description="Container extension")
     output_arguments: str = Field(
-        default="-c:v h264_nvenc -vsync 0 -2pass 1 -bf:v 0 -qp 13 -preset medium -b:v 20M -rc:v cbr",
+        default="c:v hevc_nvenc -pix_fmt x2rgb10le -color_range full -tune hq -preset p3 -rc vbr -cq 16 -rc-lookahead 56 -temporal-aq 1 -qmin 0 -qmax 10",  # noqa E501
         description="Output arguments",
     )
 
@@ -174,8 +174,8 @@ class Screen(Device):
     target_update_frequency: float = Field(default=120, description="Target update frequency")
     calibration_directory: str = Field(default="Calibration\\Monitors\\", description="Calibration directory")
     texture_assets_directory: str = Field(default="Textures", description="Calibration directory")
-    brightness: float = Field(default=1, le=1, ge=0, description="Brightness")
-    contrast: float = Field(default=1, le=1, ge=0, description="Contrast")
+    brightness: float = Field(default=0, le=1, ge=-1, description="Brightness")
+    contrast: float = Field(default=1, le=1, ge=-1, description="Contrast")
 
 
 class Treadmill(BaseModel):
