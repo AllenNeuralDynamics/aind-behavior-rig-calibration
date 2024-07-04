@@ -24,9 +24,11 @@ dependencies = [
 
 [project.optional-dependencies]
 
-aind-data-schema-mapper = [
-    'aind-data-schema==0.33.9'
+aind-extra-services = [
+    'aind-watchdog-service@git+https://github.com/AllenNeuralDynamics/aind-watchdog-service@development',
+    'aind-data-schema==0.38.5'
 ]
+
 
 linters = [
     'ruff',
