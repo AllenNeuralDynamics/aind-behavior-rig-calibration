@@ -7,7 +7,7 @@ from os import PathLike
 from pathlib import Path
 from string import capwords
 from subprocess import CompletedProcess, run
-from typing import Any, Dict, List, Optional, TypeVar
+from typing import Any, Dict, List, NewType, Optional, Type, Union
 
 from pydantic import BaseModel, PydanticInvalidForJsonSchema
 from pydantic.json_schema import (
@@ -15,6 +15,7 @@ from pydantic.json_schema import (
     JsonSchemaMode,
     JsonSchemaValue,
     _deduplicate_schemas,
+    models_json_schema,
 )
 from pydantic_core import PydanticOmit, core_schema, to_jsonable_python
 
@@ -167,17 +168,22 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
             return self.get_flattened_anyof(generated)
 
 
-Model = TypeVar("Model", bound=BaseModel)
+ModelInputTypeSignature = Union[List[Type[BaseModel]] | Type[BaseModel]]
 
 
 def export_schema(
-    model: Model,
-    schema_generator: GenerateJsonSchema = CustomGenerateJsonSchema,
+    model: ModelInputTypeSignature,
+    schema_generator: Type[GenerateJsonSchema] = CustomGenerateJsonSchema,
     mode: JsonSchemaMode = "serialization",
     def_keyword: str = "definitions",
+    models_title: Optional[str] = None,
 ):
     """Export the schema of a model to a json file"""
-    _model = model.model_json_schema(schema_generator=schema_generator, mode=mode)
+    if not isinstance(model, list):
+        _model = model.model_json_schema(schema_generator=schema_generator, mode=mode)
+    else:
+        models = [(m, mode) for m in model]
+        _, _model = models_json_schema(models, schema_generator=schema_generator, title=models_title)
     json_model = json.dumps(_model, indent=2)
     json_model = json_model.replace("$defs", def_keyword)
     return json_model
@@ -233,27 +239,30 @@ def bonsai_sgen(
 
 
 def convert_pydantic_to_bonsai(
-    models: Dict[str, BaseModel],
+    models: Dict[str, ModelInputTypeSignature],
     namespace: str = "DataSchema",
     schema_path: PathLike = Path("./src/DataSchemas/"),
     output_path: PathLike = Path("./src/Extensions/"),
     serializer: Optional[List[BonsaiSgenSerializers]] = None,
+    skip_sgen: bool = False,
+    export_schema_kwargs: Dict[str, Any] = {},
 ) -> None:
 
-    def _write_json(schema_path: PathLike, output_model_name: str, model: BaseModel) -> None:
+    def _write_json(schema_path: PathLike, output_model_name: str, model: ModelInputTypeSignature) -> None:
         with open(os.path.join(schema_path, f"{output_model_name}.json"), "w", encoding="utf-8") as f:
-            json_model = export_schema(model)
+            json_model = export_schema(model, **export_schema_kwargs)
             f.write(json_model)
 
     for output_model_name, model in models.items():
         _write_json(schema_path, output_model_name, model)
-        cmd_return = bonsai_sgen(
-            schema_path=Path(os.path.join(schema_path, f"{output_model_name}.json")),
-            output_path=Path(os.path.join(output_path, f"{snake_to_pascal_case(output_model_name)}.cs")),
-            namespace=namespace,
-            serializer=serializer,
-        )
-        print(cmd_return.stdout)
+        if not skip_sgen:
+            cmd_return = bonsai_sgen(
+                schema_path=Path(os.path.join(schema_path, f"{output_model_name}.json")),
+                output_path=Path(os.path.join(output_path, f"{snake_to_pascal_case(output_model_name)}.cs")),
+                namespace=namespace,
+                serializer=serializer,
+            )
+            print(cmd_return.stdout)
 
 
 def snake_to_pascal_case(s: str) -> str:

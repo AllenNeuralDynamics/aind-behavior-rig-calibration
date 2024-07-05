@@ -5,6 +5,7 @@ from aind_behavior_services.calibration import aind_manipulator as m
 from aind_behavior_services.calibration import load_cells as lc
 from aind_behavior_services.calibration import olfactometer as olf
 from aind_behavior_services.calibration import water_valve as wv
+from aind_behavior_services.data_types import DataTypes
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.utils import (
     convert_pydantic_to_bonsai,
@@ -46,6 +47,11 @@ def main():
         schema_path=SCHEMA_ROOT,
         output_path=EXTENSIONS_ROOT,
         namespace=f"{NAMESPACE_PREFIX}.AindBehaviorSession",
+    )
+
+    convert_pydantic_to_bonsai(
+        {"aind_behavior_data_types": DataTypes},
+        schema_path=SCHEMA_ROOT, skip_sgen=True
     )
 
     convert_pydantic_to_bonsai(
