@@ -47,8 +47,6 @@ class DistributionBase(BaseModel):
 class ScalarDistributionParameter(DistributionParametersBase):
     family: Literal[DistributionFamily.SCALAR] = DistributionFamily.SCALAR
     value: float = Field(default=0, description="The static value of the distribution")
-    truncation_parameters: Literal[None] = None
-    scaling_parameters: Literal[None] = None
 
 
 class Scalar(DistributionBase):
@@ -56,6 +54,8 @@ class Scalar(DistributionBase):
     distribution_parameters: ScalarDistributionParameter = Field(
         ScalarDistributionParameter(), description="Parameters of the distribution"
     )
+    truncation_parameters: Literal[None] = None
+    scaling_parameters: Literal[None] = None
 
 
 class NormalDistributionParameters(DistributionParametersBase):
