@@ -28,11 +28,11 @@ class SoftwareEvent(BaseModel):
     """
 
     name: str = Field(..., description="The name of the event")
-    timestamp: Optional[float] = Field(..., description="The timestamp of the event")
+    timestamp: Optional[float] = Field(default=None, description="The timestamp of the event")
     timestamp_source: TimestampSource = Field(default=TimestampSource.NULL, description="The source of the timestamp")
     frame_index: Optional[int] = Field(default=None, ge=0, description="The frame index of the event")
     frame_timestamp: Optional[float] = Field(default=None, description="The timestamp of the frame")
-    data: Optional[Any] = Field(..., description="The data of the event")
+    data: Optional[Any] = Field(default=None, description="The data of the event")
     data_type: DataType = Field(default=DataType.NULL, alias="dataType", description="The data type of the event")
 
 
