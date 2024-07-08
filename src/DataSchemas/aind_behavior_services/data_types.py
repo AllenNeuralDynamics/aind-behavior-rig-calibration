@@ -1,9 +1,11 @@
 from enum import StrEnum
-from typing import Any, Optional, Literal
+from typing import Any, Literal, Optional
+
 from aind_behavior_services.base import SchemaVersionedModel
 from pydantic import BaseModel, Field
 
 __version__ = "0.1.0"
+
 
 class DataType(StrEnum):
     STRING = "string"
