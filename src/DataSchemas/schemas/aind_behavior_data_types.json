@@ -70,6 +70,7 @@
           "type": "string"
         },
         "timestamp": {
+          "default": null,
           "description": "The timestamp of the event",
           "oneOf": [
             {
@@ -118,6 +119,7 @@
           "title": "Frame Timestamp"
         },
         "data": {
+          "default": null,
           "description": "The data of the event",
           "oneOf": [
             {},
@@ -138,9 +140,7 @@
         }
       },
       "required": [
-        "name",
-        "timestamp",
-        "data"
+        "name"
       ],
       "title": "SoftwareEvent",
       "type": "object"
