@@ -532,9 +532,9 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     
         private MotorOperationMode _motorOperationMode = AindBehaviorServices.AindManipulatorCalibrationRig.MotorOperationMode.Quiet;
     
-        private int _maxLimit = 24000;
+        private double _maxLimit = 25D;
     
-        private int _minLimit = -1;
+        private double _minLimit = -0.01D;
     
         public AxisConfiguration()
         {
@@ -642,7 +642,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("max_limit")]
-        public int MaxLimit
+        public double MaxLimit
         {
             get
             {
@@ -655,7 +655,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("min_limit")]
-        public int MinLimit
+        public double MinLimit
         {
             get
             {
@@ -897,7 +897,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     public partial class CalibrationRig
     {
     
-        private string _version = "0.0.0";
+        private string _version = "0.1.0";
     
         private string _computerName;
     

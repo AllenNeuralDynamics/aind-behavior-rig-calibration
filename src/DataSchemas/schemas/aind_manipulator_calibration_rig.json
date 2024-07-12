@@ -78,7 +78,7 @@
             "y2": 0.01,
             "z": 0.01
           },
-          "title": "Full step to mm"
+          "title": "Full step to mm. Used to convert steps to SI Units"
         },
         "axis_configuration": {
           "default": [
@@ -89,8 +89,8 @@
               "microstep_resolution": 0,
               "maximum_step_interval": 2000,
               "motor_operation_mode": 0,
-              "max_limit": 24000,
-              "min_limit": -1
+              "max_limit": 25.0,
+              "min_limit": -0.01
             },
             {
               "axis": 3,
@@ -99,8 +99,8 @@
               "microstep_resolution": 0,
               "maximum_step_interval": 2000,
               "motor_operation_mode": 0,
-              "max_limit": 24000,
-              "min_limit": -1
+              "max_limit": 25.0,
+              "min_limit": -0.01
             },
             {
               "axis": 1,
@@ -109,8 +109,8 @@
               "microstep_resolution": 0,
               "maximum_step_interval": 2000,
               "motor_operation_mode": 0,
-              "max_limit": 24000,
-              "min_limit": -1
+              "max_limit": 25.0,
+              "min_limit": -0.01
             },
             {
               "axis": 4,
@@ -119,8 +119,8 @@
               "microstep_resolution": 0,
               "maximum_step_interval": 2000,
               "motor_operation_mode": 0,
-              "max_limit": 24000,
-              "min_limit": -1
+              "max_limit": 25.0,
+              "min_limit": -0.01
             }
           ],
           "items": {
@@ -299,14 +299,14 @@
           "title": "Motor operation mode"
         },
         "max_limit": {
-          "default": 24000,
-          "title": "Maximum limit. A value of 0 disables this limit.",
-          "type": "integer"
+          "default": 25,
+          "title": "Maximum limit in SI units. A value of 0 disables this limit.",
+          "type": "number"
         },
         "min_limit": {
-          "default": -1,
-          "title": "Minimum limit. A value of 0 disables this limit.",
-          "type": "integer"
+          "default": -0.01,
+          "title": "Minimum limit in SI units. A value of 0 disables this limit.",
+          "type": "number"
         }
       },
       "required": [
@@ -379,8 +379,8 @@
   },
   "properties": {
     "version": {
-      "const": "0.0.0",
-      "default": "0.0.0",
+      "const": "0.1.0",
+      "default": "0.1.0",
       "title": "Version",
       "type": "string"
     },

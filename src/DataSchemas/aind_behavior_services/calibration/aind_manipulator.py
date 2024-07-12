@@ -7,7 +7,7 @@ from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskPa
 from pydantic import BaseModel, Field
 
 TASK_LOGIC_VERSION = "0.2.0"
-RIG_VERSION = "0.0.0"
+RIG_VERSION = "0.1.0"
 
 
 class Axis(IntEnum):
@@ -63,13 +63,13 @@ class AxisConfiguration(BaseModel):
         title="Configures the time between step motor pulses (us) used when starting or stopping a movement",
     )
     motor_operation_mode: MotorOperationMode = Field(default=MotorOperationMode.QUIET, title="Motor operation mode")
-    max_limit: int = Field(default=24000, title="Maximum limit. A value of 0 disables this limit.")
-    min_limit: int = Field(default=-1, title="Minimum limit. A value of 0 disables this limit.")
+    max_limit: float = Field(default=25, title="Maximum limit in SI units. A value of 0 disables this limit.")
+    min_limit: float = Field(default=-0.01, title="Minimum limit in SI units. A value of 0 disables this limit.")
 
 
 class AindManipulatorCalibrationInput(BaseModel):
     full_step_to_mm: ManipulatorPosition = Field(
-        default=(ManipulatorPosition(x=0.010, y1=0.010, y2=0.010, z=0.010)), title="Full step to mm"
+        default=(ManipulatorPosition(x=0.010, y1=0.010, y2=0.010, z=0.010)), title="Full step to mm. Used to convert steps to SI Units"
     )
     axis_configuration: List[AxisConfiguration] = Field(
         default=[
