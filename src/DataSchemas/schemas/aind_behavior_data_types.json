@@ -137,6 +137,19 @@
           ],
           "default": "null",
           "description": "The data type of the event"
+        },
+        "data_type_hint": {
+          "default": null,
+          "description": "The data type hint of the event",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Data Type Hint"
         }
       },
       "required": [
@@ -157,8 +170,8 @@
   },
   "properties": {
     "version": {
-      "const": "0.1.0",
-      "default": "0.1.0",
+      "const": "0.1.1",
+      "default": "0.1.1",
       "title": "Version",
       "type": "string"
     },
