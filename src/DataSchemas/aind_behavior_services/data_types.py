@@ -4,7 +4,7 @@ from typing import Any, Literal, Optional
 from aind_behavior_services.base import SchemaVersionedModel
 from pydantic import BaseModel, Field
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 class DataType(StrEnum):
@@ -34,6 +34,7 @@ class SoftwareEvent(BaseModel):
     frame_timestamp: Optional[float] = Field(default=None, description="The timestamp of the frame")
     data: Optional[Any] = Field(default=None, description="The data of the event")
     data_type: DataType = Field(default=DataType.NULL, alias="dataType", description="The data type of the event")
+    data_type_hint: Optional[str] = Field(default=None, description="The data type hint of the event")
 
 
 class RenderSynchState(BaseModel):
