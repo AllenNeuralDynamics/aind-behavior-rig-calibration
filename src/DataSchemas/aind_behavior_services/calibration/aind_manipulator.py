@@ -69,7 +69,8 @@ class AxisConfiguration(BaseModel):
 
 class AindManipulatorCalibrationInput(BaseModel):
     full_step_to_mm: ManipulatorPosition = Field(
-        default=(ManipulatorPosition(x=0.010, y1=0.010, y2=0.010, z=0.010)), title="Full step to mm. Used to convert steps to SI Units"
+        default=(ManipulatorPosition(x=0.010, y1=0.010, y2=0.010, z=0.010)),
+        title="Full step to mm. Used to convert steps to SI Units",
     )
     axis_configuration: List[AxisConfiguration] = Field(
         default=[
