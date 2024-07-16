@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.8.1"
+<WorkflowBuilder Version="2.8.5"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:p1="clr-namespace:AindBehaviorServices.OlfactometerCalibrationLogic;assembly=Extensions"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
@@ -9,14 +9,14 @@
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
                  xmlns:p5="clr-namespace:AllenNeuralDynamics.Core.Design;assembly=AllenNeuralDynamics.Core.Design"
-                 xmlns:p6="clr-namespace:System.Reactive;assembly=System.Reactive.Core"
-                 xmlns:p7="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
+                 xmlns:p6="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
+                 xmlns:p7="clr-namespace:System.Reactive;assembly=System.Reactive.Core"
                  xmlns:p8="clr-namespace:AllenNeuralDynamics.VersionControl;assembly=AllenNeuralDynamics.VersionControl"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:p9="clr-namespace:Harp.Olfactometer;assembly=Harp.Olfactometer"
                  xmlns:p10="clr-namespace:AllenNeuralDynamics.HarpUtils;assembly=AllenNeuralDynamics.HarpUtils"
-                 xmlns:p11="clr-namespace:AllenNeuralDynamics.Core.Logging;assembly=AllenNeuralDynamics.Core"
                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                 xmlns:p11="clr-namespace:AllenNeuralDynamics.AindBehaviorServices.DataTypes;assembly=AllenNeuralDynamics.AindBehaviorServices"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -209,6 +209,19 @@
           </Edges>
         </Workflow>
       </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="IntProperty">
+          <Value>0</Value>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p6:CreateSoftwareEvent">
+          <p6:EventName>SoftwareEvent</p6:EventName>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject">
+        <Name>SoftwareEvent</Name>
+      </Expression>
       <Expression xsi:type="GroupWorkflow">
         <Name>HarpDevices</Name>
         <Workflow>
@@ -340,7 +353,7 @@
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>HarpTimestampSource</Name>
       </Expression>
-      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p6:Unit">
+      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p7:Unit">
         <rx:Name>StartExperimentTrigger</rx:Name>
       </Expression>
       <Expression xsi:type="rx:PublishSubject">
@@ -376,8 +389,8 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:ThrowException">
-                <p7:Message>Channel3 must be defined as a carrier!</p7:Message>
+              <Combinator xsi:type="p6:ThrowException">
+                <p6:Message>Channel3 must be defined as a carrier!</p6:Message>
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -416,8 +429,8 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:ThrowException">
-                <p7:Message>Repository is not clean! Please discard all local changes.</p7:Message>
+              <Combinator xsi:type="p6:ThrowException">
+                <p6:Message>Repository is not clean! Please discard all local changes.</p6:Message>
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -492,8 +505,8 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:ThrowException">
-                <p7:Message>Flow on Channel3 is lower than expected.</p7:Message>
+              <Combinator xsi:type="p6:ThrowException">
+                <p6:Message>Flow on Channel3 is lower than expected.</p6:Message>
               </Combinator>
             </Expression>
           </Nodes>
@@ -701,9 +714,6 @@
         <Name>Init</Name>
         <Workflow>
           <Nodes>
-            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p11:SoftwareEvent">
-              <rx:Name>SoftwareEvent</rx:Name>
-            </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>SessionSchema</Name>
             </Expression>
@@ -711,7 +721,7 @@
               <Selector>RootPath</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:StripDirectoryPath" />
+              <Combinator xsi:type="p6:StripDirectoryPath" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>SessionSchema</Name>
@@ -765,22 +775,22 @@
             </Expression>
           </Nodes>
           <Edges>
+            <Edge From="0" To="1" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-            <Edge From="3" To="8" Label="Source1" />
+            <Edge From="2" To="7" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
             <Edge From="5" To="6" Label="Source1" />
-            <Edge From="6" To="7" Label="Source1" />
-            <Edge From="7" To="8" Label="Source2" />
-            <Edge From="7" To="12" Label="Source2" />
+            <Edge From="6" To="7" Label="Source2" />
+            <Edge From="6" To="11" Label="Source2" />
+            <Edge From="7" To="8" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
             <Edge From="10" To="11" Label="Source1" />
             <Edge From="11" To="12" Label="Source1" />
             <Edge From="12" To="13" Label="Source1" />
             <Edge From="13" To="14" Label="Source1" />
-            <Edge From="14" To="15" Label="Source1" />
-            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="15" To="16" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -847,8 +857,8 @@
               <Name>ThisOdorChannel</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p11:CreateSoftwareEvent">
-                <p11:EventName>OdorChannel</p11:EventName>
+              <Combinator xsi:type="p6:CreateSoftwareEvent">
+                <p6:EventName>OdorChannel</p6:EventName>
               </Combinator>
             </Expression>
             <Expression xsi:type="MulticastSubject">
@@ -860,8 +870,8 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p11:CreateSoftwareEvent">
-                <p11:EventName>IsEndValveCalibration</p11:EventName>
+              <Combinator xsi:type="p6:CreateSoftwareEvent">
+                <p6:EventName>IsEndValveCalibration</p6:EventName>
               </Combinator>
             </Expression>
             <Expression xsi:type="MulticastSubject">
@@ -895,8 +905,8 @@
               <Name>ThisOdorConfig</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p11:CreateSoftwareEvent">
-                <p11:EventName>OdorConfig</p11:EventName>
+              <Combinator xsi:type="p6:CreateSoftwareEvent">
+                <p6:EventName>OdorConfig</p6:EventName>
               </Combinator>
             </Expression>
             <Expression xsi:type="MulticastSubject">
@@ -1114,7 +1124,7 @@
               <Selector>TimeOff</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:TimeSpanFromSeconds" />
+              <Combinator xsi:type="p6:TimeSpanFromSeconds" />
             </Expression>
             <Expression xsi:type="PropertyMapping">
               <PropertyMappings>
@@ -1142,7 +1152,7 @@
               <Selector>TimeOn</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:TimeSpanFromSeconds" />
+              <Combinator xsi:type="p6:TimeSpanFromSeconds" />
             </Expression>
             <Expression xsi:type="PropertyMapping">
               <PropertyMappings>
@@ -1312,8 +1322,8 @@
               <Name>ThisOdorChannel</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p11:CreateSoftwareEvent">
-                <p11:EventName>OdorChannel</p11:EventName>
+              <Combinator xsi:type="p6:CreateSoftwareEvent">
+                <p6:EventName>OdorChannel</p6:EventName>
               </Combinator>
             </Expression>
             <Expression xsi:type="MulticastSubject">
@@ -1325,8 +1335,8 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p11:CreateSoftwareEvent">
-                <p11:EventName>IsEndValveCalibration</p11:EventName>
+              <Combinator xsi:type="p6:CreateSoftwareEvent">
+                <p6:EventName>IsEndValveCalibration</p6:EventName>
               </Combinator>
             </Expression>
             <Expression xsi:type="MulticastSubject">
@@ -1360,8 +1370,8 @@
               <Name>ThisOdorConfig</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p11:CreateSoftwareEvent">
-                <p11:EventName>OdorConfig</p11:EventName>
+              <Combinator xsi:type="p6:CreateSoftwareEvent">
+                <p6:EventName>OdorConfig</p6:EventName>
               </Combinator>
             </Expression>
             <Expression xsi:type="MulticastSubject">
@@ -1530,7 +1540,7 @@
               <Selector>TimeOff</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:TimeSpanFromSeconds" />
+              <Combinator xsi:type="p6:TimeSpanFromSeconds" />
             </Expression>
             <Expression xsi:type="PropertyMapping">
               <PropertyMappings>
@@ -1695,7 +1705,7 @@
               <Selector>TimeOn</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:TimeSpanFromSeconds" />
+              <Combinator xsi:type="p6:TimeSpanFromSeconds" />
             </Expression>
             <Expression xsi:type="PropertyMapping">
               <PropertyMappings>
@@ -1913,7 +1923,7 @@
                   <Expression xsi:type="ExternalizedMapping">
                     <Property Name="Value" DisplayName="Modality" />
                   </Expression>
-                  <Expression xsi:type="PropertySource" TypeArguments="p11:AppendModalitySuffix,sys:Nullable(p11:Modality)">
+                  <Expression xsi:type="PropertySource" TypeArguments="p6:AppendModalitySuffix,sys:Nullable(p6:Modality)">
                     <MemberName>Modality</MemberName>
                     <Value>Behavior</Value>
                   </Expression>
@@ -1932,9 +1942,6 @@
                         <Expression xsi:type="SubscribeSubject">
                           <Name>HarpOlfactometerEvents</Name>
                         </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:GroupByRegister" />
-                        </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>Modality</Name>
                         </Expression>
@@ -1943,67 +1950,31 @@
                             <Property Name="Modality" />
                           </PropertyMappings>
                         </Expression>
-                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
+                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogHarpDevice.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
-                          <Modality xsi:nil="true" />
-                          <LogName>Olfactometer.harp</LogName>
-                          <Extension>bin</Extension>
-                          <HarpDevice>Olfactometer</HarpDevice>
-                        </Expression>
-                        <Expression xsi:type="PropertyMapping">
-                          <PropertyMappings>
-                            <Property Name="FileName" />
-                          </PropertyMappings>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:MessageWriter">
-                            <harp:Suffix>None</harp:Suffix>
-                            <harp:Buffered>true</harp:Buffered>
-                            <harp:Overwrite>false</harp:Overwrite>
-                            <harp:FilterType>Include</harp:FilterType>
-                            <harp:MessageType xsi:nil="true" />
-                          </Combinator>
-                        </Expression>
-                        <Expression xsi:type="SubscribeSubject">
-                          <Name>HarpClockGenEvents</Name>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:GroupByRegister" />
-                        </Expression>
-                        <Expression xsi:type="SubscribeSubject">
-                          <Name>Modality</Name>
-                        </Expression>
-                        <Expression xsi:type="PropertyMapping">
-                          <PropertyMappings>
-                            <Property Name="Modality" />
-                          </PropertyMappings>
-                        </Expression>
-                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
-                          <SubjectName>LoggingRootPath</SubjectName>
-                          <Modality xsi:nil="true" />
-                          <LogName>ClockGenerator.harp</LogName>
-                          <Extension>bin</Extension>
-                          <HarpDevice>TimestampGeneratorGen3</HarpDevice>
-                        </Expression>
-                        <Expression xsi:type="PropertyMapping">
-                          <PropertyMappings>
-                            <Property Name="FileName" />
-                          </PropertyMappings>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:MessageWriter">
-                            <harp:Suffix>None</harp:Suffix>
-                            <harp:Buffered>true</harp:Buffered>
-                            <harp:Overwrite>false</harp:Overwrite>
-                            <harp:FilterType>Include</harp:FilterType>
-                            <harp:MessageType xsi:nil="true" />
-                          </Combinator>
+                          <Modality>Behavior</Modality>
+                          <DeviceName>Olfactometer</DeviceName>
+                          <HarpDeviceName>Olfactometer</HarpDeviceName>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>HarpAnalogInputEvents</Name>
                         </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:GroupByRegister" />
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>Modality</Name>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="Modality" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogHarpDevice.bonsai">
+                          <SubjectName>LoggingRootPath</SubjectName>
+                          <Modality>Behavior</Modality>
+                          <DeviceName>AnalogInput</DeviceName>
+                          <HarpDeviceName>AnalogInput</HarpDeviceName>
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>HarpClockGenEvents</Name>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>Modality</Name>
@@ -2013,47 +1984,23 @@
                             <Property Name="Modality" />
                           </PropertyMappings>
                         </Expression>
-                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
+                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogHarpDevice.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
-                          <Modality xsi:nil="true" />
-                          <LogName>AnalogInput.harp</LogName>
-                          <Extension>bin</Extension>
-                          <HarpDevice>AnalogInput</HarpDevice>
-                        </Expression>
-                        <Expression xsi:type="PropertyMapping">
-                          <PropertyMappings>
-                            <Property Name="FileName" />
-                          </PropertyMappings>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:MessageWriter">
-                            <harp:Suffix>None</harp:Suffix>
-                            <harp:Buffered>true</harp:Buffered>
-                            <harp:Overwrite>false</harp:Overwrite>
-                            <harp:FilterType>Include</harp:FilterType>
-                            <harp:MessageType xsi:nil="true" />
-                          </Combinator>
+                          <Modality>Behavior</Modality>
+                          <DeviceName>ClockGenerator</DeviceName>
+                          <HarpDeviceName>TimestampGeneratorGen3</HarpDeviceName>
                         </Expression>
                       </Nodes>
                       <Edges>
-                        <Edge From="0" To="1" Label="Source1" />
-                        <Edge From="1" To="6" Label="Source1" />
-                        <Edge From="2" To="3" Label="Source1" />
-                        <Edge From="3" To="4" Label="Source1" />
-                        <Edge From="4" To="5" Label="Source1" />
-                        <Edge From="5" To="6" Label="Source2" />
-                        <Edge From="7" To="8" Label="Source1" />
-                        <Edge From="8" To="13" Label="Source1" />
+                        <Edge From="0" To="3" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source2" />
+                        <Edge From="4" To="7" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source2" />
+                        <Edge From="8" To="11" Label="Source1" />
                         <Edge From="9" To="10" Label="Source1" />
-                        <Edge From="10" To="11" Label="Source1" />
-                        <Edge From="11" To="12" Label="Source1" />
-                        <Edge From="12" To="13" Label="Source2" />
-                        <Edge From="14" To="15" Label="Source1" />
-                        <Edge From="15" To="20" Label="Source1" />
-                        <Edge From="16" To="17" Label="Source1" />
-                        <Edge From="17" To="18" Label="Source1" />
-                        <Edge From="18" To="19" Label="Source1" />
-                        <Edge From="19" To="20" Label="Source2" />
+                        <Edge From="10" To="11" Label="Source2" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -2082,9 +2029,6 @@
                             <p10:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:GroupByRegister" />
-                        </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>Modality</Name>
                         </Expression>
@@ -2093,26 +2037,11 @@
                             <Property Name="Modality" />
                           </PropertyMappings>
                         </Expression>
-                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
+                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogHarpDevice.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
-                          <Modality xsi:nil="true" />
-                          <LogName>HarpCommands/Olfactometer.harp</LogName>
-                          <Extension>bin</Extension>
-                          <HarpDevice>Olfactometer</HarpDevice>
-                        </Expression>
-                        <Expression xsi:type="PropertyMapping">
-                          <PropertyMappings>
-                            <Property Name="FileName" />
-                          </PropertyMappings>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:MessageWriter">
-                            <harp:Suffix>None</harp:Suffix>
-                            <harp:Buffered>true</harp:Buffered>
-                            <harp:Overwrite>false</harp:Overwrite>
-                            <harp:FilterType>Include</harp:FilterType>
-                            <harp:MessageType xsi:nil="true" />
-                          </Combinator>
+                          <Modality>Behavior</Modality>
+                          <DeviceName>HarpCommands/Olfactometer</DeviceName>
+                          <HarpDeviceName>Olfactometer</HarpDeviceName>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>HarpClockGenCommands</Name>
@@ -2129,9 +2058,6 @@
                             <p10:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:GroupByRegister" />
-                        </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>Modality</Name>
                         </Expression>
@@ -2140,26 +2066,11 @@
                             <Property Name="Modality" />
                           </PropertyMappings>
                         </Expression>
-                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
+                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogHarpDevice.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
-                          <Modality xsi:nil="true" />
-                          <LogName>HarpCommands/ClockGenerator.harp</LogName>
-                          <Extension>bin</Extension>
-                          <HarpDevice>TimestampGeneratorGen3</HarpDevice>
-                        </Expression>
-                        <Expression xsi:type="PropertyMapping">
-                          <PropertyMappings>
-                            <Property Name="FileName" />
-                          </PropertyMappings>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:MessageWriter">
-                            <harp:Suffix>None</harp:Suffix>
-                            <harp:Buffered>true</harp:Buffered>
-                            <harp:Overwrite>false</harp:Overwrite>
-                            <harp:FilterType>Include</harp:FilterType>
-                            <harp:MessageType xsi:nil="true" />
-                          </Combinator>
+                          <Modality>Behavior</Modality>
+                          <DeviceName>HarpCommands/ClockGenerator</DeviceName>
+                          <HarpDeviceName>TimestampGeneratorGen3</HarpDeviceName>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>HarpAnalogInputCommands</Name>
@@ -2176,9 +2087,6 @@
                             <p10:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:GroupByRegister" />
-                        </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>Modality</Name>
                         </Expression>
@@ -2187,26 +2095,11 @@
                             <Property Name="Modality" />
                           </PropertyMappings>
                         </Expression>
-                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:GenerateHarpLoggingPath.bonsai">
+                        <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogHarpDevice.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
-                          <Modality xsi:nil="true" />
-                          <LogName>HarpCommands/AnalogInput.harp</LogName>
-                          <Extension>bin</Extension>
-                          <HarpDevice>AnalogInput</HarpDevice>
-                        </Expression>
-                        <Expression xsi:type="PropertyMapping">
-                          <PropertyMappings>
-                            <Property Name="FileName" />
-                          </PropertyMappings>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="harp:MessageWriter">
-                            <harp:Suffix>None</harp:Suffix>
-                            <harp:Buffered>true</harp:Buffered>
-                            <harp:Overwrite>false</harp:Overwrite>
-                            <harp:FilterType>Include</harp:FilterType>
-                            <harp:MessageType xsi:nil="true" />
-                          </Combinator>
+                          <Modality>Behavior</Modality>
+                          <DeviceName>HarpCommands/AnalogInput</DeviceName>
+                          <HarpDeviceName>AnalogInput</HarpDeviceName>
                         </Expression>
                       </Nodes>
                       <Edges>
@@ -2214,30 +2107,21 @@
                         <Edge From="2" To="4" Label="Source1" />
                         <Edge From="3" To="4" Label="Source2" />
                         <Edge From="4" To="5" Label="Source1" />
-                        <Edge From="5" To="6" Label="Source1" />
-                        <Edge From="6" To="11" Label="Source1" />
-                        <Edge From="7" To="8" Label="Source1" />
-                        <Edge From="8" To="9" Label="Source1" />
-                        <Edge From="9" To="10" Label="Source1" />
+                        <Edge From="5" To="8" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source1" />
+                        <Edge From="7" To="8" Label="Source2" />
+                        <Edge From="9" To="11" Label="Source1" />
                         <Edge From="10" To="11" Label="Source2" />
-                        <Edge From="12" To="14" Label="Source1" />
-                        <Edge From="13" To="14" Label="Source2" />
-                        <Edge From="14" To="15" Label="Source1" />
-                        <Edge From="15" To="16" Label="Source1" />
-                        <Edge From="16" To="21" Label="Source1" />
-                        <Edge From="17" To="18" Label="Source1" />
+                        <Edge From="11" To="12" Label="Source1" />
+                        <Edge From="12" To="15" Label="Source1" />
+                        <Edge From="13" To="14" Label="Source1" />
+                        <Edge From="14" To="15" Label="Source2" />
+                        <Edge From="16" To="18" Label="Source1" />
+                        <Edge From="17" To="18" Label="Source2" />
                         <Edge From="18" To="19" Label="Source1" />
-                        <Edge From="19" To="20" Label="Source1" />
-                        <Edge From="20" To="21" Label="Source2" />
-                        <Edge From="22" To="24" Label="Source1" />
-                        <Edge From="23" To="24" Label="Source2" />
-                        <Edge From="24" To="25" Label="Source1" />
-                        <Edge From="25" To="26" Label="Source1" />
-                        <Edge From="26" To="31" Label="Source1" />
-                        <Edge From="27" To="28" Label="Source1" />
-                        <Edge From="28" To="29" Label="Source1" />
-                        <Edge From="29" To="30" Label="Source1" />
-                        <Edge From="30" To="31" Label="Source2" />
+                        <Edge From="19" To="22" Label="Source1" />
+                        <Edge From="20" To="21" Label="Source1" />
+                        <Edge From="21" To="22" Label="Source2" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -2258,7 +2142,15 @@
                           <Combinator xsi:type="harp:CreateTimestamped" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p11:TimestampSoftwareEvent" />
+                          <Combinator xsi:type="p6:TimestampSoftwareEvent" />
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>Modality</Name>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="Modality" />
+                          </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogSoftwareEventsDemux.bonsai">
                           <LoggerName>SoftwareEvents</LoggerName>
@@ -2272,8 +2164,10 @@
                         <Edge From="1" To="2" Label="Source2" />
                         <Edge From="2" To="3" Label="Source1" />
                         <Edge From="3" To="4" Label="Source1" />
-                        <Edge From="4" To="5" Label="Source1" />
+                        <Edge From="4" To="7" Label="Source1" />
                         <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source2" />
+                        <Edge From="7" To="8" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -2292,7 +2186,7 @@
                   <Expression xsi:type="ExternalizedMapping">
                     <Property Name="Value" DisplayName="Modality" />
                   </Expression>
-                  <Expression xsi:type="PropertySource" TypeArguments="p11:AppendModalitySuffix,sys:Nullable(p11:Modality)">
+                  <Expression xsi:type="PropertySource" TypeArguments="p6:AppendModalitySuffix,sys:Nullable(p6:Modality)">
                     <MemberName>Modality</MemberName>
                     <Value>Other</Value>
                   </Expression>
@@ -2381,9 +2275,8 @@
                         <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogDataSchema.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
                           <Modality xsi:nil="true" />
-                          <LogName>session_output</LogName>
                           <DeviceName>Config</DeviceName>
-                          <Extension>json</Extension>
+                          <LogName>session_output</LogName>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>TaskLogicSchema</Name>
@@ -2402,9 +2295,8 @@
                         <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogDataSchema.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
                           <Modality xsi:nil="true" />
-                          <LogName>tasklogic_output</LogName>
                           <DeviceName>Config</DeviceName>
-                          <Extension>json</Extension>
+                          <LogName>tasklogic_output</LogName>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>RigSchema</Name>
@@ -2423,9 +2315,8 @@
                         <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogDataSchema.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
                           <Modality xsi:nil="true" />
-                          <LogName>rig_output</LogName>
                           <DeviceName>Config</DeviceName>
-                          <Extension>json</Extension>
+                          <LogName>rig_output</LogName>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>RawRigSchema</Name>
@@ -2441,8 +2332,8 @@
                         <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogAllText.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
                           <Modality xsi:nil="true" />
-                          <LogName>rig_input</LogName>
                           <DeviceName>Config</DeviceName>
+                          <LogName>rig_input</LogName>
                           <Extension>json</Extension>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -2459,8 +2350,8 @@
                         <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogAllText.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
                           <Modality xsi:nil="true" />
-                          <LogName>session_input</LogName>
                           <DeviceName>Config</DeviceName>
+                          <LogName>session_input</LogName>
                           <Extension>json</Extension>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -2477,8 +2368,8 @@
                         <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogAllText.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
                           <Modality xsi:nil="true" />
-                          <LogName>tasklogic_input</LogName>
                           <DeviceName>Config</DeviceName>
+                          <LogName>tasklogic_input</LogName>
                           <Extension>json</Extension>
                         </Expression>
                       </Nodes>
@@ -2521,8 +2412,8 @@
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p11:CreateSoftwareEvent">
-                            <p11:EventName>SoftwareEvent</p11:EventName>
+                          <Combinator xsi:type="p6:CreateSoftwareEvent">
+                            <p6:EventName>SoftwareEvent</p6:EventName>
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -2535,7 +2426,7 @@
                           <Combinator xsi:type="harp:CreateTimestamped" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p11:TimestampSoftwareEvent" />
+                          <Combinator xsi:type="p6:TimestampSoftwareEvent" />
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p11:SerializeToJson" />
@@ -2551,9 +2442,8 @@
                         <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:LogDataSchema.bonsai">
                           <SubjectName>LoggingRootPath</SubjectName>
                           <Modality xsi:nil="true" />
-                          <LogName>endsession</LogName>
                           <DeviceName />
-                          <Extension>json</Extension>
+                          <LogName>endsession</LogName>
                         </Expression>
                       </Nodes>
                       <Edges>
@@ -2688,7 +2578,7 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:StripDirectoryPath" />
+              <Combinator xsi:type="p6:StripDirectoryPath" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>CompoundRootPath</Name>
@@ -2709,10 +2599,10 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p7:StartRobocopy">
-                <p7:CreateLog>true</p7:CreateLog>
-                <p7:Arguments>/E /DCOPY:DAT /R:100 /W:3 /tee</p7:Arguments>
-                <p7:ProcessWindowStyle>Normal</p7:ProcessWindowStyle>
+              <Combinator xsi:type="p6:StartRobocopy">
+                <p6:CreateLog>true</p6:CreateLog>
+                <p6:Arguments>/E /DCOPY:DAT /R:100 /W:3 /tee</p6:Arguments>
+                <p6:ProcessWindowStyle>Normal</p6:ProcessWindowStyle>
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -2789,42 +2679,44 @@
     </Nodes>
     <Edges>
       <Edge From="0" To="1" Label="Source1" />
+      <Edge From="4" To="5" Label="Source1" />
       <Edge From="5" To="6" Label="Source1" />
-      <Edge From="6" To="7" Label="Source1" />
-      <Edge From="7" To="8" Label="Source1" />
       <Edge From="8" To="9" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
       <Edge From="10" To="11" Label="Source1" />
       <Edge From="11" To="12" Label="Source1" />
-      <Edge From="12" To="13" Label="Source1" />
-      <Edge From="14" To="19" Label="Source1" />
+      <Edge From="13" To="14" Label="Source1" />
+      <Edge From="14" To="15" Label="Source1" />
       <Edge From="15" To="16" Label="Source1" />
-      <Edge From="16" To="17" Label="Source1" />
-      <Edge From="17" To="18" Label="Source1" />
-      <Edge From="18" To="19" Label="Source2" />
-      <Edge From="22" To="23" Label="Source1" />
-      <Edge From="23" To="24" Label="Source1" />
-      <Edge From="24" To="25" Label="Source1" />
-      <Edge From="25" To="30" Label="Source1" />
+      <Edge From="17" To="22" Label="Source1" />
+      <Edge From="18" To="19" Label="Source1" />
+      <Edge From="19" To="20" Label="Source1" />
+      <Edge From="20" To="21" Label="Source1" />
+      <Edge From="21" To="22" Label="Source2" />
+      <Edge From="25" To="26" Label="Source1" />
       <Edge From="26" To="27" Label="Source1" />
       <Edge From="27" To="28" Label="Source1" />
-      <Edge From="28" To="29" Label="Source1" />
-      <Edge From="29" To="30" Label="Source2" />
+      <Edge From="28" To="33" Label="Source1" />
+      <Edge From="29" To="30" Label="Source1" />
       <Edge From="30" To="31" Label="Source1" />
       <Edge From="31" To="32" Label="Source1" />
-      <Edge From="32" To="33" Label="Source1" />
+      <Edge From="32" To="33" Label="Source2" />
       <Edge From="33" To="34" Label="Source1" />
-      <Edge From="34" To="36" Label="Source1" />
-      <Edge From="35" To="36" Label="Source2" />
-      <Edge From="37" To="40" Label="Source1" />
-      <Edge From="38" To="39" Label="Source1" />
-      <Edge From="39" To="40" Label="Source2" />
-      <Edge From="40" To="42" Label="Source1" />
-      <Edge From="41" To="42" Label="Source2" />
-      <Edge From="43" To="44" Label="Source1" />
-      <Edge From="44" To="45" Label="Source1" />
-      <Edge From="45" To="46" Label="Source1" />
+      <Edge From="34" To="35" Label="Source1" />
+      <Edge From="35" To="36" Label="Source1" />
+      <Edge From="36" To="37" Label="Source1" />
+      <Edge From="37" To="39" Label="Source1" />
+      <Edge From="38" To="39" Label="Source2" />
+      <Edge From="40" To="43" Label="Source1" />
+      <Edge From="41" To="42" Label="Source1" />
+      <Edge From="42" To="43" Label="Source2" />
+      <Edge From="43" To="45" Label="Source1" />
+      <Edge From="44" To="45" Label="Source2" />
       <Edge From="46" To="47" Label="Source1" />
       <Edge From="47" To="48" Label="Source1" />
+      <Edge From="48" To="49" Label="Source1" />
+      <Edge From="49" To="50" Label="Source1" />
+      <Edge From="50" To="51" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

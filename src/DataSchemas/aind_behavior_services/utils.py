@@ -7,7 +7,7 @@ from os import PathLike
 from pathlib import Path
 from string import capwords
 from subprocess import CompletedProcess, run
-from typing import Any, Dict, List, NewType, Optional, Type, Union
+from typing import Any, Dict, List, Optional, Type, Union
 
 from pydantic import BaseModel, PydanticInvalidForJsonSchema
 from pydantic.json_schema import (
