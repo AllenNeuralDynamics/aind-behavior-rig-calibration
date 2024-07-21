@@ -37,7 +37,7 @@ jobs:
         python-version: ["3.11"]
     steps:
       - name: Setup Bonsai
-        working-directory: .bonsai
+        working-directory: bonsai
         run: .\Setup.ps1
 
       - uses: actions/checkout@v3
