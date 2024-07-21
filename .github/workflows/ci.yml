@@ -1,12 +1,14 @@
 name: CI
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - main
       - feat*
       - dev*
       - release*
+
 
 jobs:
   linters:
