@@ -201,6 +201,7 @@ def bonsai_sgen(
     namespace: str = "DataSchema",
     root_element: Optional[str] = None,
     serializer: Optional[List[BonsaiSgenSerializers]] = None,
+    executable: PathLike | str = "dotnet tool run bonsai.sgen",
 ) -> CompletedProcess:
     """Runs Bonsai.SGen to generate a Bonsai-compatible schema from a json-schema model
     For more information run `bonsai.sgen --help` in the command line.
@@ -225,7 +226,7 @@ def bonsai_sgen(
     if serializer is None:
         serializer = [BonsaiSgenSerializers.JSON]
 
-    cmd_string = f'bonsai.sgen --schema "{schema_path}" --output "{output_path}"'
+    cmd_string = f'{executable} --schema "{schema_path}" --output "{output_path}"'
     cmd_string += "" if namespace is None else f" --namespace {namespace}"
     cmd_string += "" if root_element is None else f" --root {root_element}"
 
@@ -234,7 +235,6 @@ def bonsai_sgen(
     else:
         cmd_string += " --serializer"
         cmd_string += " ".join([f" {sr.value}" for sr in serializer])
-
     return run(cmd_string, shell=True, check=True)
 
 
