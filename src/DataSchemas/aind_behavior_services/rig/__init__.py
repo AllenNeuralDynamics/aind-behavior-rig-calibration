@@ -166,11 +166,27 @@ class HarpDevice(RootModel):
         Field(discriminator="device_type"),
     ]
 
+
 class Vector3(BaseModel):
     x: float = Field(default=0, description="X coordinate of the point")
     y: float = Field(default=0, description="Y coordinate of the point")
     z: float = Field(default=0, description="Z coordinate of the point")
 
+
+class DisplayIntrinsics(BaseModel):
+    frame_width: int = Field(default=1920, ge=0, description="Frame width")
+    frame_height: int = Field(default=1080, ge=0, description="Frame height")
+    display_width: float = Field(default=20, ge=0, description="Display width (cm)")
+    display_height: float = Field(default=15, ge=0, description="Display width (cm)")
+
+
+class DisplayExtrinsics(BaseModel):
+    rotation: Vector3 = Field(
+        default=Vector3(x=0.0, y=0.0, z=0.0), description="Rotation vector (radians)", validate_default=True
+    )
+    translation: Vector3 = Field(
+        default=Vector3(x=0.0, y=1.309016, z=-13.27), description="Translation (in cm)", validate_default=True
+    )
 
 class Screen(Device):
     device_type: Literal["Screen"] = Field(default="Screen", description="Device type")
