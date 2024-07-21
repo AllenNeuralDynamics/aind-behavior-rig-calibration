@@ -14,7 +14,7 @@ on:
 
 jobs:
   linters:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       matrix:
         python-version: ["3.11"]
@@ -31,7 +31,7 @@ jobs:
         run: ruff check . && codespell .
 
   tests:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       matrix:
         python-version: ["3.11"]
