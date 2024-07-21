@@ -111,7 +111,7 @@ def mapper(
                     Software(
                         name="Bonsai",
                         version=session.commit_hash,
-                        url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/bonsai/Bonsai.config".format(  # noqa: E501
+                        url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/bonsai/Bonsai.config".format(
                             sha=session.commit_hash
                         ),
                     )
@@ -119,7 +119,7 @@ def mapper(
                 script=Software(
                     name="vr-foraging.bonsai",
                     version=session.commit_hash,
-                    url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/src/vr-foraging.bonsai".format(  # noqa: E501
+                    url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/src/vr-foraging.bonsai".format(
                         sha=session.commit_hash
                     ),
                     parameters=task_logic,

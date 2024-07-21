@@ -1,8 +1,9 @@
 from typing import Optional
 
 import aind_behavior_curriculum.task as curriculum_task
-from aind_behavior_services.base import coerce_schema_version
 from pydantic import Field, field_validator
+
+from aind_behavior_services.base import coerce_schema_version
 
 
 class TaskParameters(curriculum_task.TaskParameters):

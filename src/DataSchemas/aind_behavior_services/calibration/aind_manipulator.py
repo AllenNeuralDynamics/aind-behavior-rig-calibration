@@ -1,10 +1,11 @@
 from enum import IntEnum
 from typing import List, Literal, Optional
 
+from pydantic import BaseModel, Field
+
 from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import AindBehaviorRigModel, HarpStepperDriver
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
-from pydantic import BaseModel, Field
 
 TASK_LOGIC_VERSION = "0.2.0"
 RIG_VERSION = "0.1.0"
