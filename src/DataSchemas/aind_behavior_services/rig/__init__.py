@@ -166,6 +166,11 @@ class HarpDevice(RootModel):
         Field(discriminator="device_type"),
     ]
 
+class Vector3(BaseModel):
+    x: float = Field(default=0, description="X coordinate of the point")
+    y: float = Field(default=0, description="Y coordinate of the point")
+    z: float = Field(default=0, description="Z coordinate of the point")
+
 
 class Screen(Device):
     device_type: Literal["Screen"] = Field(default="Screen", description="Device type")
