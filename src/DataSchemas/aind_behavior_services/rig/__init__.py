@@ -190,7 +190,6 @@ class DisplayExtrinsics(BaseModel):
 
 
 class DisplayCalibration(BaseModel):
-    display_id: str = Field(default=..., description="Display ID")
     intrinsics: DisplayIntrinsics = Field(default=DisplayIntrinsics(), description="Intrinsics", validate_default=True)
     extrinsics: DisplayExtrinsics = Field(default=DisplayExtrinsics(), description="Extrinsics", validate_default=True)
 
