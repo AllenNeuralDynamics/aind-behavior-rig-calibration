@@ -58,4 +58,4 @@ jobs:
       - name: Regenerate schemas
         run: python .\scripts\regenerate.py
       - name: Check for uncommitted changes
-        run: git diff
+        run: git config --global core.safecrlf false && git diff
