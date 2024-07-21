@@ -201,7 +201,6 @@ class Screen(Device):
     target_render_frequency: float = Field(default=60, description="Target render frequency")
     target_update_frequency: float = Field(default=120, description="Target update frequency")
     calibration: DisplayCalibration = Field(default=DisplayCalibration(), description="Calibration")
-    texture_assets_directory: str = Field(default="Textures", description="Calibration directory")
     brightness: float = Field(default=0, le=1, ge=-1, description="Brightness")
     contrast: float = Field(default=1, le=1, ge=-1, description="Contrast")
 
