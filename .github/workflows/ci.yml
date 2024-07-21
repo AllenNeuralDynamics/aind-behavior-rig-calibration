@@ -56,6 +56,6 @@ jobs:
       - name: Run tests
         run: python -m unittest
       - name: Regenerate schemas
-        run: python .\scripts\generate_schemas.py
+        run: python .\scripts\regenerate.py
       - name: Check for uncommitted changes
         run: git diff
