@@ -32,19 +32,17 @@ jobs:
 
   tests:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        python-version: ["3.11"]
     steps:
+      - uses: actions/checkout@v3
+
       - name: Setup Bonsai
         working-directory: bonsai
         run: .\Setup.ps1
 
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
