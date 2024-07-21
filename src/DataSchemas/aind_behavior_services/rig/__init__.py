@@ -188,12 +188,19 @@ class DisplayExtrinsics(BaseModel):
         default=Vector3(x=0.0, y=1.309016, z=-13.27), description="Translation (in cm)", validate_default=True
     )
 
+
+class DisplayCalibration(BaseModel):
+    display_id: str = Field(default=..., description="Display ID")
+    intrinsics: DisplayIntrinsics = Field(default=DisplayIntrinsics(), description="Intrinsics", validate_default=True)
+    extrinsics: DisplayExtrinsics = Field(default=DisplayExtrinsics(), description="Extrinsics", validate_default=True)
+
+
 class Screen(Device):
     device_type: Literal["Screen"] = Field(default="Screen", description="Device type")
     display_index: int = Field(default=1, description="Display index")
     target_render_frequency: float = Field(default=60, description="Target render frequency")
     target_update_frequency: float = Field(default=120, description="Target update frequency")
-    calibration_directory: str = Field(default="Calibration\\Monitors\\", description="Calibration directory")
+    calibration: DisplayCalibration = Field(default=DisplayCalibration(), description="Calibration")
     texture_assets_directory: str = Field(default="Textures", description="Calibration directory")
     brightness: float = Field(default=0, le=1, ge=-1, description="Brightness")
     contrast: float = Field(default=1, le=1, ge=-1, description="Contrast")
