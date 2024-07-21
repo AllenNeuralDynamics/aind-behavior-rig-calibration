@@ -35,6 +35,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v4.0.0
+        with:
+          dotnet-version: 7.x
+      - name: Restore dotnet tools
+        run: dotnet tool restore
       - name: Setup Bonsai
         working-directory: bonsai
         run: .\Setup.ps1
@@ -49,3 +55,15 @@ jobs:
           python -m pip install -e .[aind-data-schema-mapper] --no-cache-dir
       - name: Run tests
         run: python -m unittest
+      - name: Regenerate schemas
+        run: python .\scripts\generate_schemas.py
+      - name: Check for uncommitted changes
+        run: git diff
+
+  sgen:
+      runs-on: windows-latest
+      steps:
+
+
+
+        - uses: actions/checkout@v3
