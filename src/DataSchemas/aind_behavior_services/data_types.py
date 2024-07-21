@@ -1,8 +1,9 @@
 from enum import StrEnum
 from typing import Any, Literal, Optional
 
-from aind_behavior_services.base import SchemaVersionedModel
 from pydantic import BaseModel, Field
+
+from aind_behavior_services.base import SchemaVersionedModel
 
 __version__ = "0.1.1"
 

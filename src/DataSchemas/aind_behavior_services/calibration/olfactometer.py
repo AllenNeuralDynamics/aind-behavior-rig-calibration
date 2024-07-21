@@ -1,6 +1,8 @@
 from enum import Enum, IntEnum
 from typing import Dict, Literal, Optional
 
+from pydantic import BaseModel, Field
+
 from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import (
     AindBehaviorRigModel,
@@ -9,7 +11,6 @@ from aind_behavior_services.rig import (
     HarpOlfactometer,
 )
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
-from pydantic import BaseModel, Field
 
 TASK_LOGIC_VERSION = "0.4.0"
 RIG_VERSION = "0.0.0"

@@ -4,8 +4,9 @@ import os
 from enum import Enum
 from typing import Annotated, Dict, Generic, Literal, Optional, TypeVar, Union
 
-from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
 from pydantic import BaseModel, Field, RootModel, field_validator
+
+from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
 
 
 class Device(BaseModel):
@@ -19,7 +20,7 @@ class VideoWriterFfmpeg(BaseModel):
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
     container_extension: str = Field(default="mp4", description="Container extension")
     output_arguments: str = Field(
-        default="-c:v hevc_nvenc -pix_fmt x2rgb10le -color_range full -tune hq -preset p3 -rc vbr -cq 16 -rc-lookahead 56 -temporal-aq 1 -qmin 0 -qmax 10",  # noqa E501
+        default="-c:v hevc_nvenc -pix_fmt x2rgb10le -color_range full -tune hq -preset p3 -rc vbr -cq 16 -rc-lookahead 56 -temporal-aq 1 -qmin 0 -qmax 10",  # E501
         description="Output arguments",
     )
 

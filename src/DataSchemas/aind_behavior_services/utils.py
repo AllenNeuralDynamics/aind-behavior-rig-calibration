@@ -93,7 +93,7 @@ class CustomGenerateJsonSchema(GenerateJsonSchema):
 
         return result
 
-    def literal_schema(self, schema: core_schema.LiteralSchema) -> JsonSchemaValue:  # noqa: C901
+    def literal_schema(self, schema: core_schema.LiteralSchema) -> JsonSchemaValue:
         """Generates a JSON schema that matches a literal value.
 
         Args:
@@ -328,7 +328,7 @@ def _build_bonsai_process_command(
             output_cmd += " --start"
     else:
         output_cmd += " --no-editor"
-        if not (layout is None):
+        if layout is not None:
             output_cmd += f' --visualizer-layout:"{layout}"'
 
     if additional_properties:

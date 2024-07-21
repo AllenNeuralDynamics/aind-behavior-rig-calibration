@@ -89,7 +89,7 @@ Sub-classing :py:class:`~aind_behavior_services.task_logic.AindBehaviorTaskLogic
 
 The same way a :py:class:`~aind_behavior_services.task_logic.AindBehaviorTaskLogicModel` is used to define
 the settings to run a behavior task, it is also used to define the settings to run a calibration workflow.
-It will thus fallow an identical sub-classing pattern:
+It will thus follow an identical sub-classing pattern:
 
 
 .. code-block:: python

@@ -15,7 +15,7 @@ import erdantic as erd
 from pydantic import BaseModel
 
 sys.path.insert(0, os.path.abspath("../src/DataSchemas"))
-import aind_behavior_services  # noqa: E402
+import aind_behavior_services
 
 SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/tree/main/src/DataSchemas/"
 

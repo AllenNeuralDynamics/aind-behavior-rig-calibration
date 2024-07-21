@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from typing import Dict, Literal, Optional
 
-from aind_behavior_services.base import SchemaVersionedModel
 from pydantic import BaseModel, Field
+
+from aind_behavior_services.base import SchemaVersionedModel
 
 # Import core types
 

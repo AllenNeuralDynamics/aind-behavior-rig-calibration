@@ -5,8 +5,6 @@ import secrets
 from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union
 
 import git
-from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
-from aind_behavior_services.utils import open_bonsai_process
 from pydantic import ValidationError
 
 from aind_behavior_services import (
@@ -14,6 +12,8 @@ from aind_behavior_services import (
     AindBehaviorSessionModel,
     AindBehaviorTaskLogicModel,
 )
+from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
+from aind_behavior_services.utils import open_bonsai_process
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disable=invalid-name
