@@ -59,11 +59,3 @@ jobs:
         run: python .\scripts\generate_schemas.py
       - name: Check for uncommitted changes
         run: git diff
-
-  sgen:
-      runs-on: windows-latest
-      steps:
-
-
-
-        - uses: actions/checkout@v3
