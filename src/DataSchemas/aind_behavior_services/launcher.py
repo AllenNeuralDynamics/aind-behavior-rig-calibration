@@ -514,7 +514,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
 
 class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
-
     def __init__(
         self,
         rig_schema: Type[TRig],
@@ -527,7 +526,6 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
         repository_dir: Optional[os.PathLike | str] = None,
         **launcher_kwargs,
     ) -> None:
-
         parser = self._get_default_arg_parser()
         args, _ = parser.parse_known_args()
 
@@ -577,7 +575,6 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
 
     @staticmethod
     def _get_default_arg_parser() -> argparse.ArgumentParser:
-
         parser = argparse.ArgumentParser()
 
         parser.add_argument("--data_dir", help="Specify the data directory")

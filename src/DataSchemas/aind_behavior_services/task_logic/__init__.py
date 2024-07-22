@@ -11,7 +11,6 @@ class TaskParameters(curriculum_task.TaskParameters):
 
 
 class AindBehaviorTaskLogicModel(curriculum_task.Task):
-
     task_parameters: TaskParameters = Field(..., description="Parameters of the task logic", validate_default=True)
     version: str = Field(..., pattern=curriculum_task.SEMVER_REGEX, description="task schema version")
 

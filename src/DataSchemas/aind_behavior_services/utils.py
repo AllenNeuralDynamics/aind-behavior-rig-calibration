@@ -247,7 +247,6 @@ def convert_pydantic_to_bonsai(
     skip_sgen: bool = False,
     export_schema_kwargs: Dict[str, Any] = {},
 ) -> Dict[str, Optional[CompletedProcess]]:
-
     def _write_json(schema_path: PathLike, output_model_name: str, model: ModelInputTypeSignature) -> None:
         with open(os.path.join(schema_path, f"{output_model_name}.json"), "w", encoding="utf-8") as f:
             json_model = export_schema(model, **export_schema_kwargs)
@@ -325,7 +324,6 @@ def _build_bonsai_process_command(
     layout: Optional[PathLike | str] = None,
     additional_properties: Optional[Dict[str, str]] = None,
 ) -> str:
-
     output_cmd: str = f'"{bonsai_exe}" "{workflow_file}"'
     if is_editor_mode:
         if is_start_flag:
@@ -353,7 +351,6 @@ def run_bonsai_process(
     timeout: Optional[float] = None,
     print_cmd: bool = False,
 ) -> CompletedProcess:
-
     output_cmd = _build_bonsai_process_command(
         workflow_file=workflow_file,
         bonsai_exe=bonsai_exe,
@@ -381,7 +378,6 @@ def open_bonsai_process(
     creation_flags: Optional[int] = None,
     print_cmd: bool = False,
 ) -> subprocess.Popen:
-
     output_cmd = _build_bonsai_process_command(
         workflow_file=workflow_file,
         bonsai_exe=bonsai_exe,
