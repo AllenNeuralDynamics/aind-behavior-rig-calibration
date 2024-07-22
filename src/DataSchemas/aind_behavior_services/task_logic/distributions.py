@@ -2,10 +2,10 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Annotated, Literal, Optional, Union
+from typing import Annotated, List, Literal, Optional, Self, Union
 
 # Import aind-datas-schema types
-from pydantic import BaseModel, Field, RootModel
+from pydantic import BaseModel, Field, NonNegativeFloat, RootModel, field_validator, model_validator
 
 
 class TruncationParameters(BaseModel):
@@ -29,6 +29,7 @@ class DistributionFamily(str, Enum):
     BINOMIAL = "Binomial"
     BETA = "Beta"
     POISSON = "Poisson"
+    PDF = "Pdf"
 
 
 class DistributionParametersBase(BaseModel):
@@ -162,6 +163,32 @@ class PoissonDistribution(DistributionBase):
     )
 
 
+class PdfDistributionParameters(DistributionParametersBase):
+    family: Literal[DistributionFamily.PDF] = DistributionFamily.PDF
+    pdf: List[NonNegativeFloat] = Field([1], description="The probability density function")
+    index: List[float] = Field([0], description="The index of the probability density function")
+
+    @field_validator("pdf")
+    @classmethod
+    def normalize_pdf(cls, v: List[NonNegativeFloat]) -> List[NonNegativeFloat]:
+        return [x / sum(v) for x in v]
+
+    @model_validator(mode="after")
+    def validate_matching_length(self) -> Self:
+        if len(self.pdf) != len(self.index):
+            raise ValueError("pdf and index must have the same length")
+        return self
+
+
+class PdfDistribution(DistributionBase):
+    family: Literal[DistributionFamily.PDF] = DistributionFamily.PDF
+    distribution_parameters: PdfDistributionParameters = Field(
+        PdfDistributionParameters(),
+        description="Parameters of the distribution",
+        validate_default=True,
+    )
+
+
 class Distribution(RootModel):
     root: Annotated[
         Union[
@@ -174,6 +201,7 @@ class Distribution(RootModel):
             BinomialDistribution,
             BetaDistribution,
             GammaDistribution,
+            PdfDistribution,
         ],
         Field(discriminator="family", title="Distribution", description="Available distributions"),
     ]
@@ -191,6 +219,7 @@ class DistributionParameters(RootModel):
             BinomialDistributionParameters,
             BetaDistributionParameters,
             GammaDistributionParameters,
+            PdfDistributionParameters,
         ],
         Field(discriminator="family", title="DistributionParameters", description="Parameters of the distribution"),
     ]
