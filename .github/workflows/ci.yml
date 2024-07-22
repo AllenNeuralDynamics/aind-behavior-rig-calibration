@@ -1,10 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches:
-        - bc/ruff-ci
-        - release*
   pull_request:
     branches:
       - main
