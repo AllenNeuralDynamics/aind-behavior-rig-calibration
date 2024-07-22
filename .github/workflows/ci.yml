@@ -62,4 +62,6 @@ jobs:
       - name: Regenerate schemas
         run: python .\scripts\regenerate.py
       - name: Check for uncommitted changes
-        run: git config --global core.safecrlf false && git diff
+        run: |
+          git config --global core.safecrlf false
+          git diff --exit-code || (echo "Untracked changes found" && exit 1)
