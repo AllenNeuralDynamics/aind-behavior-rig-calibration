@@ -29,7 +29,7 @@ class DistributionFamily(str, Enum):
     BINOMIAL = "Binomial"
     BETA = "Beta"
     POISSON = "Poisson"
-    PDF = "ProbabilityDensityFunction"
+    PDF = "Pdf"
 
 
 class DistributionParametersBase(BaseModel):
@@ -163,7 +163,7 @@ class PoissonDistribution(DistributionBase):
     )
 
 
-class ProbabilityDensityFunctionDistributionParameters(DistributionParametersBase):
+class PdfDistributionParameters(DistributionParametersBase):
     family: Literal[DistributionFamily.PDF] = DistributionFamily.PDF
     pdf: List[NonNegativeFloat] = Field([1], description="The probability density function")
     index: List[float] = Field([0], description="The index of the probability density function")
@@ -180,10 +180,10 @@ class ProbabilityDensityFunctionDistributionParameters(DistributionParametersBas
         return self
 
 
-class ProbabilityDensityFunctionDistribution(DistributionBase):
+class PdfDistribution(DistributionBase):
     family: Literal[DistributionFamily.PDF] = DistributionFamily.PDF
-    distribution_parameters: ProbabilityDensityFunctionDistributionParameters = Field(
-        ProbabilityDensityFunctionDistributionParameters(),
+    distribution_parameters: PdfDistributionParameters = Field(
+        PdfDistributionParameters(),
         description="Parameters of the distribution",
         validate_default=True,
     )
@@ -201,7 +201,7 @@ class Distribution(RootModel):
             BinomialDistribution,
             BetaDistribution,
             GammaDistribution,
-            ProbabilityDensityFunctionDistribution,
+            PdfDistribution,
         ],
         Field(discriminator="family", title="Distribution", description="Available distributions"),
     ]
@@ -219,7 +219,7 @@ class DistributionParameters(RootModel):
             BinomialDistributionParameters,
             BetaDistributionParameters,
             GammaDistributionParameters,
-            ProbabilityDensityFunctionDistributionParameters,
+            PdfDistributionParameters,
         ],
         Field(discriminator="family", title="DistributionParameters", description="Parameters of the distribution"),
     ]
