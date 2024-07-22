@@ -23,9 +23,7 @@ class AindBehaviorRigModelPost(AindBehaviorTaskLogicModel):
 
 
 class SchemaVersionCoercionTest(unittest.TestCase):
-
     def test_version_update_coercion(self):
-
         pre_instance = AindBehaviorRigModelPre()
         post_instance = AindBehaviorRigModelPost()
         with warnings.catch_warnings():

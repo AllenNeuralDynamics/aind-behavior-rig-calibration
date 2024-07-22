@@ -9,9 +9,7 @@ from . import build_examples
 
 
 class BonsaiTests(unittest.TestCase):
-
     def test_deserialization(self):
-
         tested_modules = [
             "aind_manipulator",
             "load_cells",

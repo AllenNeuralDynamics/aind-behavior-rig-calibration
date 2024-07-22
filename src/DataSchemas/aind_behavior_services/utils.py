@@ -201,6 +201,7 @@ def bonsai_sgen(
     namespace: str = "DataSchema",
     root_element: Optional[str] = None,
     serializer: Optional[List[BonsaiSgenSerializers]] = None,
+    executable: PathLike | str = "dotnet tool run bonsai.sgen",
 ) -> CompletedProcess:
     """Runs Bonsai.SGen to generate a Bonsai-compatible schema from a json-schema model
     For more information run `bonsai.sgen --help` in the command line.
@@ -225,7 +226,7 @@ def bonsai_sgen(
     if serializer is None:
         serializer = [BonsaiSgenSerializers.JSON]
 
-    cmd_string = f'bonsai.sgen --schema "{schema_path}" --output "{output_path}"'
+    cmd_string = f'{executable} --schema "{schema_path}" --output "{output_path}"'
     cmd_string += "" if namespace is None else f" --namespace {namespace}"
     cmd_string += "" if root_element is None else f" --root {root_element}"
 
@@ -234,7 +235,6 @@ def bonsai_sgen(
     else:
         cmd_string += " --serializer"
         cmd_string += " ".join([f" {sr.value}" for sr in serializer])
-
     return run(cmd_string, shell=True, check=True)
 
 
@@ -246,13 +246,13 @@ def convert_pydantic_to_bonsai(
     serializer: Optional[List[BonsaiSgenSerializers]] = None,
     skip_sgen: bool = False,
     export_schema_kwargs: Dict[str, Any] = {},
-) -> None:
-
+) -> Dict[str, Optional[CompletedProcess]]:
     def _write_json(schema_path: PathLike, output_model_name: str, model: ModelInputTypeSignature) -> None:
         with open(os.path.join(schema_path, f"{output_model_name}.json"), "w", encoding="utf-8") as f:
             json_model = export_schema(model, **export_schema_kwargs)
             f.write(json_model)
 
+    ret_dict: Dict[str, Optional[CompletedProcess]] = {}
     for output_model_name, model in models.items():
         _write_json(schema_path, output_model_name, model)
         if not skip_sgen:
@@ -262,7 +262,10 @@ def convert_pydantic_to_bonsai(
                 namespace=namespace,
                 serializer=serializer,
             )
-            print(cmd_return.stdout)
+            ret_dict[output_model_name] = cmd_return
+        else:
+            ret_dict[output_model_name] = None
+    return ret_dict
 
 
 def snake_to_pascal_case(s: str) -> str:
@@ -321,7 +324,6 @@ def _build_bonsai_process_command(
     layout: Optional[PathLike | str] = None,
     additional_properties: Optional[Dict[str, str]] = None,
 ) -> str:
-
     output_cmd: str = f'"{bonsai_exe}" "{workflow_file}"'
     if is_editor_mode:
         if is_start_flag:
@@ -349,7 +351,6 @@ def run_bonsai_process(
     timeout: Optional[float] = None,
     print_cmd: bool = False,
 ) -> CompletedProcess:
-
     output_cmd = _build_bonsai_process_command(
         workflow_file=workflow_file,
         bonsai_exe=bonsai_exe,
@@ -377,7 +378,6 @@ def open_bonsai_process(
     creation_flags: Optional[int] = None,
     print_cmd: bool = False,
 ) -> subprocess.Popen:
-
     output_cmd = _build_bonsai_process_command(
         workflow_file=workflow_file,
         bonsai_exe=bonsai_exe,
