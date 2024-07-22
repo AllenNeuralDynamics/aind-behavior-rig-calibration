@@ -246,13 +246,14 @@ def convert_pydantic_to_bonsai(
     serializer: Optional[List[BonsaiSgenSerializers]] = None,
     skip_sgen: bool = False,
     export_schema_kwargs: Dict[str, Any] = {},
-) -> None:
+) -> Dict[str, Optional[CompletedProcess]]:
 
     def _write_json(schema_path: PathLike, output_model_name: str, model: ModelInputTypeSignature) -> None:
         with open(os.path.join(schema_path, f"{output_model_name}.json"), "w", encoding="utf-8") as f:
             json_model = export_schema(model, **export_schema_kwargs)
             f.write(json_model)
 
+    ret_dict: Dict[str, Optional[CompletedProcess]] = {}
     for output_model_name, model in models.items():
         _write_json(schema_path, output_model_name, model)
         if not skip_sgen:
@@ -262,7 +263,10 @@ def convert_pydantic_to_bonsai(
                 namespace=namespace,
                 serializer=serializer,
             )
-            print(cmd_return.stdout)
+            ret_dict[output_model_name] = cmd_return
+        else:
+            ret_dict[output_model_name] = None
+    return ret_dict
 
 
 def snake_to_pascal_case(s: str) -> str:
