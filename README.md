@@ -42,7 +42,7 @@ Contributions to this repository are welcome! However, please ensure that your c
 
 ### Linting
 
-We use [flake8](https://flake8.pycqa.org/), [black](https://black.readthedocs.io/), and [isort](https://pycqa.github.io/isort/) as our linting tools.
+We use [ruff](https://docs.astral.sh/ruff/) as our primary linting tool.
 
 ### Testing
 
