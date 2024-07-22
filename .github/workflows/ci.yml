@@ -27,8 +27,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -e .[linters] --no-cache-dir
-      - name: Run linters
-        run: ruff check . && codespell .
+      - name: Run ruff format
+        run: ruff format .
+      - name: Run ruff check
+        run: ruff check .
+      - name: Run codespell
+        run : codespell .
 
   tests:
     runs-on: windows-latest
