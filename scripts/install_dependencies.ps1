@@ -11,7 +11,12 @@ Winget install "Microsoft Visual C++ 2012 Redistributable (x64)" --force @autoac
 winget install -e --id Nvidia.GeForceExperience -v 3.26.0.160 @autoaccept
 winget install -e --id Nvidia.CUDA -v 11.3 @autoaccept
 winget install -e --id Notepad++.Notepad++ @autoaccept
-winget install -e --id dotPDNLLC.paintdotnet @autoaccept
+winget install --id=Microsoft.DotNet.SDK.8  -e @autoaccept
+
+## Install dotnet tools
+
+dotnet tool install --global Bonsai.Sgen
+dotnet tool install --global Harp.Toolkit
 
 ## Install vscode extensions
 $extensions =
