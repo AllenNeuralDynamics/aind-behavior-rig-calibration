@@ -49,12 +49,8 @@ def main():
     )
 
     convert_pydantic_to_bonsai({"aind_behavior_data_types": DataTypes}, schema_path=SCHEMA_ROOT, skip_sgen=True)
-
     convert_pydantic_to_bonsai(
-        {"aind_behavior_subject_database": db_utils.SubjectDataBase},
-        schema_path=SCHEMA_ROOT,
-        output_path=EXTENSIONS_ROOT,
-        namespace=f"{NAMESPACE_PREFIX}.AindBehaviorSubjectDatabase",
+        {"aind_behavior_subject_database": db_utils.SubjectDataBase}, schema_path=SCHEMA_ROOT, skip_sgen=True
     )
 
 
