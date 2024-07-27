@@ -245,16 +245,16 @@ def convert_pydantic_to_bonsai(
     output_path: PathLike = Path("./src/Extensions/"),
     serializer: Optional[List[BonsaiSgenSerializers]] = None,
     skip_sgen: bool = False,
-    export_schema_kwargs: Dict[str, Any] = {},
+    export_schema_kwargs: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Optional[CompletedProcess]]:
-    def _write_json(schema_path: PathLike, output_model_name: str, model: ModelInputTypeSignature) -> None:
+    def _write_json(schema_path: PathLike, output_model_name: str, model: ModelInputTypeSignature, **extra_kwargs) -> None:
         with open(os.path.join(schema_path, f"{output_model_name}.json"), "w", encoding="utf-8") as f:
-            json_model = export_schema(model, **export_schema_kwargs)
+            json_model = export_schema(model, **extra_kwargs)
             f.write(json_model)
 
     ret_dict: Dict[str, Optional[CompletedProcess]] = {}
     for output_model_name, model in models.items():
-        _write_json(schema_path, output_model_name, model)
+        _write_json(schema_path, output_model_name, model, **(export_schema_kwargs or {}))
         if not skip_sgen:
             cmd_return = bonsai_sgen(
                 schema_path=Path(os.path.join(schema_path, f"{output_model_name}.json")),
