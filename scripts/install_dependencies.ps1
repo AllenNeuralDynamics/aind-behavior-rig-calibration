@@ -1,3 +1,6 @@
+## Run this as an administrator to install all the dependencies for the project
+Write-Host "This script might fail if you are not running it as an administrator." -ForegroundColor Yellow
+
 Write-Host "Installing dependencies..." -ForegroundColor White
 $autoaccept = @("--accept-package-agreements", "--accept-source-agreements")
 
@@ -36,3 +39,9 @@ foreach ($ext in $extensions) {
         code --install-extension $ext
     }
 }
+
+## Install Pololu Jrk G2 software and drivers
+$msiUrl = "https://www.pololu.com/file/0J1494/pololu-jrk-g2-1.4.1-win.msi"
+$msiPath = "$env:TEMP\installer.msi"
+Invoke-WebRequest -Uri $msiUrl -OutFile $msiPath
+Start-Process msiexec.exe -ArgumentList "/i `"$msiPath`" MODIFYPATH=1 /quiet /norestart" -NoNewWindow -Wait
