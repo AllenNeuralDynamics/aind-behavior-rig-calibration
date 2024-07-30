@@ -44,6 +44,13 @@ class WebCamera(Device):
     )
 
 
+class Rect(BaseModel):
+    x: int = Field(default=0, ge=0, description="X coordinate of the top-left corner")
+    y: int = Field(default=0, ge=0, description="Y coordinate of the top-left corner")
+    width: int = Field(default=0, ge=0, description="Width of the rectangle")
+    height: int = Field(default=0, ge=0, description="Height of the rectangle")
+
+
 class SpinnakerCamera(Device):
     device_type: Literal["SpinnakerCamera"] = Field(default="SpinnakerCamera", description="Device type")
     serial_number: str = Field(..., description="Camera serial number")
@@ -51,9 +58,18 @@ class SpinnakerCamera(Device):
     color_processing: Literal["Default", "NoColorProcessing"] = Field(default="Default", description="Color processing")
     exposure: int = Field(default=1000, ge=100, description="Exposure time")
     gain: float = Field(default=0, ge=0, description="Gain")
+    region_of_interest: Rect = Field(default=Rect(), description="Region of interest", validate_default=True)
     video_writer: Optional[VideoWriter] = Field(
         default=None, description="Video writer. If not provided, no video will be saved."
     )
+
+    @field_validator("region_of_interest")
+    @classmethod
+    def validate_roi(cls, v: Rect) -> Rect:
+        if v.width == 0 or v.height == 0:
+            if any([x != 0 for x in [v.width, v.height, v.x, v.y]]):
+                raise ValueError("If width or height is 0, all other values must be 0")
+        return v
 
 
 TCamera = TypeVar("TCamera", bound=Union[WebCamera, SpinnakerCamera])
