@@ -24,7 +24,7 @@ dependencies = [
 
 [project.optional-dependencies]
 
-aind-extra-services = [
+aind-services = [
     'aind-watchdog-service@git+https://github.com/AllenNeuralDynamics/aind-watchdog-service@development',
     'aind-data-schema==0.38.5'
 ]
