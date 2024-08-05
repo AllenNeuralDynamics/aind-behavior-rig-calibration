@@ -8,47 +8,81 @@ except ImportError as e:
     )
     raise
 
-import json
-import os
 import datetime
-import git
+import os
 from pathlib import Path
-from typing import Type, TypeVar, Union, get_args
+from typing import Type, TypeVar, Union
 
-from aind_data_schema.core.session import Modality, Session, Software, StimulusEpoch, Stream, StimulusModality
+import git
+from aind_data_schema.core.session import Modality, Session, Software, StimulusEpoch, StimulusModality, Stream
 
+import aind_behavior_services.rig as AbsRig
 from aind_behavior_services import (
     AindBehaviorRigModel,
     AindBehaviorSessionModel,
     AindBehaviorTaskLogicModel,
 )
+from aind_behavior_services.calibration import Calibration
 
-from aind_behavior_services.rig import CameraController, CameraTypes
+from . import helpers
 
 TSchema = TypeVar("TSchema", bound=Union[AindBehaviorSessionModel, AindBehaviorRigModel, AindBehaviorTaskLogicModel])
 
 
 def mapper(
-    session_root: os.PathLike,
+    session_data_root: os.PathLike,
     session_model: Type[AindBehaviorSessionModel],
     rig_model: Type[AindBehaviorRigModel],
     task_logic_model: Type[AindBehaviorTaskLogicModel],
+    repository: Union[os.PathLike, git.Repo],
+    script_path: os.PathLike,
     /,
     session_end_time: datetime.datetime = datetime.datetime.now(),
     **kwargs,
 ) -> Session:
-    session_root = Path(session_root)
-    session = model_from_json_file(session_root / "Config" / "session_input.json", session_model)
-    rig = model_from_json_file(session_root / "Config" / "rig_input.json", rig_model)
-    task_logic = model_from_json_file(session_root / "Config" / "tasklogic_input.json", task_logic_model)
+    session_data_root = Path(session_data_root)
+    session = model_from_json_file(session_data_root / "Config" / "session_input.json", session_model)
+    rig = model_from_json_file(session_data_root / "Config" / "rig_input.json", rig_model)
+    task_logic = model_from_json_file(session_data_root / "Config" / "tasklogic_input.json", task_logic_model)
 
-    ##
-    cameras = get_cameras(rig)
+    # Normalize repository
+    if isinstance(repository, os.PathLike):
+        repository = git.Repo(Path(repository))
+    repository_remote_url = repository.remote().url
+    repository_sha = repository.head.commit.hexsha
+    repository_relative_script_path = Path(script_path).resolve().relative_to(repository.working_dir)
 
-    ## Populate modalities
-    modalities = [Modality.BEHAVIOR]
-    if any([camera.video_writer for camera in cameras]):
+    # Populate calibrations:
+    calibrations = helpers.get_fields_of_type(rig, Calibration)
+    # Populate cameras
+    cameras = helpers.get_cameras(rig, exclude_without_video_writer=True)
+    # Populate modalities
+    modalities: list[Modality] = [Modality.BEHAVIOR]
+    if len(cameras) > 0:
         modalities.append(Modality.BEHAVIOR_VIDEOS)
+    modalities = list(set(modalities))
+    # Populate stimulus modalities
+    stimulus_modalities: list[StimulusModality] = []
+
+    if helpers.get_fields_of_type(rig, AbsRig.Screen):
+        stimulus_modalities.extend([StimulusModality.VISUAL, StimulusModality.VIRTUAL_REALITY])
+    if helpers.get_fields_of_type(rig, AbsRig.HarpOlfactometer):
+        stimulus_modalities.append(StimulusModality.OLFACTORY)
+    if helpers.get_fields_of_type(rig, AbsRig.HarpTreadmill):
+        stimulus_modalities.append(StimulusModality.WHEEL_FRICTION)
+
+    # Mouse platform
+
+    mouse_platform: str
+    if helpers.get_fields_of_type(rig, AbsRig.HarpTreadmill):
+        mouse_platform = "Treadmill"
+        active_mouse_platform = True
+    elif helpers.get_fields_of_type(rig, AbsRig.HarpLoadCells):
+        mouse_platform = "TubeWithLoadCells"
+        active_mouse_platform = True
+    else:
+        mouse_platform = "None"
+        active_mouse_platform = False
 
     ##
     aind_data_schema_session = Session(
@@ -60,35 +94,39 @@ def mapper(
         notes=session.notes,
         data_streams=[
             Stream(
-                stream_modalities=[Modality.BEHAVIOR, Modality.BEHAVIOR_VIDEOS],
+                stream_modalities=modalities,
                 stream_start_time=session.date,
                 stream_end_time=session_end_time or session.date,
-                camera_names=["NULL"],
+                camera_names=cameras.keys(),
             ),
         ],
-        mouse_platform_name="Mouse platform",
-        active_mouse_platform=True,
+        calibrations=[keyed[1] for keyed in calibrations],
+        mouse_platform_name=mouse_platform,
+        active_mouse_platform=active_mouse_platform,
         stimulus_epochs=[
             StimulusEpoch(
-                stimulus_name="vr-foraging task",
+                stimulus_name=session.experiment,
                 stimulus_start_time=session.date,
                 stimulus_end_time=session_end_time,
-                stimulus_modalities=[],
+                stimulus_modalities=stimulus_modalities,
                 software=[
                     Software(
                         name="Bonsai",
-                        version=session.commit_hash,
-                        url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/bonsai/Bonsai.config".format(
-                            sha=session.commit_hash
-                        ),
-                    )
+                        version=f"{repository_remote_url}/blob/{repository_sha}/bonsai/Bonsai.config",
+                        url=f"{repository_remote_url}/blob/{repository_sha}/bonsai",
+                        parameters=helpers.snapshot_bonsai_environment(),  # todo : Consider passing an explicit path here
+                    ),
+                    Software(
+                        name="Python",
+                        version=f"{repository_remote_url}/blob/{repository_sha}/pyproject.toml",
+                        url=f"{repository_remote_url}/blob/{repository_sha}",
+                        parameters=helpers.snapshot_python_environment(),
+                    ),
                 ],
                 script=Software(
-                    name="vr-foraging.bonsai",
+                    name=Path(script_path).stem,
                     version=session.commit_hash,
-                    url="https://github.com/AllenNeuralDynamics/Aind.Behavior.VrForaging/blob/{sha}/src/vr-foraging.bonsai".format(
-                        sha=session.commit_hash
-                    ),
+                    url=f"{repository_remote_url}/blob/{repository_sha}/{repository_relative_script_path}",
                     parameters=task_logic.model_dump(),
                 ),
             )
@@ -105,17 +143,3 @@ def model_from_json_file(json_path: os.PathLike | str, model_class: Type[TSchema
 def model_to_json_file(json_path: os.PathLike | str, model: TSchema) -> None:
     with open(json_path, "w", encoding="utf-8") as f:
         f.write(model.model_dump_json(indent=4))
-
-
-
-def get_cameras(rig_instance: AindBehaviorRigModel) -> list[CameraTypes]:
-    cameras: list[CameraTypes] = []
-    for field in rig_instance.model_fields:
-        attr = getattr(rig_instance, field)
-        if isinstance(attr, CameraController):
-            for _, camera in attr.cameras.items():
-                if isinstance(camera, get_args(CameraTypes)):
-                    cameras.append(camera)
-    return cameras
-
-
