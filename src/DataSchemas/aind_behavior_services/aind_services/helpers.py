@@ -1,7 +1,11 @@
-from typing import TypeVar, Type, Iterable, Dict, List, Union, get_args, Tuple, Optional
+import os
+from importlib import metadata
+from pathlib import Path
+from typing import Dict, Iterable, List, Literal, Optional, Tuple, Type, TypeVar, Union, get_args
+
 import pydantic
 
-from aind_behavior_services.rig import CameraController, CameraTypes, AindBehaviorRigModel
+from aind_behavior_services.rig import AindBehaviorRigModel, CameraController, CameraTypes
 
 T = TypeVar("T")
 
@@ -29,7 +33,7 @@ def get_fields_of_type(
     searchable: ISearchable,
     target_type: Type[T],
     *args,
-    is_recursive: bool = True,
+    recursive: bool = True,
     stop_recursion_on_type: bool = True,
     **kwargs,
 ) -> List[Tuple[Optional[str], T]]:
@@ -51,13 +55,25 @@ def get_fields_of_type(
         if isinstance(field, target_type):
             result.append((name, field))
             _is_type = True
-        if is_recursive and isinstance(field, _ISearchableTypeChecker) and not (stop_recursion_on_type and _is_type):
+        if recursive and isinstance(field, _ISearchableTypeChecker) and not (stop_recursion_on_type and _is_type):
             result.extend(
                 get_fields_of_type(
                     field,
                     target_type,
-                    is_recursive=is_recursive,
+                    recursive=recursive,
                     stop_recursion_on_type=stop_recursion_on_type,
                 )
             )
     return result
+
+
+def snapshot_python_environment() -> Dict[str, str]:
+    return {dist.name: dist.version for dist in metadata.distributions()}
+
+
+def snapshot_bonsai_environment(
+    config_file: os.PathLike = Path("./src/bonsai/bonsai.config"),
+) -> Dict[Literal["bonsai.config"], str]:
+    config_file = Path(config_file)
+    with open(config_file, "r", encoding="utf-8") as f:
+        return {"bonsai.config": f.read()}
