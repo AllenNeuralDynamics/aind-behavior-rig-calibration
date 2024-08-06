@@ -12,11 +12,12 @@ import datetime
 import os
 from pathlib import Path
 from typing import Type, TypeVar, Union
-
+from pydantic import BaseModel
 import git
 from aind_data_schema.core.session import Modality, Session, Software, StimulusEpoch, StimulusModality, Stream, RewardDeliveryConfig, RewardSolution, RewardSpoutConfig, SpoutSide
 from aind_data_schema.components.coordinates import RelativePosition
 import aind_data_schema.components.devices as ads_devices
+
 
 import aind_behavior_services.rig as AbsRig
 from aind_behavior_services import (
@@ -30,8 +31,6 @@ from aind_behavior_services.calibration.aind_manipulator import AindManipulatorC
 
 
 from . import helpers
-
-TSchema = TypeVar("TSchema", bound=Union[AindBehaviorSessionModel, AindBehaviorRigModel, AindBehaviorTaskLogicModel])
 
 
 def mapper(
@@ -151,14 +150,12 @@ def mapper(
     return aind_data_schema_session
 
 
+TSchema = TypeVar("TSchema", bound=BaseModel)
+
+
 def model_from_json_file(json_path: os.PathLike, model_class: Type[TSchema]) -> TSchema:
     with open(Path(json_path), encoding="utf-8") as f:
         return model_class.model_validate_json(f.read())
-
-
-def model_to_json_file(json_path: os.PathLike | str, model: TSchema) -> None:
-    with open(json_path, "w", encoding="utf-8") as f:
-        f.write(model.model_dump_json(indent=4))
 
 
 def _mapper_calibration(calibration: Calibration, default_date: datetime.datetime = datetime.datetime.now()) -> ads_devices.Calibration:
