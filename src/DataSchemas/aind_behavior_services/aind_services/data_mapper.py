@@ -38,7 +38,7 @@ from aind_behavior_services.calibration import Calibration
 from . import helpers
 
 
-def mapper(
+def mapper_from_session_root(
     session_data_root: os.PathLike,
     session_model: Type[AindBehaviorSessionModel],
     rig_model: Type[AindBehaviorRigModel],
@@ -48,13 +48,51 @@ def mapper(
     session_end_time: datetime.datetime = datetime.datetime.now(),
     **kwargs,
 ) -> Session:
-    session_data_root = Path(session_data_root)
-    _schema_root = session_data_root / "other" / "Config"
-    session = model_from_json_file(_schema_root / "session_input.json", session_model)
-    rig = model_from_json_file(_schema_root / "rig_input.json", rig_model)
-    print(_schema_root / "tasklogic_input.json")
-    task_logic = model_from_json_file(_schema_root / "tasklogic_input.json", task_logic_model)
+    _schema_root = Path(session_data_root) / "other" / "Config"
 
+    return mapper(
+        session_model=model_from_json_file(_schema_root / "session_input.json", session_model),
+        rig_model=model_from_json_file(_schema_root / "rig_input.json", rig_model),
+        task_logic_model=model_from_json_file(_schema_root / "tasklogic_input.json", task_logic_model),
+        repository=repository,
+        script_path=script_path,
+        session_end_time=session_end_time,
+        **kwargs,
+    )
+
+
+def mapper_from_json_files(
+    session_json: os.PathLike,
+    rig_json: os.PathLike,
+    task_logic_json: os.PathLike,
+    session_model: Type[AindBehaviorSessionModel],
+    rig_model: Type[AindBehaviorRigModel],
+    task_logic_model: Type[AindBehaviorTaskLogicModel],
+    repository: Union[os.PathLike, git.Repo],
+    script_path: os.PathLike,
+    session_end_time: datetime.datetime = datetime.datetime.now(),
+    **kwargs,
+) -> Session:
+    return mapper(
+        session_model=model_from_json_file(session_json, session_model),
+        rig_model=model_from_json_file(rig_json, rig_model),
+        task_logic_model=model_from_json_file(task_logic_json, task_logic_model),
+        repository=repository,
+        script_path=script_path,
+        session_end_time=session_end_time,
+        **kwargs,
+    )
+
+
+def mapper(
+    session_model: AindBehaviorSessionModel,
+    rig_model: AindBehaviorRigModel,
+    task_logic_model: AindBehaviorTaskLogicModel,
+    repository: Union[os.PathLike, git.Repo],
+    script_path: os.PathLike,
+    session_end_time: datetime.datetime = datetime.datetime.now(),
+    **kwargs,
+) -> Session:
     # Normalize repository
     if isinstance(repository, os.PathLike | str):
         repository = git.Repo(Path(repository))
@@ -65,10 +103,10 @@ def mapper(
     # Populate calibrations:
     calibrations = [
         _mapper_calibration(_calibration_model[1], datetime.datetime.now())
-        for _calibration_model in helpers.get_fields_of_type(rig, Calibration)
+        for _calibration_model in helpers.get_fields_of_type(rig_model, Calibration)
     ]
     # Populate cameras
-    cameras = helpers.get_cameras(rig, exclude_without_video_writer=True)
+    cameras = helpers.get_cameras(rig_model, exclude_without_video_writer=True)
     # Populate modalities
     modalities: list[Modality] = [Modality.BEHAVIOR]
     if len(cameras) > 0:
@@ -77,20 +115,20 @@ def mapper(
     # Populate stimulus modalities
     stimulus_modalities: list[StimulusModality] = []
 
-    if helpers.get_fields_of_type(rig, AbsRig.Screen):
+    if helpers.get_fields_of_type(rig_model, AbsRig.Screen):
         stimulus_modalities.extend([StimulusModality.VISUAL, StimulusModality.VIRTUAL_REALITY])
-    if helpers.get_fields_of_type(rig, AbsRig.HarpOlfactometer):
+    if helpers.get_fields_of_type(rig_model, AbsRig.HarpOlfactometer):
         stimulus_modalities.append(StimulusModality.OLFACTORY)
-    if helpers.get_fields_of_type(rig, AbsRig.HarpTreadmill):
+    if helpers.get_fields_of_type(rig_model, AbsRig.HarpTreadmill):
         stimulus_modalities.append(StimulusModality.WHEEL_FRICTION)
 
     # Mouse platform
 
     mouse_platform: str
-    if helpers.get_fields_of_type(rig, AbsRig.HarpTreadmill):
+    if helpers.get_fields_of_type(rig_model, AbsRig.HarpTreadmill):
         mouse_platform = "Treadmill"
         active_mouse_platform = True
-    elif helpers.get_fields_of_type(rig, AbsRig.HarpLoadCells):
+    elif helpers.get_fields_of_type(rig_model, AbsRig.HarpLoadCells):
         mouse_platform = "TubeWithLoadCells"
         active_mouse_platform = True
     else:
@@ -106,17 +144,17 @@ def mapper(
         animal_weight_prior=None,  # todo: fetch/push to slims
         reward_consumed_total=None,  # todo: fetch/push to slims
         reward_delivery=reward_delivery_config,
-        experimenter_full_name=session.experimenter,
-        session_start_time=session.date,
-        session_type=session.experiment,
-        rig_id=rig.rig_name,
-        subject_id=session.subject,
-        notes=session.notes,
+        experimenter_full_name=session_model.experimenter,
+        session_start_time=session_model.date,
+        session_type=session_model.experiment,
+        rig_id=rig_model.rig_name,
+        subject_id=session_model.subject,
+        notes=session_model.notes,
         data_streams=[
             Stream(
                 stream_modalities=modalities,
-                stream_start_time=session.date,
-                stream_end_time=session_end_time or session.date,
+                stream_start_time=session_model.date,
+                stream_end_time=session_end_time or session_model.date,
                 camera_names=cameras.keys(),
             ),
         ],
@@ -125,8 +163,8 @@ def mapper(
         active_mouse_platform=active_mouse_platform,
         stimulus_epochs=[
             StimulusEpoch(
-                stimulus_name=session.experiment,
-                stimulus_start_time=session.date,
+                stimulus_name=session_model.experiment,
+                stimulus_start_time=session_model.date,
                 stimulus_end_time=session_end_time,
                 stimulus_modalities=stimulus_modalities,
                 software=[
@@ -145,9 +183,9 @@ def mapper(
                 ],
                 script=Software(
                     name=Path(script_path).stem,
-                    version=session.commit_hash,
+                    version=session_model.commit_hash or repository_sha,
                     url=f"{repository_remote_url}/blob/{repository_sha}/{repository_relative_script_path}",
-                    parameters=task_logic.model_dump(),
+                    parameters=task_logic_model.model_dump(),
                 ),
             )
         ],
