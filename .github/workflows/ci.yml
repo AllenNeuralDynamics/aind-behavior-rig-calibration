@@ -49,7 +49,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install -e .[aind-data-schema-mapper] --no-cache-dir
+          python -m pip install -e .[aind-services] --no-cache-dir
       - name: Run tests
         run: python -m unittest
       - name: Regenerate schemas
