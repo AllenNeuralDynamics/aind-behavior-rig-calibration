@@ -2,6 +2,7 @@ import os
 from importlib import metadata
 from pathlib import Path
 from typing import Dict, Iterable, List, Literal, Optional, Tuple, Type, TypeVar, Union, get_args
+import xml.etree.ElementTree as ET
 
 import pydantic
 
@@ -72,8 +73,12 @@ def snapshot_python_environment() -> Dict[str, str]:
 
 
 def snapshot_bonsai_environment(
-    config_file: os.PathLike = Path("./src/bonsai/bonsai.config"),
-) -> Dict[Literal["bonsai.config"], str]:
-    config_file = Path(config_file)
-    with open(config_file, "r", encoding="utf-8") as f:
-        return {"bonsai.config": f.read()}
+    config_file: os.PathLike = Path("./bonsai/bonsai.config"),
+) -> Dict[str, str]:
+    tree = ET.parse(Path(config_file))
+    root = tree.getroot()
+    packages = root.findall("Packages/Package")
+    return {leaf.attrib["id"]: leaf.attrib["version"] for leaf in packages}
+
+
+
