@@ -12,12 +12,20 @@ import datetime
 import os
 from pathlib import Path
 from typing import Type, TypeVar, Union
-from pydantic import BaseModel
-import git
-from aind_data_schema.core.session import Modality, Session, Software, StimulusEpoch, StimulusModality, Stream, RewardDeliveryConfig, RewardSolution, RewardSpoutConfig, SpoutSide
-from aind_data_schema.components.coordinates import RelativePosition
-import aind_data_schema.components.devices as ads_devices
 
+import aind_data_schema.components.devices as ads_devices
+import git
+from aind_data_schema.core.session import (
+    Modality,
+    RewardDeliveryConfig,
+    RewardSolution,
+    Session,
+    Software,
+    StimulusEpoch,
+    StimulusModality,
+    Stream,
+)
+from pydantic import BaseModel
 
 import aind_behavior_services.rig as AbsRig
 from aind_behavior_services import (
@@ -26,9 +34,6 @@ from aind_behavior_services import (
     AindBehaviorTaskLogicModel,
 )
 from aind_behavior_services.calibration import Calibration
-from aind_behavior_services.calibration.aind_manipulator import AindManipulatorCalibrationInput
-
-
 
 from . import helpers
 
@@ -58,7 +63,10 @@ def mapper(
     repository_relative_script_path = Path(script_path).resolve().relative_to(repository.working_dir)
 
     # Populate calibrations:
-    calibrations = [_mapper_calibration(_calibration_model[1], datetime.datetime.now()) for _calibration_model in helpers.get_fields_of_type(rig, Calibration)]
+    calibrations = [
+        _mapper_calibration(_calibration_model[1], datetime.datetime.now())
+        for _calibration_model in helpers.get_fields_of_type(rig, Calibration)
+    ]
     # Populate cameras
     cameras = helpers.get_cameras(rig, exclude_without_video_writer=True)
     # Populate modalities
@@ -90,10 +98,7 @@ def mapper(
         active_mouse_platform = False
 
     # Reward delivery
-    reward_delivery_config = RewardDeliveryConfig(
-        reward_solution=RewardSolution.WATER,
-        reward_spouts=[])
-
+    reward_delivery_config = RewardDeliveryConfig(reward_solution=RewardSolution.WATER, reward_spouts=[])
 
     # Construct aind-data-schema session
     aind_data_schema_session = Session(
@@ -158,7 +163,9 @@ def model_from_json_file(json_path: os.PathLike, model_class: Type[TSchema]) -> 
         return model_class.model_validate_json(f.read())
 
 
-def _mapper_calibration(calibration: Calibration, default_date: datetime.datetime = datetime.datetime.now()) -> ads_devices.Calibration:
+def _mapper_calibration(
+    calibration: Calibration, default_date: datetime.datetime = datetime.datetime.now()
+) -> ads_devices.Calibration:
     return ads_devices.Calibration(
         device_name=calibration.device_name,
         input=calibration.input.model_dump() if calibration.input else {},

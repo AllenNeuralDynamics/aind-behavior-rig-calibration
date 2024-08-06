@@ -1,8 +1,8 @@
 import os
+import xml.etree.ElementTree as ET
 from importlib import metadata
 from pathlib import Path
-from typing import Dict, Iterable, List, Literal, Optional, Tuple, Type, TypeVar, Union, get_args
-import xml.etree.ElementTree as ET
+from typing import Dict, Iterable, List, Optional, Tuple, Type, TypeVar, Union, get_args
 
 import pydantic
 
@@ -79,6 +79,3 @@ def snapshot_bonsai_environment(
     root = tree.getroot()
     packages = root.findall("Packages/Package")
     return {leaf.attrib["id"]: leaf.attrib["version"] for leaf in packages}
-
-
-
