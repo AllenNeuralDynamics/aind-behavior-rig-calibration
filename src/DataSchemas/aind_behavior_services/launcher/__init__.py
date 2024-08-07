@@ -73,10 +73,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         data_dir: os.PathLike,
         config_library_dir: os.PathLike,
         workflow: os.PathLike,
-        temp_dir: os.PathLike = "local/.temp",
-        log_dir: os.PathLike = "local/.dump",
+        temp_dir: os.PathLike = Path("local/.temp"),
+        log_dir: os.PathLike = Path("local/.dump"),
         remote_data_dir: Optional[os.PathLike] = None,
-        bonsai_executable: os.PathLike = "bonsai/bonsai.exe",
+        bonsai_executable: os.PathLike = Path("bonsai/bonsai.exe"),
         repository_dir: Optional[os.PathLike] = None,
         bonsai_is_editor_mode: bool = True,
         bonsai_is_start_flag: bool = True,
@@ -117,15 +117,14 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.allow_dirty_repo = allow_dirty_repo
         self.skip_hardware_validation = skip_hardware_validation
 
-
         self.config_library_dir = self.abspath(Path(config_library_dir))
         self.computer_name = os.environ["COMPUTERNAME"]
 
         self._dev_mode = dev_mode
-        self._rig_dir = os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name)
-        self._subject_dir = os.path.join(self.config_library_dir, self.SUBJECT_DIR)
-        self._task_logic_dir = os.path.join(self.config_library_dir, self.TASK_LOGIC_DIR)
-        self._visualizer_layouts_dir = os.path.join(self.config_library_dir, self.VISUALIZERS_DIR, self.computer_name)
+        self._rig_dir = Path(os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name))
+        self._subject_dir = Path(os.path.join(self.config_library_dir, self.SUBJECT_DIR))
+        self._task_logic_dir = Path(os.path.join(self.config_library_dir, self.TASK_LOGIC_DIR))
+        self._visualizer_layouts_dir = Path(os.path.join(self.config_library_dir, self.VISUALIZERS_DIR, self.computer_name))
 
         self._subject_db_data: Optional[SubjectEntry] = None
 
@@ -218,8 +217,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     TModel = TypeVar("TModel", bound=pydantic.BaseModel)  # pylint: disable=invalid-name
 
     @staticmethod
-    def load_json_model(json_path: os.PathLike, model: type[TModel]) -> TModel:
-        with open(json_path, "r", encoding="utf-8") as file:
+    def load_json_model(json_path: os.PathLike | str, model: type[TModel]) -> TModel:
+        with open(Path(json_path), "r", encoding="utf-8") as file:
             return model.model_validate_json(file.read())
 
     def _validate_dependencies(self) -> None:
@@ -283,7 +282,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     def prompt_session_input(self, folder: Optional[str] = None) -> TSession:
         _local_config_folder = (
-            os.path.join(self.config_library_dir, folder) if folder is not None else self._subject_dir
+            Path(os.path.join(self.config_library_dir, folder)) if folder is not None else self._subject_dir
         )
         available_batches = self._get_available_batches(_local_config_folder)
 
@@ -294,8 +293,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
         return self.session_schema(
             experiment="",  # Will be set later
-            root_path=self.data_dir,
-            remote_path=self.remote_data_dir,
+            root_path=str(self.data_dir.resolve()),
+            remote_path=str(self.remote_data_dir.resolve()) if self.remote_data_dir is not None else None,
             subject=subject,
             notes=notes,
             commit_hash=self.repository.head.commit.hexsha,
@@ -304,7 +303,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             experiment_version="",  # Will be set later
         )
 
-    def _get_available_batches(self, folder: str) -> List[str]:
+    def _get_available_batches(self, folder: os.PathLike) -> List[str]:
         available_batches = glob.glob(os.path.join(folder, "*.json"))
         available_batches = [batch for batch in available_batches if os.path.isfile(batch)]
         if len(available_batches) == 0:
@@ -361,7 +360,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     def prompt_rig_input(self, folder_name: Optional[str] = None) -> TRig:
         rig_schemas_path = (
-            os.path.join(self.config_library_dir, folder_name, self.computer_name)
+            Path(os.path.join(self.config_library_dir, folder_name, self.computer_name))
             if folder_name is not None
             else self._rig_dir
         )
@@ -384,7 +383,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     def prompt_task_logic_input(
         self, folder: Optional[str] = None, hint_input: Optional[SubjectEntry] = None
     ) -> TTaskLogic:
-        _path = os.path.join(self.config_library_dir, folder) if folder is not None else self._task_logic_dir
+        _path = Path(os.path.join(self.config_library_dir, folder)) if folder is not None else self._task_logic_dir
 
         task_logic: Optional[TTaskLogic] = None
         while task_logic is None:
@@ -421,7 +420,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     def prompt_visualizer_layout_input(self, folder_name: Optional[str] = None) -> Optional[str]:
         layout_schemas_path = (
-            os.path.join(self.config_library_dir, folder_name, self.computer_name)
+            Path(os.path.join(self.config_library_dir, folder_name, self.computer_name))
             if folder_name is not None
             else self._visualizer_layouts_dir
         )
@@ -485,7 +484,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             print("Exiting!")
             return
 
-    def abspath(self, path: os.PathLike) -> Path:
+    @classmethod
+    def abspath(cls, path: os.PathLike) -> Path:
         """
         Returns the absolute path of the given file or directory.
 
@@ -570,8 +570,6 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
 
         if force_create_directories:
             self.make_folder_structure()
-
-
 
 
     def run(self) -> None:
