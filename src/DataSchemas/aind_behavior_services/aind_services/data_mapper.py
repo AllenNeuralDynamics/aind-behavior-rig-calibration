@@ -107,6 +107,8 @@ def mapper(
     ]
     # Populate cameras
     cameras = helpers.get_cameras(rig_model, exclude_without_video_writer=True)
+    # populate devices
+    devices = [device[0] for device in helpers.get_fields_of_type(rig_model, AbsRig.Device) if device[0]]
     # Populate modalities
     modalities: list[Modality] = [Modality.BEHAVIOR]
     if len(cameras) > 0:
@@ -152,6 +154,7 @@ def mapper(
         notes=session_model.notes,
         data_streams=[
             Stream(
+                daq_names=devices,
                 stream_modalities=modalities,
                 stream_start_time=session_model.date,
                 stream_end_time=session_end_time or session_model.date,
