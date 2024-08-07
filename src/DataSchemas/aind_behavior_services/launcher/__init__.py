@@ -4,8 +4,8 @@ import os
 import sys
 import secrets
 import pydantic
-from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union
-
+from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union, overload, Literal, Any
+from pathlib import Path
 import git
 from pydantic import ValidationError
 
@@ -70,14 +70,14 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         rig_schema: Type[TRig],
         session_schema: Type[TSession],
         task_logic_schema: Type[TTaskLogic],
-        data_dir: os.PathLike | str,
-        config_library_dir: os.PathLike | str,
-        workflow: os.PathLike | str,
-        temp_dir: os.PathLike | str = "local/.temp",
-        log_dir: os.PathLike | str = "local/.dump",
-        remote_data_dir: Optional[os.PathLike | str] = None,
-        bonsai_executable: os.PathLike | str = "bonsai/bonsai.exe",
-        repository_dir: Optional[os.PathLike | str] = None,
+        data_dir: os.PathLike,
+        config_library_dir: os.PathLike,
+        workflow: os.PathLike,
+        temp_dir: os.PathLike = "local/.temp",
+        log_dir: os.PathLike = "local/.dump",
+        remote_data_dir: Optional[os.PathLike] = None,
+        bonsai_executable: os.PathLike = "bonsai/bonsai.exe",
+        repository_dir: Optional[os.PathLike] = None,
         bonsai_is_editor_mode: bool = True,
         bonsai_is_start_flag: bool = True,
         allow_dirty_repo: bool = False,
@@ -117,9 +117,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.allow_dirty_repo = allow_dirty_repo
         self.skip_hardware_validation = skip_hardware_validation
 
-        if not isinstance(config_library_dir, str):
-            config_library_dir = str(config_library_dir)
-        self.config_library_dir = self.abspath(config_library_dir)
+
+        self.config_library_dir = self.abspath(Path(config_library_dir))
         self.computer_name = os.environ["COMPUTERNAME"]
 
         self._dev_mode = dev_mode
@@ -194,13 +193,13 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         if self._dev_mode:
             self._print_diagnosis()
 
-    def save_temp_model(self, model: Union[TRig, TSession, TTaskLogic], folder: Optional[os.PathLike | str]) -> str:
+    def save_temp_model(self, model: Union[TRig, TSession, TTaskLogic], folder: Optional[os.PathLike]) -> str:
         """
         Saves the given model as a JSON file in the specified folder or in the default temporary folder.
 
         Args:
             model (BaseModel): The model to be saved.
-            folder (Optional[os.PathLike | str]):
+            folder (Optional[os.PathLike]):
               The folder where the model should be saved.
               If not provided, the default temporary folder will be used.
 
@@ -208,21 +207,18 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             str: The file path of the saved model.
 
         """
-        if folder is None:
-            folder = self.temp_dir
+        folder = Path(folder) if folder is not None else Path(self.temp_dir)
         os.makedirs(folder, exist_ok=True)
         fname = model.__class__.__name__ + "_" + secrets.token_hex(nbytes=16) + ".json"
         fpath = os.path.join(folder, fname)
-        with open(fpath, "w", encoding="utf-8") as f:
+        with open(folder, "w", encoding="utf-8") as f:
             f.write(model.model_dump_json(indent=3))
         return fpath
 
     TModel = TypeVar("TModel", bound=pydantic.BaseModel)  # pylint: disable=invalid-name
 
     @staticmethod
-    def load_json_model(
-        json_path: os.PathLike | str, model: type[TModel]
-    ) -> TModel:
+    def load_json_model(json_path: os.PathLike, model: type[TModel]) -> TModel:
         with open(json_path, "r", encoding="utf-8") as file:
             return model.model_validate_json(file.read())
 
@@ -489,20 +485,18 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             print("Exiting!")
             return
 
-    def abspath(self, path: os.PathLike | str) -> str:
+    def abspath(self, path: os.PathLike) -> Path:
         """
         Returns the absolute path of the given file or directory.
 
         Args:
-            path (os.PathLike | str): The path to the file or directory.
+            path os.PathLike: The path to the file or directory.
 
         Returns:
-            str: The absolute path of the file or directory.
+            Path: The absolute path of the file or directory.
 
         """
-        if not isinstance(path, str):
-            path = str(path)
-        return os.path.abspath(path)
+        return Path(path).resolve()
 
     def make_folder_structure(self) -> None:
         try:
@@ -517,25 +511,27 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         except OSError as e:
             print(f"Failed to create folder structure: {e}")
 
-    @staticmethod
-    def _make_folder(folder: os.PathLike | str) -> None:
-        if not os.path.exists(os.path.abspath(folder)):
+    @classmethod
+    def _make_folder(cls, folder: os.PathLike) -> None:
+        if not os.path.exists(cls.abspath(folder)):
             print(f"Creating {folder}")
             os.makedirs(folder)
 
 
 class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
+
     def __init__(
         self,
-        rig_schema: Type[TRig],
-        session_schema: Type[TSession],
-        task_logic_schema: Type[TTaskLogic],
-        data_dir: os.PathLike | str,
-        config_library_dir: os.PathLike | str,
-        workflow: os.PathLike | str,
-        remote_data_dir: Optional[os.PathLike | str] = None,
-        repository_dir: Optional[os.PathLike | str] = None,
-        **launcher_kwargs,
+        rig_schema: Optional[Type[TRig]],
+        session_schema: Optional[Type[TSession]],
+        task_logic_schema: Optional[Type[TTaskLogic]],
+        data_dir: os.PathLike,
+        config_library_dir: os.PathLike,
+        workflow: os.PathLike,
+        remote_data_dir: Optional[os.PathLike] = None,
+        repository_dir: Optional[os.PathLike] = None,
+        launcher_kwargs: Optional[dict[str, Any]] = None,
+        **kwargs,
     ) -> None:
         parser = self._get_default_arg_parser()
         args, _ = parser.parse_known_args()
@@ -569,11 +565,14 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
             bonsai_is_start_flag=bonsai_is_start_flag,
             allow_dirty_repo=allow_dirty_repo,
             skip_hardware_validation=skip_hardware_validation,
-            **launcher_kwargs,
+            **launcher_kwargs if launcher_kwargs is not None else {},
         )
 
         if force_create_directories:
             self.make_folder_structure()
+
+
+
 
     def run(self) -> None:
         self.launcher.run()
