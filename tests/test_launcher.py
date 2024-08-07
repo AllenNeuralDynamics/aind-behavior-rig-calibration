@@ -28,7 +28,7 @@ class LauncherTests(unittest.TestCase):
             task_logic_schema=AindGenericTaskTaskLogic,
             data_dir="data",
             config_library_dir="config",
-            workflow="workflow.bonsai",
+            bonsai_workflow="workflow.bonsai",
         )
 
         with self.assertRaises((FileNotFoundError, OSError)) as context:

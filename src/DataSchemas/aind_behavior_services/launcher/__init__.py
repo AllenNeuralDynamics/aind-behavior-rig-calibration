@@ -23,7 +23,6 @@ TTaskLogic = TypeVar("TTaskLogic", bound=AindBehaviorTaskLogicModel)  # pylint: 
 
 
 class Launcher(Generic[TRig, TSession, TTaskLogic]):
-
     RIG_DIR = "Rig"
     SUBJECT_DIR = "Subjects"
     TASK_LOGIC_DIR = "TaskLogic"
@@ -49,7 +48,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         task_logic_schema: Type[TTaskLogic],
         data_dir: os.PathLike,
         config_library_dir: os.PathLike,
-        workflow: os.PathLike,
+        bonsai_workflow: os.PathLike,
         temp_dir: os.PathLike = Path("local/.temp"),
         log_dir: os.PathLike = Path("local/.dump"),
         remote_data_dir: Optional[os.PathLike] = None,
@@ -57,11 +56,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         repository_dir: Optional[os.PathLike] = None,
         bonsai_is_editor_mode: bool = True,
         bonsai_is_start_flag: bool = True,
-        allow_dirty_repo: bool = False,
+        allow_dirty: bool = False,
         skip_hardware_validation: bool = False,
         dev_mode: bool = False,
     ) -> None:
-
         args = self._cli_wrapper()
 
         try:
@@ -90,7 +88,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             else (self.abspath(remote_data_dir) if remote_data_dir is not None else None)
         )
         self.bonsai_executable = self.abspath(bonsai_executable)
-        self.default_workflow = Path(args.workflow) if args.workflow is not None else self.abspath(workflow)
+        self.default_bonsai_workflow = (
+            Path(args.bonsai_workflow) if args.bonsai_workflow is not None else self.abspath(bonsai_workflow)
+        )
         # Derived directories
         self.config_library_dir = (
             Path(args.config_library_dir)
@@ -108,7 +108,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         # Flags
         self.bonsai_is_editor_mode = args.bonsai_is_editor_mode if args.bonsai_is_editor_mode else bonsai_is_editor_mode
         self.bonsai_is_start_flag = args.bonsai_is_start_flag if args.bonsai_is_start_flag else bonsai_is_start_flag
-        self.allow_dirty_repo = args.allow_dirty_repo if args.allow_dirty_repo else allow_dirty_repo
+        self.allow_dirty = args.allow_dirty if args.allow_dirty else allow_dirty
         self.skip_hardware_validation = (
             args.skip_hardware_validation if args.skip_hardware_validation else skip_hardware_validation
         )
@@ -118,7 +118,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.post_init_hook(args)
 
     def post_init_hook(self, cli_args: argparse.Namespace) -> None:
-        if cli_args.force_create_directories is True:
+        if cli_args.create_directories is True:
             self.make_folder_structure()
 
     @staticmethod
@@ -151,7 +151,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         print(f"Temporary Directory: {self.temp_dir}")
         print(f"Log Directory: {self.log_dir}")
         print(f"Bonsai Executable: {self.bonsai_executable}")
-        print(f"Default Workflow: {self.default_workflow}")
+        print(f"Default Workflow: {self.default_bonsai_workflow}")
         print("-------------------------------")
 
     def _print_header(self) -> None:
@@ -228,8 +228,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 f"Rig configuration not found! \
                     Expected {os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name)}."
             )
-        if not (os.path.isfile(os.path.join(self.default_workflow))):
-            raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_workflow}.")
+        if not (os.path.isfile(os.path.join(self.default_bonsai_workflow))):
+            raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_bonsai_workflow}.")
 
         if self.repository.is_dirty():
             print(
@@ -291,7 +291,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             subject=subject,
             notes=notes,
             commit_hash=self.repository.head.commit.hexsha,
-            allow_dirty_repo=self._dev_mode or self.allow_dirty_repo,
+            allow_dirty_repo=self._dev_mode or self.allow_dirty,
             skip_hardware_validation=self.skip_hardware_validation,
             experiment_version="",  # Will be set later
         )
@@ -460,7 +460,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             _date = session.date.strftime("%Y%m%dT%H%M%S")
             proc = open_bonsai_process(
                 bonsai_exe=self.bonsai_executable,
-                workflow_file=self.default_workflow,
+                workflow_file=self.default_bonsai_workflow,
                 additional_properties=additional_properties,
                 layout=bonsai_visualizer_layout,
                 log_file_name=os.path.join(self.log_dir, f"{session.subject}_{session.experiment}_{_date}.log"),
@@ -514,35 +514,35 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     def _get_default_arg_parser() -> argparse.ArgumentParser:
         parser = argparse.ArgumentParser()
 
-        parser.add_argument("--data_dir", help="Specify the data directory")
-        parser.add_argument("--remote_data_dir", help="Specify the remote data directory")
-        parser.add_argument("--repository_dir", help="Specify the repository directory")
-        parser.add_argument("--config_library_dir", help="Specify the configuration library directory")
-        parser.add_argument("--workflow", help="Specify the workflow")
+        parser.add_argument("--data-dir", help="Specify the data directory")
+        parser.add_argument("--remote-data-dir", help="Specify the remote data directory")
+        parser.add_argument("--repository-dir", help="Specify the repository directory")
+        parser.add_argument("--config-library-dir", help="Specify the configuration library directory")
+        parser.add_argument("--bonsai-workflow", help="Specify the workflow")
         parser.add_argument(
-            "--force_create_directories",
+            "--create-directories",
             help="Specify whether to force create directories",
             action="store_true",
             default=False,
         )
-        parser.add_argument("--dev_mode", help="Specify whether to run in dev mode", action="store_true", default=False)
+        parser.add_argument("--dev-mode", help="Specify whether to run in dev mode", action="store_true", default=False)
         parser.add_argument(
-            "--bonsai_is_editor_mode",
+            "--bonsai-is-editor-mode",
             help="Specify whether to run in Bonsai editor mode",
             action="store_false",
             default=True,
         )
         parser.add_argument(
-            "--bonsai_is_start_flag",
+            "--bonsai-is-start-flag",
             help="Specify whether to start the Bonsai workflow",
             action="store_false",
             default=True,
         )
         parser.add_argument(
-            "--allow_dirty_repo", help="Specify whether to allow a dirty repository", action="store_true", default=False
+            "--allow-dirty", help="Specify whether to allow a dirty repository", action="store_true", default=False
         )
         parser.add_argument(
-            "--skip_hardware_validation",
+            "--skip-hardware-validation",
             help="Specify whether to skip hardware validation",
             action="store_true",
             default=False,
