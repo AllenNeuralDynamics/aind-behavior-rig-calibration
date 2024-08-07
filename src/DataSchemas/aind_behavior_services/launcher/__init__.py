@@ -3,6 +3,7 @@ import glob
 import os
 import sys
 import secrets
+import pydantic
 from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union
 
 import git
@@ -216,10 +217,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             f.write(model.model_dump_json(indent=3))
         return fpath
 
+    TModel = TypeVar("TModel", bound=pydantic.BaseModel)  # pylint: disable=invalid-name
+
     @staticmethod
     def load_json_model(
-        json_path: os.PathLike | str, model: Union[Type[TRig], Type[TSession], Type[TTaskLogic]]
-    ) -> Union[TRig, TSession, TTaskLogic]:
+        json_path: os.PathLike | str, model: type[TModel]
+    ) -> TModel:
         with open(json_path, "r", encoding="utf-8") as file:
             return model.model_validate_json(file.read())
 
@@ -387,7 +390,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     ) -> TTaskLogic:
         _path = os.path.join(self.config_library_dir, folder) if folder is not None else self._task_logic_dir
 
-        task_logic: TTaskLogic = None
+        task_logic: Optional[TTaskLogic] = None
         while task_logic is None:
             try:
                 if hint_input is None:
