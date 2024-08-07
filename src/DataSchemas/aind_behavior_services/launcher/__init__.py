@@ -4,7 +4,7 @@ import os
 import secrets
 import sys
 from pathlib import Path
-from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union
+from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union, Any
 
 import git
 import pydantic
@@ -78,6 +78,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.rig_schema = rig_schema
         self.session_schema = session_schema
         self.task_logic_schema = task_logic_schema
+
+        self._rig_schema_instance: Optional[TRig] = None
+        self._session_schema_instance: Optional[TSession] = None
+        self._task_logic_schema_instance: Optional[TTaskLogic] = None
+        self._bonsai_visualizer_layout: Optional[str] = None
+
         # Directories
         self.temp_dir = self.abspath(temp_dir)
         self.log_dir = self.abspath(log_dir)
@@ -114,10 +120,15 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         )
 
         self._subject_db_data: Optional[SubjectEntry] = None
+        self._run_hook_return: Any = None
 
         self.post_init_hook(args)
 
+    def run(self):  # For backwards compatibility
+        self.run_ui()
+
     def post_init_hook(self, cli_args: argparse.Namespace) -> None:
+        """Overridable method that runs at the end of the self.__init__ method"""
         if cli_args.create_directories is True:
             self.make_folder_structure()
 
@@ -185,7 +196,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         if self._dev_mode:
             self._print_diagnosis()
 
-    def save_temp_model(self, model: Union[TRig, TSession, TTaskLogic], folder: Optional[os.PathLike]) -> str:
+    def _save_temp_model(self, model: Union[TRig, TSession, TTaskLogic], folder: Optional[os.PathLike]) -> str:
         """
         Saves the given model as a JSON file in the specified folder or in the default temporary folder.
 
@@ -210,7 +221,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     TModel = TypeVar("TModel", bound=pydantic.BaseModel)  # pylint: disable=invalid-name
 
     @staticmethod
-    def load_json_model(json_path: os.PathLike | str, model: type[TModel]) -> TModel:
+    def load_model_from_json(json_path: os.PathLike | str, model: type[TModel]) -> TModel:
         with open(Path(json_path), "r", encoding="utf-8") as file:
             return model.model_validate_json(file.read())
 
@@ -239,7 +250,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             input("Press enter to continue...")
 
     @staticmethod
-    def pick_file_from_list(
+    def prompt_pick_file_from_list(
         available_files: list[str],
         prompt: str = "Choose a file:",
         override_zero: Tuple[Optional[str], Optional[str]] = ("Enter manually", None),
@@ -273,7 +284,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             else:
                 print("Invalid input. Please enter 'Y' or 'N'.")
 
-    def prompt_session_input(self, folder: Optional[str] = None) -> TSession:
+    def _prompt_session_input(self, folder: Optional[str] = None) -> TSession:
         _local_config_folder = (
             Path(os.path.join(self.config_library_dir, folder)) if folder is not None else self._subject_dir
         )
@@ -282,7 +293,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         subject_list = self._get_subject_list(available_batches)
         subject = self._choose_subject(subject_list)
         self._subject_db_data = subject_list.get_subject(subject)
-        notes = self._get_notes()
+        notes = self.prompt_get_notes()
 
         return self.session_schema(
             experiment="",  # Will be set later
@@ -311,7 +322,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     batch_file = available_batches[0]
                     print(f"Found a single session config file. Using {batch_file}.")
                 else:
-                    batch_file = self.pick_file_from_list(
+                    batch_file = self.prompt_pick_file_from_list(
                         available_batches, prompt="Choose a batch:", override_zero=(None, None)
                     )
                     if not os.path.isfile(batch_file):
@@ -340,18 +351,19 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         subject = None
         while subject is None:
             try:
-                subject = self.pick_file_from_list(
+                subject = self.prompt_pick_file_from_list(
                     list(subject_list.subjects.keys()), prompt="Choose a subject:", override_zero=(None, None)
                 )
             except ValueError:
                 print("Invalid choice. Try again.")
         return subject
 
-    def _get_notes(self) -> str:
+    @staticmethod
+    def prompt_get_notes() -> str:
         notes = str(input("Enter notes:"))
         return notes
 
-    def prompt_rig_input(self, folder_name: Optional[str] = None) -> TRig:
+    def _prompt_rig_input(self, folder_name: Optional[str] = None) -> TRig:
         rig_schemas_path = (
             Path(os.path.join(self.config_library_dir, folder_name, self.computer_name))
             if folder_name is not None
@@ -360,12 +372,14 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         available_rigs = glob.glob(os.path.join(rig_schemas_path, "*.json"))
         if len(available_rigs) == 1:
             print(f"Found a single rig config file. Using {available_rigs[0]}.")
-            return self.load_json_model(available_rigs[0], self.rig_schema)
+            return self.load_model_from_json(available_rigs[0], self.rig_schema)
         else:
             while True:
                 try:
-                    path = self.pick_file_from_list(available_rigs, prompt="Choose a rig:", override_zero=(None, None))
-                    rig = self.load_json_model(path, self.rig_schema)
+                    path = self.prompt_pick_file_from_list(
+                        available_rigs, prompt="Choose a rig:", override_zero=(None, None)
+                    )
+                    rig = self.load_model_from_json(path, self.rig_schema)
                     print(f"Using {path}.")
                     return rig
                 except pydantic.ValidationError:
@@ -373,7 +387,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 except ValueError:
                     print("Invalid choice. Try again.")
 
-    def prompt_task_logic_input(
+    def _prompt_task_logic_input(
         self, folder: Optional[str] = None, hint_input: Optional[SubjectEntry] = None
     ) -> TTaskLogic:
         _path = Path(os.path.join(self.config_library_dir, folder)) if folder is not None else self._task_logic_dir
@@ -383,12 +397,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             try:
                 if hint_input is None:
                     available_files = glob.glob(os.path.join(_path, "*.json"))
-                    path = self.pick_file_from_list(
+                    path = self.prompt_pick_file_from_list(
                         available_files, prompt="Choose a task logic:", override_zero=(None, None)
                     )
                     if not os.path.isfile(path):
                         raise FileNotFoundError(f"File not found: {path}")
-                    task_logic = self.load_json_model(path, self.task_logic_schema)
+                    task_logic = self.load_model_from_json(path, self.task_logic_schema)
                     print(f"Using {path}.")
 
                 else:
@@ -398,7 +412,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                         raise FileNotFoundError(f"Hinted file not found: {hinted_path}. Try entering manually.")
                     use_hint = self.prompt_yes_no_question(f"Would you like to go with the task file: {hinted_path}?")
                     if use_hint:
-                        task_logic = self.load_json_model(hinted_path, self.task_logic_schema)
+                        task_logic = self.load_model_from_json(hinted_path, self.task_logic_schema)
                     else:
                         hint_input = None
 
@@ -411,7 +425,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 print("Invalid choice. Try again.")
         return task_logic
 
-    def prompt_visualizer_layout_input(self, folder_name: Optional[str] = None) -> Optional[str]:
+    def _prompt_visualizer_layout_input(self, folder_name: Optional[str] = None) -> Optional[str]:
         layout_schemas_path = (
             Path(os.path.join(self.config_library_dir, folder_name, self.computer_name))
             if folder_name is not None
@@ -436,42 +450,63 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             except ValueError:
                 print("Invalid choice. Try again.")
 
-    def run(self) -> None:
+    def pre_run_hook(self, *args, **kwargs): ...
+    def post_run_hook(self, *args, **kwargs): ...
+    def run_hook(self, *args, **kwargs) -> None:
+        if self._session_schema_instance is None:
+            raise ValueError("Session schema instance not set.")
+        if self._task_logic_schema_instance is None:
+            raise ValueError("Task logic schema instance not set.")
+        if self._rig_schema_instance is None:
+            raise ValueError("Rig schema instance not set.")
+
+        additional_properties = {
+            "TaskLogicPath": os.path.abspath(
+                self._save_temp_model(model=self._task_logic_schema_instance, folder=self.temp_dir)
+            ),
+            "SessionPath": os.path.abspath(
+                self._save_temp_model(model=self._session_schema_instance, folder=self.temp_dir)
+            ),
+            "RigPath": os.path.abspath(self._save_temp_model(model=self._rig_schema_instance, folder=self.temp_dir)),
+        }
+
+        _date = self._session_schema_instance.date.strftime("%Y%m%dT%H%M%S")
+        proc = open_bonsai_process(
+            bonsai_exe=self.bonsai_executable,
+            workflow_file=self.default_bonsai_workflow,
+            additional_properties=additional_properties,
+            layout=self._bonsai_visualizer_layout,
+            log_file_name=os.path.join(
+                self.log_dir,
+                f"{self._session_schema_instance.subject}_{self._session_schema_instance.experiment}_{_date}.log",
+            ),
+            is_editor_mode=self.bonsai_is_editor_mode,
+            is_start_flag=self.bonsai_is_start_flag,
+            cwd=self._cwd,
+            print_cmd=self._dev_mode,
+        )
+        print("Bonsai process running...")
+        ret = proc.wait(None)  # todo What should this return?
+        print(f"Bonsai process finished with return code {ret}.")
+        self._run_hook_return = ret
+
+    def run_ui(self) -> None:
         try:
             self._print_header()
             self._validate_dependencies()
-            session: TSession = self.prompt_session_input()
-            task_logic: TTaskLogic = self.prompt_task_logic_input(hint_input=self._subject_db_data)
-            rig: TRig = self.prompt_rig_input()
-            bonsai_visualizer_layout: Optional[str] = self.prompt_visualizer_layout_input()
+            self._session_schema_instance = self._prompt_session_input()
+            self._task_logic_schema_instance = self._prompt_task_logic_input(hint_input=self._subject_db_data)
+            self._rig_schema_instance = self._prompt_rig_input()
+            self._bonsai_visualizer_layout = self._prompt_visualizer_layout_input()
 
             # Handle some cross-schema references
-            session.experiment = task_logic.name
-            session.experiment_version = task_logic.version
+            self._session_schema_instance.experiment = self._task_logic_schema_instance.name
+            self._session_schema_instance.experiment_version = self._task_logic_schema_instance.version
 
-            input("Press enter to launch Bonsai or Control+C to exit...")
-
-            additional_properties = {
-                "TaskLogicPath": os.path.abspath(self.save_temp_model(model=task_logic, folder=self.temp_dir)),
-                "SessionPath": os.path.abspath(self.save_temp_model(model=session, folder=self.temp_dir)),
-                "RigPath": os.path.abspath(self.save_temp_model(model=rig, folder=self.temp_dir)),
-            }
-
-            _date = session.date.strftime("%Y%m%dT%H%M%S")
-            proc = open_bonsai_process(
-                bonsai_exe=self.bonsai_executable,
-                workflow_file=self.default_bonsai_workflow,
-                additional_properties=additional_properties,
-                layout=bonsai_visualizer_layout,
-                log_file_name=os.path.join(self.log_dir, f"{session.subject}_{session.experiment}_{_date}.log"),
-                is_editor_mode=self.bonsai_is_editor_mode,
-                is_start_flag=self.bonsai_is_start_flag,
-                cwd=self._cwd,
-                print_cmd=self._dev_mode,
-            )
-            print("Bonsai process running...")
-            ret = proc.wait()
-            print(f"Bonsai process finished with return code {ret}.")
+            input("Press enter to start or Control+C to exit...")
+            self.pre_run_hook()
+            self.run_hook()
+            self.post_run_hook()
 
         except KeyboardInterrupt:
             print("Exiting!")
