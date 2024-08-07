@@ -1,13 +1,13 @@
 import argparse
 import glob
 import os
-import sys
 import secrets
-import pydantic
-from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union, overload, Literal, Any
+import sys
 from pathlib import Path
+from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union
+
 import git
-from pydantic import ValidationError
+import pydantic
 
 from aind_behavior_services import (
     AindBehaviorRigModel,
@@ -23,29 +23,6 @@ TTaskLogic = TypeVar("TTaskLogic", bound=AindBehaviorTaskLogicModel)  # pylint: 
 
 
 class Launcher(Generic[TRig, TSession, TTaskLogic]):
-    """
-    The Launcher class is responsible for launching the behavior services.
-
-    It initializes the Launcher object with the provided rig schema, session schema, and task logic schema.
-
-    Attributes:
-        rig_schema (Type[TRig]): The rig schema for the behavior services.
-        session_schema (Type[TSession]): The session schema for the behavior services.
-        task_logic_schema (Type[TTaskLogic]): The task logic schema for the behavior services.
-        data_dir (os.PathLike | str): The directory where the data files are located.
-        config_library_dir (os.PathLike | str): The directory where the config library is located.
-        temp_dir (os.PathLike | str): The directory for temporary files.
-        log_dir (os.PathLike | str): The directory for log files.
-        remote_data_dir (Optional[os.PathLike | str]): The directory to log remote data.
-        bonsai_executable (os.PathLike | str): The path to the Bonsai executable.
-        workflow (os.PathLike | str): The path to the bonsai workflow file.
-        repository_dir (Optional[os.PathLike | str]): The directory of the repository.
-        bonsai_is_editor_mode (bool): Flag indicating whether Bonsai is in editor mode.
-        bonsai_is_start_flag (bool): Flag indicating whether to start Bonsai.
-        allow_dirty_repo (bool): Flag indicating whether to allow a dirty repository.
-        skip_hardware_validation (bool): Flag indicating whether to skip hardware validation.
-        dev_mode (bool): Flag indicating whether to run in development mode.
-    """
 
     RIG_DIR = "Rig"
     SUBJECT_DIR = "Subjects"
@@ -84,15 +61,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         skip_hardware_validation: bool = False,
         dev_mode: bool = False,
     ) -> None:
-        """
-        Initializes a new instance of the Launcher class.
 
-        Parameters:
-            rig_schema (Type[AindBehaviorRigModel]): The rig schema for the behavior services.
-            session_schema (Type[AindBehaviorSessionModel]): The session schema for the behavior services.
-            task_logic_schema (Type[AindBehaviorTaskLogicModel]): The task logic schema for the behavior services.
-        """
+        args = self._cli_wrapper()
+
         try:
+            repository_dir = Path(args.repository_dir) if args.repository_dir is not None else repository_dir
             if repository_dir is None:
                 self.repository = git.Repo()
             else:
@@ -103,30 +76,50 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self._cwd = self.repository.working_dir
         os.chdir(self._cwd)
 
+        # Schemas
         self.rig_schema = rig_schema
         self.session_schema = session_schema
         self.task_logic_schema = task_logic_schema
+        # Directories
         self.temp_dir = self.abspath(temp_dir)
         self.log_dir = self.abspath(log_dir)
-        self.data_dir = self.abspath(data_dir)
-        self.remote_data_dir = self.abspath(remote_data_dir) if remote_data_dir is not None else None
+        self.data_dir = Path(args.data_dir) if args.data_dir is not None else self.abspath(data_dir)
+        self.remote_data_dir = (
+            Path(args.remote_data_dir)
+            if args.remote_data_dir is not None
+            else (self.abspath(remote_data_dir) if remote_data_dir is not None else None)
+        )
         self.bonsai_executable = self.abspath(bonsai_executable)
-        self.default_workflow = self.abspath(workflow)
-        self.bonsai_is_editor_mode = bonsai_is_editor_mode
-        self.bonsai_is_start_flag = bonsai_is_start_flag
-        self.allow_dirty_repo = allow_dirty_repo
-        self.skip_hardware_validation = skip_hardware_validation
-
-        self.config_library_dir = self.abspath(Path(config_library_dir))
+        self.default_workflow = Path(args.workflow) if args.workflow is not None else self.abspath(workflow)
+        # Derived directories
+        self.config_library_dir = (
+            Path(args.config_library_dir)
+            if args.config_library_dir is not None
+            else self.abspath(Path(config_library_dir))
+        )
         self.computer_name = os.environ["COMPUTERNAME"]
-
-        self._dev_mode = dev_mode
+        self._dev_mode = args.dev_mode if args.dev_mode else dev_mode
         self._rig_dir = Path(os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name))
         self._subject_dir = Path(os.path.join(self.config_library_dir, self.SUBJECT_DIR))
         self._task_logic_dir = Path(os.path.join(self.config_library_dir, self.TASK_LOGIC_DIR))
-        self._visualizer_layouts_dir = Path(os.path.join(self.config_library_dir, self.VISUALIZERS_DIR, self.computer_name))
+        self._visualizer_layouts_dir = Path(
+            os.path.join(self.config_library_dir, self.VISUALIZERS_DIR, self.computer_name)
+        )
+        # Flags
+        self.bonsai_is_editor_mode = args.bonsai_is_editor_mode if args.bonsai_is_editor_mode else bonsai_is_editor_mode
+        self.bonsai_is_start_flag = args.bonsai_is_start_flag if args.bonsai_is_start_flag else bonsai_is_start_flag
+        self.allow_dirty_repo = args.allow_dirty_repo if args.allow_dirty_repo else allow_dirty_repo
+        self.skip_hardware_validation = (
+            args.skip_hardware_validation if args.skip_hardware_validation else skip_hardware_validation
+        )
 
         self._subject_db_data: Optional[SubjectEntry] = None
+
+        self.post_init_hook(args)
+
+    def post_init_hook(self, cli_args: argparse.Namespace) -> None:
+        if cli_args.force_create_directories is True:
+            self.make_folder_structure()
 
     @staticmethod
     def _exit(code: int = 0) -> None:
@@ -332,7 +325,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                         self._exit(-1)
                     print(f"No subjects found in {batch_file}")
                     raise ValueError()
-            except ValidationError:
+            except pydantic.ValidationError:
                 print("Failed to validate pydantic model. Try again.")
             except ValueError:
                 print("Invalid choice. Try again.")
@@ -375,7 +368,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     rig = self.load_json_model(path, self.rig_schema)
                     print(f"Using {path}.")
                     return rig
-                except ValidationError:
+                except pydantic.ValidationError:
                     print("Failed to validate pydantic model. Try again.")
                 except ValueError:
                     print("Invalid choice. Try again.")
@@ -409,7 +402,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     else:
                         hint_input = None
 
-            except ValidationError as validation_error:
+            except pydantic.ValidationError as validation_error:
                 print(validation_error)
                 print("Failed to validate pydantic model. Try again.")
             except ValueError:
@@ -517,70 +510,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             print(f"Creating {folder}")
             os.makedirs(folder)
 
-
-class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
-
-    def __init__(
-        self,
-        rig_schema: Optional[Type[TRig]],
-        session_schema: Optional[Type[TSession]],
-        task_logic_schema: Optional[Type[TTaskLogic]],
-        data_dir: os.PathLike,
-        config_library_dir: os.PathLike,
-        workflow: os.PathLike,
-        remote_data_dir: Optional[os.PathLike] = None,
-        repository_dir: Optional[os.PathLike] = None,
-        launcher_kwargs: Optional[dict[str, Any]] = None,
-        **kwargs,
-    ) -> None:
-        parser = self._get_default_arg_parser()
-        args, _ = parser.parse_known_args()
-
-        # optional parameters that override the defaults
-        data_dir = args.data_dir if args.data_dir is not None else data_dir
-        workflow = args.workflow if args.workflow is not None else workflow
-        remote_data_dir = args.remote_data_dir if args.remote_data_dir is not None else remote_data_dir
-        repository_dir = args.repository_dir if args.repository_dir is not None else repository_dir
-        config_library_dir = args.config_library_dir if args.config_library_dir is not None else config_library_dir
-
-        # flag-like parameter
-        force_create_directories = args.force_create_directories
-        dev_mode = args.dev_mode
-        bonsai_is_editor_mode = args.bonsai_is_editor_mode
-        bonsai_is_start_flag = args.bonsai_is_start_flag
-        allow_dirty_repo = args.allow_dirty_repo
-        skip_hardware_validation = args.skip_hardware_validation
-
-        self.launcher = Launcher(
-            rig_schema=rig_schema,
-            session_schema=session_schema,
-            task_logic_schema=task_logic_schema,
-            data_dir=data_dir,
-            remote_data_dir=remote_data_dir,
-            repository_dir=repository_dir,
-            config_library_dir=config_library_dir,
-            workflow=workflow,
-            dev_mode=dev_mode,
-            bonsai_is_editor_mode=bonsai_is_editor_mode,
-            bonsai_is_start_flag=bonsai_is_start_flag,
-            allow_dirty_repo=allow_dirty_repo,
-            skip_hardware_validation=skip_hardware_validation,
-            **launcher_kwargs if launcher_kwargs is not None else {},
-        )
-
-        if force_create_directories:
-            self.make_folder_structure()
-
-
-    def run(self) -> None:
-        self.launcher.run()
-
-    def make_folder_structure(self) -> None:
-        self.launcher.make_folder_structure()
-
-    def _validate_dependencies(self) -> None:
-        self.launcher._validate_dependencies()
-
     @staticmethod
     def _get_default_arg_parser() -> argparse.ArgumentParser:
         parser = argparse.ArgumentParser()
@@ -620,3 +549,9 @@ class LauncherCli(Generic[TRig, TSession, TTaskLogic]):
         )
 
         return parser
+
+    @classmethod
+    def _cli_wrapper(cls) -> argparse.Namespace:
+        parser = cls._get_default_arg_parser()
+        args, _ = parser.parse_known_args()
+        return args
