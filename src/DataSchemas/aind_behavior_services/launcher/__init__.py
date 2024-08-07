@@ -1,6 +1,7 @@
 import argparse
 import glob
 import os
+import sys
 import secrets
 from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union
 
@@ -127,6 +128,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self._visualizer_layouts_dir = os.path.join(self.config_library_dir, self.VISUALIZERS_DIR, self.computer_name)
 
         self._subject_db_data: Optional[SubjectEntry] = None
+
+    @staticmethod
+    def _exit(code: int = 0) -> None:
+        sys.exit(code)
 
     def _print_diagnosis(self) -> None:
         """
@@ -324,6 +329,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 with open(batch_file, "r", encoding="utf-8") as file:
                     subject_list = SubjectDataBase.model_validate_json(file.read())
                 if len(subject_list.subjects) == 0:
+                    if len(available_batches) == 1:
+                        print(f"No subjects found in {batch_file} and only a single file has been found.")
+                        self._exit(-1)
                     print(f"No subjects found in {batch_file}")
                     raise ValueError()
             except ValidationError:
