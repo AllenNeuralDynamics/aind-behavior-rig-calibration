@@ -1,10 +1,11 @@
 import argparse
 import glob
+import logging
 import os
 import secrets
 import sys
 from pathlib import Path
-from typing import Generic, List, Optional, Tuple, Type, TypeVar, Union, Any
+from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar, Union
 
 import git
 import pydantic
@@ -14,6 +15,7 @@ from aind_behavior_services import (
     AindBehaviorSessionModel,
     AindBehaviorTaskLogicModel,
 )
+from aind_behavior_services.base import singleton
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
 from aind_behavior_services.utils import open_bonsai_process
 
@@ -22,24 +24,12 @@ TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disabl
 TTaskLogic = TypeVar("TTaskLogic", bound=AindBehaviorTaskLogicModel)  # pylint: disable=invalid-name
 
 
+@singleton
 class Launcher(Generic[TRig, TSession, TTaskLogic]):
     RIG_DIR = "Rig"
     SUBJECT_DIR = "Subjects"
     TASK_LOGIC_DIR = "TaskLogic"
     VISUALIZERS_DIR = "VisualizerLayouts"
-
-    _HEADER = r"""
-
-    ██████╗██╗      █████╗ ██████╗ ███████╗
-    ██╔════╝██║     ██╔══██╗██╔══██╗██╔════╝
-    ██║     ██║     ███████║██████╔╝█████╗
-    ██║     ██║     ██╔══██║██╔══██╗██╔══╝
-    ╚██████╗███████╗██║  ██║██████╔╝███████╗
-    ╚═════╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝
-
-    Command-line-interface Launcher for AIND Behavior Experiments
-    Press Control+C to exit at any time.
-    """
 
     def __init__(
         self,
@@ -59,17 +49,18 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         allow_dirty: bool = False,
         skip_hardware_validation: bool = False,
         dev_mode: bool = False,
+        logger: Optional[logging.Logger] = None,
     ) -> None:
+        self.logger = logger if logger is not None else self._create_logger()
+
         args = self._cli_wrapper()
 
-        try:
-            repository_dir = Path(args.repository_dir) if args.repository_dir is not None else repository_dir
-            if repository_dir is None:
-                self.repository = git.Repo()
-            else:
-                self.repository = git.Repo(path=repository_dir)
-        except git.InvalidGitRepositoryError as e:
-            raise e("Not a git repository. Please run from the root of the repository.") from e
+        repository_dir = Path(args.repository_dir) if args.repository_dir is not None else repository_dir
+        if repository_dir is None:
+            self.repository = git.Repo()
+        else:
+            self.repository = git.Repo(path=repository_dir)
+
         # Always work from the root of the repository
         self._cwd = self.repository.working_dir
         os.chdir(self._cwd)
@@ -105,6 +96,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         )
         self.computer_name = os.environ["COMPUTERNAME"]
         self._dev_mode = args.dev_mode if args.dev_mode else dev_mode
+        if self._dev_mode:
+            self.logger.setLevel(logging.DEBUG)
+
         self._rig_dir = Path(os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name))
         self._subject_dir = Path(os.path.join(self.config_library_dir, self.SUBJECT_DIR))
         self._task_logic_dir = Path(os.path.join(self.config_library_dir, self.TASK_LOGIC_DIR))
@@ -150,20 +144,32 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         Returns:
             None
         """
-        print("-------------------------------")
-        print("Diagnosis:")
-        print("-------------------------------")
-        print(f"Current Directory: {self._cwd}")
-        print(f"Repository: {self.repository.working_dir}")
-        print(f"Computer Name: {self.computer_name}")
-        print(f"Data Directory: {self.data_dir}")
-        print(f"Remote Data Directory: {self.remote_data_dir}")
-        print(f"Config Library Directory: {self.config_library_dir}")
-        print(f"Temporary Directory: {self.temp_dir}")
-        print(f"Log Directory: {self.log_dir}")
-        print(f"Bonsai Executable: {self.bonsai_executable}")
-        print(f"Default Workflow: {self.default_bonsai_workflow}")
-        print("-------------------------------")
+        self.logger.debug(
+            "-------------------------------\n"
+            "Diagnosis:\n"
+            "-------------------------------\n"
+            "Current Directory: %s\n"
+            "Repository: %s\n"
+            "Computer Name: %s\n"
+            "Data Directory: %s\n"
+            "Remote Data Directory: %s\n"
+            "Config Library Directory: %s\n"
+            "Temporary Directory: %s\n"
+            "Log Directory: %s\n"
+            "Bonsai Executable: %s\n"
+            "Default Workflow: %s\n"
+            "-------------------------------",
+            self._cwd,
+            self.repository.working_dir,
+            self.computer_name,
+            self.data_dir,
+            self.remote_data_dir,
+            self.config_library_dir,
+            self.temp_dir,
+            self.log_dir,
+            self.bonsai_executable,
+            self.default_bonsai_workflow,
+        )
 
     def _print_header(self) -> None:
         """
@@ -178,21 +184,30 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         Returns:
             None
         """
-        print("-------------------------------")
-        print(self._HEADER)
-        print(
-            f"TaskLogic ({self.task_logic_schema.__name__}) \
-                Schema Version: {self.task_logic_schema.model_construct().version}"
+
+        _HEADER = r"""
+
+        ██████╗██╗      █████╗ ██████╗ ███████╗
+        ██╔════╝██║     ██╔══██╗██╔══██╗██╔════╝
+        ██║     ██║     ███████║██████╔╝█████╗
+        ██║     ██║     ██╔══██║██╔══██╗██╔══╝
+        ╚██████╗███████╗██║  ██║██████╔╝███████╗
+        ╚═════╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝
+
+        Command-line-interface Launcher for AIND Behavior Experiments
+        Press Control+C to exit at any time.
+        """
+
+        _str = (
+            "-------------------------------\n"
+            f"{_HEADER}\n"
+            f"TaskLogic ({self.task_logic_schema.__name__}) Schema Version: {self.task_logic_schema.model_construct().version}\n"
+            f"Rig ({self.rig_schema.__name__}) Schema Version: {self.rig_schema.model_construct().version}\n"
+            f"Session ({self.session_schema.__name__}) Schema Version: {self.session_schema.model_construct().version}\n"
+            "-------------------------------"
         )
-        print(
-            f"Rig ({self.rig_schema.__name__}) \
-              Schema Version: {self.rig_schema.model_construct().version}"
-        )
-        print(
-            f"Session ({self.session_schema.__name__}) \
-                Schema Version: {self.session_schema.model_construct().version}"
-        )
-        print("-------------------------------")
+
+        self.logger.info(_str)
         if self._dev_mode:
             self._print_diagnosis()
 
@@ -243,9 +258,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_bonsai_workflow}.")
 
         if self.repository.is_dirty():
-            print(
-                "WARNING: Git repository is dirty. \
-                    Discard changes before continuing unless you know what you are doing!"
+            self.logger.warning(
+                "Git repository is dirty. Discard changes before continuing unless you know what you are doing!"
             )
             input("Press enter to continue...")
 
@@ -336,14 +350,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                         self._exit(-1)
                     print(f"No subjects found in {batch_file}")
                     raise ValueError()
-            except pydantic.ValidationError:
-                print("Failed to validate pydantic model. Try again.")
-            except ValueError:
-                print("Invalid choice. Try again.")
-            except FileNotFoundError:
-                print("Invalid choice. Try again.")
-            except IOError:
-                print("Invalid choice. Try again.")
+            except pydantic.ValidationError as e:
+                self.logger.error("Failed to validate pydantic model. Try again. %s", e)
+            except (ValueError, FileNotFoundError, IOError) as e:
+                self.logger.error("Invalid choice. Try again. %s", e)
 
         return subject_list
 
@@ -354,8 +364,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 subject = self.prompt_pick_file_from_list(
                     list(subject_list.subjects.keys()), prompt="Choose a subject:", override_zero=(None, None)
                 )
-            except ValueError:
-                print("Invalid choice. Try again.")
+            except ValueError as e:
+                self.logger.error("Invalid choice. Try again. %s", e)
         return subject
 
     @staticmethod
@@ -382,10 +392,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     rig = self.load_model_from_json(path, self.rig_schema)
                     print(f"Using {path}.")
                     return rig
-                except pydantic.ValidationError:
-                    print("Failed to validate pydantic model. Try again.")
-                except ValueError:
-                    print("Invalid choice. Try again.")
+                except pydantic.ValidationError as e:
+                    self.logger.error("Failed to validate pydantic model. Try again. %s", e)
+                except ValueError as e:
+                    self.logger.error("Invalid choice. Try again. %s", e)
 
     def _prompt_task_logic_input(
         self, folder: Optional[str] = None, hint_input: Optional[SubjectEntry] = None
@@ -416,13 +426,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     else:
                         hint_input = None
 
-            except pydantic.ValidationError as validation_error:
-                print(validation_error)
-                print("Failed to validate pydantic model. Try again.")
-            except ValueError:
-                print("Invalid choice. Try again.")
-            except FileNotFoundError:
-                print("Invalid choice. Try again.")
+            except pydantic.ValidationError as e:
+                self.logger.error("Failed to validate pydantic model. Try again. %s", e)
+            except (ValueError, FileNotFoundError) as e:
+                self.logger.error("Invalid choice. Try again. %s", e)
+
         return task_logic
 
     def _prompt_visualizer_layout_input(self, folder_name: Optional[str] = None) -> Optional[str]:
@@ -447,8 +455,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     return ""
                 else:
                     return available_layouts[choice - 2]
-            except ValueError:
-                print("Invalid choice. Try again.")
+            except ValueError as e:
+                self.logger.error("Invalid choice. Try again. %s", e)
 
     def pre_run_hook(self, *args, **kwargs): ...
     def post_run_hook(self, *args, **kwargs): ...
@@ -485,9 +493,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             cwd=self._cwd,
             print_cmd=self._dev_mode,
         )
-        print("Bonsai process running...")
+        self.logger.info("Bonsai process running...")
         ret = proc.wait(None)  # todo What should this return?
-        print(f"Bonsai process finished with return code {ret}.")
+        self.logger.info("Bonsai process finished with return code %s.", ret)
         self._run_hook_return = ret
 
     def run_ui(self) -> None:
@@ -509,7 +517,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.post_run_hook()
 
         except KeyboardInterrupt:
-            print("Exiting!")
+            self.logger.error("User interrupted the process.")
+            self._exit(-1)
             return
 
     @classmethod
@@ -537,13 +546,16 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self._make_folder(self._subject_dir)
             self._make_folder(self._visualizer_layouts_dir)
         except OSError as e:
-            print(f"Failed to create folder structure: {e}")
+            self.logger.error("Failed to create folder structure: %s", e)
 
-    @classmethod
-    def _make_folder(cls, folder: os.PathLike) -> None:
-        if not os.path.exists(cls.abspath(folder)):
-            print(f"Creating {folder}")
-            os.makedirs(folder)
+    def _make_folder(self, folder: os.PathLike) -> None:
+        if not os.path.exists(self.abspath(folder)):
+            self.logger.info("Creating  %s", folder)
+            try:
+                os.makedirs(folder)
+            except OSError as e:
+                self.logger.error("Failed to create folder %s: %s", folder, e)
+                raise e
 
     @staticmethod
     def _get_default_arg_parser() -> argparse.ArgumentParser:
@@ -590,3 +602,13 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         parser = cls._get_default_arg_parser()
         args, _ = parser.parse_known_args()
         return args
+
+    @staticmethod
+    def _create_logger() -> logging.Logger:
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.INFO)
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
+        return logger
