@@ -23,9 +23,9 @@ class LauncherTests(unittest.TestCase):
             version: Literal[__version__] = __version__
 
         launcher = Launcher(
-            rig_schema=AindGenericTaskRig,
-            session_schema=AindGenericTaskSession,
-            task_logic_schema=AindGenericTaskTaskLogic,
+            rig_schema_model=AindGenericTaskRig,
+            session_schema_model=AindGenericTaskSession,
+            task_logic_schema_model=AindGenericTaskTaskLogic,
             data_dir="data",
             config_library_dir="config",
             bonsai_workflow="workflow.bonsai",
