@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import argparse
+import datetime
 import glob
 import logging
 import os
@@ -9,12 +12,15 @@ from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar, Union
 
 import git
 import pydantic
+from requests import HTTPError
 
 from aind_behavior_services import (
     AindBehaviorRigModel,
     AindBehaviorSessionModel,
     AindBehaviorTaskLogicModel,
 )
+from aind_behavior_services.aind_services import data_mapper
+from aind_behavior_services.aind_services.watchdog import Watchdog
 from aind_behavior_services.base import singleton
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
 from aind_behavior_services.utils import open_bonsai_process
@@ -33,9 +39,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     def __init__(
         self,
-        rig_schema: Type[TRig],
-        session_schema: Type[TSession],
-        task_logic_schema: Type[TTaskLogic],
+        rig_schema_model: Type[TRig],
+        session_schema_model: Type[TSession],
+        task_logic_schema_model: Type[TTaskLogic],
         data_dir: os.PathLike,
         config_library_dir: os.PathLike,
         bonsai_workflow: os.PathLike,
@@ -50,8 +56,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         skip_hardware_validation: bool = False,
         dev_mode: bool = False,
         logger: Optional[logging.Logger] = None,
+        watchdog: Optional[Watchdog] = None,
     ) -> None:
+        # Dependency injection
         self.logger = logger if logger is not None else self._create_logger()
+        self.watchdog = watchdog
 
         args = self._cli_wrapper()
 
@@ -66,13 +75,13 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         os.chdir(self._cwd)
 
         # Schemas
-        self.rig_schema = rig_schema
-        self.session_schema = session_schema
-        self.task_logic_schema = task_logic_schema
+        self.rig_schema_model = rig_schema_model
+        self.session_schema_model = session_schema_model
+        self.task_logic_schema_model = task_logic_schema_model
 
-        self._rig_schema_instance: Optional[TRig] = None
-        self._session_schema_instance: Optional[TSession] = None
-        self._task_logic_schema_instance: Optional[TTaskLogic] = None
+        self._rig_schema: Optional[TRig] = None
+        self._session_schema: Optional[TSession] = None
+        self._task_logic_schema: Optional[TTaskLogic] = None
         self._bonsai_visualizer_layout: Optional[str] = None
 
         # Directories
@@ -117,6 +126,24 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self._run_hook_return: Any = None
 
         self.post_init_hook(args)
+
+    @property
+    def rig_schema(self) -> TRig:
+        if self._rig_schema is None:
+            raise ValueError("Rig schema instance not set.")
+        return self._rig_schema
+
+    @property
+    def session_schema(self) -> TSession:
+        if self._session_schema is None:
+            raise ValueError("Session schema instance not set.")
+        return self._session_schema
+
+    @property
+    def task_logic_schema(self) -> TTaskLogic:
+        if self._task_logic_schema is None:
+            raise ValueError("Task logic schema instance not set.")
+        return self._task_logic_schema
 
     def run(self):  # For backwards compatibility
         self.run_ui()
@@ -201,9 +228,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         _str = (
             "-------------------------------\n"
             f"{_HEADER}\n"
-            f"TaskLogic ({self.task_logic_schema.__name__}) Schema Version: {self.task_logic_schema.model_construct().version}\n"
-            f"Rig ({self.rig_schema.__name__}) Schema Version: {self.rig_schema.model_construct().version}\n"
-            f"Session ({self.session_schema.__name__}) Schema Version: {self.session_schema.model_construct().version}\n"
+            f"TaskLogic ({self.task_logic_schema_model.__name__}) Schema Version: {self.task_logic_schema_model.model_construct().version}\n"
+            f"Rig ({self.rig_schema_model.__name__}) Schema Version: {self.rig_schema_model.model_construct().version}\n"
+            f"Session ({self.session_schema_model.__name__}) Schema Version: {self.session_schema_model.model_construct().version}\n"
             "-------------------------------"
         )
 
@@ -257,11 +284,25 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         if not (os.path.isfile(os.path.join(self.default_bonsai_workflow))):
             raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_bonsai_workflow}.")
 
+        if self.watchdog is not None:
+            self.logger.warning("Watchdog service is enabled.")
+            if not self.watchdog.is_running():
+                self.logger.warning("Watchdog service is not running. Consider starting it manually.")
+            if not self.watchdog.validate_project_name():
+                try:
+                    self.logger.warning("Watchdog project name is not valid.")
+                except HTTPError as e:
+                    self.logger.error("Failed to fetch project names from endpoint. %s", e)
+        else:
+            self.logger.warning("Watchdog service is disabled.")
+
         if self.repository.is_dirty():
             self.logger.warning(
                 "Git repository is dirty. Discard changes before continuing unless you know what you are doing!"
             )
-            input("Press enter to continue...")
+            if not self.allow_dirty:
+                self.logger.error("Dirty repository not allowed. Exiting. Consider running with --allow-dirty flag.")
+                self._exit(-1)
 
     @staticmethod
     def prompt_pick_file_from_list(
@@ -309,7 +350,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self._subject_db_data = subject_list.get_subject(subject)
         notes = self.prompt_get_notes()
 
-        return self.session_schema(
+        return self.session_schema_model(
             experiment="",  # Will be set later
             root_path=str(self.data_dir.resolve()),
             remote_path=str(self.remote_data_dir.resolve()) if self.remote_data_dir is not None else None,
@@ -382,14 +423,14 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         available_rigs = glob.glob(os.path.join(rig_schemas_path, "*.json"))
         if len(available_rigs) == 1:
             print(f"Found a single rig config file. Using {available_rigs[0]}.")
-            return self.load_model_from_json(available_rigs[0], self.rig_schema)
+            return self.load_model_from_json(available_rigs[0], self.rig_schema_model)
         else:
             while True:
                 try:
                     path = self.prompt_pick_file_from_list(
                         available_rigs, prompt="Choose a rig:", override_zero=(None, None)
                     )
-                    rig = self.load_model_from_json(path, self.rig_schema)
+                    rig = self.load_model_from_json(path, self.rig_schema_model)
                     print(f"Using {path}.")
                     return rig
                 except pydantic.ValidationError as e:
@@ -412,7 +453,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     )
                     if not os.path.isfile(path):
                         raise FileNotFoundError(f"File not found: {path}")
-                    task_logic = self.load_model_from_json(path, self.task_logic_schema)
+                    task_logic = self.load_model_from_json(path, self.task_logic_schema_model)
                     print(f"Using {path}.")
 
                 else:
@@ -422,7 +463,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                         raise FileNotFoundError(f"Hinted file not found: {hinted_path}. Try entering manually.")
                     use_hint = self.prompt_yes_no_question(f"Would you like to go with the task file: {hinted_path}?")
                     if use_hint:
-                        task_logic = self.load_model_from_json(hinted_path, self.task_logic_schema)
+                        task_logic = self.load_model_from_json(hinted_path, self.task_logic_schema_model)
                     else:
                         hint_input = None
 
@@ -458,27 +499,49 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             except ValueError as e:
                 self.logger.error("Invalid choice. Try again. %s", e)
 
-    def pre_run_hook(self, *args, **kwargs): ...
-    def post_run_hook(self, *args, **kwargs): ...
+    def pre_run_hook(self, *args, **kwargs):
+        self.logger.info("Pre-run hook started.")
+
+    def post_run_hook(self, *args, **kwargs):
+        self.logger.info("Post-run hook started.")
+        if self._run_hook_return is not None:
+            self.logger.info("Run hook returned %s", self._run_hook_return)
+        try:
+            self.logger.info("Mapping to aind-data-schema Session: %s.")
+            aind_data_schema_session = self._map_to_aind_data_schema_session()
+            aind_data_schema_session.write_standard_file(self.session_schema.root_path)
+            self.logger.info("Mapping successful.")
+        except (pydantic.ValidationError, ValueError, IOError) as e:
+            self.logger.error("Failed to map to aind-data-schema Session. %s", e)
+        else:
+            if self.watchdog is not None:
+                if not self.watchdog.is_running():
+                    self.logger.warning("Watchdog service is not running. Consider starting it manually.")
+                self.logger.info("Creating watchdog manifest config.")
+                watchdog_manifest_config = self.watchdog.create_manifest_config_from_session(
+                    session=self.session_schema, aind_data_schema_session=aind_data_schema_session
+                )
+                _manifest_path = self.watchdog.dump_manifest_config(watchdog_manifest_config)
+                self.logger.info("Watchdog manifest config created successfully at %s.", _manifest_path)
+
     def run_hook(self, *args, **kwargs) -> None:
-        if self._session_schema_instance is None:
+        self.logger.info("Running hook started.")
+        if self._session_schema is None:
             raise ValueError("Session schema instance not set.")
-        if self._task_logic_schema_instance is None:
+        if self._task_logic_schema is None:
             raise ValueError("Task logic schema instance not set.")
-        if self._rig_schema_instance is None:
+        if self._rig_schema is None:
             raise ValueError("Rig schema instance not set.")
 
         additional_properties = {
             "TaskLogicPath": os.path.abspath(
-                self._save_temp_model(model=self._task_logic_schema_instance, folder=self.temp_dir)
+                self._save_temp_model(model=self._task_logic_schema, folder=self.temp_dir)
             ),
-            "SessionPath": os.path.abspath(
-                self._save_temp_model(model=self._session_schema_instance, folder=self.temp_dir)
-            ),
-            "RigPath": os.path.abspath(self._save_temp_model(model=self._rig_schema_instance, folder=self.temp_dir)),
+            "SessionPath": os.path.abspath(self._save_temp_model(model=self._session_schema, folder=self.temp_dir)),
+            "RigPath": os.path.abspath(self._save_temp_model(model=self._rig_schema, folder=self.temp_dir)),
         }
 
-        _date = self._session_schema_instance.date.strftime("%Y%m%dT%H%M%S")
+        _date = self._session_schema.date.strftime("%Y%m%dT%H%M%S")
         proc = open_bonsai_process(
             bonsai_exe=self.bonsai_executable,
             workflow_file=self.default_bonsai_workflow,
@@ -486,7 +549,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             layout=self._bonsai_visualizer_layout,
             log_file_name=os.path.join(
                 self.log_dir,
-                f"{self._session_schema_instance.subject}_{self._session_schema_instance.experiment}_{_date}.log",
+                f"{self._session_schema.subject}_{self._session_schema.experiment}_{_date}.log",
             ),
             is_editor_mode=self.bonsai_is_editor_mode,
             is_start_flag=self.bonsai_is_start_flag,
@@ -502,19 +565,21 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         try:
             self._print_header()
             self._validate_dependencies()
-            self._session_schema_instance = self._prompt_session_input()
-            self._task_logic_schema_instance = self._prompt_task_logic_input(hint_input=self._subject_db_data)
-            self._rig_schema_instance = self._prompt_rig_input()
+            self._session_schema = self._prompt_session_input()
+            self._task_logic_schema = self._prompt_task_logic_input(hint_input=self._subject_db_data)
+            self._rig_schema = self._prompt_rig_input()
             self._bonsai_visualizer_layout = self._prompt_visualizer_layout_input()
 
             # Handle some cross-schema references
-            self._session_schema_instance.experiment = self._task_logic_schema_instance.name
-            self._session_schema_instance.experiment_version = self._task_logic_schema_instance.version
+            self._session_schema.experiment = self._task_logic_schema.name
+            self._session_schema.experiment_version = self._task_logic_schema.version
 
             input("Press enter to start or Control+C to exit...")
             self.pre_run_hook()
             self.run_hook()
             self.post_run_hook()
+            self.logger.info("All hooks finished. Launcher closing.")
+            self._exit(0)
 
         except KeyboardInterrupt:
             self.logger.error("User interrupted the process.")
@@ -612,3 +677,14 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         console_handler.setFormatter(formatter)
         logger.addHandler(console_handler)
         return logger
+
+    def _map_to_aind_data_schema_session(self):
+        return data_mapper.mapper_from_session_root(
+            session_data_root=Path(self.session_schema.root_path).resolve(),
+            session_model=self.session_schema_model,
+            rig_model=self.rig_schema_model,
+            task_logic_model=self.task_logic_schema_model,
+            repository=self.repository,
+            script_path=Path(self.default_bonsai_workflow).resolve(),
+            session_end_time=datetime.datetime.now(),
+        )
