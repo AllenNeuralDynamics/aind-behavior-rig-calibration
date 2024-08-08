@@ -151,7 +151,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     def post_init_hook(self, cli_args: argparse.Namespace) -> None:
         """Overridable method that runs at the end of the self.__init__ method"""
         if cli_args.create_directories is True:
-            self.make_folder_structure()
+            self._make_folder_structure()
 
     @staticmethod
     def _exit(code: int = 0) -> None:
@@ -263,7 +263,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     TModel = TypeVar("TModel", bound=pydantic.BaseModel)  # pylint: disable=invalid-name
 
     @staticmethod
-    def load_model_from_json(json_path: os.PathLike | str, model: type[TModel]) -> TModel:
+    def _load_model_from_json(json_path: os.PathLike | str, model: type[TModel]) -> TModel:
         with open(Path(json_path), "r", encoding="utf-8") as file:
             return model.model_validate_json(file.read())
 
@@ -305,7 +305,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 self._exit(-1)
 
     @staticmethod
-    def prompt_pick_file_from_list(
+    def _prompt_pick_file_from_list(
         available_files: list[str],
         prompt: str = "Choose a file:",
         override_zero: Tuple[Optional[str], Optional[str]] = ("Enter manually", None),
@@ -329,7 +329,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             return available_files[choice - 1]
 
     @staticmethod
-    def prompt_yes_no_question(prompt: str) -> bool:
+    def _prompt_yes_no_question(prompt: str) -> bool:
         while True:
             reply = input(prompt + " (Y\\N): ").upper()
             if reply == "Y":
@@ -377,7 +377,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     batch_file = available_batches[0]
                     print(f"Found a single session config file. Using {batch_file}.")
                 else:
-                    batch_file = self.prompt_pick_file_from_list(
+                    batch_file = self._prompt_pick_file_from_list(
                         available_batches, prompt="Choose a batch:", override_zero=(None, None)
                     )
                     if not os.path.isfile(batch_file):
@@ -402,7 +402,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         subject = None
         while subject is None:
             try:
-                subject = self.prompt_pick_file_from_list(
+                subject = self._prompt_pick_file_from_list(
                     list(subject_list.subjects.keys()), prompt="Choose a subject:", override_zero=(None, None)
                 )
             except ValueError as e:
@@ -423,14 +423,14 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         available_rigs = glob.glob(os.path.join(rig_schemas_path, "*.json"))
         if len(available_rigs) == 1:
             print(f"Found a single rig config file. Using {available_rigs[0]}.")
-            return self.load_model_from_json(available_rigs[0], self.rig_schema_model)
+            return self._load_model_from_json(available_rigs[0], self.rig_schema_model)
         else:
             while True:
                 try:
-                    path = self.prompt_pick_file_from_list(
+                    path = self._prompt_pick_file_from_list(
                         available_rigs, prompt="Choose a rig:", override_zero=(None, None)
                     )
-                    rig = self.load_model_from_json(path, self.rig_schema_model)
+                    rig = self._load_model_from_json(path, self.rig_schema_model)
                     print(f"Using {path}.")
                     return rig
                 except pydantic.ValidationError as e:
@@ -448,12 +448,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             try:
                 if hint_input is None:
                     available_files = glob.glob(os.path.join(_path, "*.json"))
-                    path = self.prompt_pick_file_from_list(
+                    path = self._prompt_pick_file_from_list(
                         available_files, prompt="Choose a task logic:", override_zero=(None, None)
                     )
                     if not os.path.isfile(path):
                         raise FileNotFoundError(f"File not found: {path}")
-                    task_logic = self.load_model_from_json(path, self.task_logic_schema_model)
+                    task_logic = self._load_model_from_json(path, self.task_logic_schema_model)
                     print(f"Using {path}.")
 
                 else:
@@ -461,9 +461,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     if not os.path.isfile(hinted_path):
                         hint_input = None
                         raise FileNotFoundError(f"Hinted file not found: {hinted_path}. Try entering manually.")
-                    use_hint = self.prompt_yes_no_question(f"Would you like to go with the task file: {hinted_path}?")
+                    use_hint = self._prompt_yes_no_question(f"Would you like to go with the task file: {hinted_path}?")
                     if use_hint:
-                        task_logic = self.load_model_from_json(hinted_path, self.task_logic_schema_model)
+                        task_logic = self._load_model_from_json(hinted_path, self.task_logic_schema_model)
                     else:
                         hint_input = None
 
@@ -600,7 +600,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         """
         return Path(path).resolve()
 
-    def make_folder_structure(self) -> None:
+    def _make_folder_structure(self) -> None:
         try:
             self._make_folder(self.data_dir)
             self._make_folder(self.config_library_dir)
@@ -612,6 +612,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self._make_folder(self._visualizer_layouts_dir)
         except OSError as e:
             self.logger.error("Failed to create folder structure: %s", e)
+            self._exit(-1)
 
     def _make_folder(self, folder: os.PathLike) -> None:
         if not os.path.exists(self.abspath(folder)):
