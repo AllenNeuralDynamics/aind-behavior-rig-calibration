@@ -85,3 +85,15 @@ def get_commit_hash(repository: Optional[PathLike] = None) -> str:
         return repo.head.commit.hexsha
     except git.InvalidGitRepositoryError as e:
         raise e("Not a git repository. Please run from the root of the repository.") from e
+
+
+def singleton(class_):
+    #  from https://stackoverflow.com/questions/6760685/what-is-the-best-way-of-implementing-singleton-in-python
+    instances = {}
+
+    def getinstance(*args, **kwargs):
+        if class_ not in instances:
+            instances[class_] = class_(*args, **kwargs)
+        return instances[class_]
+
+    return getinstance
