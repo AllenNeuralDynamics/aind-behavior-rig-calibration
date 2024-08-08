@@ -271,38 +271,42 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         """
         Validates the dependencies required for the launcher to run.
         """
+        try:
+            if not (os.path.isfile(self.bonsai_executable)):
+                raise FileNotFoundError(f"Bonsai executable (bonsai.exe) not found! Expected {self.bonsai_executable}.")
+            if not (os.path.isdir(self.config_library_dir)):
+                raise FileNotFoundError(f"Config library not found! Expected {self.config_library_dir}.")
+            if not (os.path.isdir(os.path.join(self.config_library_dir, "Rig", self.computer_name))):
+                raise FileNotFoundError(
+                    f"Rig configuration not found! \
+                        Expected {os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name)}."
+                )
+            if not (os.path.isfile(os.path.join(self.default_bonsai_workflow))):
+                raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_bonsai_workflow}.")
 
-        if not (os.path.isfile(self.bonsai_executable)):
-            raise FileNotFoundError(f"Bonsai executable (bonsai.exe) not found! Expected {self.bonsai_executable}.")
-        if not (os.path.isdir(self.config_library_dir)):
-            raise FileNotFoundError(f"Config library not found! Expected {self.config_library_dir}.")
-        if not (os.path.isdir(os.path.join(self.config_library_dir, "Rig", self.computer_name))):
-            raise FileNotFoundError(
-                f"Rig configuration not found! \
-                    Expected {os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name)}."
-            )
-        if not (os.path.isfile(os.path.join(self.default_bonsai_workflow))):
-            raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_bonsai_workflow}.")
+            if self.watchdog is not None:
+                self.logger.warning("Watchdog service is enabled.")
+                if not self.watchdog.is_running():
+                    self.logger.warning("Watchdog service is not running. Consider starting it manually.")
+                if not self.watchdog.validate_project_name():
+                    try:
+                        self.logger.warning("Watchdog project name is not valid.")
+                    except HTTPError as e:
+                        self.logger.error("Failed to fetch project names from endpoint. %s", e)
+            else:
+                self.logger.warning("Watchdog service is disabled.")
 
-        if self.watchdog is not None:
-            self.logger.warning("Watchdog service is enabled.")
-            if not self.watchdog.is_running():
-                self.logger.warning("Watchdog service is not running. Consider starting it manually.")
-            if not self.watchdog.validate_project_name():
-                try:
-                    self.logger.warning("Watchdog project name is not valid.")
-                except HTTPError as e:
-                    self.logger.error("Failed to fetch project names from endpoint. %s", e)
-        else:
-            self.logger.warning("Watchdog service is disabled.")
-
-        if self.repository.is_dirty():
-            self.logger.warning(
-                "Git repository is dirty. Discard changes before continuing unless you know what you are doing!"
-            )
-            if not self.allow_dirty:
-                self.logger.error("Dirty repository not allowed. Exiting. Consider running with --allow-dirty flag.")
-                self._exit(-1)
+            if self.repository.is_dirty():
+                self.logger.warning(
+                    "Git repository is dirty. Discard changes before continuing unless you know what you are doing!"
+                )
+                if not self.allow_dirty:
+                    self.logger.error("Dirty repository not allowed. Exiting. Consider running with --allow-dirty flag.")
+                    self._exit(-1)
+        except Exception as e:
+            self.logger.error("Failed to validate dependencies. %s", e)
+            self._exit(-1)
+            raise e
 
     @staticmethod
     def _prompt_pick_file_from_list(
