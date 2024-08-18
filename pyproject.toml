@@ -5,13 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "aind-behavior-services"
 description = "A library that defines AIND data schema and validates JSON files for behavior rig models."
+authors = [
+    { name = "Bruno Cruz", email = "bruno.cruz@alleninstitute.org" },
+]
 license = {text = "MIT"}
 requires-python = ">=3.11"
-classifiers = [
-    "Programming Language :: Python :: 3"
-]
 dynamic = ["version", "readme"]
-
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+]
 dependencies = [
     'pydantic>=2.7, <3.0',
     'harp-python>=0.2',
@@ -19,22 +23,24 @@ dependencies = [
     'scikit-learn',
     'semver',
     'aind-behavior-curriculum@git+https://github.com/AllenNeuralDynamics/aind-behavior-curriculum@v0.0.27',
-
 ]
 
-[project.optional-dependencies]
+[project.urls]
+Documentation = "https://allenneuraldynamics.github.io/Aind.Behavior.Services/"
+Repository = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/"
+Issues = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/issues"
+Changelog = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/releases"
 
+
+[project.optional-dependencies]
 aind-extra-services = [
     'aind-watchdog-service@git+https://github.com/AllenNeuralDynamics/aind-watchdog-service@development',
     'aind-data-schema==0.38.5'
 ]
-
-
 linters = [
     'ruff',
     'codespell'
 ]
-
 docs = [
     'Sphinx<7.3',
     'furo',
@@ -47,6 +53,9 @@ docs = [
 
 [tool.setuptools.packages.find]
 where = ["src/DataSchemas"]
+
+[tool.setuptools.package-data]
+aind_behavior_services = ["py.typed"]
 
 [tool.setuptools.dynamic]
 version = {attr = "aind_behavior_services.__version__"}
