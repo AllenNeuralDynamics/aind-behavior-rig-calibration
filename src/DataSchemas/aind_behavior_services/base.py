@@ -2,17 +2,28 @@ from __future__ import annotations
 
 import warnings
 from os import PathLike
-from typing import Any, Callable, Optional, get_args
+from typing import Any, Callable, Literal, Optional, get_args
 
 import git
-from pydantic import BaseModel, Field, GetJsonSchemaHandler
+from aind_behavior_curriculum.task import SEMVER_REGEX
+from pydantic import BaseModel, Field, GetJsonSchemaHandler, field_validator
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 from semver import Version
 
+from aind_behavior_services import __version__ as pkg_version
+
 
 class SchemaVersionedModel(BaseModel):
-    version: str = Field(..., pattern=r"^\d+.\d+.\d+$", description="schema version", title="Version", frozen=True)
+    aind_behavior_services_pkg_version: Literal[pkg_version] = Field(
+        default=pkg_version, title="aind_behavior_services package version", frozen=True
+    )
+    version: str = Field(..., pattern=SEMVER_REGEX, description="schema version", title="Version", frozen=True)
+
+    @field_validator("aind_behavior_services_pkg_version", mode="before", check_fields=False)
+    @classmethod
+    def coerce_version(cls, v: str, ctx) -> str:
+        return coerce_schema_version(cls, v, ctx.field_name)
 
 
 class SemVerAnnotation:
@@ -52,9 +63,9 @@ class SemVerAnnotation:
         return handler(core_schema.str_schema())
 
 
-def coerce_schema_version(cls: BaseModel, v: str) -> str:
+def coerce_schema_version(cls: type[SchemaVersionedModel], v: str, version_string: str = "version") -> str:
     try:  # Get the default schema version from the model literal field
-        _default_schema_version = Version.parse(get_args(cls.model_fields["version"].annotation)[0])
+        _default_schema_version = Version.parse(get_args(cls.model_fields[version_string].annotation)[0])
     except IndexError:  # This handles the case where the base class does not define a literal schema_version value
         return v
 
