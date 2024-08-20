@@ -1,13 +1,14 @@
 import unittest
 from datetime import datetime
 
+from pydantic import ValidationError
+
 from aind_behavior_services.calibration.water_valve import (
     Measurement,
     WaterValveCalibration,
     WaterValveCalibrationInput,
     WaterValveCalibrationOutput,
 )
-from pydantic import ValidationError
 
 
 class WaterValveTests(unittest.TestCase):
@@ -37,7 +38,7 @@ class WaterValveTests(unittest.TestCase):
             input=WaterValveCalibrationInput(measurements=_inputs),
             output=_outputs,
             device_name="WaterValve",
-            calibration_date=datetime.now(),
+            date=datetime.now(),
         )
 
         try:
@@ -63,7 +64,7 @@ class WaterValveTests(unittest.TestCase):
             input=_inputs,
             output=_inputs.calibrate_output(),
             device_name="WaterValve",
-            calibration_date=datetime.now(),
+            date=datetime.now(),
         )
 
         self.assertAlmostEqual(_slope, calibration.output.slope, 2, "Slope is not almost equal")
