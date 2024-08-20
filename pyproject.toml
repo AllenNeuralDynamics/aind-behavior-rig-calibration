@@ -31,7 +31,6 @@ Repository = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/"
 Issues = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/issues"
 Changelog = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/releases"
 
-
 [project.optional-dependencies]
 aind-extra-services = [
     'aind-watchdog-service@git+https://github.com/AllenNeuralDynamics/aind-watchdog-service@requirements-fix-aind-transfer-models',

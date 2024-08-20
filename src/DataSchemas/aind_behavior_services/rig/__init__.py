@@ -72,7 +72,8 @@ class SpinnakerCamera(Device):
         return v
 
 
-TCamera = TypeVar("TCamera", bound=Union[WebCamera, SpinnakerCamera])
+CameraTypes = Union[WebCamera, SpinnakerCamera]
+TCamera = TypeVar("TCamera", bound=CameraTypes)
 
 
 class CameraController(Device, Generic[TCamera]):
