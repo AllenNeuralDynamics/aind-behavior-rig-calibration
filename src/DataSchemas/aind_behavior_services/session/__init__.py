@@ -1,6 +1,6 @@
 # Import core types
 from datetime import datetime
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Any
 
 from pydantic import Field, field_validator
 
@@ -29,3 +29,8 @@ class AindBehaviorSessionModel(SchemaVersionedModel):
     @classmethod
     def coerce_version(cls, v: str) -> str:
         return coerce_schema_version(cls, v)
+
+    @field_validator("subject", mode="before")
+    @classmethod
+    def coerce_subject_str_to_int(cls, v: Any) -> Any:
+        return int(v) if v.isdecimal() else v
