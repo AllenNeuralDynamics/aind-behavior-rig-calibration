@@ -18,7 +18,7 @@ class AindBehaviorSessionModel(SchemaVersionedModel):
     remote_path: Optional[str] = Field(
         default=None, description="Remote path where data will be attempted to be copied to after experiment is done"
     )
-    subject: str = Field(..., description="Name of the subject")
+    subject: int = Field(..., description="Name of the subject")
     experiment_version: str = Field(..., description="Version of the experiment")
     notes: Optional[str] = Field(default=None, description="Notes about the experiment")
     commit_hash: Optional[str] = Field(default=None, description="Commit hash of the repository")
