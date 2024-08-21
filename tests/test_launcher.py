@@ -35,5 +35,6 @@ class LauncherTests(unittest.TestCase):
         with self.assertRaises((FileNotFoundError, OSError, SystemExit)) as _:
             launcher._validate_dependencies()
 
+
 if __name__ == "__main__":
     unittest.main()
