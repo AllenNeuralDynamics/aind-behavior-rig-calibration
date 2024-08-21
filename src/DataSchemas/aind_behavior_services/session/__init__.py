@@ -6,7 +6,7 @@ from pydantic import Field, field_validator
 
 from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 
 class AindBehaviorSessionModel(SchemaVersionedModel):
