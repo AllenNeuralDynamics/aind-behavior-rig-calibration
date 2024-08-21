@@ -13,12 +13,13 @@ import json
 import os
 import subprocess
 from pathlib import Path
-from typing import Dict, List, Literal, Optional
+from typing import Dict, List, Optional
 
 import requests
 import yaml
 from aind_data_schema.core.session import Session
-from aind_watchdog_service.models.manifest_config import ManifestConfig, Platform
+from aind_data_schema_models.platforms import Platform
+from aind_watchdog_service.models.manifest_config import BucketType, ManifestConfig
 from aind_watchdog_service.models.watch_config import WatchConfig
 
 from aind_behavior_services.session import AindBehaviorSessionModel
@@ -34,7 +35,7 @@ class Watchdog:
         watched_folder: os.PathLike = DEFAULT_WATCHED_DIRECTORY,
     ) -> None:
         self.project_name = project_name
-        self.schedule_time = datetime.datetime.combine(datetime.datetime.now(), time_to_run) if time_to_run else None
+        self.schedule_time = time_to_run
         self.watched_folder = Path(watched_folder)
 
     @staticmethod
@@ -45,7 +46,7 @@ class Watchdog:
     ) -> WatchConfig:
         """Create a WatchConfig object"""
         return WatchConfig(
-            watched_directory=str(watched_directory),
+            flag_dir=str(watched_directory),
             manifest_complete=str(manifest_complete_directory),
             webhook_url=webhook_url,
         )
@@ -64,17 +65,17 @@ class Watchdog:
         session_name: Optional[str] = None,
         processor_full_name: Optional[str] = None,
         schedule_time: Optional[
-            datetime.datetime
+            datetime.time
         ] = None,  # TODO https://github.com/AllenNeuralDynamics/aind-watchdog-service/pull/37
-        platform: str = Platform.BEHAVIOR.abbreviation,
+        platform: Platform = getattr(Platform, "BEHAVIOR"),
         capsule_id: Optional[str] = None,
         script: Optional[Dict[str, List[str]]] = None,
-        s3_bucket: Literal["s3", "public", "private", "scratch"] = "private",
+        s3_bucket: BucketType = BucketType.PRIVATE,
         mount: Optional[str] = None,
         validate_project_name: bool = True,
     ) -> ManifestConfig:
         """Create a ManifestConfig object"""
-        processor_full_name = processor_full_name or os.environ.get("USERNAME")
+        processor_full_name = processor_full_name or os.environ.get("USERNAME", "unknown")
 
         destination = Path(destination).resolve()
         source = Path(source).resolve()
@@ -90,21 +91,21 @@ class Watchdog:
         return ManifestConfig(
             name=session_name,
             modalities={
-                str(modality.abbreviation): [source / str(modality.abbreviation)]
+                str(modality.abbreviation): [str(path.resolve()) for path in [source / str(modality.abbreviation)]]
                 for modality in session.data_streams[0].stream_modalities
             },
-            subject_id=session.subject_id,
+            subject_id=int(session.subject_id),
             acquisition_datetime=session.session_start_time,
-            schemas=[source / "session.json", source / "other"],
-            destination=destination,
+            schemas=[str(path.resolve()) for path in [source / "session.json", source / "other"]],
+            destination=str(destination.resolve()),
             mount=mount,
             processor_full_name=processor_full_name,
             project_name=project_name,
             schedule_time=schedule_time,
-            platform=platform,
+            platform=getattr(platform, "abbreviation"),
             capsule_id=capsule_id,
             s3_bucket=s3_bucket,
-            script=script,
+            script=script if script else {},
         )
 
     @staticmethod
@@ -123,8 +124,8 @@ class Watchdog:
         session: AindBehaviorSessionModel,
         aind_data_schema_session: Session,
         project_name: Optional[str] = None,
-        schedule_time: Optional[datetime.datetime] = None,
-        platform: Platform = Platform.BEHAVIOR.abbreviation,
+        schedule_time: Optional[datetime.time] = None,
+        platform: Platform = getattr(Platform, "BEHAVIOR"),
         **kwargs,
     ) -> ManifestConfig:
         if session.remote_path is None:

@@ -11,7 +11,7 @@ except ImportError as e:
 import datetime
 import os
 from pathlib import Path
-from typing import Type, TypeVar, Union
+from typing import Dict, Optional, Type, TypeVar, Union
 
 import aind_data_schema.components.devices as ads_devices
 import git
@@ -46,6 +46,7 @@ def mapper_from_session_root(
     repository: Union[os.PathLike, git.Repo],
     script_path: os.PathLike,
     session_end_time: datetime.datetime = datetime.datetime.now(),
+    output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> Session:
     _schema_root = Path(session_data_root) / "other" / "Config"
@@ -71,6 +72,7 @@ def mapper_from_json_files(
     repository: Union[os.PathLike, git.Repo],
     script_path: os.PathLike,
     session_end_time: datetime.datetime = datetime.datetime.now(),
+    output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> Session:
     return mapper(
@@ -91,6 +93,7 @@ def mapper(
     repository: Union[os.PathLike, git.Repo],
     script_path: os.PathLike,
     session_end_time: datetime.datetime = datetime.datetime.now(),
+    output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> Session:
     # Normalize repository
@@ -110,9 +113,9 @@ def mapper(
     # populate devices
     devices = [device[0] for device in helpers.get_fields_of_type(rig_model, AbsRig.Device) if device[0]]
     # Populate modalities
-    modalities: list[Modality] = [Modality.BEHAVIOR]
+    modalities: list[Modality] = [getattr(Modality, "BEHAVIOR")]
     if len(cameras) > 0:
-        modalities.append(Modality.BEHAVIOR_VIDEOS)
+        modalities.append(getattr(Modality, "BEHAVIOR-VIDEOS"))
     modalities = list(set(modalities))
     # Populate stimulus modalities
     stimulus_modalities: list[StimulusModality] = []
@@ -158,7 +161,7 @@ def mapper(
                 stream_modalities=modalities,
                 stream_start_time=session_model.date,
                 stream_end_time=session_end_time or session_model.date,
-                camera_names=cameras.keys(),
+                camera_names=list(cameras.keys()),
             ),
         ],
         calibrations=calibrations,
@@ -190,9 +193,10 @@ def mapper(
                     url=f"{repository_remote_url}/blob/{repository_sha}/{repository_relative_script_path}",
                     parameters=task_logic_model.model_dump(),
                 ),
-            )
+                output_parameters=output_parameters if output_parameters else {},
+            )  # type: ignore
         ],
-    )
+    )  # type: ignore
     return aind_data_schema_session
 
 
