@@ -33,8 +33,8 @@ Changelog = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/relea
 
 [project.optional-dependencies]
 aind-extra-services = [
-    'aind-watchdog-service@git+https://github.com/AllenNeuralDynamics/aind-watchdog-service@requirements-fix-aind-transfer-models',
-    'aind-data-schema==0.38.5',
+    'aind-watchdog-service@git+https://github.com/AllenNeuralDynamics/aind-watchdog-service@0.1.0-rc1',
+    'aind-data-schema==1.0.0',
     'aind-data-transfer-models<0.5.6', # need to pin this or it will request aind-data-schema 0.35.0 via aind-data-mapper
 ]
 linters = [
