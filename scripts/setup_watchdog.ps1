@@ -1,15 +1,16 @@
-#$url = "https://github.com/AllenNeuralDynamics/aind-watchdog-service/actions/runs/9781777954/artifacts/1664898054"
-$outputPath = Join-Path -Path $PSScriptRoot -ChildPath "watchdog.exe"
-$outputPath = $outputPath | Resolve-Path
-#Invoke-WebRequest -Uri $url -OutFile $outputPath
+$url = "https://github.com/AllenNeuralDynamics/aind-watchdog-service/releases/download/0.1.0-rc1/aind-watchdog-service.exe"
+$outputPath = Join-Path -Path $env:APPDATA -ChildPath "aind-watchdog-service"
+if (-not (Test-Path -Path $outputPath)) {
+    $null = New-Item -Path $outputPath -ItemType Directory
+}
+$outputPath = Join-Path -Path $outputPath -ChildPath "watchdog.exe"
+Invoke-WebRequest -Uri $url -OutFile $outputPath
 
-
-$taskAction = New-ScheduledTaskAction -Execute "$outputPath" # TODO add default arguments via cli if/when PR gets merged
+$taskAction = New-ScheduledTaskAction -Execute "$outputPath"
 $taskTriggerStartup = New-ScheduledTaskTrigger -AtStartup
 $taskTriggerLogOn = New-ScheduledTaskTrigger -AtLogOn
 $taskTriggerStartup.Delay = "PT30S"
 $taskTriggerLogOn.Delay = "PT30S"
-
 $taskSettings = New-ScheduledTaskSettingsSet -DontStopOnIdleEnd -ExecutionTimeLimit '00:00:00'
 $taskPrincipal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType S4U -RunLevel Highest
 $taskPath = "AIND"
