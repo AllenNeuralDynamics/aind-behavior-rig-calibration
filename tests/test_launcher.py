@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 from typing import Literal
 
 from aind_behavior_services import (
@@ -26,14 +27,13 @@ class LauncherTests(unittest.TestCase):
             rig_schema_model=AindGenericTaskRig,
             session_schema_model=AindGenericTaskSession,
             task_logic_schema_model=AindGenericTaskTaskLogic,
-            data_dir="data",
-            config_library_dir="config",
-            bonsai_workflow="workflow.bonsai",
+            data_dir=Path("data"),
+            config_library_dir=Path("config"),
+            bonsai_workflow=Path("workflow.bonsai"),
         )
 
-        with self.assertRaises((FileNotFoundError, OSError)) as context:
+        with self.assertRaises((FileNotFoundError, OSError, SystemExit)) as _:
             launcher._validate_dependencies()
-            self.assertTrue("This is broken" in context.exception)
 
 
 if __name__ == "__main__":

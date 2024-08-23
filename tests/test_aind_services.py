@@ -1,8 +1,10 @@
 import datetime
 import unittest
+from pathlib import Path
 from typing import Dict, List, Literal, Optional
 
 import pydantic
+
 from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.rig import AindBehaviorRigModel, CameraController, CameraTypes, SpinnakerCamera
 from aind_behavior_services.session import AindBehaviorSessionModel
@@ -16,8 +18,8 @@ class AindServicesTests(unittest.TestCase):
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),
             session_end_time=datetime.datetime.now(),
-            repository="./",
-            script_path="./src/unit_test.bonsai",
+            repository=Path("./"),
+            script_path=Path("./src/unit_test.bonsai"),
         )
 
 

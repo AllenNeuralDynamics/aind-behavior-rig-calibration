@@ -301,7 +301,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     "Git repository is dirty. Discard changes before continuing unless you know what you are doing!"
                 )
                 if not self.allow_dirty:
-                    self.logger.error("Dirty repository not allowed. Exiting. Consider running with --allow-dirty flag.")
+                    self.logger.error(
+                        "Dirty repository not allowed. Exiting. Consider running with --allow-dirty flag."
+                    )
                     self._exit(-1)
         except Exception as e:
             self.logger.error("Failed to validate dependencies. %s", e)
