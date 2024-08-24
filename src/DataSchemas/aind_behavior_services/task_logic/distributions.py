@@ -40,9 +40,11 @@ class DistributionBase(BaseModel):
     family: DistributionFamily = Field(..., description="Family of the distribution")
     distribution_parameters: DistributionParameters = Field(..., description="Parameters of the distribution")
     truncation_parameters: Optional[TruncationParameters] = Field(
-        None, description="Truncation parameters of the distribution"
+        default=None, description="Truncation parameters of the distribution"
     )
-    scaling_parameters: Optional[ScalingParameters] = Field(None, description="Scaling parameters of the distribution")
+    scaling_parameters: Optional[ScalingParameters] = Field(
+        default=None, description="Scaling parameters of the distribution"
+    )
 
 
 class ScalarDistributionParameter(DistributionParametersBase):
@@ -53,7 +55,7 @@ class ScalarDistributionParameter(DistributionParametersBase):
 class Scalar(DistributionBase):
     family: Literal[DistributionFamily.SCALAR] = DistributionFamily.SCALAR
     distribution_parameters: ScalarDistributionParameter = Field(
-        ScalarDistributionParameter(), description="Parameters of the distribution"
+        default=ScalarDistributionParameter(), description="Parameters of the distribution"
     )
     truncation_parameters: Literal[None] = None
     scaling_parameters: Literal[None] = None
@@ -68,7 +70,7 @@ class NormalDistributionParameters(DistributionParametersBase):
 class NormalDistribution(DistributionBase):
     family: Literal[DistributionFamily.NORMAL] = DistributionFamily.NORMAL
     distribution_parameters: NormalDistributionParameters = Field(
-        NormalDistributionParameters(), description="Parameters of the distribution"
+        default=NormalDistributionParameters(), description="Parameters of the distribution"
     )
 
 
@@ -81,7 +83,7 @@ class LogNormalDistributionParameters(DistributionParametersBase):
 class LogNormalDistribution(DistributionBase):
     family: Literal[DistributionFamily.LOGNORMAL] = DistributionFamily.LOGNORMAL
     distribution_parameters: LogNormalDistributionParameters = Field(
-        LogNormalDistributionParameters(), description="Parameters of the distribution"
+        default=LogNormalDistributionParameters(), description="Parameters of the distribution"
     )
 
 
@@ -94,7 +96,7 @@ class UniformDistributionParameters(DistributionParametersBase):
 class UniformDistribution(DistributionBase):
     family: Literal[DistributionFamily.UNIFORM] = DistributionFamily.UNIFORM
     distribution_parameters: UniformDistributionParameters = Field(
-        UniformDistributionParameters(), description="Parameters of the distribution"
+        default=UniformDistributionParameters(), description="Parameters of the distribution"
     )
 
 
@@ -106,7 +108,7 @@ class ExponentialDistributionParameters(DistributionParametersBase):
 class ExponentialDistribution(DistributionBase):
     family: Literal[DistributionFamily.EXPONENTIAL] = DistributionFamily.EXPONENTIAL
     distribution_parameters: ExponentialDistributionParameters = Field(
-        ExponentialDistributionParameters(), description="Parameters of the distribution"
+        default=ExponentialDistributionParameters(), description="Parameters of the distribution"
     )
 
 
@@ -119,7 +121,7 @@ class GammaDistributionParameters(DistributionParametersBase):
 class GammaDistribution(DistributionBase):
     family: Literal[DistributionFamily.GAMMA] = DistributionFamily.GAMMA
     distribution_parameters: GammaDistributionParameters = Field(
-        GammaDistributionParameters(), description="Parameters of the distribution"
+        default=GammaDistributionParameters(), description="Parameters of the distribution"
     )
 
 
@@ -132,7 +134,7 @@ class BinomialDistributionParameters(DistributionParametersBase):
 class BinomialDistribution(DistributionBase):
     family: Literal[DistributionFamily.BINOMIAL] = DistributionFamily.BINOMIAL
     distribution_parameters: BinomialDistributionParameters = Field(
-        BinomialDistributionParameters(), description="Parameters of the distribution"
+        default=BinomialDistributionParameters(), description="Parameters of the distribution"
     )
 
 
@@ -145,7 +147,7 @@ class BetaDistributionParameters(DistributionParametersBase):
 class BetaDistribution(DistributionBase):
     family: Literal[DistributionFamily.BETA] = DistributionFamily.BETA
     distribution_parameters: BetaDistributionParameters = Field(
-        BetaDistributionParameters(), description="Parameters of the distribution"
+        default=BetaDistributionParameters(), description="Parameters of the distribution"
     )
 
 
@@ -159,14 +161,14 @@ class PoissonDistributionParameters(DistributionParametersBase):
 class PoissonDistribution(DistributionBase):
     family: Literal[DistributionFamily.POISSON] = DistributionFamily.POISSON
     distribution_parameters: PoissonDistributionParameters = Field(
-        PoissonDistributionParameters(), description="Parameters of the distribution"
+        default=PoissonDistributionParameters(), description="Parameters of the distribution"
     )
 
 
 class PdfDistributionParameters(DistributionParametersBase):
     family: Literal[DistributionFamily.PDF] = DistributionFamily.PDF
-    pdf: List[NonNegativeFloat] = Field([1], description="The probability density function")
-    index: List[float] = Field([0], description="The index of the probability density function")
+    pdf: List[NonNegativeFloat] = Field(default=[1], description="The probability density function")
+    index: List[float] = Field(default=[0], description="The index of the probability density function")
 
     @field_validator("pdf")
     @classmethod
@@ -183,7 +185,7 @@ class PdfDistributionParameters(DistributionParametersBase):
 class PdfDistribution(DistributionBase):
     family: Literal[DistributionFamily.PDF] = DistributionFamily.PDF
     distribution_parameters: PdfDistributionParameters = Field(
-        PdfDistributionParameters(),
+        default=PdfDistributionParameters(),
         description="Parameters of the distribution",
         validate_default=True,
     )

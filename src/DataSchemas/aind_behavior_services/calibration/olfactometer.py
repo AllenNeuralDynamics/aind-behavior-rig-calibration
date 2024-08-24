@@ -39,13 +39,13 @@ class OlfactometerChannelConfig(BaseModel):
     flow_rate: float = Field(
         default=100, le=100, title="Target flow rate. mL/min. If channel_type == CARRIER, this value is ignored."
     )
-    odorant: Optional[str] = Field(None, title="Odorant name")
-    odorant_dilution: Optional[float] = Field(None, title="Odorant dilution (%v/v)")
+    odorant: Optional[str] = Field(default=None, title="Odorant name")
+    odorant_dilution: Optional[float] = Field(default=None, title="Odorant dilution (%v/v)")
 
 
 class OlfactometerCalibrationInput(BaseModel):
     channel_config: Dict[OlfactometerChannel, OlfactometerChannelConfig] = Field(
-        {}, description="Configuration of olfactometer channels"
+        default={}, description="Configuration of olfactometer channels"
     )
 
 
@@ -56,7 +56,9 @@ class OlfactometerCalibrationOutput(BaseModel):
 class OlfactometerCalibration(Calibration):
     """Olfactometer calibration class"""
 
-    device_name: str = Field("Olfactometer", title="Device name", description="Name of the device being calibrated")
+    device_name: str = Field(
+        default="Olfactometer", title="Device name", description="Name of the device being calibrated"
+    )
     description: Literal["Calibration of the harp olfactometer device"] = "Calibration of the harp olfactometer device"
     input: OlfactometerCalibrationInput = Field(..., title="Input of the calibration")
     output: OlfactometerCalibrationOutput = Field(..., title="Output of the calibration")
@@ -64,12 +66,12 @@ class OlfactometerCalibration(Calibration):
 
 class CalibrationParameters(TaskParameters):
     channel_config: Dict[OlfactometerChannel, OlfactometerChannelConfig] = Field(
-        {}, description="Configuration of olfactometer channels"
+        default={}, description="Configuration of olfactometer channels"
     )
-    full_flow_rate: float = Field(1000, ge=0, le=1000, description="Full flow rate of the olfactometer")
-    n_repeats_per_stimulus: int = Field(1, ge=1, description="Number of repeats per stimulus")
-    time_on: float = Field(1, ge=0, description="Time (s) the valve is open during calibration")
-    time_off: float = Field(1, ge=0, description="Time (s) the valve is close during calibration")
+    full_flow_rate: float = Field(default=1000, ge=0, le=1000, description="Full flow rate of the olfactometer")
+    n_repeats_per_stimulus: int = Field(default=1, ge=1, description="Number of repeats per stimulus")
+    time_on: float = Field(default=1, ge=0, description="Time (s) the valve is open during calibration")
+    time_off: float = Field(default=1, ge=0, description="Time (s) the valve is close during calibration")
 
 
 class CalibrationLogic(AindBehaviorTaskLogicModel):

@@ -99,7 +99,7 @@ class AindManipulatorCalibration(Calibration):
     """Aind manipulator calibration class"""
 
     device_name: str = Field(
-        "AindManipulator", title="Device name", description="Must match a device name in rig/instrument"
+        default="AindManipulator", title="Device name", description="Must match a device name in rig/instrument"
     )
     description: Literal["Calibration of the load cells system"] = "Calibration of the load cells system"
     input: AindManipulatorCalibrationInput = Field(default=..., title="Input of the calibration")

@@ -74,7 +74,7 @@ class WaterValveCalibrationOutput(BaseModel):
     """Output for water valve calibration class"""
 
     interval_average: Optional[Dict[PositiveFloat, PositiveFloat]] = Field(
-        None,
+        default=None,
         description="Dictionary keyed by measured valve interval and corresponding average single event volume.",
         title="Interval average",
     )
@@ -117,13 +117,13 @@ class CalibrationParameters(TaskParameters):
         description="An array with the times (s) the valve is open during calibration",
     )
     valve_open_interval: float = Field(
-        0.2,
+        default=0.2,
         description="Time between two consecutive valve openings (s)",
         title="Valve open interval",
         gt=0,
     )
     repeat_count: int = Field(
-        200,
+        default=200,
         ge=1,
         description="Number of times the valve opened per measure valve_open_time entry",
         title="Repeat count",
