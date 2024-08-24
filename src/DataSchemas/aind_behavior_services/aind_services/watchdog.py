@@ -24,7 +24,7 @@ from aind_watchdog_service.models.watch_config import WatchConfig
 
 from aind_behavior_services.session import AindBehaviorSessionModel
 
-DEFAULT_WATCHED_DIRECTORY = Path((os.getenv("LOCALAPPDATA") or ".") + "aind-watchdog-service").resolve()
+DEFAULT_WATCHED_DIRECTORY = Path((os.getenv("PROGRAMDATA") or ".") + "aind-watchdog-service").resolve()
 
 
 class Watchdog:
