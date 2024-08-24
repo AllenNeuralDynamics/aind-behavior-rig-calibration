@@ -1,10 +1,10 @@
-from typing import Optional, Literal
+from typing import Literal, Optional
 
 import aind_behavior_curriculum.task as curriculum_task
 from pydantic import Field, field_validator
 
-from aind_behavior_services.base import coerce_schema_version, SEMVER_REGEX
 from aind_behavior_services import __version__ as pkg_version
+from aind_behavior_services.base import SEMVER_REGEX, coerce_schema_version
 
 
 class TaskParameters(curriculum_task.TaskParameters):
@@ -22,7 +22,6 @@ class TaskParameters(curriculum_task.TaskParameters):
 class AindBehaviorTaskLogicModel(curriculum_task.Task):
     task_parameters: TaskParameters = Field(..., description="Parameters of the task logic", validate_default=True)
     version: str = Field(..., pattern=curriculum_task.SEMVER_REGEX, description="task schema version")
-    
 
     @field_validator("version", mode="before")
     @classmethod
