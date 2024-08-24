@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from enum import Enum
-from typing import Annotated, Dict, Generic, List, Literal, Optional, TypeVar, Union
+from typing import Annotated, Dict, Generic, Literal, Optional, TypeVar, Union
 
 from pydantic import BaseModel, Field, RootModel, field_validator
 
@@ -212,14 +212,21 @@ class DisplayCalibration(BaseModel):
     extrinsics: DisplayExtrinsics = Field(default=DisplayExtrinsics(), description="Extrinsics", validate_default=True)
 
 
+class DisplaysCalibration(BaseModel):
+    left: DisplayCalibration = Field(default=DisplayCalibration(), description="Left display calibration")
+    center: DisplayCalibration = Field(default=DisplayCalibration(), description="Center display calibration")
+    right: DisplayCalibration = Field(default=DisplayCalibration(), description="Right display calibration")
+
+
 class Screen(Device):
     device_type: Literal["Screen"] = Field(default="Screen", description="Device type")
     display_index: int = Field(default=1, description="Display index")
     target_render_frequency: float = Field(default=60, description="Target render frequency")
     target_update_frequency: float = Field(default=120, description="Target update frequency")
-    calibration: List[DisplayCalibration] = Field(
-        default=[DisplayCalibration()],
-        description="Screen calibration. Screens are assumed to be identified from left to right",
+    texture_assets_directory: str = Field(default="Textures", description="Calibration directory")
+    calibration: DisplaysCalibration = Field(
+        DisplaysCalibration(),
+        description="Screen calibration",
     )
     brightness: float = Field(default=0, le=1, ge=-1, description="Brightness")
     contrast: float = Field(default=1, le=1, ge=-1, description="Contrast")
