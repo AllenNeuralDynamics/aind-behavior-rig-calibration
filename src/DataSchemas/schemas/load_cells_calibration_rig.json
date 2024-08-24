@@ -241,6 +241,12 @@
     }
   },
   "properties": {
+    "aind_behavior_services_pkg_version": {
+      "const": "0.8.0-rc1",
+      "default": "0.8.0-rc1",
+      "title": "aind_behavior_services package version",
+      "type": "string"
+    },
     "version": {
       "const": "0.0.0",
       "default": "0.0.0",
