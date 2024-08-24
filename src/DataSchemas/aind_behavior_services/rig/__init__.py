@@ -193,8 +193,8 @@ class Vector3(BaseModel):
 
 
 class DisplayIntrinsics(BaseModel):
-    frame_width: int = Field(default=1920, ge=0, description="Frame width")
-    frame_height: int = Field(default=1080, ge=0, description="Frame height")
+    frame_width: int = Field(default=1920, ge=0, description="Frame width (px)")
+    frame_height: int = Field(default=1080, ge=0, description="Frame height (px)")
     display_width: float = Field(default=20, ge=0, description="Display width (cm)")
     display_height: float = Field(default=15, ge=0, description="Display width (cm)")
 
@@ -214,9 +214,36 @@ class DisplayCalibration(BaseModel):
 
 
 class DisplaysCalibration(BaseModel):
-    left: DisplayCalibration = Field(default=DisplayCalibration(), description="Left display calibration")
-    center: DisplayCalibration = Field(default=DisplayCalibration(), description="Center display calibration")
-    right: DisplayCalibration = Field(default=DisplayCalibration(), description="Right display calibration")
+    left: DisplayCalibration = Field(
+        default=DisplayCalibration(
+            extrinsics=DisplayExtrinsics(
+                rotation=Vector3(x=0.0, y=1.0472, z=0.0),
+                translation=Vector3(x=-16.6917756, y=1.309016, z=-3.575264),
+            )
+        ),
+        description="Left display calibration",
+        validate_default=True,
+    )
+    center: DisplayCalibration = Field(
+        default=DisplayCalibration(
+            extrinsics=DisplayExtrinsics(
+                rotation=Vector3(x=0.0, y=0.0, z=0.0),
+                translation=Vector3(x=0.0, y=1.309016, z=-13.27),
+            )
+        ),
+        description="Center display calibration",
+        validate_default=True,
+    )
+    right: DisplayCalibration = Field(
+        default=DisplayCalibration(
+            extrinsics=DisplayExtrinsics(
+                rotation=Vector3(x=0.0, y=-1.0472, z=0.0),
+                translation=Vector3(x=16.6917756, y=1.309016, z=-3.575264),
+            )
+        ),
+        description="Right display calibration",
+        validate_default=True,
+    )
 
 
 class Screen(Device):
@@ -226,7 +253,7 @@ class Screen(Device):
     target_update_frequency: float = Field(default=120, description="Target update frequency")
     texture_assets_directory: str = Field(default="Textures", description="Calibration directory")
     calibration: DisplaysCalibration = Field(
-        DisplaysCalibration(),
+        default=DisplaysCalibration(),
         description="Screen calibration",
     )
     brightness: float = Field(default=0, le=1, ge=-1, description="Brightness")
