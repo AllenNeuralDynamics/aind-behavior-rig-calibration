@@ -16,7 +16,7 @@ from aind_behavior_services import __version__ as pkg_version
 
 class SchemaVersionedModel(BaseModel):
     aind_behavior_services_pkg_version: Literal[pkg_version] = Field(
-        default=pkg_version, title="aind_behavior_services package version", frozen=True
+        default=pkg_version, pattern=SEMVER_REGEX, title="aind_behavior_services package version", frozen=True
     )
     version: str = Field(..., pattern=SEMVER_REGEX, description="schema version", title="Version", frozen=True)
 

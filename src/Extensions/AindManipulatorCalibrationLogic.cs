@@ -17,6 +17,8 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         private double? _rngSeed;
     
+        private string _aindBehaviorServicesPkgVersion = "0.8.0-rc1";
+    
         public CalibrationParameters()
         {
         }
@@ -24,6 +26,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
         protected CalibrationParameters(CalibrationParameters other)
         {
             _rngSeed = other._rngSeed;
+            _aindBehaviorServicesPkgVersion = other._aindBehaviorServicesPkgVersion;
         }
     
         /// <summary>
@@ -44,6 +47,19 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
             }
         }
     
+        [Newtonsoft.Json.JsonPropertyAttribute("aind_behavior_services_pkg_version")]
+        public string AindBehaviorServicesPkgVersion
+        {
+            get
+            {
+                return _aindBehaviorServicesPkgVersion;
+            }
+            set
+            {
+                _aindBehaviorServicesPkgVersion = value;
+            }
+        }
+    
         public System.IObservable<CalibrationParameters> Process()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CalibrationParameters(this)));
@@ -56,7 +72,8 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("rng_seed = " + _rngSeed);
+            stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("aind_behavior_services_pkg_version = " + _aindBehaviorServicesPkgVersion);
             return true;
         }
     
