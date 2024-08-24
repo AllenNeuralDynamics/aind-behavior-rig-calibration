@@ -58,6 +58,7 @@ class SpinnakerCamera(Device):
     color_processing: Literal["Default", "NoColorProcessing"] = Field(default="Default", description="Color processing")
     exposure: int = Field(default=1000, ge=100, description="Exposure time")
     gain: float = Field(default=0, ge=0, description="Gain")
+    gamma: Optional[float] = Field(default=None, ge=0, description="Gamma. If None, will disable gamma correction.")
     region_of_interest: Rect = Field(default=Rect(), description="Region of interest", validate_default=True)
     video_writer: Optional[VideoWriter] = Field(
         default=None, description="Video writer. If not provided, no video will be saved."
