@@ -24,19 +24,31 @@ from aind_watchdog_service.models.watch_config import WatchConfig
 
 from aind_behavior_services.session import AindBehaviorSessionModel
 
-DEFAULT_WATCHED_DIRECTORY = Path((os.getenv("PROGRAMDATA") or ".") + "aind-watchdog-service").resolve()
+
+DEFAULT_EXE = "watchdog.exe"
+DEFAULT_EXE_PATH = Path(os.getenv("PROGRAMDATA", ".") + "aind-watchdog-service" + DEFAULT_EXE)
+DEFAULT_WATCHED_DIRECTORY = DEFAULT_EXE_PATH.parent / "manifests"
+DEFAULT_COMPLETED_DIRECTORY = DEFAULT_EXE_PATH.parent / "completed"
 
 
 class Watchdog:
+    """A class to interact with the AIND Watchdog service"""
+
     def __init__(
         self,
         project_name: str,
         time_to_run: Optional[datetime.time] = datetime.time(hour=20),
-        watched_folder: os.PathLike = DEFAULT_WATCHED_DIRECTORY,
+        executable: os.PathLike = DEFAULT_EXE_PATH,
+        watched_dir: os.PathLike = DEFAULT_WATCHED_DIRECTORY,
+        completed_dir: os.PathLike = DEFAULT_COMPLETED_DIRECTORY,
     ) -> None:
+
         self.project_name = project_name
         self.schedule_time = time_to_run
-        self.watched_folder = Path(watched_folder)
+
+        self.executable = Path(executable)
+        self.watched_dir = Path(watched_dir)
+        self.completed_dir = Path(completed_dir)
 
     @staticmethod
     def create_watchdog_config(
@@ -66,7 +78,7 @@ class Watchdog:
         processor_full_name: Optional[str] = None,
         schedule_time: Optional[
             datetime.time
-        ] = None,  # TODO https://github.com/AllenNeuralDynamics/aind-watchdog-service/pull/37
+        ] = None,
         platform: Platform = getattr(Platform, "BEHAVIOR"),
         capsule_id: Optional[str] = None,
         script: Optional[Dict[str, List[str]]] = None,
@@ -152,15 +164,27 @@ class Watchdog:
         )
 
     @staticmethod
-    def is_running(process_name: str = "watchdog.exe") -> bool:
+    def is_running(process_name: str = DEFAULT_EXE) -> bool:
         output = subprocess.check_output(
             ["tasklist", "/FI", f"IMAGENAME eq {process_name}"], shell=True, encoding="utf-8"
         )
         processes = [line.split()[0] for line in output.splitlines()[3:]]
         return len(processes) > 0
 
+    def force_restart(self, kill_if_running: bool = True) -> subprocess.Popen[bytes]:
+        if kill_if_running is True:
+            while self.is_running():
+                subprocess.run(["taskkill", "/IM", DEFAULT_EXE, "/F"], shell=True, check=True)
+
+        cmd_builder = "{exe} -f {watched_dir} -m {completed_dir}".format(
+            exe=self.executable,
+            watched_dir=self.watched_dir,
+            completed_dir=self.completed_dir)
+
+        return subprocess.Popen(cmd_builder, start_new_session=True, shell=True)
+
     def dump_manifest_config(self, manifest_config: ManifestConfig, path: Optional[os.PathLike] = None) -> Path:
-        path = (Path(path or self.watched_folder) / f"manifest_{manifest_config.name}.yaml").resolve()
+        path = (Path(path or self.watched_dir) / f"manifest_{manifest_config.name}.yaml").resolve()
         with open(path, "w", encoding="utf-8") as f:
             yaml.dump(manifest_config.model_dump(), f, default_flow_style=False)
         return path

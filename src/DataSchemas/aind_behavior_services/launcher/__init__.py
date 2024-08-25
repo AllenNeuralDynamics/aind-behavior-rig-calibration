@@ -9,6 +9,7 @@ import secrets
 import sys
 from pathlib import Path
 from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar, Union
+import subprocess
 
 import git
 import pydantic
@@ -522,7 +523,18 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         else:
             if self.watchdog is not None:
                 if not self.watchdog.is_running():
-                    self.logger.warning("Watchdog service is not running. Consider starting it manually.")
+                    self.logger.warning("Watchdog service is not running. Attempting to start it.")
+
+                    try:
+                        self.watchdog.force_restart(kill_if_running=False)
+                    except subprocess.CalledProcessError as e:
+                        self.logger.error("Failed to start watchdog service. %s", e)
+                    else:
+                        if not self.watchdog.is_running():
+                            self.logger.error("Failed to start watchdog service.")
+                        else:
+                            self.logger.info("Watchdog service restarted successfully.")
+
                 self.logger.info("Creating watchdog manifest config.")
                 watchdog_manifest_config = self.watchdog.create_manifest_config_from_session(
                     session=self.session_schema, aind_data_schema_session=aind_data_schema_session
