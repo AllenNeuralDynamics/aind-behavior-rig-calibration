@@ -257,7 +257,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         os.makedirs(folder, exist_ok=True)
         fname = model.__class__.__name__ + "_" + secrets.token_hex(nbytes=16) + ".json"
         fpath = os.path.join(folder, fname)
-        with open(folder, "w", encoding="utf-8") as f:
+        with open(folder, "w+", encoding="utf-8") as f:
             f.write(model.model_dump_json(indent=3))
         return fpath
 
