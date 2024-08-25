@@ -343,9 +343,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     def _prompt_yes_no_question(prompt: str) -> bool:
         while True:
             reply = input(prompt + " (Y\\N): ").upper()
-            if reply == "Y":
+            if reply == "Y" or reply == "1":
                 return True
-            elif reply == "N":
+            elif reply == "N" or reply == "0":
                 return False
             else:
                 print("Invalid input. Please enter 'Y' or 'N'.")
