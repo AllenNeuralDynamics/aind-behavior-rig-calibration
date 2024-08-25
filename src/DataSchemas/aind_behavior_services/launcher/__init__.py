@@ -6,10 +6,10 @@ import glob
 import logging
 import os
 import secrets
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar, Union
-import subprocess
 
 import git
 import pydantic
@@ -288,7 +288,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             if self.watchdog is not None:
                 self.logger.warning("Watchdog service is enabled.")
                 if not self.watchdog.is_running():
-                    self.logger.warning("Watchdog service is not running. Consider starting it manually.")
+                    self.logger.warning(
+                        "Watchdog service is not running. \
+                                        After the session is over, \
+                                        the launcher will attempt to forcefully restart it"
+                    )
                 if not self.watchdog.validate_project_name():
                     try:
                         self.logger.warning("Watchdog project name is not valid.")

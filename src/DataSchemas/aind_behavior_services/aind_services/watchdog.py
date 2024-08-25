@@ -24,7 +24,6 @@ from aind_watchdog_service.models.watch_config import WatchConfig
 
 from aind_behavior_services.session import AindBehaviorSessionModel
 
-
 DEFAULT_EXE = "watchdog.exe"
 DEFAULT_EXE_PATH = Path(os.getenv("PROGRAMDATA", ".") + "aind-watchdog-service" + DEFAULT_EXE)
 DEFAULT_WATCHED_DIRECTORY = DEFAULT_EXE_PATH.parent / "manifests"
@@ -42,7 +41,6 @@ class Watchdog:
         watched_dir: os.PathLike = DEFAULT_WATCHED_DIRECTORY,
         completed_dir: os.PathLike = DEFAULT_COMPLETED_DIRECTORY,
     ) -> None:
-
         self.project_name = project_name
         self.schedule_time = time_to_run
 
@@ -76,9 +74,7 @@ class Watchdog:
         project_name: str,
         session_name: Optional[str] = None,
         processor_full_name: Optional[str] = None,
-        schedule_time: Optional[
-            datetime.time
-        ] = None,
+        schedule_time: Optional[datetime.time] = None,
         platform: Platform = getattr(Platform, "BEHAVIOR"),
         capsule_id: Optional[str] = None,
         script: Optional[Dict[str, List[str]]] = None,
@@ -177,9 +173,8 @@ class Watchdog:
                 subprocess.run(["taskkill", "/IM", DEFAULT_EXE, "/F"], shell=True, check=True)
 
         cmd_builder = "{exe} -f {watched_dir} -m {completed_dir}".format(
-            exe=self.executable,
-            watched_dir=self.watched_dir,
-            completed_dir=self.completed_dir)
+            exe=self.executable, watched_dir=self.watched_dir, completed_dir=self.completed_dir
+        )
 
         return subprocess.Popen(cmd_builder, start_new_session=True, shell=True)
 
