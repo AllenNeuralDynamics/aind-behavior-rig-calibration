@@ -58,6 +58,7 @@ def mapper_from_session_root(
         repository=repository,
         script_path=script_path,
         session_end_time=session_end_time,
+        output_parameters=output_parameters,
         **kwargs,
     )
 
@@ -82,6 +83,7 @@ def mapper_from_json_files(
         repository=repository,
         script_path=script_path,
         session_end_time=session_end_time,
+        output_parameters=output_parameters,
         **kwargs,
     )
 
