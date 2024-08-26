@@ -398,16 +398,13 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     subject_list = SubjectDataBase.model_validate_json(file.read())
                 if len(subject_list.subjects) == 0:
                     raise ValueError("No subjects found in the batch file.")
-            except pydantic.ValidationError as e:
-                self.logger.error("Failed to validate pydantic model. Try again. %s", e)
-            except (ValueError, FileNotFoundError, IOError) as e:
+            except (ValueError, FileNotFoundError, IOError, pydantic.ValidationError) as e:
                 self.logger.error("Invalid choice. Try again. %s", e)
-            finally:
                 if len(available_batches) == 1:
                     self.logger.error("No valid subject batch files found. Exiting.")
                     self._exit(-1)
-
-        return subject_list
+            else:
+                return subject_list
 
     def _choose_subject(self, subject_list: SubjectDataBase) -> str:
         subject = None
