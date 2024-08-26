@@ -24,7 +24,7 @@ from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.aind_services.watchdog import Watchdog
 from aind_behavior_services.base import singleton
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
-from aind_behavior_services.utils import open_bonsai_process
+from aind_behavior_services.utils import run_bonsai_process
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disable=invalid-name
@@ -560,25 +560,27 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             "RigPath": os.path.abspath(self._save_temp_model(model=self._rig_schema, folder=self.temp_dir)),
         }
 
-        _date = self._session_schema.date.strftime("%Y%m%dT%H%M%S")
-        proc = open_bonsai_process(
+        # _date = self._session_schema.date.strftime("%Y%m%dT%H%M%S")
+        self.logger.info("Bonsai process running...")
+        proc = run_bonsai_process(
             bonsai_exe=self.bonsai_executable,
             workflow_file=self.default_bonsai_workflow,
             additional_properties=additional_properties,
             layout=self._bonsai_visualizer_layout,
-            log_file_name=os.path.join(
-                self.log_dir,
-                f"{self._session_schema.subject}_{self._session_schema.experiment}_{_date}.log",
-            ),
             is_editor_mode=self.bonsai_is_editor_mode,
             is_start_flag=self.bonsai_is_start_flag,
             cwd=self._cwd,
             print_cmd=self._dev_mode,
         )
-        self.logger.info("Bonsai process running...")
-        ret = proc.wait(None)  # todo What should this return?
-        self.logger.info("Bonsai process finished with return code %s.", ret)
-        self._run_hook_return = ret
+        try:
+            proc.check_returncode()
+        except subprocess.CalledProcessError as e:
+            self.logger.error("Bonsai process failed. \n%s", e)
+            self.logger.error("Bonsai error dump: \n%s", proc.stderr)
+            self._exit(-1)
+        else:
+            self.logger.info("Bonsai process finished successfully.")
+            self._run_hook_return = None  # TODO To be improved
 
     def run_ui(self) -> None:
         try:
