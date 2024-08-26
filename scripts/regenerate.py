@@ -14,7 +14,7 @@ from aind_behavior_services.utils import (
     snake_to_pascal_case,
 )
 
-SCHEMA_ROOT = Path("./src/DataSchemas/schemas")
+SCHEMA_ROOT = Path("./src/schemas")
 EXTENSIONS_ROOT = Path("./src/Extensions/")
 NAMESPACE_PREFIX = "AindBehaviorServices"
 

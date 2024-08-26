@@ -2,9 +2,9 @@
 water_valve_calibration_logic
 ----------------------------------------------------
 
-`Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration_logic.json>`_
+`Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/schemas/water_valve_calibration_logic.json>`_
 
-.. jsonschema:: https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/water_valve_calibration_logic.json
+.. jsonschema:: https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/schemas/water_valve_calibration_logic.json
    :lift_definitions:
    :auto_reference:
 

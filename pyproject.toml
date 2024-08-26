@@ -52,7 +52,7 @@ docs = [
 ]
 
 [tool.setuptools.packages.find]
-where = ["src/DataSchemas"]
+where = ["src"]
 
 [tool.setuptools.package-data]
 aind_behavior_services = ["py.typed"]

@@ -2,9 +2,9 @@
 load_cells_calibration_rig
 ----------------------------------------------------
 
-`Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration_rig.json>`_
+`Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/schemas/load_cells_calibration_rig.json>`_
 
-.. jsonschema:: https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/load_cells_calibration_rig.json
+.. jsonschema:: https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/schemas/load_cells_calibration_rig.json
    :lift_definitions:
    :auto_reference:
 

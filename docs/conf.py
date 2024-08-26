@@ -14,10 +14,10 @@ import sys
 import erdantic as erd
 from pydantic import BaseModel
 
-sys.path.insert(0, os.path.abspath("../src/DataSchemas"))
+sys.path.insert(0, os.path.abspath("../src"))
 import aind_behavior_services
 
-SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/tree/main/src/DataSchemas/"
+SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/tree/main/src/"
 
 
 project = "AIND Behavior Services"
@@ -28,7 +28,7 @@ release = aind_behavior_services.__version__
 
 # -- Generate jsons --------------------------------------------------------------
 
-json_root_path = os.path.abspath("../src/DataSchemas/schemas")
+json_root_path = os.path.abspath("../src/schemas")
 json_files = glob.glob(os.path.join(json_root_path, "*.json"))
 rst_target_path = os.path.abspath("json-schemas")
 
@@ -44,9 +44,9 @@ leaf_template = """
 {json_file_name}
 ----------------------------------------------------
 
-`Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/{json_file_name}.json>`_
+`Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/schemas/{json_file_name}.json>`_
 
-.. jsonschema:: https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/{json_file_name}.json
+.. jsonschema:: https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/schemas/{json_file_name}.json
    :lift_definitions:
    :auto_reference:
 
