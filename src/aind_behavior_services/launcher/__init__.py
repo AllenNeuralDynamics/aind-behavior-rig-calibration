@@ -574,15 +574,22 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         )
         try:
             proc.check_returncode()
-            if len(proc.stderr) > 0:
-                raise subprocess.CalledProcessError(proc.returncode, proc.args, output=proc.stdout, stderr=proc.stderr)
         except subprocess.CalledProcessError as e:
             self.logger.error("Bonsai process failed. \n%s", e)
             self.logger.error("Bonsai error dump: \n%s", proc.stderr)
             self._exit(-1)
         else:
-            self.logger.info("Bonsai process finished successfully.")
-            self._run_hook_return = None  # TODO To be improved
+            _continue = True
+            if len(proc.stderr) > 0:
+                self.logger.error("Bonsai process finished with errors. \n%s", proc.stderr)
+                _continue = self._prompt_yes_no_question("Would you still like to continue?")
+
+            if _continue:
+                self.logger.info("Bonsai process returned.")
+                self._run_hook_return = None  # TODO To be improved
+            else:
+                self.logger.error("User chose to exit.")
+                self._exit(-1)
 
     def run_ui(self) -> None:
         try:
