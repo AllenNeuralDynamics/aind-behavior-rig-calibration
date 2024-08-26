@@ -574,6 +574,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         )
         try:
             proc.check_returncode()
+            if len(proc.stderr) > 0:
+                raise subprocess.CalledProcessError(proc.returncode, proc.args, output=proc.stdout, stderr=proc.stderr)
         except subprocess.CalledProcessError as e:
             self.logger.error("Bonsai process failed. \n%s", e)
             self.logger.error("Bonsai error dump: \n%s", proc.stderr)
