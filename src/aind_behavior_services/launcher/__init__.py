@@ -404,7 +404,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 self.logger.error("Invalid choice. Try again. %s", e)
             finally:
                 if len(available_batches) == 1:
-                    self.logger.error("No valid batch files found. Exiting.")
+                    self.logger.error("No valid subject batch files found. Exiting.")
                     self._exit(-1)
 
         return subject_list
