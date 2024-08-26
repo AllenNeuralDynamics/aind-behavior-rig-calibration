@@ -397,15 +397,15 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 with open(batch_file, "r", encoding="utf-8") as file:
                     subject_list = SubjectDataBase.model_validate_json(file.read())
                 if len(subject_list.subjects) == 0:
-                    if len(available_batches) == 1:
-                        print(f"No subjects found in {batch_file} and only a single file has been found.")
-                        self._exit(-1)
-                    print(f"No subjects found in {batch_file}")
-                    raise ValueError()
+                    raise ValueError("No subjects found in the batch file.")
             except pydantic.ValidationError as e:
                 self.logger.error("Failed to validate pydantic model. Try again. %s", e)
             except (ValueError, FileNotFoundError, IOError) as e:
                 self.logger.error("Invalid choice. Try again. %s", e)
+            finally:
+                if len(available_batches) == 1:
+                    self.logger.error("No valid batch files found. Exiting.")
+                    self._exit(-1)
 
         return subject_list
 
