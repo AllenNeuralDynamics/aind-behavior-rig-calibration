@@ -47,7 +47,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         config_library_dir: os.PathLike,
         bonsai_workflow: os.PathLike,
         temp_dir: os.PathLike = Path("local/.temp"),
-        log_dir: os.PathLike = Path("local/.dump"),
         remote_data_dir: Optional[os.PathLike] = None,
         bonsai_executable: os.PathLike = Path("bonsai/bonsai.exe"),
         repository_dir: Optional[os.PathLike] = None,
@@ -61,7 +60,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         group_by_subject_log: bool = False,
     ) -> None:
         # Dependency injection
-        self.logger = logger if logger is not None else self._create_logger()
+        self.temp_dir = self.abspath(temp_dir) / secrets.token_hex(nbytes=16)
+        self.logger = logger if logger is not None else self._create_logger(self.temp_dir / "launcher.log")
+
         self.watchdog = watchdog
 
         args = self._cli_wrapper()
@@ -87,8 +88,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self._bonsai_visualizer_layout: Optional[str] = None
 
         # Directories
-        self.temp_dir = self.abspath(temp_dir)
-        self.log_dir = self.abspath(log_dir)
         self.data_dir = Path(args.data_dir) if args.data_dir is not None else self.abspath(data_dir)
         self.remote_data_dir = (
             Path(args.remote_data_dir)
@@ -196,7 +195,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.remote_data_dir,
             self.config_library_dir,
             self.temp_dir,
-            self.log_dir,
             self.bonsai_executable,
             self.default_bonsai_workflow,
         )
@@ -257,7 +255,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         """
         folder = Path(folder) if folder is not None else Path(self.temp_dir)
         os.makedirs(folder, exist_ok=True)
-        fname = model.__class__.__name__ + "_" + secrets.token_hex(nbytes=16) + ".json"
+        fname = model.__class__.__name__ + ".json"
         fpath = os.path.join(folder, fname)
         with open(fpath, "w+", encoding="utf-8") as f:
             f.write(model.model_dump_json(indent=3))
@@ -576,24 +574,31 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             cwd=self._cwd,
             print_cmd=self._dev_mode,
         )
+        if self.bonsai_is_editor_mode:
+            self.logger.warning("Bonsai is running in editor mode. Cannot assert successful completion.")
         try:
             proc.check_returncode()
         except subprocess.CalledProcessError as e:
-            self.logger.error("Bonsai process failed. \n%s", e)
-            self.logger.error("Bonsai error dump: \n%s", proc.stderr)
+            self.logger.error("Bonsai process exited with an error. \n%s", e)
+            self._log_process_std_output("Bonsai", proc)
             self._exit(-1)
         else:
-            _continue = True
-            if len(proc.stderr) > 0:
-                self.logger.error("Bonsai process finished with errors. \n%s", proc.stderr)
-                _continue = self._prompt_yes_no_question("Would you still like to continue?")
+            self._log_process_std_output("Bonsai", proc)
+            self.logger.info("Bonsai process completed.")
 
-            if _continue:
-                self.logger.info("Bonsai process returned.")
-                self._run_hook_return = None  # TODO To be improved
-            else:
-                self.logger.error("User chose to exit.")
-                self._exit(-1)
+            if len(proc.stderr) > 0:
+                self.logger.error("Bonsai process finished with errors.")
+                _continue = self._prompt_yes_no_question("Would you still like to continue?")
+                if not _continue:
+                    self.logger.info("User chose to exit.")
+                    self._exit(-1)
+            self._run_hook_return = None  # TODO To be improved
+
+    def _log_process_std_output(self, process_name: str, proc: subprocess.CompletedProcess) -> None:
+        if len(proc.stdout) > 0:
+            self.logger.info("%s full stdout dump: \n%s", process_name, proc.stdout)
+        if len(proc.stderr) > 0:
+            self.logger.error("%s full stderr dump: \n%s", process_name, proc.stderr)
 
     def run_ui(self) -> None:
         try:
@@ -704,13 +709,19 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         return args
 
     @staticmethod
-    def _create_logger() -> logging.Logger:
+    def _create_logger(output_path: Optional[os.PathLike]) -> logging.Logger:
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.INFO)
         formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setFormatter(formatter)
         logger.addHandler(console_handler)
+
+        if output_path is not None:
+            file_handler = logging.FileHandler(Path(output_path))
+            file_handler.setFormatter(formatter)
+            logger.addHandler(file_handler)
         return logger
 
     def _map_to_aind_data_schema_session(self):
