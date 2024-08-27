@@ -62,6 +62,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     ) -> None:
         # Dependency injection
         self.temp_dir = self.abspath(temp_dir) / secrets.token_hex(nbytes=16)
+        self.temp_dir.mkdir(parents=True, exist_ok=True)
+
         self.logger = logger if logger is not None else self._create_logger(self.temp_dir / "launcher.log")
 
         self.watchdog = watchdog
