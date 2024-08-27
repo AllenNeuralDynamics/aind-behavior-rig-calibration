@@ -6,6 +6,7 @@ import glob
 import logging
 import os
 import secrets
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -617,6 +618,15 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.pre_run_hook()
             self.run_hook()
             self.post_run_hook()
+
+            for handler in self.logger.handlers:
+                if isinstance(handler, logging.FileHandler):
+                    self.logger.info("File handler found in logger. Closing and copying to session directory.")
+                    handler.close()
+
+            if self.session_schema.session_name is not None:
+                self._copy_tmp_folder(Path(self.session_schema_model.root_path) / self.session_schema.session_name)
+
             self.logger.info("All hooks finished. Launcher closing.")
             self._exit(0)
 
@@ -644,7 +654,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self._make_folder(self.data_dir)
             self._make_folder(self.config_library_dir)
             self._make_folder(self.temp_dir)
-            self._make_folder(self.log_dir)
             self._make_folder(self._task_logic_dir)
             self._make_folder(self._rig_dir)
             self._make_folder(self._subject_dir)
@@ -734,3 +743,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             script_path=Path(self.default_bonsai_workflow).resolve(),
             session_end_time=datetime.datetime.now(),
         )
+
+    def _copy_tmp_folder(self, dst: os.PathLike) -> None:
+        dst = Path(dst) / ".tmp"
+        shutil.copytree(self.temp_dir, dst, dirs_exist_ok=True)
