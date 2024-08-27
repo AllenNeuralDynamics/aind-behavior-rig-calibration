@@ -58,6 +58,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         dev_mode: bool = False,
         logger: Optional[logging.Logger] = None,
         watchdog: Optional[Watchdog] = None,
+        group_by_subject_log: bool = False,
     ) -> None:
         # Dependency injection
         self.logger = logger if logger is not None else self._create_logger()
@@ -122,6 +123,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.skip_hardware_validation = (
             args.skip_hardware_validation if args.skip_hardware_validation else skip_hardware_validation
         )
+        self.group_by_subject_log = group_by_subject_log
 
         self._subject_db_data: Optional[SubjectEntry] = None
         self._run_hook_return: Any = None
@@ -363,7 +365,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
         return self.session_schema_model(
             experiment="",  # Will be set later
-            root_path=str(self.data_dir.resolve()),
+            root_path=str(self.data_dir.resolve())
+            if not self.group_by_subject_log
+            else str(self.data_dir.resolve() / subject),
             remote_path=str(self.remote_data_dir.resolve()) if self.remote_data_dir is not None else None,
             subject=subject,
             notes=notes,
