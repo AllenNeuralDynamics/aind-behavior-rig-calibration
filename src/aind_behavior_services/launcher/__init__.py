@@ -730,7 +730,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         logger.addHandler(console_handler)
 
         if output_path is not None:
-            file_handler = logging.FileHandler(Path(output_path))
+            file_handler = logging.FileHandler(Path(output_path), encoding="utf-8", mode="w")
             file_handler.setFormatter(formatter)
             logger.addHandler(file_handler)
         return logger
