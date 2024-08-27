@@ -158,8 +158,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         if cli_args.create_directories is True:
             self._make_folder_structure()
 
-    @staticmethod
-    def _exit(code: int = 0) -> None:
+    def _exit(self, code: int = 0) -> None:
+        # Dispose loggers
+        logging.shutdown()
         sys.exit(code)
 
     def _print_diagnosis(self) -> None:
@@ -566,21 +567,22 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         }
 
         # _date = self._session_schema.date.strftime("%Y%m%dT%H%M%S")
-        self.logger.info("Bonsai process running...")
-        proc = run_bonsai_process(
-            bonsai_exe=self.bonsai_executable,
-            workflow_file=self.default_bonsai_workflow,
-            additional_properties=additional_properties,
-            layout=self._bonsai_visualizer_layout,
-            is_editor_mode=self.bonsai_is_editor_mode,
-            is_start_flag=self.bonsai_is_start_flag,
-            cwd=self._cwd,
-            print_cmd=self._dev_mode,
-        )
-        if self.bonsai_is_editor_mode:
-            self.logger.warning("Bonsai is running in editor mode. Cannot assert successful completion.")
         try:
+            if self.bonsai_is_editor_mode:
+                self.logger.warning("Bonsai is running in editor mode. Cannot assert successful completion.")
+            self.logger.info("Bonsai process running...")
+            proc = run_bonsai_process(
+                bonsai_exe=self.bonsai_executable,
+                workflow_file=self.default_bonsai_workflow,
+                additional_properties=additional_properties,
+                layout=self._bonsai_visualizer_layout,
+                is_editor_mode=self.bonsai_is_editor_mode,
+                is_start_flag=self.bonsai_is_start_flag,
+                cwd=self._cwd,
+                print_cmd=self._dev_mode,
+            )
             proc.check_returncode()
+
         except subprocess.CalledProcessError as e:
             self.logger.error("Bonsai process exited with an error. \n%s", e)
             self._log_process_std_output("Bonsai", proc)
