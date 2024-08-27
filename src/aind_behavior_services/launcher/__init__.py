@@ -627,7 +627,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     handler.close()
 
             if self.session_schema.session_name is not None:
-                self._copy_tmp_folder(Path(self.session_schema_model.root_path) / self.session_schema.session_name)
+                self._copy_tmp_folder(Path(self.session_schema.root_path) / self.session_schema.session_name)
 
             self.logger.info("All hooks finished. Launcher closing.")
             self._exit(0)
