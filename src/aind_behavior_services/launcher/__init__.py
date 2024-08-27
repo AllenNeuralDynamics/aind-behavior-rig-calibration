@@ -150,6 +150,15 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             raise ValueError("Task logic schema instance not set.")
         return self._task_logic_schema
 
+    @property
+    def session_directory(self) -> Optional[Path]:
+        if self.session_schema.session_name is None:
+            return None
+        else:
+            return Path(self.session_schema.root_path) / (
+                self.session_schema.session_name if self.session_schema.session_name is not None else ""
+            )
+
     def run(self):  # For backwards compatibility
         self.run_ui()
 
@@ -523,7 +532,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         try:
             self.logger.info("Mapping to aind-data-schema Session: %s.")
             aind_data_schema_session = self._map_to_aind_data_schema_session()
-            aind_data_schema_session.write_standard_file(self.session_schema.root_path)
+            aind_data_schema_session.write_standard_file(self.session_directory)
             self.logger.info("Mapping successful.")
         except (pydantic.ValidationError, ValueError, IOError) as e:
             self.logger.error("Failed to map to aind-data-schema Session. %s", e)
@@ -628,8 +637,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     self.logger.info("File handler found in logger. Closing and copying to session directory.")
                     handler.close()
 
-            if self.session_schema.session_name is not None:
-                self._copy_tmp_folder(Path(self.session_schema.root_path) / self.session_schema.session_name)
+            if self.session_directory is not None:
+                self._copy_tmp_folder(self.session_directory)
 
             self.logger.info("All hooks finished. Launcher closing.")
             self._exit(0)
@@ -739,7 +748,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     def _map_to_aind_data_schema_session(self):
         return data_mapper.mapper_from_session_root(
-            session_data_root=Path(self.session_schema.root_path).resolve(),
+            session_data_root=self.session_directory,
             session_model=self.session_schema_model,
             rig_model=self.rig_schema_model,
             task_logic_model=self.task_logic_schema_model,
