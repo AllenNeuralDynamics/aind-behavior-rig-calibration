@@ -117,7 +117,7 @@ def mapper(
     # Populate modalities
     modalities: list[Modality] = [getattr(Modality, "BEHAVIOR")]
     if len(cameras) > 0:
-        modalities.append(getattr(Modality, "BEHAVIOR-VIDEOS"))
+        modalities.append(getattr(Modality, "BEHAVIOR_VIDEOS"))
     modalities = list(set(modalities))
     # Populate stimulus modalities
     stimulus_modalities: list[StimulusModality] = []
