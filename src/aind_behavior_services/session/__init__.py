@@ -38,5 +38,5 @@ class AindBehaviorSessionModel(SchemaVersionedModel):
     @model_validator(mode="after")
     def generate_session_name_default(self) -> Self:
         if self.session_name is None:
-            self.session_name = f"{self.subject}/{self.date.strftime('%Y-%m-%dT%H%M%S')}"
+            self.session_name = f"{self.subject}_{self.date.strftime('%Y%m%dT%H%M%S')}"
         return self
