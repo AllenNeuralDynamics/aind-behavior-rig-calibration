@@ -555,7 +555,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 watchdog_manifest_config = self.watchdog.create_manifest_config_from_session(
                     session=self.session_schema, aind_data_schema_session=aind_data_schema_session
                 )
-                _manifest_path = self.watchdog.dump_manifest_config(watchdog_manifest_config)
+                _manifest_path = self.watchdog.dump_manifest_config(
+                    watchdog_manifest_config,
+                    path=Path(self.watchdog.watched_dir) / "manifest_" + self.session_schema.session_name,
+                )
                 self.logger.info("Watchdog manifest config created successfully at %s.", _manifest_path)
 
     def run_hook(self, *args, **kwargs) -> None:
