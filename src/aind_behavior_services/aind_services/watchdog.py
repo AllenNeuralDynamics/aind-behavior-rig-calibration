@@ -25,7 +25,7 @@ from aind_watchdog_service.models.watch_config import WatchConfig
 from aind_behavior_services.session import AindBehaviorSessionModel
 
 DEFAULT_EXE = "watchdog.exe"
-DEFAULT_EXE_PATH = Path(os.getenv("PROGRAMDATA", ".") + "aind-watchdog-service" + DEFAULT_EXE)
+DEFAULT_EXE_PATH = Path(os.getenv("PROGRAMDATA", ".")) / ("aind-watchdog-service" + DEFAULT_EXE)
 DEFAULT_WATCHED_DIRECTORY = DEFAULT_EXE_PATH.parent / "manifests"
 DEFAULT_COMPLETED_DIRECTORY = DEFAULT_EXE_PATH.parent / "completed"
 
