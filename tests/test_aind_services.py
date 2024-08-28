@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Dict, List, Literal, Optional
 
 import pydantic
+import yaml
 
 from aind_behavior_services.aind_services import data_mapper, watchdog
 from aind_behavior_services.rig import AindBehaviorRigModel, CameraController, CameraTypes, SpinnakerCamera
@@ -38,7 +39,7 @@ class AindServicesTests(unittest.TestCase):
             script_path=Path("./src/unit_test.bonsai"),
         )
 
-        config = _watchdog.create_manifest_config(
+        _config = _watchdog.create_manifest_config(
             session=_session,
             source=_aind_behavior_session.root_path,
             destination=_aind_behavior_session.remote_path,
@@ -47,10 +48,13 @@ class AindServicesTests(unittest.TestCase):
         )
 
         self.assertEqual(
-            config,
-            watchdog.ManifestConfig.model_validate_json(config.model_dump_json()),
+            _config,
+            watchdog.ManifestConfig.model_validate_json(_config.model_dump_json()),
             "Manifest config round trip failed",
         )
+
+        round_via_yaml = watchdog.ManifestConfig.model_validate(yaml.safe_load(_watchdog._yaml_dump(_config)))
+        self.assertEqual(_config, round_via_yaml, "Manifest config round trip failed via yaml")
 
 
 class MockRig(AindBehaviorRigModel):

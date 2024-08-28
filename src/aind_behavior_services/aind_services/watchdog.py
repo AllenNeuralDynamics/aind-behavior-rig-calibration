@@ -21,8 +21,7 @@ from aind_data_schema.core.session import Session
 from aind_data_schema_models.platforms import Platform
 from aind_watchdog_service.models.manifest_config import BucketType, ManifestConfig
 from aind_watchdog_service.models.watch_config import WatchConfig
-
-from aind_behavior_services.session import AindBehaviorSessionModel
+from pydantic import BaseModel
 
 DEFAULT_EXE = "watchdog.exe"
 DEFAULT_EXE_PATH = Path(os.getenv("PROGRAMDATA", ".")) / "aind-watchdog-service" / DEFAULT_EXE
@@ -155,5 +154,10 @@ class Watchdog:
         if make_dir and not path.parent.exists():
             path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
-            yaml.dump(manifest_config.model_dump(), f, default_flow_style=False)
+            f.write(self._yaml_dump(manifest_config))
         return path
+
+    @staticmethod
+    def _yaml_dump(model: BaseModel) -> str:
+        native_json = json.loads(model.model_dump_json())
+        return yaml.dump(native_json, default_flow_style=False)
