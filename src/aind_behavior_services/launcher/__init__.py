@@ -538,30 +538,47 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.logger.error("Failed to map to aind-data-schema Session. %s", e)
         else:
             if self.watchdog is not None:
-                if not self.watchdog.is_running():
-                    self.logger.warning("Watchdog service is not running. Attempting to start it.")
+                try:
+                    if not self.watchdog.is_running():
+                        self.logger.warning("Watchdog service is not running. Attempting to start it.")
 
-                    try:
-                        self.watchdog.force_restart(kill_if_running=False)
-                    except subprocess.CalledProcessError as e:
-                        self.logger.error("Failed to start watchdog service. %s", e)
-                    else:
-                        if not self.watchdog.is_running():
-                            self.logger.error("Failed to start watchdog service.")
+                        try:
+                            self.watchdog.force_restart(kill_if_running=False)
+                        except subprocess.CalledProcessError as e:
+                            self.logger.error("Failed to start watchdog service. %s", e)
                         else:
-                            self.logger.info("Watchdog service restarted successfully.")
+                            if not self.watchdog.is_running():
+                                self.logger.error("Failed to start watchdog service.")
+                            else:
+                                self.logger.info("Watchdog service restarted successfully.")
 
-                self.logger.info("Creating watchdog manifest config.")
-                watchdog_manifest_config = self.watchdog.create_manifest_config_from_session(
-                    session=self.session_schema, aind_data_schema_session=aind_data_schema_session
-                )
-                _manifest_name = (
-                    f"manifest_{self.session_schema.session_name or format_datetime(self.session_schema.date)}.yaml"
-                )
-                _manifest_path = self.watchdog.dump_manifest_config(
-                    watchdog_manifest_config, path=Path(self.watchdog.watched_dir) / _manifest_name
-                )
-                self.logger.info("Watchdog manifest config created successfully at %s.", _manifest_path)
+                    self.logger.info("Creating watchdog manifest config.")
+                    if self.session_schema.remote_path is None:
+                        raise ValueError(
+                            "Remote path is not defined in the session schema. \
+                                A remote path must be used to create a watchdog manifest."
+                        )
+                    watchdog_manifest_config = self.watchdog.create_manifest_config(
+                        session=aind_data_schema_session,
+                        schedule_time=self.watchdog.schedule_time,
+                        source=Path(self.session_directory),
+                        destination=Path(self.session_schema.remote_path),
+                        project_name=self.watchdog.project_name,
+                        processor_full_name=",".join(
+                            [name for name in aind_data_schema_session.experimenter_full_name]
+                        ),
+                        session_name=self.session_schema.session_name,
+                    )
+
+                    _manifest_name = (
+                        f"manifest_{self.session_schema.session_name or format_datetime(self.session_schema.date)}.yaml"
+                    )
+                    _manifest_path = self.watchdog.dump_manifest_config(
+                        watchdog_manifest_config, path=Path(self.watchdog.watched_dir) / _manifest_name
+                    )
+                    self.logger.info("Watchdog manifest config created successfully at %s.", _manifest_path)
+                except (pydantic.ValidationError, ValueError, IOError) as e:
+                    self.logger.error("Failed to create watchdog manifest config. %s", e)
 
     def run_hook(self, *args, **kwargs) -> None:
         self.logger.info("Running hook started.")
