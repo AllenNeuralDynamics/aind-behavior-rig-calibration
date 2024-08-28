@@ -1,3 +1,4 @@
+import logging
 import unittest
 from pathlib import Path
 from typing import Literal
@@ -30,10 +31,17 @@ class LauncherTests(unittest.TestCase):
             data_dir=Path("data"),
             config_library_dir=Path("config"),
             bonsai_workflow=Path("workflow.bonsai"),
+            logger=dummy_logger(),
         )
 
         with self.assertRaises((FileNotFoundError, OSError, SystemExit)) as _:
             launcher._validate_dependencies()
+
+
+def dummy_logger() -> logging.Logger:
+    logger = logging.getLogger("dummy")
+    logger.setLevel(logging.CRITICAL)
+    return logger
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ from typing import Dict, List, Literal, Optional
 
 import pydantic
 
-from aind_behavior_services.aind_services import data_mapper
+from aind_behavior_services.aind_services import data_mapper, watchdog
 from aind_behavior_services.rig import AindBehaviorRigModel, CameraController, CameraTypes, SpinnakerCamera
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
@@ -20,6 +20,36 @@ class AindServicesTests(unittest.TestCase):
             session_end_time=datetime.datetime.now(),
             repository=Path("./"),
             script_path=Path("./src/unit_test.bonsai"),
+        )
+
+    def test_watchdog_manifest(self):
+        _watchdog = watchdog.Watchdog(
+            project_name="Cognitive flexibility in patch foraging", time_to_run=datetime.time(hour=20)
+        )
+
+        _aind_behavior_session = MockSession()
+
+        _session = data_mapper.mapper(
+            session_model=_aind_behavior_session,
+            rig_model=MockRig(),
+            task_logic_model=MockTaskLogic(),
+            session_end_time=datetime.datetime.now(),
+            repository=Path("./"),
+            script_path=Path("./src/unit_test.bonsai"),
+        )
+
+        config = _watchdog.create_manifest_config(
+            session=_session,
+            source=_aind_behavior_session.root_path,
+            destination=_aind_behavior_session.remote_path,
+            project_name=_watchdog.project_name,
+            session_name=_aind_behavior_session.session_name,
+        )
+
+        self.assertEqual(
+            config,
+            watchdog.ManifestConfig.model_validate_json(config.model_dump_json()),
+            "Manifest config round trip failed",
         )
 
 
@@ -49,8 +79,9 @@ def MockSession() -> AindBehaviorSessionModel:
     return AindBehaviorSessionModel(
         experiment="MockExperiment",
         root_path="MockRootPath",
-        subject="MockSubject",
+        subject="0000",
         experiment_version="0.0.0",
+        remote_path="MockRemotePath",
     )
 
 
