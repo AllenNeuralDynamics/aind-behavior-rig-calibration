@@ -180,6 +180,8 @@ class Watchdog:
 
     def dump_manifest_config(self, manifest_config: ManifestConfig, path: Optional[os.PathLike] = None) -> Path:
         path = (Path(path or self.watched_dir) / f"manifest_{manifest_config.name}.yaml").resolve()
+        if "manifest" not in path.name:
+            raise ValueError("The file name must contain the string 'manifest' for the watchdog to work.")
         with open(path, "w", encoding="utf-8") as f:
             yaml.dump(manifest_config.model_dump(), f, default_flow_style=False)
         return path
