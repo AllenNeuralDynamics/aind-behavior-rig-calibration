@@ -55,7 +55,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         bonsai_is_start_flag: bool = True,
         allow_dirty: bool = False,
         skip_hardware_validation: bool = False,
-        dev_mode: bool = False,
+        debug_mode: bool = False,
         logger: Optional[logging.Logger] = None,
         watchdog: Optional[Watchdog] = None,
         group_by_subject_log: bool = False,
@@ -108,8 +108,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             else self.abspath(Path(config_library_dir))
         )
         self.computer_name = os.environ["COMPUTERNAME"]
-        self._dev_mode = args.dev_mode if args.dev_mode else dev_mode
-        if self._dev_mode:
+        self._debug_mode = args.debug if args.debug else debug_mode
+        if self._debug_mode:
             self.logger.setLevel(logging.DEBUG)
 
         self._rig_dir = Path(os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name))
@@ -249,7 +249,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         )
 
         self.logger.info(_str)
-        if self._dev_mode:
+        if self._debug_mode:
             self._print_diagnosis()
 
     def _save_temp_model(self, model: Union[TRig, TSession, TTaskLogic], folder: Optional[os.PathLike]) -> str:
@@ -383,7 +383,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             subject=subject,
             notes=notes,
             commit_hash=self.repository.head.commit.hexsha,
-            allow_dirty_repo=self._dev_mode or self.allow_dirty,
+            allow_dirty_repo=self._debug_mode or self.allow_dirty,
             skip_hardware_validation=self.skip_hardware_validation,
             experiment_version="",  # Will be set later
         )
@@ -609,7 +609,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 is_editor_mode=self.bonsai_is_editor_mode,
                 is_start_flag=self.bonsai_is_start_flag,
                 cwd=self._cwd,
-                print_cmd=self._dev_mode,
+                print_cmd=self._debug_mode,
             )
             proc.check_returncode()
 
@@ -720,7 +720,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             action="store_true",
             default=False,
         )
-        parser.add_argument("--dev-mode", help="Specify whether to run in dev mode", action="store_true", default=False)
+        parser.add_argument("--debug", help="Specify whether to run in debug mode", action="store_true", default=False)
         parser.add_argument(
             "--bonsai-is-editor-mode",
             help="Specify whether to run in Bonsai editor mode",
