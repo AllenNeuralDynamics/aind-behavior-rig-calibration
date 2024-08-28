@@ -127,38 +127,6 @@ class Watchdog:
             response.raise_for_status()
         return jData["data"]
 
-    def create_manifest_config_from_session(
-        self,
-        session: AindBehaviorSessionModel,
-        aind_data_schema_session: Session,
-        project_name: Optional[str] = None,
-        schedule_time: Optional[datetime.time] = None,
-        platform: Platform = getattr(Platform, "BEHAVIOR"),
-        **kwargs,
-    ) -> ManifestConfig:
-        if session.remote_path is None:
-            raise ValueError(
-                "Remote path is not defined in the session schema. \
-                    A remote path must be used to create a watchdog manifest."
-            )
-
-        if project_name is None:
-            project_name = self.project_name
-
-        if schedule_time is None:
-            schedule_time = self.schedule_time  # if neither is provided, the watchdog will run immediately
-
-        return Watchdog.create_manifest_config(
-            session=aind_data_schema_session,
-            source=Path(session.root_path),
-            destination=Path(session.remote_path),
-            project_name=project_name,
-            processor_full_name=",".join([name for name in aind_data_schema_session.experimenter_full_name]),
-            schedule_time=schedule_time,
-            platform=platform,
-            **kwargs,
-        )
-
     @staticmethod
     def is_running(process_name: str = DEFAULT_EXE) -> bool:
         output = subprocess.check_output(
