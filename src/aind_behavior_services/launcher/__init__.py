@@ -530,7 +530,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         if self._run_hook_return is not None:
             self.logger.info("Run hook returned %s", self._run_hook_return)
         try:
-            self.logger.info("Mapping to aind-data-schema Session: %s.")
+            self.logger.info("Mapping to aind-data-schema Session")
             aind_data_schema_session = self._map_to_aind_data_schema_session()
             aind_data_schema_session.write_standard_file(self.session_directory)
             self.logger.info("Mapping successful.")
