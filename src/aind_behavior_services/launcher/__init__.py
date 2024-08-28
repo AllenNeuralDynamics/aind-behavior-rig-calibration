@@ -659,7 +659,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     handler.close()
 
             if self.session_directory is not None:
-                self._copy_tmp_folder(self.session_directory)
+                self._copy_tmp_folder(self.session_directory / "Behavior" / "Logs")
 
             self.logger.info("All hooks finished. Launcher closing.")
             self._exit(0)
@@ -779,5 +779,5 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         )
 
     def _copy_tmp_folder(self, dst: os.PathLike) -> None:
-        dst = Path(dst) / ".tmp"
+        dst = Path(dst) / ".launcher"
         shutil.copytree(self.temp_dir, dst, dirs_exist_ok=True)
