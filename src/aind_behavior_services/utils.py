@@ -1,3 +1,4 @@
+import datetime
 import inspect
 import json
 import os
@@ -403,3 +404,7 @@ def open_bonsai_process(
         if print_cmd:
             print(logging_cmd)
         return subprocess.Popen(logging_cmd, cwd=cwd, creationflags=creation_flags)
+
+
+def format_datetime(value: datetime.datetime) -> str:
+    return value.strftime("%Y%m%dT%H%M%S")
