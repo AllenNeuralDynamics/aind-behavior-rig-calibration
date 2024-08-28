@@ -45,6 +45,7 @@ class AindServicesTests(unittest.TestCase):
             destination=_aind_behavior_session.remote_path,
             project_name=_watchdog.project_name,
             session_name=_aind_behavior_session.session_name,
+            validate_project_name=False,
         )
 
         self.assertEqual(
