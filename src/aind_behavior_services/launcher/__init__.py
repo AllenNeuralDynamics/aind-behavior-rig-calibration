@@ -769,7 +769,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     def _map_to_aind_data_schema_session(self):
         return data_mapper.mapper_from_session_root(
-            session_data_root=self.session_directory,
+            schema_root=self.session_directory / "Behavior" / "Logs",
             session_model=self.session_schema_model,
             rig_model=self.rig_schema_model,
             task_logic_model=self.task_logic_schema_model,

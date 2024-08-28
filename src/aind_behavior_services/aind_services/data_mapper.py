@@ -39,7 +39,7 @@ from . import helpers
 
 
 def mapper_from_session_root(
-    session_data_root: os.PathLike,
+    schema_root: os.PathLike,
     session_model: Type[AindBehaviorSessionModel],
     rig_model: Type[AindBehaviorRigModel],
     task_logic_model: Type[AindBehaviorTaskLogicModel],
@@ -49,12 +49,11 @@ def mapper_from_session_root(
     output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> Session:
-    _schema_root = Path(session_data_root) / "other" / "Config"
 
     return mapper(
-        session_model=model_from_json_file(_schema_root / "session_input.json", session_model),
-        rig_model=model_from_json_file(_schema_root / "rig_input.json", rig_model),
-        task_logic_model=model_from_json_file(_schema_root / "tasklogic_input.json", task_logic_model),
+        session_model=model_from_json_file(Path(schema_root) / "session_input.json", session_model),
+        rig_model=model_from_json_file(Path(schema_root) / "rig_input.json", rig_model),
+        task_logic_model=model_from_json_file(Path(schema_root) / "tasklogic_input.json", task_logic_model),
         repository=repository,
         script_path=script_path,
         session_end_time=session_end_time,
