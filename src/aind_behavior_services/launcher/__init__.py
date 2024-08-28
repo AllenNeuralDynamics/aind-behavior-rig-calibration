@@ -557,7 +557,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 )
                 _manifest_path = self.watchdog.dump_manifest_config(
                     watchdog_manifest_config,
-                    path=Path(self.watchdog.watched_dir) / "manifest_" + str(self.session_schema.session_name),
+                    path=Path(self.watchdog.watched_dir) / ("manifest_" + str(self.session_schema.session_name)),
                 )
                 self.logger.info("Watchdog manifest config created successfully at %s.", _manifest_path)
 
