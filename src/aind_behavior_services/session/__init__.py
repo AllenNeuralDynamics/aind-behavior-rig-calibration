@@ -4,6 +4,7 @@ from typing import List, Literal, Optional, Self
 
 from pydantic import Field, field_validator, model_validator
 
+import aind_behavior_services.utils
 from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
 
 __version__ = "0.2.0"
@@ -38,5 +39,5 @@ class AindBehaviorSessionModel(SchemaVersionedModel):
     @model_validator(mode="after")
     def generate_session_name_default(self) -> Self:
         if self.session_name is None:
-            self.session_name = f"{self.subject}_{self.date.strftime('%Y%m%dT%H%M%S')}"
+            self.session_name = f"{self.subject}_{aind_behavior_services.utils.format_datetime(self.date)}"
         return self

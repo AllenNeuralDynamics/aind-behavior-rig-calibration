@@ -25,7 +25,7 @@ from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.aind_services.watchdog import Watchdog
 from aind_behavior_services.base import singleton
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
-from aind_behavior_services.utils import run_bonsai_process
+from aind_behavior_services.utils import format_datetime, run_bonsai_process
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disable=invalid-name
@@ -555,9 +555,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 watchdog_manifest_config = self.watchdog.create_manifest_config_from_session(
                     session=self.session_schema, aind_data_schema_session=aind_data_schema_session
                 )
+                _manifest_name = (
+                    f"manifest_{self.session_schema.session_name or format_datetime(self.session_schema.date)}.yaml"
+                )
                 _manifest_path = self.watchdog.dump_manifest_config(
-                    watchdog_manifest_config,
-                    path=Path(self.watchdog.watched_dir) / ("manifest_" + str(self.session_schema.session_name)),
+                    watchdog_manifest_config, path=Path(self.watchdog.watched_dir) / _manifest_name
                 )
                 self.logger.info("Watchdog manifest config created successfully at %s.", _manifest_path)
 
@@ -578,7 +580,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             "RigPath": os.path.abspath(self._save_temp_model(model=self._rig_schema, folder=self.temp_dir)),
         }
 
-        # _date = self._session_schema.date.strftime("%Y%m%dT%H%M%S")
         try:
             if self.bonsai_is_editor_mode:
                 self.logger.warning("Bonsai is running in editor mode. Cannot assert successful completion.")
