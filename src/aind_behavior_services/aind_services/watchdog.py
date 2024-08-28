@@ -178,10 +178,15 @@ class Watchdog:
 
         return subprocess.Popen(cmd_builder, start_new_session=True, shell=True)
 
-    def dump_manifest_config(self, manifest_config: ManifestConfig, path: Optional[os.PathLike] = None) -> Path:
+    def dump_manifest_config(self,
+                             manifest_config: ManifestConfig,
+                             path: Optional[os.PathLike] = None,
+                             make_dir: bool = True) -> Path:
         path = Path(path or self.watched_dir / f"manifest_{manifest_config.name}.yaml").resolve()
         if "manifest" not in path.name:
             raise ValueError("The file name must contain the string 'manifest' for the watchdog to work.")
+        if make_dir and not path.parent.exists():
+            path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             yaml.dump(manifest_config.model_dump(), f, default_flow_style=False)
         return path
