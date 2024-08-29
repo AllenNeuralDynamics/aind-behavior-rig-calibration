@@ -19,18 +19,17 @@ class TreadmillCalibrationInput(BaseModel):
 class TreadmillCalibrationOutput(BaseModel):
     _BRAKE_OUTPUT_MAX: ClassVar[float] = 65535
     _BRAKE_OUTPUT_MIN: ClassVar[float] = 0
-    _BRAKE_INPUT_MAX: ClassVar[float] = 1
+    _BRAKE_INPUT_MAX: ClassVar[float] = float("inf")
     _BRAKE_INPUT_MIN: ClassVar[float] = 0
 
     wheel_diameter: float = Field(default=15, ge=0, description="Wheel diameter")
     pulses_per_revolution: int = Field(default=28800, ge=1, description="Pulses per revolution")
     invert_direction: bool = Field(default=False, description="Invert direction")
     brake_lookup_calibration: List[ValuePair] = Field(
-        default=[[0, 0], [1, 65535]],
+        ...,
         validate_default=True,
         min_length=2,
-        description="Brake lookup calibration. Each Tuple is (0-1 (percent), 0-full-scale). \
-            Values are linearly interpolated",
+        description="Brake lookup calibration. Each pair of values define (input [torque], output [brake set-point U16])",
     )
 
     @field_validator("brake_lookup_calibration", mode="after")
