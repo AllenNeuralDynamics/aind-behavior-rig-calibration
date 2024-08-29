@@ -179,6 +179,14 @@ class Watchdog:
             raise ValueError("The file name must contain the string 'manifest' for the watchdog to work.")
         if make_dir and not path.parent.exists():
             path.parent.mkdir(parents=True, exist_ok=True)
+
+        manifest_config.destination = str(Path.as_posix(Path(manifest_config.destination)))
+        manifest_config.schemas = [str(Path.as_posix(Path(schema))) for schema in manifest_config.schemas]
+        for modality in manifest_config.modalities:
+            manifest_config.modalities[modality] = [
+                str(Path.as_posix(Path(_path))) for _path in manifest_config.modalities[modality]
+            ]
+
         with open(path, "w", encoding="utf-8") as f:
             f.write(self._yaml_dump(manifest_config))
         return path
