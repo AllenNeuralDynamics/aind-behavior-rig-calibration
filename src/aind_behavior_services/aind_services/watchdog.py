@@ -85,7 +85,7 @@ class Watchdog:
         source: os.PathLike,
         destination: os.PathLike,
         ads_session: Session,
-        ads_schemas: Optional[List[os.PathLike]],
+        ads_schemas: Optional[List[os.PathLike]] = None,
         session_name: Optional[str] = None,
         **kwargs,
     ) -> ManifestConfig:
