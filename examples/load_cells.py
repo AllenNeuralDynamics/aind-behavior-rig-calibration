@@ -19,7 +19,7 @@ calibration = lc.LoadCellsCalibration(
     input=lc_calibration_input,
     output=lc_calibration_output,
     device_name="LoadCells",
-    calibration_date=datetime.datetime.now(),
+    date=datetime.datetime.now(),
 )
 
 calibration_logic = lc.CalibrationLogic(

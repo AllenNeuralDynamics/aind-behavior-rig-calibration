@@ -6,7 +6,7 @@ from aind_behavior_services.calibration import aind_manipulator as m
 from aind_behavior_services.session import AindBehaviorSessionModel
 
 calibration_data = m.AindManipulatorCalibration(
-    name="AindManipulatorCalibration",
+    device_name="AindManipulatorCalibration",
     input=m.AindManipulatorCalibrationInput(
         full_step_to_mm=m.ManipulatorPosition(x=0.01, y1=0.01, y2=0.01, z=0.01),
         axis_configuration=[
@@ -19,7 +19,7 @@ calibration_data = m.AindManipulatorCalibration(
         initial_position=m.ManipulatorPosition(y1=0, y2=0, x=0, z=10000),
     ),
     output=m.AindManipulatorCalibrationOutput(),
-    calibration_date=datetime.datetime.now(),
+    date=datetime.datetime.now(),
 )
 
 calibration_logic = m.CalibrationLogic(task_parameters=m.CalibrationParameters())
