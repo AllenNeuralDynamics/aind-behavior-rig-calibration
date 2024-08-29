@@ -119,5 +119,6 @@ For an example see :py:class:`aind_behavior_services.calibration.olfactometer.Ca
    api.calibration/load_cells
    api.calibration/olfactometer
    api.calibration/water_valve
+   api.calibration/treadmill
 
 
