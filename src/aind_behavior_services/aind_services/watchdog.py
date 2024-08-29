@@ -34,14 +34,30 @@ class Watchdog:
 
     def __init__(
         self,
-        project_name: str,
-        time_to_run: Optional[datetime.time] = datetime.time(hour=20),
+        schedule_time: Optional[datetime.time] = datetime.time(hour=20),
         executable: os.PathLike = DEFAULT_EXE_PATH,
         watched_dir: os.PathLike = DEFAULT_WATCHED_DIRECTORY,
         completed_dir: os.PathLike = DEFAULT_COMPLETED_DIRECTORY,
+        project_name: Optional[str] = None,
+        platform: Platform = getattr(Platform, "BEHAVIOR"),
+        capsule_id: Optional[str] = None,
+        script: Optional[Dict[str, List[str]]] = None,
+        s3_bucket: BucketType = BucketType.PRIVATE,
+        mount: Optional[str] = None,
+        force_cloud_sync: bool = True,
+        transfer_endpoint: str = "http://aind-data-transfer-service/api/v1/submit_jobs",
+        validate_project_name: bool = True,
     ) -> None:
         self.project_name = project_name
-        self.schedule_time = time_to_run
+        self.schedule_time = schedule_time
+        self.platform = platform
+        self.capsule_id = capsule_id
+        self.script = script
+        self.s3_bucket = s3_bucket
+        self.mount = mount
+        self.force_cloud_sync = force_cloud_sync
+        self.transfer_endpoint = transfer_endpoint
+        self._validate_project_name = validate_project_name
 
         self.executable = Path(executable)
         self.watched_dir = Path(watched_dir)
@@ -64,47 +80,54 @@ class Watchdog:
         project_names = Watchdog._get_project_names()
         return self.project_name in project_names
 
-    @staticmethod
     def create_manifest_config(
-        session: Session,
+        self,
         source: os.PathLike,
         destination: os.PathLike,
-        schemas: List[os.PathLike],
-        *args,
-        project_name: str,
+        ads_session: Session,
+        ads_schemas: Optional[List[os.PathLike]],
         session_name: Optional[str] = None,
-        processor_full_name: Optional[str] = None,
-        schedule_time: Optional[datetime.time] = None,
-        platform: Platform = getattr(Platform, "BEHAVIOR"),
-        capsule_id: Optional[str] = None,
-        script: Optional[Dict[str, List[str]]] = None,
-        s3_bucket: BucketType = BucketType.PRIVATE,
-        mount: Optional[str] = None,
-        validate_project_name: bool = True,
+        **kwargs,
     ) -> ManifestConfig:
         """Create a ManifestConfig object"""
-        processor_full_name = processor_full_name or os.environ.get("USERNAME", "unknown")
+        project_name = kwargs.pop("project_name", None) or self.project_name
+        schedule_time = kwargs.pop("schedule_time", None) or self.schedule_time
+        platform = kwargs.pop("platform", None) or self.platform
+        capsule_id = kwargs.pop("capsule_id", None) or self.capsule_id
+        script = kwargs.pop("script", None) or self.script
+        s3_bucket = kwargs.pop("s3_bucket", None) or self.s3_bucket
+        mount = kwargs.pop("mount", None) or self.mount
+        force_cloud_sync = kwargs.pop("force_cloud_sync", None) or self.force_cloud_sync
+        transfer_endpoint = kwargs.pop("transfer_endpoint", None) or self.transfer_endpoint
+        validate_project_name = kwargs.pop("validate_project_name", None) or self._validate_project_name
+        processor_full_name = (
+            kwargs.pop("processor_full_name", None)
+            or ",".join(ads_session.experimenter_full_name)
+            or os.environ.get("USERNAME", "unknown")
+        )
 
         destination = Path(destination).resolve()
         source = Path(source).resolve()
 
         if session_name is None:
-            session_name = (session.stimulus_epochs[0]).stimulus_name
+            session_name = (ads_session.stimulus_epochs[0]).stimulus_name
 
         if validate_project_name:
             project_names = Watchdog._get_project_names()
             if project_name not in project_names:
                 raise ValueError(f"Project name {project_name} not found in {project_names}")
 
+        ads_schemas = [source / "session.json"] if ads_schemas is None else ads_schemas
+
         return ManifestConfig(
             name=session_name,
             modalities={
                 str(modality.abbreviation): [str(path.resolve()) for path in [source / str(modality.abbreviation)]]
-                for modality in session.data_streams[0].stream_modalities
+                for modality in ads_session.data_streams[0].stream_modalities
             },
-            subject_id=int(session.subject_id),
-            acquisition_datetime=session.session_start_time,
-            schemas=[str(value) for value in schemas],
+            subject_id=int(ads_session.subject_id),
+            acquisition_datetime=ads_session.session_start_time,
+            schemas=[str(value) for value in ads_schemas],
             destination=str(destination.resolve()),
             mount=mount,
             processor_full_name=processor_full_name,
@@ -114,6 +137,8 @@ class Watchdog:
             capsule_id=capsule_id,
             s3_bucket=s3_bucket,
             script=script if script else {},
+            force_cloud_sync=force_cloud_sync,
+            transfer_endpoint=transfer_endpoint,
         )
 
     @staticmethod

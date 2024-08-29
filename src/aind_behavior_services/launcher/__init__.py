@@ -559,12 +559,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                                 A remote path must be used to create a watchdog manifest."
                         )
                     watchdog_manifest_config = self.watchdog.create_manifest_config(
-                        session=aind_data_schema_session,
-                        schedule_time=self.watchdog.schedule_time,
+                        ads_session=aind_data_schema_session,
                         source=Path(self.session_directory),
                         destination=Path(self.session_schema.remote_path),
-                        schemas=[self.session_directory / "session.json"],
-                        project_name=self.watchdog.project_name,
                         processor_full_name=",".join(
                             [name for name in aind_data_schema_session.experimenter_full_name]
                         ),

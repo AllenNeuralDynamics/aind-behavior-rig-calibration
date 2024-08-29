@@ -25,7 +25,7 @@ class AindServicesTests(unittest.TestCase):
 
     def test_watchdog_manifest(self):
         _watchdog = watchdog.Watchdog(
-            project_name="Cognitive flexibility in patch foraging", time_to_run=datetime.time(hour=20)
+            project_name="Cognitive flexibility in patch foraging", schedule_time=datetime.time(hour=20)
         )
 
         _aind_behavior_session = MockSession()
@@ -40,10 +40,10 @@ class AindServicesTests(unittest.TestCase):
         )
 
         _config = _watchdog.create_manifest_config(
-            session=_session,
+            ads_session=_session,
             source=_aind_behavior_session.root_path,
             destination=_aind_behavior_session.remote_path,
-            schemas=["schema1", "schema2"],
+            ads_schemas=["schema1", "schema2"],
             project_name=_watchdog.project_name,
             session_name=_aind_behavior_session.session_name,
             validate_project_name=False,
