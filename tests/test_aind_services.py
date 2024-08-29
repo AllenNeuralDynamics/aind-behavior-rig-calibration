@@ -43,6 +43,7 @@ class AindServicesTests(unittest.TestCase):
             session=_session,
             source=_aind_behavior_session.root_path,
             destination=_aind_behavior_session.remote_path,
+            schemas=["schema1", "schema2"],
             project_name=_watchdog.project_name,
             session_name=_aind_behavior_session.session_name,
             validate_project_name=False,

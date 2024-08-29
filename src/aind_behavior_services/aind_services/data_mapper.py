@@ -49,7 +49,6 @@ def mapper_from_session_root(
     output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> Session:
-
     return mapper(
         session_model=model_from_json_file(Path(schema_root) / "session_input.json", session_model),
         rig_model=model_from_json_file(Path(schema_root) / "rig_input.json", rig_model),
