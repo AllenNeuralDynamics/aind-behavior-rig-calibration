@@ -35,7 +35,7 @@ calibration = wv.WaterValveCalibration(
     input=input,
     output=input.calibrate_output(),
     device_name="WaterValve",
-    calibration_date=datetime.datetime.now(),
+    date=datetime.datetime.now(),
 )
 
 calibration_logic = wv.CalibrationLogic(
