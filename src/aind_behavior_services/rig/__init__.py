@@ -260,12 +260,6 @@ class Screen(Device):
     contrast: float = Field(default=1, le=1, ge=-1, description="Contrast")
 
 
-class Treadmill(BaseModel):
-    wheel_diameter: float = Field(default=15, ge=0, description="Wheel diameter")
-    pulses_per_revolution: int = Field(default=28800, ge=1, description="Pulses per revolution")
-    invert_direction: bool = Field(default=False, description="Invert direction")
-
-
 class AindBehaviorRigModel(SchemaVersionedModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
