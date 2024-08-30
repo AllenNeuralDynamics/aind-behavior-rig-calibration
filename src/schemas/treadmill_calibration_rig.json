@@ -160,17 +160,7 @@
           "type": "boolean"
         },
         "brake_lookup_calibration": {
-          "default": [
-            [
-              0,
-              0
-            ],
-            [
-              1,
-              65535
-            ]
-          ],
-          "description": "Brake lookup calibration. Each Tuple is (0-1 (percent), 0-full-scale).             Values are linearly interpolated",
+          "description": "Brake lookup calibration. Each pair of values define (input [torque], output [brake set-point U16])",
           "items": {
             "items": {
               "type": "number"
@@ -184,6 +174,9 @@
           "type": "array"
         }
       },
+      "required": [
+        "brake_lookup_calibration"
+      ],
       "title": "TreadmillCalibrationOutput",
       "type": "object"
     }

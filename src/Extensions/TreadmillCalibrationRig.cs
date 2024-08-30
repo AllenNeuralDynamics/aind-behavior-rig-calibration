@@ -492,12 +492,12 @@ namespace AindBehaviorServices.TreadmillCalibrationRig
         }
     
         /// <summary>
-        /// Brake lookup calibration. Each Tuple is (0-1 (percent), 0-full-scale).             Values are linearly interpolated
+        /// Brake lookup calibration. Each pair of values define (input [torque], output [brake set-point U16])
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("brake_lookup_calibration")]
-        [System.ComponentModel.DescriptionAttribute("Brake lookup calibration. Each Tuple is (0-1 (percent), 0-full-scale).           " +
-            "  Values are linearly interpolated")]
+        [Newtonsoft.Json.JsonPropertyAttribute("brake_lookup_calibration", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Brake lookup calibration. Each pair of values define (input [torque], output [bra" +
+            "ke set-point U16])")]
         public System.Collections.Generic.List<System.Collections.Generic.List<double>> BrakeLookupCalibration
         {
             get
