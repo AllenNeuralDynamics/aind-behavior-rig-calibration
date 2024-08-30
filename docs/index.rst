@@ -6,8 +6,7 @@
 Welcome to AIND Behavior Services's documentation!
 ==================================================
 
-.. include:: ../README.md
-   :parser: myst_parser.sphinx_
+.. mdinclude:: ../README.md
 
 .. toctree::
    :maxdepth: 4

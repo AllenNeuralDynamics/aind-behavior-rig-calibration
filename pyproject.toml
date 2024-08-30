@@ -46,9 +46,10 @@ docs = [
     'furo',
     'sphinx-jinja',
     'autodoc_pydantic[erdantic]',
-    'myst_parser',
     'sphinx-jsonschema',
-    'sphinx-copybutton'
+    'sphinx-copybutton',
+    "sphinx_mdinclude",
+
 ]
 
 [tool.setuptools.packages.find]

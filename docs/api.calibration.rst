@@ -85,7 +85,7 @@ For an example see :py:class:`aind_behavior_services.calibration.olfactometer.Ca
 
 
 Sub-classing :py:class:`~aind_behavior_services.task_logic.AindBehaviorTaskLogicModel`
-################################################################################
+########################################################################################
 
 The same way a :py:class:`~aind_behavior_services.task_logic.AindBehaviorTaskLogicModel` is used to define
 the settings to run a behavior task, it is also used to define the settings to run a calibration workflow.
