@@ -160,7 +160,7 @@ def mapper(
                 daq_names=devices,
                 stream_modalities=modalities,
                 stream_start_time=session_model.date,
-                stream_end_time=session_end_time or session_model.date,
+                stream_end_time=session_end_time if session_end_time else session_model.date,
                 camera_names=list(cameras.keys()),
             ),
         ],
@@ -189,7 +189,7 @@ def mapper(
                 ],
                 script=Software(
                     name=Path(script_path).stem,
-                    version=session_model.commit_hash or repository_sha,
+                    version=session_model.commit_hash if session_model.commit_hash else repository_sha,
                     url=f"{repository_remote_url}/blob/{repository_sha}/{repository_relative_script_path}",
                     parameters=task_logic_model.model_dump(),
                 ),
@@ -215,7 +215,7 @@ def _mapper_calibration(
         device_name=calibration.device_name,
         input=calibration.input.model_dump() if calibration.input else {},
         output=calibration.output.model_dump() if calibration.output else {},
-        calibration_date=calibration.date or default_date,
+        calibration_date=calibration.date if calibration.date else default_date,
         description=calibration.description if calibration.description else "",
         notes=calibration.notes,
     )

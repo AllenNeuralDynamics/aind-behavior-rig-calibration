@@ -90,16 +90,16 @@ class Watchdog:
         **kwargs,
     ) -> ManifestConfig:
         """Create a ManifestConfig object"""
-        project_name = kwargs.pop("project_name", None) or self.project_name
-        schedule_time = kwargs.pop("schedule_time", None) or self.schedule_time
-        platform = kwargs.pop("platform", None) or self.platform
-        capsule_id = kwargs.pop("capsule_id", None) or self.capsule_id
-        script = kwargs.pop("script", None) or self.script
-        s3_bucket = kwargs.pop("s3_bucket", None) or self.s3_bucket
-        mount = kwargs.pop("mount", None) or self.mount
-        force_cloud_sync = kwargs.pop("force_cloud_sync", None) or self.force_cloud_sync
-        transfer_endpoint = kwargs.pop("transfer_endpoint", None) or self.transfer_endpoint
-        validate_project_name = kwargs.pop("validate_project_name", None) or self._validate_project_name
+        project_name = kwargs.pop("project_name", self.project_name)
+        schedule_time = kwargs.pop("schedule_time", self.schedule_time)
+        platform = kwargs.pop("platform", self.platform)
+        capsule_id = kwargs.pop("capsule_id", self.capsule_id)
+        script = kwargs.pop("script", self.script)
+        s3_bucket = kwargs.pop("s3_bucket", self.s3_bucket)
+        mount = kwargs.pop("mount", self.mount)
+        force_cloud_sync = kwargs.pop("force_cloud_sync", self.force_cloud_sync)
+        transfer_endpoint = kwargs.pop("transfer_endpoint", self.transfer_endpoint)
+        validate_project_name = kwargs.pop("validate_project_name", self._validate_project_name)
         processor_full_name = (
             kwargs.pop("processor_full_name", None)
             or ",".join(ads_session.experimenter_full_name)
@@ -174,7 +174,7 @@ class Watchdog:
     def dump_manifest_config(
         self, manifest_config: ManifestConfig, path: Optional[os.PathLike] = None, make_dir: bool = True
     ) -> Path:
-        path = Path(path or self.watched_dir / f"manifest_{manifest_config.name}.yaml").resolve()
+        path = Path(path if path else self.watched_dir / f"manifest_{manifest_config.name}.yaml").resolve()
         if "manifest" not in path.name:
             raise ValueError("The file name must contain the string 'manifest' for the watchdog to work.")
         if make_dir and not path.parent.exists():

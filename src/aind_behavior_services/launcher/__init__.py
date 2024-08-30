@@ -568,9 +568,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                         session_name=self.session_schema.session_name,
                     )
 
-                    _manifest_name = (
-                        f"manifest_{self.session_schema.session_name or format_datetime(self.session_schema.date)}.yaml"
-                    )
+                    _manifest_name = f"manifest_{self.session_schema.session_name if self.session_schema.session_name else format_datetime(self.session_schema.date)}.yaml"
                     _manifest_path = self.watchdog.dump_manifest_config(
                         watchdog_manifest_config, path=Path(self.watchdog.watched_dir) / _manifest_name
                     )
