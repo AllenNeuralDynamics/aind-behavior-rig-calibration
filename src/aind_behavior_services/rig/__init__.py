@@ -51,6 +51,12 @@ class Rect(BaseModel):
     height: int = Field(default=0, ge=0, description="Height of the rectangle")
 
 
+class SpinnakerCameraAdcBitDepth(int, Enum):
+    ADC8BIT = 0
+    ADC10BIT = 1
+    ADC12BIT = 2
+
+
 class SpinnakerCamera(Device):
     device_type: Literal["SpinnakerCamera"] = Field(default="SpinnakerCamera", description="Device type")
     serial_number: str = Field(..., description="Camera serial number")
@@ -59,6 +65,9 @@ class SpinnakerCamera(Device):
     exposure: int = Field(default=1000, ge=100, description="Exposure time")
     gain: float = Field(default=0, ge=0, description="Gain")
     gamma: Optional[float] = Field(default=None, ge=0, description="Gamma. If None, will disable gamma correction.")
+    adc_bit_depth: SpinnakerCameraAdcBitDepth = Field(
+        default=SpinnakerCameraAdcBitDepth.ADC8BIT, description="ADC bit depth"
+    )
     region_of_interest: Rect = Field(default=Rect(), description="Region of interest", validate_default=True)
     video_writer: Optional[VideoWriter] = Field(
         default=None, description="Video writer. If not provided, no video will be saved."
