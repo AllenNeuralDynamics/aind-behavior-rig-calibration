@@ -23,7 +23,6 @@ from aind_behavior_services import (
 )
 from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.aind_services.watchdog import Watchdog
-from aind_behavior_services.base import singleton
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
 from aind_behavior_services.utils import format_datetime, run_bonsai_process
 
@@ -32,7 +31,6 @@ TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disabl
 TTaskLogic = TypeVar("TTaskLogic", bound=AindBehaviorTaskLogicModel)  # pylint: disable=invalid-name
 
 
-@singleton
 class Launcher(Generic[TRig, TSession, TTaskLogic]):
     RIG_DIR = "Rig"
     SUBJECT_DIR = "Subjects"
