@@ -1,6 +1,6 @@
-from typing import Annotated, Dict, List, Literal, Optional, Tuple
+from typing import Annotated, List, Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import AindBehaviorRigModel, HarpLoadCells
@@ -14,35 +14,63 @@ LoadCellChannel = Annotated[int, Field(ge=0, le=7, description="Load cell channe
 LoadCellOffset = Annotated[int, Field(ge=-255, le=255, description="Load cell offset value [-255, 255]")]
 
 
-class LoadCellCalibration(BaseModel):
-    measured_offset: Dict[LoadCellOffset, float] = Field(
-        default={},
-        title="Load cells offset. Each entry is expected to be in the format of: Channel : (offset, baseline)",
+class MeasuredOffset(BaseModel):
+    offset: LoadCellOffset = Field(..., description="The applied offset resistor value[-255, 255]")
+    baseline: float = Field(..., description="The measured baseline value")
+
+
+class MeasuredWeight(BaseModel):
+    weight: float = Field(..., description="The applied weight in grams")
+    baseline: float = Field(..., description="The measured baseline value")
+
+
+class LoadCellCalibrationInput(BaseModel):
+    channel: LoadCellChannel = Field(..., title="Load cell channel number")
+    offset_measurement: List[MeasuredOffset] = Field(
+        default=[],
+        title="Load cell offset calibration data",
+        validate_default=True,
     )
-    measured_weight: List[Tuple[float, float]] = Field(
-        default={},
-        title="Load cells measured weight. Each entry is expected to be in the format of: (known weight(g), baseline)",
+    weight_measurement: List[MeasuredWeight] = Field(
+        default=[],
+        title="Load cell weight calibration data",
+        validate_default=True,
     )
 
 
 class LoadCellsCalibrationInput(BaseModel):
-    channels: Dict[LoadCellChannel, LoadCellCalibration] = Field(default={}, title="Load cells calibration data")
+    channels: List[LoadCellCalibrationInput] = Field(
+        default=[], title="Load cells calibration data", validate_default=True
+    )
+
+    @field_validator("channels", mode="after")
+    @classmethod
+    def ensure_unique_channels(cls, values: List[LoadCellCalibrationInput]) -> List[LoadCellCalibrationInput]:
+        channels = [c.channel for c in values]
+        if len(channels) != len(set(channels)):
+            raise ValueError("Channels must be unique.")
+        return values
+
+
+class LoadCellCalibrationOutput(BaseModel):
+    channel: LoadCellChannel
+    offset: Optional[LoadCellOffset] = Field(default=None, title="Load cell offset")
+    baseline: Optional[float] = Field(default=None, title="Load cell baseline")
+    weight_lookup: List[MeasuredWeight] = Field(default=[], title="Load cell weight lookup calibration table")
 
 
 class LoadCellsCalibrationOutput(BaseModel):
-    offset: Dict[LoadCellChannel, LoadCellOffset] = Field(
-        default={lc: 0 for lc in range(8)}, validate_default=True, title="Load cells offset"
+    channels: List[LoadCellCalibrationOutput] = Field(
+        default=[], title="Load cells calibration output", validate_default=True
     )
-    baseline: Dict[LoadCellChannel, float] = Field(
-        default={lc: 0 for lc in range(8)},
-        validate_default=True,
-        title="Load cells baseline to be subtracted from the raw data after applying the offset.",
-    )
-    weight_lookup: Dict[LoadCellChannel, Tuple[float, float]] = Field(
-        default={},
-        validate_default=True,
-        title="Load cells lookup calibration table for each channel: (weight, baseline).",
-    )
+
+    @field_validator("channels", mode="after")
+    @classmethod
+    def ensure_unique_channels(cls, values: List[LoadCellCalibrationOutput]) -> List[LoadCellCalibrationOutput]:
+        channels = [c.channel for c in values]
+        if len(channels) != len(set(channels)):
+            raise ValueError("Channels must be unique.")
+        return values
 
 
 class LoadCellsCalibration(Calibration):

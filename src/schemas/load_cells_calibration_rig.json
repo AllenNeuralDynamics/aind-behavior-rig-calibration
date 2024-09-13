@@ -5,36 +5,87 @@
       "title": "BaseModel",
       "type": "object"
     },
-    "LoadCellCalibration": {
+    "LoadCellCalibrationInput": {
       "properties": {
-        "measured_offset": {
-          "additionalProperties": {
-            "type": "number"
-          },
-          "default": {},
-          "title": "Load cells offset. Each entry is expected to be in the format of: Channel : (offset, baseline)",
-          "type": "object"
+        "channel": {
+          "description": "Load cell channel number available",
+          "maximum": 7,
+          "minimum": 0,
+          "title": "Load cell channel number",
+          "type": "integer"
         },
-        "measured_weight": {
-          "default": {},
+        "offset_measurement": {
+          "default": [],
           "items": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "number"
-              }
-            ],
-            "type": "array"
+            "$ref": "#/definitions/MeasuredOffset"
           },
-          "title": "Load cells measured weight. Each entry is expected to be in the format of: (known weight(g), baseline)",
+          "title": "Load cell offset calibration data",
+          "type": "array"
+        },
+        "weight_measurement": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/MeasuredWeight"
+          },
+          "title": "Load cell weight calibration data",
           "type": "array"
         }
       },
-      "title": "LoadCellCalibration",
+      "required": [
+        "channel"
+      ],
+      "title": "LoadCellCalibrationInput",
+      "type": "object"
+    },
+    "LoadCellCalibrationOutput": {
+      "properties": {
+        "channel": {
+          "description": "Load cell channel number available",
+          "maximum": 7,
+          "minimum": 0,
+          "title": "Channel",
+          "type": "integer"
+        },
+        "offset": {
+          "default": null,
+          "oneOf": [
+            {
+              "description": "Load cell offset value [-255, 255]",
+              "maximum": 255,
+              "minimum": -255,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Load cell offset"
+        },
+        "baseline": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Load cell baseline"
+        },
+        "weight_lookup": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/MeasuredWeight"
+          },
+          "title": "Load cell weight lookup calibration table",
+          "type": "array"
+        }
+      },
+      "required": [
+        "channel"
+      ],
+      "title": "LoadCellCalibrationOutput",
       "type": "object"
     },
     "LoadCells": {
@@ -167,12 +218,12 @@
     "LoadCellsCalibrationInput": {
       "properties": {
         "channels": {
-          "additionalProperties": {
-            "$ref": "#/definitions/LoadCellCalibration"
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/LoadCellCalibrationInput"
           },
-          "default": {},
           "title": "Load cells calibration data",
-          "type": "object"
+          "type": "array"
         }
       },
       "title": "LoadCellsCalibrationInput",
@@ -180,63 +231,58 @@
     },
     "LoadCellsCalibrationOutput": {
       "properties": {
-        "offset": {
-          "additionalProperties": {
-            "description": "Load cell offset value [-255, 255]",
-            "maximum": 255,
-            "minimum": -255,
-            "type": "integer"
+        "channels": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/LoadCellCalibrationOutput"
           },
-          "default": {
-            "0": 0,
-            "1": 0,
-            "2": 0,
-            "3": 0,
-            "4": 0,
-            "5": 0,
-            "6": 0,
-            "7": 0
-          },
-          "title": "Load cells offset",
-          "type": "object"
-        },
-        "baseline": {
-          "additionalProperties": {
-            "type": "number"
-          },
-          "default": {
-            "0": 0,
-            "1": 0,
-            "2": 0,
-            "3": 0,
-            "4": 0,
-            "5": 0,
-            "6": 0,
-            "7": 0
-          },
-          "title": "Load cells baseline to be subtracted from the raw data after applying the offset.",
-          "type": "object"
-        },
-        "weight_lookup": {
-          "additionalProperties": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "number"
-              }
-            ],
-            "type": "array"
-          },
-          "default": {},
-          "title": "Load cells lookup calibration table for each channel: (weight, baseline).",
-          "type": "object"
+          "title": "Load cells calibration output",
+          "type": "array"
         }
       },
       "title": "LoadCellsCalibrationOutput",
+      "type": "object"
+    },
+    "MeasuredOffset": {
+      "properties": {
+        "offset": {
+          "description": "The applied offset resistor value[-255, 255]",
+          "maximum": 255,
+          "minimum": -255,
+          "title": "Offset",
+          "type": "integer"
+        },
+        "baseline": {
+          "description": "The measured baseline value",
+          "title": "Baseline",
+          "type": "number"
+        }
+      },
+      "required": [
+        "offset",
+        "baseline"
+      ],
+      "title": "MeasuredOffset",
+      "type": "object"
+    },
+    "MeasuredWeight": {
+      "properties": {
+        "weight": {
+          "description": "The applied weight in grams",
+          "title": "Weight",
+          "type": "number"
+        },
+        "baseline": {
+          "description": "The measured baseline value",
+          "title": "Baseline",
+          "type": "number"
+        }
+      },
+      "required": [
+        "weight",
+        "baseline"
+      ],
+      "title": "MeasuredWeight",
       "type": "object"
     }
   },
