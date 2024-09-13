@@ -408,3 +408,7 @@ def open_bonsai_process(
 
 def format_datetime(value: datetime.datetime) -> str:
     return value.strftime("%Y%m%dT%H%M%S")
+
+
+def utcnow() -> datetime.datetime:
+    return datetime.datetime.now(datetime.timezone.utc)

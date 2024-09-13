@@ -1,9 +1,9 @@
-import datetime
 import os
 
 from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration import load_cells as lc
 from aind_behavior_services.session import AindBehaviorSessionModel
+from aind_behavior_services.utils import utcnow
 
 lc0 = lc.LoadCellCalibrationInput(
     channel=0,
@@ -28,7 +28,7 @@ calibration = lc.LoadCellsCalibration(
     input=lc_calibration_input,
     output=lc_calibration_output,
     device_name="LoadCells",
-    date=datetime.datetime.now(),
+    date=utcnow(),
 )
 
 calibration_logic = lc.CalibrationLogic(
@@ -40,7 +40,7 @@ calibration_session = AindBehaviorSessionModel(
     remote_path=None,
     allow_dirty_repo=False,
     experiment="LoadCellsCalibration",
-    date=datetime.datetime.now(),
+    date=utcnow(),
     subject="LoadCells",
     experiment_version="load_cells",
     commit_hash=get_commit_hash(),

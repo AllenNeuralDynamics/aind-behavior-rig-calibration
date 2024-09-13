@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import datetime
 import glob
 import logging
 import os
@@ -24,7 +23,7 @@ from aind_behavior_services import (
 from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.aind_services.watchdog import Watchdog
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
-from aind_behavior_services.utils import format_datetime, run_bonsai_process
+from aind_behavior_services.utils import format_datetime, run_bonsai_process, utcnow
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disable=invalid-name
@@ -769,7 +768,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             task_logic_model=self.task_logic_schema_model,
             repository=self.repository,
             script_path=Path(self.default_bonsai_workflow).resolve(),
-            session_end_time=datetime.datetime.now(),
+            session_end_time=utcnow(),
         )
 
     def _copy_tmp_folder(self, dst: os.PathLike) -> None:

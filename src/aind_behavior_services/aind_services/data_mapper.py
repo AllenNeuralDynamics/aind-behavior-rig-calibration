@@ -34,6 +34,7 @@ from aind_behavior_services import (
     AindBehaviorTaskLogicModel,
 )
 from aind_behavior_services.calibration import Calibration
+from aind_behavior_services.utils import utcnow
 
 from . import helpers
 
@@ -45,7 +46,7 @@ def mapper_from_session_root(
     task_logic_model: Type[AindBehaviorTaskLogicModel],
     repository: Union[os.PathLike, git.Repo],
     script_path: os.PathLike,
-    session_end_time: datetime.datetime = datetime.datetime.now(),
+    session_end_time: datetime.datetime = utcnow(),
     output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> Session:
@@ -70,7 +71,7 @@ def mapper_from_json_files(
     task_logic_model: Type[AindBehaviorTaskLogicModel],
     repository: Union[os.PathLike, git.Repo],
     script_path: os.PathLike,
-    session_end_time: datetime.datetime = datetime.datetime.now(),
+    session_end_time: datetime.datetime = utcnow(),
     output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> Session:
@@ -92,7 +93,7 @@ def mapper(
     task_logic_model: AindBehaviorTaskLogicModel,
     repository: Union[os.PathLike, git.Repo],
     script_path: os.PathLike,
-    session_end_time: datetime.datetime = datetime.datetime.now(),
+    session_end_time: datetime.datetime = utcnow(),
     output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> Session:
@@ -105,7 +106,7 @@ def mapper(
 
     # Populate calibrations:
     calibrations = [
-        _mapper_calibration(_calibration_model[1], datetime.datetime.now())
+        _mapper_calibration(_calibration_model[1], utcnow())
         for _calibration_model in helpers.get_fields_of_type(rig_model, Calibration)
     ]
     # Populate cameras
@@ -209,7 +210,7 @@ def model_from_json_file(json_path: os.PathLike, model_class: Type[TSchema]) -> 
 
 
 def _mapper_calibration(
-    calibration: Calibration, default_date: datetime.datetime = datetime.datetime.now()
+    calibration: Calibration, default_date: datetime.datetime = utcnow()
 ) -> ads_devices.Calibration:
     return ads_devices.Calibration(
         device_name=calibration.device_name,

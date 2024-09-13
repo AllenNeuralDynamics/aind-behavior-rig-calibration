@@ -1,9 +1,9 @@
-import datetime
 import os
 
 from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration import aind_manipulator as m
 from aind_behavior_services.session import AindBehaviorSessionModel
+from aind_behavior_services.utils import utcnow
 
 calibration_data = m.AindManipulatorCalibration(
     device_name="AindManipulatorCalibration",
@@ -19,7 +19,7 @@ calibration_data = m.AindManipulatorCalibration(
         initial_position=m.ManipulatorPosition(y1=0, y2=0, x=0, z=10000),
     ),
     output=m.AindManipulatorCalibrationOutput(),
-    date=datetime.datetime.now(),
+    date=utcnow(),
 )
 
 calibration_logic = m.CalibrationLogic(task_parameters=m.CalibrationParameters())
@@ -30,7 +30,7 @@ calibration_session = AindBehaviorSessionModel(
     remote_path=None,
     allow_dirty_repo=False,
     experiment="AindManipulatorCalibration",
-    date=datetime.datetime.now(),
+    date=utcnow(),
     subject="AindManipulator",
     experiment_version="manipulator_control",
     commit_hash=get_commit_hash(),

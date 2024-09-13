@@ -10,6 +10,7 @@ from aind_behavior_services.aind_services import data_mapper, watchdog
 from aind_behavior_services.rig import AindBehaviorRigModel, CameraController, CameraTypes, SpinnakerCamera
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
+from aind_behavior_services.utils import utcnow
 
 
 class AindServicesTests(unittest.TestCase):
@@ -18,7 +19,7 @@ class AindServicesTests(unittest.TestCase):
             session_model=MockSession(),
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),
-            session_end_time=datetime.datetime.now(),
+            session_end_time=utcnow(),
             repository=Path("./"),
             script_path=Path("./src/unit_test.bonsai"),
         )
@@ -34,7 +35,7 @@ class AindServicesTests(unittest.TestCase):
             session_model=_aind_behavior_session,
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),
-            session_end_time=datetime.datetime.now(),
+            session_end_time=utcnow(),
             repository=Path("./"),
             script_path=Path("./src/unit_test.bonsai"),
         )

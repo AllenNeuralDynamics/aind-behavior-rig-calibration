@@ -1,9 +1,9 @@
-import datetime
 import os
 
 from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration import treadmill
 from aind_behavior_services.session import AindBehaviorSessionModel
+from aind_behavior_services.utils import utcnow
 
 treadmill_calibration = treadmill.TreadmillCalibrationOutput(
     wheel_diameter=10,
@@ -16,7 +16,7 @@ calibration = treadmill.TreadmillCalibration(
     device_name="Treadmill",
     input=treadmill.TreadmillCalibrationInput(),
     output=treadmill_calibration,
-    date=datetime.datetime.now(),
+    date=utcnow(),
 )
 
 calibration_logic = treadmill.CalibrationLogic()
@@ -26,7 +26,7 @@ calibration_session = AindBehaviorSessionModel(
     remote_path=None,
     allow_dirty_repo=False,
     experiment="Calibration",
-    date=datetime.datetime.now(),
+    date=utcnow(),
     subject="00000",
     experiment_version="treadmill",
     commit_hash=get_commit_hash(),
