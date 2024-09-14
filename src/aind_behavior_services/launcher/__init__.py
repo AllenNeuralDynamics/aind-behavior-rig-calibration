@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar, Union
+from typing import Any, Generic, List, Optional, Self, Tuple, Type, TypeVar, Union
 
 import git
 import pydantic
@@ -157,7 +157,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             )
 
     def run(self):  # For backwards compatibility
-        self.run_ui()
+        self.main()
 
     def post_init_hook(self, cli_args: argparse.Namespace) -> None:
         """Overridable method that runs at the end of the self.__init__ method"""
@@ -165,6 +165,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self._make_folder_structure()
 
     def _exit(self, code: int = 0) -> None:
+        logging.info("Exiting with code %s", code)
         # Dispose loggers
         logging.shutdown()
         sys.exit(code)
@@ -369,7 +370,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         subject_list = self._get_subject_list(available_batches)
         subject = self._choose_subject(subject_list)
         self._subject_db_data = subject_list.get_subject(subject)
-        notes = self.prompt_get_notes()
+        notes = self._prompt_get_notes()
 
         return self.session_schema_model(
             experiment="",  # Will be set later
@@ -430,7 +431,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         return subject
 
     @staticmethod
-    def prompt_get_notes() -> str:
+    def _prompt_get_notes() -> str:
         notes = str(input("Enter notes:"))
         return notes
 
@@ -519,10 +520,13 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             except ValueError as e:
                 self.logger.error("Invalid choice. Try again. %s", e)
 
-    def pre_run_hook(self, *args, **kwargs):
+    def pre_run_hook(self, *args, **kwargs) -> Self:
         self.logger.info("Pre-run hook started.")
+        self.session_schema.experiment = self.task_logic_schema.name
+        self.session_schema.experiment_version = self.task_logic_schema.version
+        return self
 
-    def post_run_hook(self, *args, **kwargs):
+    def post_run_hook(self, *args, **kwargs) -> Self:
         self.logger.info("Post-run hook started.")
         if self._run_hook_return is not None:
             self.logger.info("Run hook returned %s", self._run_hook_return)
@@ -572,8 +576,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     self.logger.info("Watchdog manifest config created successfully at %s.", _manifest_path)
                 except (pydantic.ValidationError, ValueError, IOError) as e:
                     self.logger.error("Failed to create watchdog manifest config. %s", e)
+        return self
 
-    def run_hook(self, *args, **kwargs) -> None:
+    def run_hook(self, *args, **kwargs) -> Self:
         self.logger.info("Running hook started.")
         if self._session_schema is None:
             raise ValueError("Session schema instance not set.")
@@ -621,6 +626,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     self.logger.info("User chose to exit.")
                     self._exit(-1)
             self._run_hook_return = None  # TODO To be improved
+        return self
 
     def _log_process_std_output(self, process_name: str, proc: subprocess.CompletedProcess) -> None:
         if len(proc.stdout) > 0:
@@ -628,39 +634,46 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         if len(proc.stderr) > 0:
             self.logger.error("%s full stderr dump: \n%s", process_name, proc.stderr)
 
-    def run_ui(self) -> None:
+    def ui_prompt(self) -> Self:
+        self._print_header()
+        self._validate_dependencies()
+        self._session_schema = self._prompt_session_input()
+        self._task_logic_schema = self._prompt_task_logic_input(hint_input=self._subject_db_data)
+        self._rig_schema = self._prompt_rig_input()
+        self._bonsai_visualizer_layout = self._prompt_visualizer_layout_input()
+        input("Press enter to start or Control+C to exit...")
+        return self
+
+    def main(self) -> None:
         try:
-            self._print_header()
-            self._validate_dependencies()
-            self._session_schema = self._prompt_session_input()
-            self._task_logic_schema = self._prompt_task_logic_input(hint_input=self._subject_db_data)
-            self._rig_schema = self._prompt_rig_input()
-            self._bonsai_visualizer_layout = self._prompt_visualizer_layout_input()
-
-            # Handle some cross-schema references
-            self._session_schema.experiment = self._task_logic_schema.name
-            self._session_schema.experiment_version = self._task_logic_schema.version
-
-            input("Press enter to start or Control+C to exit...")
-            self.pre_run_hook()
-            self.run_hook()
-            self.post_run_hook()
-
-            for handler in self.logger.handlers:
-                if isinstance(handler, logging.FileHandler):
-                    self.logger.info("File handler found in logger. Closing and copying to session directory.")
-                    handler.close()
-
-            if self.session_directory is not None:
-                self._copy_tmp_folder(self.session_directory / "Behavior" / "Logs")
-
-            self.logger.info("All hooks finished. Launcher closing.")
+            self.ui_prompt()
+            self.run_hooks()
+            self.cleanup()
             self._exit(0)
-
         except KeyboardInterrupt:
             self.logger.error("User interrupted the process.")
             self._exit(-1)
             return
+
+    def cleanup(self) -> Self:
+        self.logger.info("Cleaning up...")
+        for handler in self.logger.handlers:
+            if isinstance(handler, logging.FileHandler):
+                self.logger.info("File handler found in logger. Closing and copying to session directory.")
+                handler.close()
+
+        if self.session_directory is not None:
+            self._copy_tmp_folder(self.session_directory / "Behavior" / "Logs")
+        return self
+
+    def run_hooks(self) -> Self:
+        self.pre_run_hook()
+        self.logger.info("Pre-run hook completed.")
+        self.run_hook()
+        self.logger.info("Run hook completed.")
+        self.post_run_hook()
+        self.logger.info("Post-run hook completed.")
+        return self
 
     @classmethod
     def abspath(cls, path: os.PathLike) -> Path:
