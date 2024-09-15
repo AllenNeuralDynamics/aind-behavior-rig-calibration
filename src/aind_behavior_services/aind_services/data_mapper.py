@@ -19,12 +19,12 @@ from aind_data_schema.core.session import (
     Modality,
     RewardDeliveryConfig,
     RewardSolution,
-    Session,
     Software,
     StimulusEpoch,
     StimulusModality,
     Stream,
 )
+from aind_data_schema.core.session import Session as AdsSession
 from pydantic import BaseModel
 
 import aind_behavior_services.rig as AbsRig
@@ -49,7 +49,7 @@ def mapper_from_session_root(
     session_end_time: datetime.datetime = utcnow(),
     output_parameters: Optional[Dict] = None,
     **kwargs,
-) -> Session:
+) -> AdsSession:
     return mapper(
         session_model=model_from_json_file(Path(schema_root) / "session_input.json", session_model),
         rig_model=model_from_json_file(Path(schema_root) / "rig_input.json", rig_model),
@@ -74,7 +74,7 @@ def mapper_from_json_files(
     session_end_time: datetime.datetime = utcnow(),
     output_parameters: Optional[Dict] = None,
     **kwargs,
-) -> Session:
+) -> AdsSession:
     return mapper(
         session_model=model_from_json_file(session_json, session_model),
         rig_model=model_from_json_file(rig_json, rig_model),
@@ -96,7 +96,7 @@ def mapper(
     session_end_time: datetime.datetime = utcnow(),
     output_parameters: Optional[Dict] = None,
     **kwargs,
-) -> Session:
+) -> AdsSession:
     # Normalize repository
     if isinstance(repository, os.PathLike | str):
         repository = git.Repo(Path(repository))
@@ -145,7 +145,7 @@ def mapper(
     reward_delivery_config = RewardDeliveryConfig(reward_solution=RewardSolution.WATER, reward_spouts=[])
 
     # Construct aind-data-schema session
-    aind_data_schema_session = Session(
+    aind_data_schema_session = AdsSession(
         animal_weight_post=None,  # todo: fetch/push to slims
         animal_weight_prior=None,  # todo: fetch/push to slims
         reward_consumed_total=None,  # todo: fetch/push to slims
