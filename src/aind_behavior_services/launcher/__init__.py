@@ -13,7 +13,6 @@ from typing import Any, Generic, List, Optional, Self, Tuple, Type, TypeVar, Uni
 
 import git
 import pydantic
-from requests import HTTPError
 
 from aind_behavior_services import (
     AindBehaviorRigModel,
@@ -23,7 +22,8 @@ from aind_behavior_services import (
 from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.aind_services.watchdog import Watchdog
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
-from aind_behavior_services.utils import format_datetime, run_bonsai_process, utcnow
+from aind_behavior_services.launcher import watchdog as launcher_watchdog_helper
+from aind_behavior_services.utils import run_bonsai_process, utcnow
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disable=invalid-name
@@ -296,21 +296,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             if not (os.path.isfile(os.path.join(self.default_bonsai_workflow))):
                 raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_bonsai_workflow}.")
 
-            if self.watchdog is not None:
-                self.logger.warning("Watchdog service is enabled.")
-                if not self.watchdog.is_running():
-                    self.logger.warning(
-                        "Watchdog service is not running. \
-                                        After the session is over, \
-                                        the launcher will attempt to forcefully restart it"
-                    )
-                if not self.watchdog.validate_project_name():
-                    try:
-                        self.logger.warning("Watchdog project name is not valid.")
-                    except HTTPError as e:
-                        self.logger.error("Failed to fetch project names from endpoint. %s", e)
-            else:
-                self.logger.warning("Watchdog service is disabled.")
+            _ = launcher_watchdog_helper.is_valid_instance(self.logger, self.watchdog)
 
             if self.repository.is_dirty():
                 self.logger.warning(
@@ -540,40 +526,18 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         else:
             if self.watchdog is not None:
                 try:
-                    if not self.watchdog.is_running():
-                        self.logger.warning("Watchdog service is not running. Attempting to start it.")
-
-                        try:
-                            self.watchdog.force_restart(kill_if_running=False)
-                        except subprocess.CalledProcessError as e:
-                            self.logger.error("Failed to start watchdog service. %s", e)
-                        else:
-                            if not self.watchdog.is_running():
-                                self.logger.error("Failed to start watchdog service.")
-                            else:
-                                self.logger.info("Watchdog service restarted successfully.")
-
-                    self.logger.info("Creating watchdog manifest config.")
-                    if self.session_schema.remote_path is None:
-                        raise ValueError(
-                            "Remote path is not defined in the session schema. \
-                                A remote path must be used to create a watchdog manifest."
-                        )
-                    watchdog_manifest_config = self.watchdog.create_manifest_config(
+                    if self.remote_data_dir is None:
+                        raise ValueError("Remote data directory is not defined.")
+                    if self.session_directory is None:
+                        raise ValueError("Session directory is not defined.")
+                    launcher_watchdog_helper.post_run_hook_routine(
+                        watchdog=self.watchdog,
+                        logger=self.logger,
+                        session_schema=self.session_schema,
                         ads_session=aind_data_schema_session,
-                        source=Path(self.session_directory),
-                        destination=Path(self.session_schema.remote_path),
-                        processor_full_name=",".join(
-                            [name for name in aind_data_schema_session.experimenter_full_name]
-                        ),
-                        session_name=self.session_schema.session_name,
+                        remote_path=self.remote_data_dir,
+                        session_directory=self.session_directory,
                     )
-
-                    _manifest_name = f"manifest_{self.session_schema.session_name if self.session_schema.session_name else format_datetime(self.session_schema.date)}.yaml"
-                    _manifest_path = self.watchdog.dump_manifest_config(
-                        watchdog_manifest_config, path=Path(self.watchdog.watched_dir) / _manifest_name
-                    )
-                    self.logger.info("Watchdog manifest config created successfully at %s.", _manifest_path)
                 except (pydantic.ValidationError, ValueError, IOError) as e:
                     self.logger.error("Failed to create watchdog manifest config. %s", e)
         return self
