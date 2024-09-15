@@ -17,7 +17,7 @@ from typing import Dict, List, Optional
 
 import requests
 import yaml
-from aind_data_schema.core.session import Session
+from aind_data_schema.core.session import Session as AdsSession
 from aind_data_schema_models.platforms import Platform
 from aind_watchdog_service.models.manifest_config import BucketType, ManifestConfig
 from aind_watchdog_service.models.watch_config import WatchConfig
@@ -76,7 +76,7 @@ class Watchdog:
             webhook_url=webhook_url,
         )
 
-    def validate_project_name(self) -> bool:
+    def is_valid_project_name(self) -> bool:
         project_names = Watchdog._get_project_names()
         return self.project_name in project_names
 
@@ -84,7 +84,7 @@ class Watchdog:
         self,
         source: os.PathLike,
         destination: os.PathLike,
-        ads_session: Session,
+        ads_session: AdsSession,
         ads_schemas: Optional[List[os.PathLike]] = None,
         session_name: Optional[str] = None,
         **kwargs,
