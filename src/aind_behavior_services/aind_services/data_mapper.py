@@ -46,7 +46,7 @@ def mapper_from_session_root(
     task_logic_model: Type[AindBehaviorTaskLogicModel],
     repository: Union[os.PathLike, git.Repo],
     script_path: os.PathLike,
-    session_end_time: datetime.datetime = utcnow(),
+    session_end_time: Optional[datetime.datetime] = None,
     output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> AdsSession:
@@ -56,7 +56,7 @@ def mapper_from_session_root(
         task_logic_model=model_from_json_file(Path(schema_root) / "tasklogic_input.json", task_logic_model),
         repository=repository,
         script_path=script_path,
-        session_end_time=session_end_time,
+        session_end_time=session_end_time if session_end_time else utcnow(),
         output_parameters=output_parameters,
         **kwargs,
     )
@@ -71,7 +71,7 @@ def mapper_from_json_files(
     task_logic_model: Type[AindBehaviorTaskLogicModel],
     repository: Union[os.PathLike, git.Repo],
     script_path: os.PathLike,
-    session_end_time: datetime.datetime = utcnow(),
+    session_end_time: Optional[datetime.datetime],
     output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> AdsSession:
@@ -81,7 +81,7 @@ def mapper_from_json_files(
         task_logic_model=model_from_json_file(task_logic_json, task_logic_model),
         repository=repository,
         script_path=script_path,
-        session_end_time=session_end_time,
+        session_end_time=session_end_time if session_end_time else utcnow(),
         output_parameters=output_parameters,
         **kwargs,
     )
@@ -93,7 +93,7 @@ def mapper(
     task_logic_model: AindBehaviorTaskLogicModel,
     repository: Union[os.PathLike, git.Repo],
     script_path: os.PathLike,
-    session_end_time: datetime.datetime = utcnow(),
+    session_end_time: Optional[datetime.datetime] = None,
     output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> AdsSession:
@@ -172,7 +172,7 @@ def mapper(
             StimulusEpoch(
                 stimulus_name=session_model.experiment,
                 stimulus_start_time=session_model.date,
-                stimulus_end_time=session_end_time,
+                stimulus_end_time=session_end_time if session_end_time else session_model.date,
                 stimulus_modalities=stimulus_modalities,
                 software=[
                     Software(
@@ -209,14 +209,12 @@ def model_from_json_file(json_path: os.PathLike, model_class: Type[TSchema]) -> 
         return model_class.model_validate_json(f.read())
 
 
-def _mapper_calibration(
-    calibration: Calibration, default_date: datetime.datetime = utcnow()
-) -> ads_devices.Calibration:
+def _mapper_calibration(calibration: Calibration) -> ads_devices.Calibration:
     return ads_devices.Calibration(
         device_name=calibration.device_name,
         input=calibration.input.model_dump() if calibration.input else {},
         output=calibration.output.model_dump() if calibration.output else {},
-        calibration_date=calibration.date if calibration.date else default_date,
+        calibration_date=calibration.date,
         description=calibration.description if calibration.description else "",
         notes=calibration.notes,
     )
