@@ -11,10 +11,12 @@ Welcome to AIND Behavior Services's documentation!
 .. toctree::
    :maxdepth: 4
    :caption: Contents:
+   :glob:
 
    self
    api
-   json-schemas
+   json_schemas
+   articles/*
    GitHub Source Code <https://github.com/AllenNeuralDynamics/Aind.Behavior.Services>
 
 Indices and tables
