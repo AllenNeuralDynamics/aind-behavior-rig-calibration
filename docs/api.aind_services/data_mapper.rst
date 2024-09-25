@@ -10,7 +10,7 @@ The design and pattern of this module will likely evolve over time, but for now 
 or via the syntactic sugar methods:
 :py:class:`~aind_behavior_services.aind_services.data_mapper.mapper_from_session_root` and  :py:class:`~aind_behavior_services.aind_services.data_mapper.mapper_from_json_files`
 
-For an implementation example see the `~aind_behavior_services.launcher.Launcher` class.
+For an implementation example see the :py:class:`~aind_behavior_services.launcher.Launcher` class.
 
 .. automodule:: aind_behavior_services.aind_services.data_mapper
    :members:

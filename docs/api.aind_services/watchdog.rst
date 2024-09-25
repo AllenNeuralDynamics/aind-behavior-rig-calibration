@@ -52,7 +52,7 @@ Once the instance is created, the user can interface with the service using the 
         session)
 
 
-For an implementation example see the `~aind_behavior_services.launcher.Launcher` class.
+For an implementation example see the :py:class:`~aind_behavior_services.launcher.Launcher` class.
 
 
 .. automodule:: aind_behavior_services.aind_services.watchdog
