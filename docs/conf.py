@@ -30,15 +30,7 @@ release = aind_behavior_services.__version__
 
 json_root_path = os.path.abspath("../src/schemas")
 json_files = glob.glob(os.path.join(json_root_path, "*.json"))
-rst_target_path = os.path.abspath("json-schemas")
-
-root_template = """
-JsonSchema
--------------
-.. toctree::
-   :maxdepth: 4
-
-"""
+rst_target_path = os.path.abspath("json_schemas")
 
 leaf_template = """
 {json_file_name}
@@ -54,12 +46,8 @@ leaf_template = """
 
 for json_file in json_files:
     json_file_name = os.path.basename(json_file)
-    root_template += f"   json-schemas/{json_file_name.replace('.json', '')}\n"
     with open(os.path.join(rst_target_path, f"{json_file_name.replace('.json', '')}.rst"), "w") as f:
         f.write(leaf_template.format(json_file_name=json_file_name.replace(".json", "")))
-
-with open("json-schemas.rst", "w") as f:
-    f.write(root_template)
 
 
 # -- General configuration ---------------------------------------------------
