@@ -8,7 +8,7 @@ from aind_behavior_services import (
     AindBehaviorSessionModel,
     AindBehaviorTaskLogicModel,
 )
-from aind_behavior_services.launcher import Launcher
+from aind_behavior_services.launcher import Launcher, launcher_logging
 
 
 class LauncherTests(unittest.TestCase):
@@ -36,6 +36,10 @@ class LauncherTests(unittest.TestCase):
 
         with self.assertRaises((FileNotFoundError, OSError, SystemExit)) as _:
             launcher._validate_dependencies()
+
+    def test_logger(self):
+        logger = launcher_logging.default_logger_factory(None)
+        self.assertIsInstance(logger, logging.Logger)
 
 
 def dummy_logger() -> logging.Logger:
