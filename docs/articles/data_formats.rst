@@ -6,4 +6,5 @@ Data formats
    :caption: Contents:
    :glob:
 
+   core/*
    data_formats/*

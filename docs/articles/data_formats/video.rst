@@ -37,10 +37,10 @@ If multiple streams from the same camera are acquired in the same session, an op
 .. code-block:: none
 
     📦behavior-videos
-    ┣ 📂BodyCamera_2023-12-25T133015
+    ┣ 📂BodyCamera_2023-12-25T133015Z
     ┃ ┣ 📜metadata.cs
     ┃ ┗ 📜video.mp4
-    ┗ 📂BodyCamera_2023-12-25T145001
+    ┗ 📂BodyCamera_2023-12-25T145001Z
     ┃ ┣ 📜metadata.csv
     ┃ ┗ 📜video.mp4
 

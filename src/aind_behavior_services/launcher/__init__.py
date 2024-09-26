@@ -22,7 +22,8 @@ from aind_behavior_services import (
 from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.aind_services.watchdog import Watchdog
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
-from aind_behavior_services.launcher import watchdog as launcher_watchdog_helper
+from aind_behavior_services.launcher import launcher_logging
+from aind_behavior_services.launcher import _watchdog as launcher_watchdog_helper
 from aind_behavior_services.utils import run_bonsai_process, utcnow
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
@@ -61,7 +62,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.temp_dir = self.abspath(temp_dir) / secrets.token_hex(nbytes=16)
         self.temp_dir.mkdir(parents=True, exist_ok=True)
 
-        self.logger = logger if logger is not None else self._create_logger(self.temp_dir / "launcher.log")
+        self.logger = logger if logger is not None else launcher_logging.default_logger_factory(self.temp_dir / "launcher.log")
 
         self.watchdog = watchdog
 
@@ -165,9 +166,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self._make_folder_structure()
 
     def _exit(self, code: int = 0) -> None:
-        logging.info("Exiting with code %s", code)
-        # Dispose loggers
-        logging.shutdown()
+        self.logger.info("Exiting with code %s", code)
+        if self.logger is not None:
+            launcher_logging.shutdown_logger(self.logger)
         sys.exit(code)
 
     def _print_diagnosis(self) -> None:
@@ -621,10 +622,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     def cleanup(self) -> Self:
         self.logger.info("Cleaning up...")
-        for handler in self.logger.handlers:
-            if isinstance(handler, logging.FileHandler):
-                self.logger.info("File handler found in logger. Closing and copying to session directory.")
-                handler.close()
+        launcher_logging.dispose_logger(self.logger)
 
         if self.session_directory is not None:
             self._copy_tmp_folder(self.session_directory / "Behavior" / "Logs")
@@ -720,22 +718,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         parser = cls._get_default_arg_parser()
         args, _ = parser.parse_known_args()
         return args
-
-    @staticmethod
-    def _create_logger(output_path: Optional[os.PathLike]) -> logging.Logger:
-        logger = logging.getLogger(__name__)
-        logger.setLevel(logging.INFO)
-        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-
-        console_handler = logging.StreamHandler(sys.stdout)
-        console_handler.setFormatter(formatter)
-        logger.addHandler(console_handler)
-
-        if output_path is not None:
-            file_handler = logging.FileHandler(Path(output_path), encoding="utf-8", mode="w")
-            file_handler.setFormatter(formatter)
-            logger.addHandler(file_handler)
-        return logger
 
     def _map_to_aind_data_schema_session(self):
         return data_mapper.mapper_from_session_root(
