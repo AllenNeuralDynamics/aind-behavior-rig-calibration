@@ -147,10 +147,10 @@ class Watchdog:
     ) -> list[str]:
         response = requests.get(end_point, timeout=timeout)
         if response.ok:
-            jData = json.loads(response.content)
+            content = json.loads(response.content)
         else:
             response.raise_for_status()
-        return jData["data"]
+        return content["data"]
 
     @staticmethod
     def is_running(process_name: str = DEFAULT_EXE) -> bool:
