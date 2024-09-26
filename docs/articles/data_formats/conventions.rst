@@ -1,6 +1,10 @@
 Standard conventions
 ---------------------
 
+Version
+#############
+0.1.0-draft
+
 Introduction
 #############
 
@@ -14,7 +18,7 @@ In general, filename conventions will be defined by the specific data format sta
 - Filenames must not contain spaces or special characters. `Use this as a reference for special characters <https://en.wikipedia.org/wiki/Filename#Reserved_characters_and_words>`_.
 - "Underscore" `_` should be used instead of "-" or any other special character to separate words.
 - Filenames should always contain a file extension. If no extension is provided, the file will be considered a flat binary file.
-- ANY file name can be suffixed with a ``datetime``. This suffix will ALWAYS be the last suffix in the filename, in case multiple suffixes are used, and will follow the ISO 8601 format and always be timezone aware, or UTC if no tz information is provided. If a `datetime` field is added we will adopt the format `YYYY-MM-DDTHHMMSS` e.g. `2023-12-25T133015` (`Reference<https://github.com/neuroinformatics-unit/NeuroBlueprint/issues/31>`_). See the :ref:`datetime` section for more details.
+- ANY file name can be suffixed with a ``datetime``. This suffix will ALWAYS be the last suffix in the filename, in case multiple suffixes are used, and will follow the ISO 8601 format and always be timezone aware, or UTC if no tz information is provided. If a `datetime` field is added we will adopt the format `YYYY-MM-DDTHHMMSS` e.g. `2023-12-25T133015` (`Reference <https://github.com/neuroinformatics-unit/NeuroBlueprint/issues/31>`_). See the :ref:`datetime` section for more details.
 
 - As an example, if two files (``data_stream.bin``) are generated as part of two different acquisition `streams <https://aind-data-schema.readthedocs.io/en/latest/session.html>`_:
 

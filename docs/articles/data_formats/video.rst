@@ -112,9 +112,9 @@ The following features should be true if the data asset is to be considered vali
 
 - Check if dropped frames occurred. This should be done in two ways:
 
-  - The difference between adjacent FrameNumber is always 1;
+  - The difference between adjacent ``FrameNumber`` is always 1;
 
-  - The difference between adjacent Seconds and adjacent FrameTime should be very close (I would suggest a threshold of 0.5ms for now);
+  - The difference between adjacent ``Seconds`` and adjacent ``FrameTime`` should be very close (I would suggest a threshold of 0.5ms for now);
 
     .. note::
 
