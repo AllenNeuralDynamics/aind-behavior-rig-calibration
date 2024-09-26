@@ -1,4 +1,4 @@
-Calibration
+calibration
 -------------
 
 Calibration Module

@@ -1,4 +1,4 @@
-AIND Services
+aind_services
 -------------
 
 AIND Services Module
