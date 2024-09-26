@@ -17,7 +17,7 @@ A list of services relevant for this library include:
 
 We will generally try to wrap the services provided by these repositories into a more user-friendly and opinionated interface that can be used by the Aind Behavior Services library and other repositories.
 
-We will also try to scope all dependencies of the related to AIND Services to its own optional dependency list in the `./pyproject.toml` file of this repository. Therefor, in order to use this module, you will need to install these optional dependencies by running:
+We will also try to scope all dependencies of the related to AIND Services to its own optional dependency list in the `./pyproject.toml` file of this repository. Therefore, in order to use this module, you will need to install these optional dependencies by running:
 
 ```pip install .[aind-services]```
 
