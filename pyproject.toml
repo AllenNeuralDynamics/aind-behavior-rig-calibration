@@ -32,7 +32,7 @@ Issues = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/issues"
 Changelog = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/releases"
 
 [project.optional-dependencies]
-aind-extra-services = [
+aind-services = [
     'aind-watchdog-service@git+https://github.com/AllenNeuralDynamics/aind-watchdog-service@0.1.0-rc1',
     'aind-data-schema<1.1',
 ]

@@ -106,7 +106,7 @@ def mapper(
 
     # Populate calibrations:
     calibrations = [
-        _mapper_calibration(_calibration_model[1], utcnow())
+        _mapper_calibration(_calibration_model[1])
         for _calibration_model in helpers.get_fields_of_type(rig_model, Calibration)
     ]
     # Populate cameras
