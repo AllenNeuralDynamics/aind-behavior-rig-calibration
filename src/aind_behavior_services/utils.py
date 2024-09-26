@@ -406,8 +406,15 @@ def open_bonsai_process(
         return subprocess.Popen(logging_cmd, cwd=cwd, creationflags=creation_flags)
 
 
-def format_datetime(value: datetime.datetime) -> str:
-    return value.strftime("%Y%m%dT%H%M%S")
+def format_datetime(value: datetime.datetime, is_tz_strict: bool = False) -> str:
+    if value.tzinfo is None:
+        if is_tz_strict:
+            raise ValueError("Datetime object must be timezone-aware")
+        return value.strftime("%Y-%m-%dT%H%M%S")
+    elif value.tzinfo.utcoffset(value) == datetime.timedelta(0):
+        return value.strftime("%Y-%m-%dT%H%M%SZ")
+    else:
+        return value.strftime("%Y-%m-%dT%H%M%S%z")
 
 
 def utcnow() -> datetime.datetime:
