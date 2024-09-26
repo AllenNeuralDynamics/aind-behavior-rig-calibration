@@ -25,18 +25,18 @@ In general, filename conventions will be defined by the specific data format sta
 .. code-block:: none
 
     📂Modality
-    ┣ 📜data_stream_2023-12-25T133015.bin
-    ┗ 📜data_stream_2023-12-25T145235.bin
+    ┣ 📜data_stream_2023-12-25T133015Z.bin
+    ┗ 📜data_stream_2023-12-25T145235Z.bin
 
 - This rule can be generalized to container-like file formats by adding the suffix to the container:
 
 .. code-block:: none
 
     📂Modality
-    ┣ 📂FileContainer_2023-12-25T133015
+    ┣ 📂FileContainer_2023-12-25T133015Z
     ┃ ┣ 📜file1.bin
     ┃ ┗ 📜file2.csv
-    ┣ 📂FileContainer_2023-12-25T145235
+    ┣ 📂FileContainer_2023-12-25T145235Z
     ┃ ┣ 📜file1.bin
     ┗ ┗ 📜file2.csv
 
