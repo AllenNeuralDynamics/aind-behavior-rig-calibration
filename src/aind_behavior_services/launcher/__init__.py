@@ -20,10 +20,8 @@ from aind_behavior_services import (
     AindBehaviorTaskLogicModel,
 )
 from aind_behavior_services.aind_services import data_mapper
-from aind_behavior_services.aind_services.watchdog import Watchdog
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
-from aind_behavior_services.launcher import _watchdog as launcher_watchdog_helper
-from aind_behavior_services.launcher import launcher_logging, ui_helpers
+from aind_behavior_services.launcher import logging_helper, ui_helper, watchdog
 from aind_behavior_services.utils import model_from_json_file, run_bonsai_process, utcnow
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
@@ -57,15 +55,15 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         skip_hardware_validation: bool = False,
         debug_mode: bool = False,
         logger: Optional[logging.Logger] = None,
-        watchdog: Optional[Watchdog] = None,
+        watchdog: Optional[watchdog.Watchdog] = None,
         group_by_subject_log: bool = False,
     ) -> None:
         self.temp_dir = self.abspath(temp_dir) / secrets.token_hex(nbytes=16)
         self.temp_dir.mkdir(parents=True, exist_ok=True)
         self.logger = (
-            logger if logger is not None else launcher_logging.default_logger_factory(self.temp_dir / "launcher.log")
+            logger if logger is not None else logging_helper.default_logger_factory(self.temp_dir / "launcher.log")
         )
-        self._ui_helper = ui_helpers.UIHelper(logger=self.logger)
+        self._ui_helper = ui_helper.UIHelper(logger=self.logger)
 
         args = self._cli_wrapper()
 
@@ -285,7 +283,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 try:
                     if self.remote_data_dir is None:
                         raise ValueError("Remote data directory is not defined.")
-                    launcher_watchdog_helper.post_run_hook_routine(
+                    watchdog.post_run_hook_routine(
                         watchdog=self.watchdog,
                         logger=self.logger,
                         session_schema=self.session_schema,
@@ -300,7 +298,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     def _exit(self, code: int = 0) -> None:
         self.logger.info("Exiting with code %s", code)
         if self.logger is not None:
-            launcher_logging.shutdown_logger(self.logger)
+            logging_helper.shutdown_logger(self.logger)
         sys.exit(code)
 
     def _print_diagnosis(self) -> None:  # todo
@@ -369,7 +367,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             if not (os.path.isfile(os.path.join(self.default_bonsai_workflow))):
                 raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_bonsai_workflow}.")
 
-            _ = launcher_watchdog_helper.is_valid_instance(self.logger, self.watchdog)
+            _ = watchdog.is_valid_instance(self.logger, self.watchdog)
 
             if self.repository.is_dirty():
                 self.logger.warning(
@@ -544,7 +542,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
     def dispose(self) -> None:
         self.logger.info("Disposing...")
-        launcher_logging.dispose_logger(self.logger)
+        logging_helper.dispose_logger(self.logger)
         try:
             self._copy_tmp_directory(self.session_directory / "Behavior" / "Logs")
         except ValueError:
