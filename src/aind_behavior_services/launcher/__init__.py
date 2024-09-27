@@ -21,7 +21,8 @@ from aind_behavior_services import (
 )
 from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
-from aind_behavior_services.launcher import logging_helper, ui_helper, watchdog
+from aind_behavior_services.launcher import logging_helper, ui_helper
+from aind_behavior_services.launcher.services import Services
 from aind_behavior_services.utils import model_from_json_file, run_bonsai_process, utcnow
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
@@ -36,6 +37,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     SUBJECT_DIR = "Subjects"
     TASK_LOGIC_DIR = "TaskLogic"
     VISUALIZERS_DIR = "VisualizerLayouts"
+
+    _services: Optional[Services] = None
 
     def __init__(
         self,
@@ -55,8 +58,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         skip_hardware_validation: bool = False,
         debug_mode: bool = False,
         logger: Optional[logging.Logger] = None,
-        watchdog: Optional[watchdog.Watchdog] = None,
         group_by_subject_log: bool = False,
+        services: Optional[Services] = None,
     ) -> None:
         self.temp_dir = self.abspath(temp_dir) / secrets.token_hex(nbytes=16)
         self.temp_dir.mkdir(parents=True, exist_ok=True)
@@ -64,10 +67,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             logger if logger is not None else logging_helper.default_logger_factory(self.temp_dir / "launcher.log")
         )
         self._ui_helper = ui_helper.UIHelper(logger=self.logger)
-
+        self._services = services if services is not None else Services()
         args = self._cli_wrapper()
-
-        self.watchdog = watchdog  # todo
 
         repository_dir = Path(args.repository_dir) if args.repository_dir is not None else repository_dir
         if repository_dir is None:
@@ -163,6 +164,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             return Path(self.session_schema.root_path) / (
                 self.session_schema.session_name if self.session_schema.session_name is not None else ""
             )
+
+    @property
+    def services(self) -> Services:
+        if self._services is None:
+            raise ValueError("Services instance not set.")
+        return self._services
 
     def __call__(self) -> None:
         self.main()
@@ -279,20 +286,16 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         except (pydantic.ValidationError, ValueError, IOError) as e:
             self.logger.error("Failed to map to aind-data-schema Session. %s", e)
         else:
-            if self.watchdog is not None:
-                try:
-                    if self.remote_data_dir is None:
-                        raise ValueError("Remote data directory is not defined.")
-                    watchdog.post_run_hook_routine(
-                        watchdog=self.watchdog,
-                        logger=self.logger,
-                        session_schema=self.session_schema,
-                        ads_session=aind_data_schema_session,
-                        remote_path=self.remote_data_dir,
-                        session_directory=self.session_directory,
-                    )
-                except (pydantic.ValidationError, ValueError, IOError) as e:
-                    self.logger.error("Failed to create watchdog manifest config. %s", e)
+            if self.services.watchdog is not None:
+                if self.remote_data_dir is None:
+                    raise ValueError("Remote data directory is not defined.")
+                self.services.watchdog.post_run_hook_routine(
+                    logger=self.logger,
+                    session_schema=self.session_schema,
+                    ads_session=aind_data_schema_session,
+                    remote_path=self.remote_data_dir,
+                    session_directory=self.session_directory,
+                )
         return self
 
     def _exit(self, code: int = 0) -> None:
@@ -367,7 +370,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             if not (os.path.isfile(os.path.join(self.default_bonsai_workflow))):
                 raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_bonsai_workflow}.")
 
-            _ = watchdog.is_valid_instance(self.logger, self.watchdog)
+            _ = self.services.validate_service(self.services.watchdog)
 
             if self.repository.is_dirty():
                 self.logger.warning(
