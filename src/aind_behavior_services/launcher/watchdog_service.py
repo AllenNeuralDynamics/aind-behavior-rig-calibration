@@ -9,22 +9,30 @@ from requests.exceptions import HTTPError
 
 import aind_behavior_services.aind_services.watchdog as watchdog
 from aind_behavior_services.aind_services.data_mapper import AdsSession
-from aind_behavior_services.launcher._service import Service
+from aind_behavior_services.launcher._service import IService
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.utils import format_datetime
 
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 
 
-class WatchdogService(watchdog.Watchdog, Service):
+class WatchdogService(watchdog.Watchdog, IService):
+    def __init__(self, logger: Logger, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._logger = logger
+
+    @property
+    def logger(self) -> Logger:
+        return self._logger
+
     def post_run_hook_routine(
         self,
-        logger: Logger,
         session_schema: TSession,
         ads_session: AdsSession,
         remote_path: PathLike,
         session_directory: PathLike,
     ):
+        logger = self.logger
         try:
             if not self.is_running():
                 logger.warning("Watchdog service is not running. Attempting to start it.")
@@ -62,7 +70,8 @@ class WatchdogService(watchdog.Watchdog, Service):
         except (pydantic.ValidationError, ValueError, IOError) as e:
             logger.error("Failed to create watchdog manifest config. %s", e)
 
-    def validate(self, logger: Logger) -> bool:
+    def validate(self, *args, **kwargs) -> bool:
+        logger = self.logger
         logger.info("Watchdog service is enabled.")
         is_running = True
         if not self.is_running():
