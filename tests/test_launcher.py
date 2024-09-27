@@ -8,7 +8,7 @@ from aind_behavior_services import (
     AindBehaviorSessionModel,
     AindBehaviorTaskLogicModel,
 )
-from aind_behavior_services.launcher import Launcher, launcher_logging
+from aind_behavior_services.launcher import Launcher, logging_helper
 
 
 class LauncherTests(unittest.TestCase):
@@ -38,7 +38,7 @@ class LauncherTests(unittest.TestCase):
             launcher._validate_dependencies()
 
     def test_logger(self):
-        logger = launcher_logging.default_logger_factory(None)
+        logger = logging_helper.default_logger_factory(None)
         self.assertIsInstance(logger, logging.Logger)
 
 

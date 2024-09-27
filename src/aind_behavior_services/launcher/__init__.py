@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Generic, List, Optional, Self, Tuple, Type, TypeVar, Union
+from typing import Any, Generic, List, Optional, Self, Type, TypeVar, Union
 
 import git
 import pydantic
@@ -20,15 +20,16 @@ from aind_behavior_services import (
     AindBehaviorTaskLogicModel,
 )
 from aind_behavior_services.aind_services import data_mapper
-from aind_behavior_services.aind_services.watchdog import Watchdog
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
-from aind_behavior_services.launcher import launcher_logging
-from aind_behavior_services.launcher import _watchdog as launcher_watchdog_helper
-from aind_behavior_services.utils import run_bonsai_process, utcnow
+from aind_behavior_services.launcher import logging_helper, ui_helper
+from aind_behavior_services.launcher.services import Services
+from aind_behavior_services.utils import model_from_json_file, run_bonsai_process, utcnow
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disable=invalid-name
 TTaskLogic = TypeVar("TTaskLogic", bound=AindBehaviorTaskLogicModel)  # pylint: disable=invalid-name
+
+TModel = TypeVar("TModel", bound=pydantic.BaseModel)  # pylint: disable=invalid-name
 
 
 class Launcher(Generic[TRig, TSession, TTaskLogic]):
@@ -36,6 +37,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     SUBJECT_DIR = "Subjects"
     TASK_LOGIC_DIR = "TaskLogic"
     VISUALIZERS_DIR = "VisualizerLayouts"
+
+    _services: Optional[Services] = None
 
     def __init__(
         self,
@@ -55,17 +58,16 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         skip_hardware_validation: bool = False,
         debug_mode: bool = False,
         logger: Optional[logging.Logger] = None,
-        watchdog: Optional[Watchdog] = None,
         group_by_subject_log: bool = False,
+        services: Optional[Services] = None,
     ) -> None:
-        # Dependency injection
         self.temp_dir = self.abspath(temp_dir) / secrets.token_hex(nbytes=16)
         self.temp_dir.mkdir(parents=True, exist_ok=True)
-
-        self.logger = logger if logger is not None else launcher_logging.default_logger_factory(self.temp_dir / "launcher.log")
-
-        self.watchdog = watchdog
-
+        self.logger = (
+            logger if logger is not None else logging_helper.default_logger_factory(self.temp_dir / "launcher.log")
+        )
+        self._ui_helper = ui_helper.UIHelper(logger=self.logger)
+        self._services = services if services is not None else Services()
         args = self._cli_wrapper()
 
         repository_dir = Path(args.repository_dir) if args.repository_dir is not None else repository_dir
@@ -107,8 +109,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         )
         self.computer_name = os.environ["COMPUTERNAME"]
         self._debug_mode = args.debug if args.debug else debug_mode
-        if self._debug_mode:
-            self.logger.setLevel(logging.DEBUG)
 
         self._rig_dir = Path(os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name))
         self._subject_dir = Path(os.path.join(self.config_library_dir, self.SUBJECT_DIR))
@@ -128,8 +128,16 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self._subject_db_data: Optional[SubjectEntry] = None
         self._run_hook_return: Any = None
 
-        self.post_init_hook(args)
+        self._post_init_(args)
 
+    def _post_init_(self, cli_args: argparse.Namespace) -> None:
+        """Overridable method that runs at the end of the self.__init__ method"""
+        if self._debug_mode:
+            self.logger.setLevel(logging.DEBUG)
+        if cli_args.create_directories is True:
+            self._create_directory_structure()
+
+    # Public properties / interfaces
     @property
     def rig_schema(self) -> TRig:
         if self._rig_schema is None:
@@ -149,29 +157,154 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         return self._task_logic_schema
 
     @property
-    def session_directory(self) -> Optional[Path]:
+    def session_directory(self) -> Path:
         if self.session_schema.session_name is None:
-            return None
+            raise ValueError("session_schema.session_name is not set.")
         else:
             return Path(self.session_schema.root_path) / (
                 self.session_schema.session_name if self.session_schema.session_name is not None else ""
             )
 
-    def run(self):  # For backwards compatibility
+    @property
+    def services(self) -> Services:
+        if self._services is None:
+            raise ValueError("Services instance not set.")
+        return self._services
+
+    def __call__(self) -> None:
         self.main()
 
-    def post_init_hook(self, cli_args: argparse.Namespace) -> None:
-        """Overridable method that runs at the end of the self.__init__ method"""
-        if cli_args.create_directories is True:
-            self._make_folder_structure()
+    def main(self) -> None:
+        try:
+            self._ui_prompt()
+            self._run_hooks()
+            self.dispose()
+        except KeyboardInterrupt:
+            self.logger.error("User interrupted the process.")
+            self._exit(-1)
+            return
+
+    def _ui_prompt(self) -> Self:
+        self._ui_helper.print_header(
+            task_logic_schema_model=self.task_logic_schema_model,
+            rig_schema_model=self.rig_schema_model,
+            session_schema_model=self.session_schema_model,
+        )
+        if self._debug_mode:
+            self._print_diagnosis()
+
+        self._validate_dependencies()
+        self._session_schema = self._prompt_session_input()
+        self._task_logic_schema = self._prompt_task_logic_input(hint_input=self._subject_db_data)
+        self._rig_schema = self._prompt_rig_input()
+        self._bonsai_visualizer_layout = self._prompt_visualizer_layout_input()
+        input("Press enter to start or Control+C to exit...")
+        return self
+
+    def _run_hooks(self) -> Self:
+        self._pre_run_hook()
+        self.logger.info("Pre-run hook completed.")
+        self._run_hook()
+        self.logger.info("Run hook completed.")
+        self._post_run_hook()
+        self.logger.info("Post-run hook completed.")
+        return self
+
+    def _pre_run_hook(self, *args, **kwargs) -> Self:
+        self.logger.info("Pre-run hook started.")
+        self.session_schema.experiment = self.task_logic_schema.name
+        self.session_schema.experiment_version = self.task_logic_schema.version
+        return self
+
+    def _run_hook(self, *args, **kwargs) -> Self:
+        self.logger.info("Running hook started.")
+        if self._session_schema is None:
+            raise ValueError("Session schema instance not set.")
+        if self._task_logic_schema is None:
+            raise ValueError("Task logic schema instance not set.")
+        if self._rig_schema is None:
+            raise ValueError("Rig schema instance not set.")
+
+        additional_properties = {
+            "TaskLogicPath": os.path.abspath(
+                self._save_temp_model(model=self._task_logic_schema, directory=self.temp_dir)
+            ),
+            "SessionPath": os.path.abspath(self._save_temp_model(model=self._session_schema, directory=self.temp_dir)),
+            "RigPath": os.path.abspath(self._save_temp_model(model=self._rig_schema, directory=self.temp_dir)),
+        }
+
+        try:
+            if self.bonsai_is_editor_mode:
+                self.logger.warning("Bonsai is running in editor mode. Cannot assert successful completion.")
+            self.logger.info("Bonsai process running...")
+            proc = run_bonsai_process(
+                bonsai_exe=self.bonsai_executable,
+                workflow_file=self.default_bonsai_workflow,
+                additional_properties=additional_properties,
+                layout=self._bonsai_visualizer_layout,
+                is_editor_mode=self.bonsai_is_editor_mode,
+                is_start_flag=self.bonsai_is_start_flag,
+                cwd=self._cwd,
+                print_cmd=self._debug_mode,
+            )
+            proc.check_returncode()
+
+        except subprocess.CalledProcessError as e:
+            self.logger.error("Bonsai process exited with an error. \n%s", e)
+            self._log_process_std_output("Bonsai", proc)
+            self._exit(-1)
+        else:
+            self._log_process_std_output("Bonsai", proc)
+            self.logger.info("Bonsai process completed.")
+
+            if len(proc.stderr) > 0:
+                self.logger.error("Bonsai process finished with errors.")
+                _continue = self._ui_helper.prompt_yes_no_question("Would you still like to continue?")
+                if not _continue:
+                    self.logger.info("User chose to exit.")
+                    self._exit(-1)
+            self._run_hook_return = None  # TODO To be improved
+        return self
+
+    def _post_run_hook(self, *args, **kwargs) -> Self:
+        self.logger.info("Post-run hook started.")
+        if self._run_hook_return is not None:
+            self.logger.info("Run hook returned %s", self._run_hook_return)
+        try:
+            self.logger.info("Mapping to aind-data-schema Session")
+            aind_data_schema_session = data_mapper.mapper_from_session_root(
+                schema_root=self.session_directory / "Behavior" / "Logs",
+                session_model=self.session_schema_model,
+                rig_model=self.rig_schema_model,
+                task_logic_model=self.task_logic_schema_model,
+                repository=self.repository,
+                script_path=Path(self.default_bonsai_workflow).resolve(),
+                session_end_time=utcnow(),
+            )
+            aind_data_schema_session.write_standard_file(self.session_directory)
+            self.logger.info("Mapping successful.")
+        except (pydantic.ValidationError, ValueError, IOError) as e:
+            self.logger.error("Failed to map to aind-data-schema Session. %s", e)
+        else:
+            if self.services.watchdog is not None:
+                if self.remote_data_dir is None:
+                    raise ValueError("Remote data directory is not defined.")
+                self.services.watchdog.post_run_hook_routine(
+                    logger=self.logger,
+                    session_schema=self.session_schema,
+                    ads_session=aind_data_schema_session,
+                    remote_path=self.remote_data_dir,
+                    session_directory=self.session_directory,
+                )
+        return self
 
     def _exit(self, code: int = 0) -> None:
         self.logger.info("Exiting with code %s", code)
         if self.logger is not None:
-            launcher_logging.shutdown_logger(self.logger)
+            logging_helper.shutdown_logger(self.logger)
         sys.exit(code)
 
-    def _print_diagnosis(self) -> None:
+    def _print_diagnosis(self) -> None:  # todo
         """
         Prints the diagnosis information for the launcher.
 
@@ -211,76 +344,16 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.default_bonsai_workflow,
         )
 
-    def _print_header(self) -> None:
-        """
-        Prints the header information for the launcher.
-
-        This method prints the header information, including the task logic schema version,
-        rig schema version, and session schema version.
-
-        Parameters:
-            None
-
-        Returns:
-            None
-        """
-
-        _HEADER = r"""
-
-        ██████╗██╗      █████╗ ██████╗ ███████╗
-        ██╔════╝██║     ██╔══██╗██╔══██╗██╔════╝
-        ██║     ██║     ███████║██████╔╝█████╗
-        ██║     ██║     ██╔══██║██╔══██╗██╔══╝
-        ╚██████╗███████╗██║  ██║██████╔╝███████╗
-        ╚═════╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝
-
-        Command-line-interface Launcher for AIND Behavior Experiments
-        Press Control+C to exit at any time.
-        """
-
-        _str = (
-            "-------------------------------\n"
-            f"{_HEADER}\n"
-            f"TaskLogic ({self.task_logic_schema_model.__name__}) Schema Version: {self.task_logic_schema_model.model_construct().version}\n"
-            f"Rig ({self.rig_schema_model.__name__}) Schema Version: {self.rig_schema_model.model_construct().version}\n"
-            f"Session ({self.session_schema_model.__name__}) Schema Version: {self.session_schema_model.model_construct().version}\n"
-            "-------------------------------"
-        )
-
-        self.logger.info(_str)
-        if self._debug_mode:
-            self._print_diagnosis()
-
-    def _save_temp_model(self, model: Union[TRig, TSession, TTaskLogic], folder: Optional[os.PathLike]) -> str:
-        """
-        Saves the given model as a JSON file in the specified folder or in the default temporary folder.
-
-        Args:
-            model (BaseModel): The model to be saved.
-            folder (Optional[os.PathLike]):
-              The folder where the model should be saved.
-              If not provided, the default temporary folder will be used.
-
-        Returns:
-            str: The file path of the saved model.
-
-        """
-        folder = Path(folder) if folder is not None else Path(self.temp_dir)
-        os.makedirs(folder, exist_ok=True)
+    def _save_temp_model(self, model: Union[TRig, TSession, TTaskLogic], directory: Optional[os.PathLike]) -> str:
+        directory = Path(directory) if directory is not None else Path(self.temp_dir)
+        os.makedirs(directory, exist_ok=True)
         fname = model.__class__.__name__ + ".json"
-        fpath = os.path.join(folder, fname)
+        fpath = os.path.join(directory, fname)
         with open(fpath, "w+", encoding="utf-8") as f:
             f.write(model.model_dump_json(indent=3))
         return fpath
 
-    TModel = TypeVar("TModel", bound=pydantic.BaseModel)  # pylint: disable=invalid-name
-
-    @staticmethod
-    def _load_model_from_json(json_path: os.PathLike | str, model: type[TModel]) -> TModel:
-        with open(Path(json_path), "r", encoding="utf-8") as file:
-            return model.model_validate_json(file.read())
-
-    def _validate_dependencies(self) -> None:
+    def _validate_dependencies(self) -> None:  # todo
         """
         Validates the dependencies required for the launcher to run.
         """
@@ -297,7 +370,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             if not (os.path.isfile(os.path.join(self.default_bonsai_workflow))):
                 raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_bonsai_workflow}.")
 
-            _ = launcher_watchdog_helper.is_valid_instance(self.logger, self.watchdog)
+            _ = self.services.validate_service(self.services.watchdog)
 
             if self.repository.is_dirty():
                 self.logger.warning(
@@ -313,51 +386,16 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self._exit(-1)
             raise e
 
-    @staticmethod
-    def _prompt_pick_file_from_list(
-        available_files: list[str],
-        prompt: str = "Choose a file:",
-        override_zero: Tuple[Optional[str], Optional[str]] = ("Enter manually", None),
-    ) -> str:
-        print(prompt)
-        if override_zero[0] is not None:
-            print(f"0: {override_zero[0]}")
-        _ = [print(f"{i+1}: {os.path.split(file)[1]}") for i, file in enumerate(available_files)]
-        choice = int(input("Choice: "))
-        if choice < 0 or choice >= len(available_files) + 1:
-            raise ValueError
-        if choice == 0:
-            if override_zero[0] is None:
-                raise ValueError
-            if override_zero[1] is not None:
-                return override_zero[1]
-            else:
-                path = str(input(override_zero[0]))
-            return path
-        else:
-            return available_files[choice - 1]
-
-    @staticmethod
-    def _prompt_yes_no_question(prompt: str) -> bool:
-        while True:
-            reply = input(prompt + " (Y\\N): ").upper()
-            if reply == "Y" or reply == "1":
-                return True
-            elif reply == "N" or reply == "0":
-                return False
-            else:
-                print("Invalid input. Please enter 'Y' or 'N'.")
-
-    def _prompt_session_input(self, folder: Optional[str] = None) -> TSession:
-        _local_config_folder = (
-            Path(os.path.join(self.config_library_dir, folder)) if folder is not None else self._subject_dir
+    def _prompt_session_input(self, directory: Optional[str] = None) -> TSession:
+        _local_config_directory = (
+            Path(os.path.join(self.config_library_dir, directory)) if directory is not None else self._subject_dir
         )
-        available_batches = self._get_available_batches(_local_config_folder)
+        available_batches = self._get_available_batches(_local_config_directory)
 
         subject_list = self._get_subject_list(available_batches)
-        subject = self._choose_subject(subject_list)
+        subject = self._ui_helper.choose_subject(subject_list)
         self._subject_db_data = subject_list.get_subject(subject)
-        notes = self._prompt_get_notes()
+        notes = self._ui_helper.prompt_get_notes()
 
         return self.session_schema_model(
             experiment="",  # Will be set later
@@ -373,11 +411,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             experiment_version="",  # Will be set later
         )
 
-    def _get_available_batches(self, folder: os.PathLike) -> List[str]:
-        available_batches = glob.glob(os.path.join(folder, "*.json"))
+    def _get_available_batches(self, directory: os.PathLike) -> List[str]:
+        available_batches = glob.glob(os.path.join(directory, "*.json"))
         available_batches = [batch for batch in available_batches if os.path.isfile(batch)]
         if len(available_batches) == 0:
-            raise FileNotFoundError(f"No batch files found in {folder}")
+            raise FileNotFoundError(f"No batch files found in {directory}")
         return available_batches
 
     def _get_subject_list(self, available_batches: List[str]) -> SubjectDataBase:
@@ -388,7 +426,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     batch_file = available_batches[0]
                     print(f"Found a single session config file. Using {batch_file}.")
                 else:
-                    batch_file = self._prompt_pick_file_from_list(
+                    batch_file = self._ui_helper.prompt_pick_file_from_list(
                         available_batches, prompt="Choose a batch:", override_zero=(None, None)
                     )
                     if not os.path.isfile(batch_file):
@@ -406,39 +444,23 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             else:
                 return subject_list
 
-    def _choose_subject(self, subject_list: SubjectDataBase) -> str:
-        subject = None
-        while subject is None:
-            try:
-                subject = self._prompt_pick_file_from_list(
-                    list(subject_list.subjects.keys()), prompt="Choose a subject:", override_zero=(None, None)
-                )
-            except ValueError as e:
-                self.logger.error("Invalid choice. Try again. %s", e)
-        return subject
-
-    @staticmethod
-    def _prompt_get_notes() -> str:
-        notes = str(input("Enter notes:"))
-        return notes
-
-    def _prompt_rig_input(self, folder_name: Optional[str] = None) -> TRig:
+    def _prompt_rig_input(self, directory: Optional[str] = None) -> TRig:
         rig_schemas_path = (
-            Path(os.path.join(self.config_library_dir, folder_name, self.computer_name))
-            if folder_name is not None
+            Path(os.path.join(self.config_library_dir, directory, self.computer_name))
+            if directory is not None
             else self._rig_dir
         )
         available_rigs = glob.glob(os.path.join(rig_schemas_path, "*.json"))
         if len(available_rigs) == 1:
             print(f"Found a single rig config file. Using {available_rigs[0]}.")
-            return self._load_model_from_json(available_rigs[0], self.rig_schema_model)
+            return model_from_json_file(available_rigs[0], self.rig_schema_model)
         else:
             while True:
                 try:
-                    path = self._prompt_pick_file_from_list(
+                    path = self._ui_helper.prompt_pick_file_from_list(
                         available_rigs, prompt="Choose a rig:", override_zero=(None, None)
                     )
-                    rig = self._load_model_from_json(path, self.rig_schema_model)
+                    rig = model_from_json_file(path, self.rig_schema_model)
                     print(f"Using {path}.")
                     return rig
                 except pydantic.ValidationError as e:
@@ -447,21 +469,23 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     self.logger.error("Invalid choice. Try again. %s", e)
 
     def _prompt_task_logic_input(
-        self, folder: Optional[str] = None, hint_input: Optional[SubjectEntry] = None
+        self, directory: Optional[str] = None, hint_input: Optional[SubjectEntry] = None
     ) -> TTaskLogic:
-        _path = Path(os.path.join(self.config_library_dir, folder)) if folder is not None else self._task_logic_dir
+        _path = (
+            Path(os.path.join(self.config_library_dir, directory)) if directory is not None else self._task_logic_dir
+        )
 
         task_logic: Optional[TTaskLogic] = None
         while task_logic is None:
             try:
                 if hint_input is None:
                     available_files = glob.glob(os.path.join(_path, "*.json"))
-                    path = self._prompt_pick_file_from_list(
+                    path = self._ui_helper.prompt_pick_file_from_list(
                         available_files, prompt="Choose a task logic:", override_zero=(None, None)
                     )
                     if not os.path.isfile(path):
                         raise FileNotFoundError(f"File not found: {path}")
-                    task_logic = self._load_model_from_json(path, self.task_logic_schema_model)
+                    task_logic = model_from_json_file(path, self.task_logic_schema_model)
                     print(f"Using {path}.")
 
                 else:
@@ -469,9 +493,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     if not os.path.isfile(hinted_path):
                         hint_input = None
                         raise FileNotFoundError(f"Hinted file not found: {hinted_path}. Try entering manually.")
-                    use_hint = self._prompt_yes_no_question(f"Would you like to go with the task file: {hinted_path}?")
+                    use_hint = self._ui_helper.prompt_yes_no_question(
+                        f"Would you like to go with the task file: {hinted_path}?"
+                    )
                     if use_hint:
-                        task_logic = self._load_model_from_json(hinted_path, self.task_logic_schema_model)
+                        task_logic = model_from_json_file(hinted_path, self.task_logic_schema_model)
                     else:
                         hint_input = None
 
@@ -482,10 +508,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
         return task_logic
 
-    def _prompt_visualizer_layout_input(self, folder_name: Optional[str] = None) -> Optional[str]:
+    def _prompt_visualizer_layout_input(
+        self, directory: Optional[str] = None
+    ) -> Optional[str]:  # todo this should belong in the executable class
         layout_schemas_path = (
-            Path(os.path.join(self.config_library_dir, folder_name, self.computer_name))
-            if folder_name is not None
+            Path(os.path.join(self.config_library_dir, directory, self.computer_name))
+            if directory is not None
             else self._visualizer_layouts_dir
         )
         available_layouts = glob.glob(os.path.join(layout_schemas_path, "*.bonsai.layout"))
@@ -507,170 +535,48 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             except ValueError as e:
                 self.logger.error("Invalid choice. Try again. %s", e)
 
-    def pre_run_hook(self, *args, **kwargs) -> Self:
-        self.logger.info("Pre-run hook started.")
-        self.session_schema.experiment = self.task_logic_schema.name
-        self.session_schema.experiment_version = self.task_logic_schema.version
-        return self
-
-    def post_run_hook(self, *args, **kwargs) -> Self:
-        self.logger.info("Post-run hook started.")
-        if self._run_hook_return is not None:
-            self.logger.info("Run hook returned %s", self._run_hook_return)
-        try:
-            self.logger.info("Mapping to aind-data-schema Session")
-            aind_data_schema_session = self._map_to_aind_data_schema_session()
-            aind_data_schema_session.write_standard_file(self.session_directory)
-            self.logger.info("Mapping successful.")
-        except (pydantic.ValidationError, ValueError, IOError) as e:
-            self.logger.error("Failed to map to aind-data-schema Session. %s", e)
-        else:
-            if self.watchdog is not None:
-                try:
-                    if self.remote_data_dir is None:
-                        raise ValueError("Remote data directory is not defined.")
-                    if self.session_directory is None:
-                        raise ValueError("Session directory is not defined.")
-                    launcher_watchdog_helper.post_run_hook_routine(
-                        watchdog=self.watchdog,
-                        logger=self.logger,
-                        session_schema=self.session_schema,
-                        ads_session=aind_data_schema_session,
-                        remote_path=self.remote_data_dir,
-                        session_directory=self.session_directory,
-                    )
-                except (pydantic.ValidationError, ValueError, IOError) as e:
-                    self.logger.error("Failed to create watchdog manifest config. %s", e)
-        return self
-
-    def run_hook(self, *args, **kwargs) -> Self:
-        self.logger.info("Running hook started.")
-        if self._session_schema is None:
-            raise ValueError("Session schema instance not set.")
-        if self._task_logic_schema is None:
-            raise ValueError("Task logic schema instance not set.")
-        if self._rig_schema is None:
-            raise ValueError("Rig schema instance not set.")
-
-        additional_properties = {
-            "TaskLogicPath": os.path.abspath(
-                self._save_temp_model(model=self._task_logic_schema, folder=self.temp_dir)
-            ),
-            "SessionPath": os.path.abspath(self._save_temp_model(model=self._session_schema, folder=self.temp_dir)),
-            "RigPath": os.path.abspath(self._save_temp_model(model=self._rig_schema, folder=self.temp_dir)),
-        }
-
-        try:
-            if self.bonsai_is_editor_mode:
-                self.logger.warning("Bonsai is running in editor mode. Cannot assert successful completion.")
-            self.logger.info("Bonsai process running...")
-            proc = run_bonsai_process(
-                bonsai_exe=self.bonsai_executable,
-                workflow_file=self.default_bonsai_workflow,
-                additional_properties=additional_properties,
-                layout=self._bonsai_visualizer_layout,
-                is_editor_mode=self.bonsai_is_editor_mode,
-                is_start_flag=self.bonsai_is_start_flag,
-                cwd=self._cwd,
-                print_cmd=self._debug_mode,
-            )
-            proc.check_returncode()
-
-        except subprocess.CalledProcessError as e:
-            self.logger.error("Bonsai process exited with an error. \n%s", e)
-            self._log_process_std_output("Bonsai", proc)
-            self._exit(-1)
-        else:
-            self._log_process_std_output("Bonsai", proc)
-            self.logger.info("Bonsai process completed.")
-
-            if len(proc.stderr) > 0:
-                self.logger.error("Bonsai process finished with errors.")
-                _continue = self._prompt_yes_no_question("Would you still like to continue?")
-                if not _continue:
-                    self.logger.info("User chose to exit.")
-                    self._exit(-1)
-            self._run_hook_return = None  # TODO To be improved
-        return self
-
-    def _log_process_std_output(self, process_name: str, proc: subprocess.CompletedProcess) -> None:
+    def _log_process_std_output(
+        self, process_name: str, proc: subprocess.CompletedProcess
+    ) -> None:  # todo this should belong in the executable class
         if len(proc.stdout) > 0:
             self.logger.info("%s full stdout dump: \n%s", process_name, proc.stdout)
         if len(proc.stderr) > 0:
             self.logger.error("%s full stderr dump: \n%s", process_name, proc.stderr)
 
-    def ui_prompt(self) -> Self:
-        self._print_header()
-        self._validate_dependencies()
-        self._session_schema = self._prompt_session_input()
-        self._task_logic_schema = self._prompt_task_logic_input(hint_input=self._subject_db_data)
-        self._rig_schema = self._prompt_rig_input()
-        self._bonsai_visualizer_layout = self._prompt_visualizer_layout_input()
-        input("Press enter to start or Control+C to exit...")
-        return self
-
-    def main(self) -> None:
+    def dispose(self) -> None:
+        self.logger.info("Disposing...")
+        logging_helper.dispose_logger(self.logger)
         try:
-            self.ui_prompt()
-            self.run_hooks()
-            self.cleanup()
-            self._exit(0)
-        except KeyboardInterrupt:
-            self.logger.error("User interrupted the process.")
-            self._exit(-1)
-            return
-
-    def cleanup(self) -> Self:
-        self.logger.info("Cleaning up...")
-        launcher_logging.dispose_logger(self.logger)
-
-        if self.session_directory is not None:
-            self._copy_tmp_folder(self.session_directory / "Behavior" / "Logs")
-        return self
-
-    def run_hooks(self) -> Self:
-        self.pre_run_hook()
-        self.logger.info("Pre-run hook completed.")
-        self.run_hook()
-        self.logger.info("Run hook completed.")
-        self.post_run_hook()
-        self.logger.info("Post-run hook completed.")
-        return self
+            self._copy_tmp_directory(self.session_directory / "Behavior" / "Logs")
+        except ValueError:
+            self.logger.error("Failed to copy temporary directory to session directory since it was not set.")
+        self._exit(0)
 
     @classmethod
     def abspath(cls, path: os.PathLike) -> Path:
-        """
-        Returns the absolute path of the given file or directory.
-
-        Args:
-            path os.PathLike: The path to the file or directory.
-
-        Returns:
-            Path: The absolute path of the file or directory.
-
-        """
         return Path(path).resolve()
 
-    def _make_folder_structure(self) -> None:
+    def _create_directory_structure(self) -> None:
         try:
-            self._make_folder(self.data_dir)
-            self._make_folder(self.config_library_dir)
-            self._make_folder(self.temp_dir)
-            self._make_folder(self._task_logic_dir)
-            self._make_folder(self._rig_dir)
-            self._make_folder(self._subject_dir)
-            self._make_folder(self._visualizer_layouts_dir)
+            self._create_directory(self.data_dir, self.logger)
+            self._create_directory(self.config_library_dir, self.logger)
+            self._create_directory(self.temp_dir, self.logger)
+            self._create_directory(self._task_logic_dir, self.logger)
+            self._create_directory(self._rig_dir, self.logger)
+            self._create_directory(self._subject_dir, self.logger)
+            self._create_directory(self._visualizer_layouts_dir, self.logger)
         except OSError as e:
-            self.logger.error("Failed to create folder structure: %s", e)
+            self.logger.error("Failed to create directory structure: %s", e)
             self._exit(-1)
 
-    def _make_folder(self, folder: os.PathLike) -> None:
-        if not os.path.exists(self.abspath(folder)):
-            self.logger.info("Creating  %s", folder)
+    @classmethod
+    def _create_directory(cls, dir: os.PathLike, logger: logging.Logger) -> None:
+        if not os.path.exists(cls.abspath(dir)):
+            logger.info("Creating  %s", dir)
             try:
-                os.makedirs(folder)
+                os.makedirs(dir)
             except OSError as e:
-                self.logger.error("Failed to create folder %s: %s", folder, e)
+                logger.error("Failed to create directory %s: %s", dir, e)
                 raise e
 
     @staticmethod
@@ -719,17 +625,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         args, _ = parser.parse_known_args()
         return args
 
-    def _map_to_aind_data_schema_session(self):
-        return data_mapper.mapper_from_session_root(
-            schema_root=self.session_directory / "Behavior" / "Logs",
-            session_model=self.session_schema_model,
-            rig_model=self.rig_schema_model,
-            task_logic_model=self.task_logic_schema_model,
-            repository=self.repository,
-            script_path=Path(self.default_bonsai_workflow).resolve(),
-            session_end_time=utcnow(),
-        )
-
-    def _copy_tmp_folder(self, dst: os.PathLike) -> None:
+    def _copy_tmp_directory(self, dst: os.PathLike) -> None:
         dst = Path(dst) / ".launcher"
         shutil.copytree(self.temp_dir, dst, dirs_exist_ok=True)
