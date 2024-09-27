@@ -2,16 +2,16 @@ import subprocess
 from logging import Logger
 from os import PathLike
 from pathlib import Path
-from typing import Optional, TypeVar
+from typing import TypeVar
 
+import pydantic
 from requests.exceptions import HTTPError
 
-from aind_behavior_services.aind_services.data_mapper import AdsSession
 import aind_behavior_services.aind_services.watchdog as watchdog
+from aind_behavior_services.aind_services.data_mapper import AdsSession
+from aind_behavior_services.launcher._service import Service
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.utils import format_datetime
-from aind_behavior_services.launcher._service import Service
-import pydantic
 
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 

@@ -1,13 +1,13 @@
-import aind_behavior_services.launcher.watchdog_service as watchdog_service
-from typing import Optional, Union, TypeVar, Self
 import logging
+from typing import Optional, Self, TypeVar, Union
+
+import aind_behavior_services.launcher.watchdog_service as watchdog_service
 
 SupportedServices = Union[watchdog_service.WatchdogService]
 TService = TypeVar("TService", bound=SupportedServices)
 
 
 class Services:
-
     _watchdog: Optional[watchdog_service.WatchdogService]
     _logger: Optional[logging.Logger]
 
