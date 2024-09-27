@@ -4,6 +4,7 @@ import logging
 import shutil
 from dataclasses import dataclass, field
 from typing import Callable, List, Optional
+import os
 
 from aind_behavior_services.launcher._service import IService
 
@@ -58,17 +59,23 @@ class Constraint:
         return f"Constraint {self.name} failed."
 
 
-def check_available_storage(drive: str, min_bytes: float) -> bool:
-    _, _, bytes_free = shutil.disk_usage(drive)
-    return bytes_free >= min_bytes
-
-
 def available_storage_constraint_factory(drive: str = "C:\\", min_bytes: float = 2e11) -> Constraint:
     return Constraint(
         name="available_storage",
-        constraint=check_available_storage,
+        constraint=lambda drive, min_bytes: shutil.disk_usage(drive).free >= min_bytes,
         args=[],
         kwargs={"drive": drive, "min_bytes": min_bytes},
         fail_msg_handler=lambda drive,
         min_bytes: f"Drive {drive} does not have enough space. Minimum required: {min_bytes} bytes.",
     )
+
+
+def remote_dir_exists_constraint_factory(dir_path: os.PathLike) -> Constraint:
+    return Constraint(
+        name="remote_dir_exists",
+        constraint=lambda dir_path: os.path.exists(dir_path),
+        args=[],
+        kwargs={"dir_path": dir_path},
+        fail_msg_handler=lambda dir_path: f"Directory {dir_path} does not exist.",
+    )
+
