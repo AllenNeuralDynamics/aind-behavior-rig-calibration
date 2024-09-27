@@ -8,7 +8,7 @@ from os import PathLike
 from pathlib import Path
 from string import capwords
 from subprocess import CompletedProcess, run
-from typing import Any, Dict, List, Optional, Type, Union
+from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 
 from pydantic import BaseModel, PydanticInvalidForJsonSchema
 from pydantic.json_schema import (
@@ -19,6 +19,8 @@ from pydantic.json_schema import (
     models_json_schema,
 )
 from pydantic_core import PydanticOmit, core_schema, to_jsonable_python
+
+TModel = TypeVar("TModel", bound=BaseModel)
 
 
 class CustomGenerateJsonSchema(GenerateJsonSchema):
@@ -419,3 +421,8 @@ def format_datetime(value: datetime.datetime, is_tz_strict: bool = False) -> str
 
 def utcnow() -> datetime.datetime:
     return datetime.datetime.now(datetime.timezone.utc)
+
+
+def model_from_json_file(json_path: os.PathLike | str, model: type[TModel]) -> TModel:
+    with open(Path(json_path), "r", encoding="utf-8") as file:
+        return model.model_validate_json(file.read())
