@@ -9,7 +9,7 @@ import os
 from aind_behavior_services.launcher._service import IService
 
 
-class ResourceManager(IService):
+class ResourceMonitor(IService):
     def __init__(
         self,
         logger: logging.Logger,
@@ -24,9 +24,6 @@ class ResourceManager(IService):
 
     def validate(self, *args, **kwargs) -> bool:
         return True
-
-    def register(self, *args, **kwargs) -> None:
-        pass
 
     def add_constraint(self, constraint: Constraint) -> None:
         self.constraints.append(constraint)
@@ -78,4 +75,3 @@ def remote_dir_exists_constraint_factory(dir_path: os.PathLike) -> Constraint:
         kwargs={"dir_path": dir_path},
         fail_msg_handler=lambda dir_path: f"Directory {dir_path} does not exist.",
     )
-
