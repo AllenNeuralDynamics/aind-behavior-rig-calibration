@@ -33,7 +33,7 @@ class WatchdogService(watchdog.Watchdog, IService):
             raise ValueError("Logger already set")
         self._logger = logger
 
-    def post_run_hook_routine(
+    def create_manifest_from_ads_session(
         self,
         session_schema: TSession,
         ads_session: AdsSession,
