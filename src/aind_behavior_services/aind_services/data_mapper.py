@@ -39,7 +39,7 @@ from aind_behavior_services.utils import utcnow
 from . import helpers
 
 
-def mapper_from_session_root(
+def map_from_session_root(
     schema_root: os.PathLike,
     session_model: Type[AindBehaviorSessionModel],
     rig_model: Type[AindBehaviorRigModel],
@@ -50,7 +50,7 @@ def mapper_from_session_root(
     output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> AdsSession:
-    return mapper(
+    return map(
         session_model=model_from_json_file(Path(schema_root) / "session_input.json", session_model),
         rig_model=model_from_json_file(Path(schema_root) / "rig_input.json", rig_model),
         task_logic_model=model_from_json_file(Path(schema_root) / "tasklogic_input.json", task_logic_model),
@@ -62,7 +62,7 @@ def mapper_from_session_root(
     )
 
 
-def mapper_from_json_files(
+def map_from_json_files(
     session_json: os.PathLike,
     rig_json: os.PathLike,
     task_logic_json: os.PathLike,
@@ -75,7 +75,7 @@ def mapper_from_json_files(
     output_parameters: Optional[Dict] = None,
     **kwargs,
 ) -> AdsSession:
-    return mapper(
+    return map(
         session_model=model_from_json_file(session_json, session_model),
         rig_model=model_from_json_file(rig_json, rig_model),
         task_logic_model=model_from_json_file(task_logic_json, task_logic_model),
@@ -87,7 +87,7 @@ def mapper_from_json_files(
     )
 
 
-def mapper(
+def map(
     session_model: AindBehaviorSessionModel,
     rig_model: AindBehaviorRigModel,
     task_logic_model: AindBehaviorTaskLogicModel,
