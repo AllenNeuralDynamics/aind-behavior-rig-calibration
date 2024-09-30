@@ -331,7 +331,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             f.write(model.model_dump_json(indent=3))
         return fpath
 
-    def _validate_dependencies(self) -> None:  # todo
+    def _validate_dependencies(self) -> None:
         """
         Validates the dependencies required for the launcher to run.
         """
@@ -341,22 +341,28 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             if self.services.app is None:
                 raise ValueError("Bonsai app not set.")
             else:
-                self.services.app.validate()
-                self.logger.info("Bonsai app validated.")
+                if not self.services.app.validate():
+                    raise ValueError("Bonsai app failed to validate.")
+                else:
+                    self.logger.info("Bonsai app validated.")
 
             # Watchdog service is optional
             if self.services.watchdog is None:
                 self.logger.warning("Watchdog service not set.")
             else:
-                self.services.watchdog.validate()
-                self.logger.info("Watchdog service validated.")
+                if not self.services.watchdog.validate():
+                    raise ValueError("Watchdog service failed to validate.")
+                else:
+                    self.logger.info("Watchdog service validated.")
 
             # Resource monitor service is optional
             if self.services.resource_monitor is None:
                 self.logger.warning("Resource monitor service not set.")
             else:
-                self.services.resource_monitor.validate()
-                self.logger.info("Resource monitor service validated.")
+                if not self.services.resource_monitor.validate():
+                    raise ValueError("Resource monitor service failed to validate.")
+                else:
+                    self.logger.info("Resource monitor service validated.")
 
             if not (os.path.isdir(self.config_library_dir)):
                 raise FileNotFoundError(f"Config library not found! Expected {self.config_library_dir}.")
@@ -375,6 +381,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                         "Dirty repository not allowed. Exiting. Consider running with --allow-dirty flag."
                     )
                     self._exit(-1)
+
         except Exception as e:
             self.logger.error("Failed to validate dependencies. %s", e)
             self._exit(-1)
