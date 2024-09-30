@@ -426,9 +426,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     batch_file = available_batches[0]
                     print(f"Found a single session config file. Using {batch_file}.")
                 else:
-                    batch_file = self._ui_helper.prompt_pick_file_from_list(
-                        available_batches, prompt="Choose a batch:", override_zero=(None, None)
+                    pick = self._ui_helper.prompt_pick_file_from_list(
+                        available_batches, prompt="Choose a batch:", zero_label=None
                     )
+                    if not isinstance(pick, str):
+                        raise ValueError("Invalid choice.")
+                    batch_file = pick
                     if not os.path.isfile(batch_file):
                         raise FileNotFoundError(f"File not found: {batch_file}")
                     print(f"Using {batch_file}.")
@@ -458,8 +461,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             while True:
                 try:
                     path = self._ui_helper.prompt_pick_file_from_list(
-                        available_rigs, prompt="Choose a rig:", override_zero=(None, None)
+                        available_rigs, prompt="Choose a rig:", zero_label=None
                     )
+                    if not isinstance(path, str):
+                        raise ValueError("Invalid choice.")
                     rig = model_from_json_file(path, self.rig_schema_model)
                     print(f"Using {path}.")
                     return rig
@@ -481,8 +486,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 if hint_input is None:
                     available_files = glob.glob(os.path.join(_path, "*.json"))
                     path = self._ui_helper.prompt_pick_file_from_list(
-                        available_files, prompt="Choose a task logic:", override_zero=(None, None)
+                        available_files, prompt="Choose a task logic:", zero_label=None
                     )
+                    if not isinstance(path, str):
+                        raise ValueError("Invalid choice.")
                     if not os.path.isfile(path):
                         raise FileNotFoundError(f"File not found: {path}")
                     task_logic = model_from_json_file(path, self.task_logic_schema_model)
@@ -534,14 +541,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     return available_layouts[choice - 2]
             except ValueError as e:
                 self.logger.error("Invalid choice. Try again. %s", e)
-
-    def _log_process_std_output(
-        self, process_name: str, proc: subprocess.CompletedProcess
-    ) -> None:  # todo this should belong in the executable class
-        if len(proc.stdout) > 0:
-            self.logger.info("%s full stdout dump: \n%s", process_name, proc.stdout)
-        if len(proc.stderr) > 0:
-            self.logger.error("%s full stderr dump: \n%s", process_name, proc.stderr)
 
     def dispose(self) -> None:
         self.logger.info("Disposing...")

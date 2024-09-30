@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import logging
+import os
 import shutil
 from dataclasses import dataclass, field
 from typing import Callable, List, Optional
-import os
 
 from aind_behavior_services.launcher._service import IService
 
