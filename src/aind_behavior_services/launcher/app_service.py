@@ -147,7 +147,8 @@ class BonsaiApp(App):
             try:
                 available_layouts.insert(0, "None")
                 picked = UIHelper(self.logger, print).prompt_pick_file_from_list(
-                    available_layouts, prompt="Pick a visualizer layout:",
+                    available_layouts,
+                    prompt="Pick a visualizer layout:",
                     zero_label="Default",
                     zero_value=None,
                     zero_as_input=False,
