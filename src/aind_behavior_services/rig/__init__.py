@@ -23,6 +23,7 @@ class VideoWriterFfmpeg(BaseModel):
         default="-c:v hevc_nvenc -pix_fmt x2rgb10le -color_range full -tune hq -preset p3 -rc vbr -cq 16 -rc-lookahead 56 -temporal-aq 1 -qmin 0 -qmax 10",  # E501
         description="Output arguments",
     )
+    input_arguments: str = Field(default="", description="Input arguments")
 
 
 class VideoWriterOpenCv(BaseModel):
