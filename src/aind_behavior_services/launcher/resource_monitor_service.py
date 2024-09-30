@@ -23,7 +23,7 @@ class ResourceMonitor(IService):
         return self._logger
 
     def validate(self, *args, **kwargs) -> bool:
-        return True
+        return self.evaluate_constraints()
 
     def add_constraint(self, constraint: Constraint) -> None:
         self.constraints.append(constraint)
