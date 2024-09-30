@@ -1,10 +1,11 @@
 import logging
 from typing import Optional, Self, TypeVar, Union
 
+import aind_behavior_services.launcher.apps as apps
 import aind_behavior_services.launcher.resource_monitor_service as resource_monitor_service
 import aind_behavior_services.launcher.watchdog_service as watchdog_service
 
-SupportedServices = Union[watchdog_service.WatchdogService, resource_monitor_service.ResourceMonitor]
+SupportedServices = Union[watchdog_service.WatchdogService, resource_monitor_service.ResourceMonitor, apps.BonsaiApp]
 TService = TypeVar("TService", bound=SupportedServices)
 
 
@@ -12,11 +13,19 @@ class Services:
     _watchdog: Optional[watchdog_service.WatchdogService]
     _logger: Optional[logging.Logger]
     _resource_monitor: Optional[resource_monitor_service.ResourceMonitor]
+    _app: Optional[apps.BonsaiApp]
 
-    def __init__(self, logger: Optional[logging.Logger] = None):
-        self._watchdog = None
+    def __init__(
+        self,
+        logger: Optional[logging.Logger] = None,
+        watchdog: Optional[watchdog_service.WatchdogService] = None,
+        resource_monitor: Optional[resource_monitor_service.ResourceMonitor] = None,
+        app: Optional[apps.BonsaiApp] = None,
+    ) -> None:
         self._logger = logger
-        self._resource_monitor = None
+        self._watchdog = watchdog
+        self._resource_monitor = resource_monitor
+        self._app = app
 
     @property
     def logger(self) -> logging.Logger:
@@ -50,13 +59,15 @@ class Services:
         self._resource_monitor = resource_monitor
         return self
 
-    def register(self, service: TService) -> Self:
-        if isinstance(service, watchdog_service.WatchdogService):
-            return self.register_watchdog(service)
-        elif isinstance(service, resource_monitor_service.ResourceMonitor):
-            return self.register_resource_monitor(service)
-        else:
-            raise ValueError(f"Unsupported service: {service}")
+    @property
+    def app(self) -> Optional[apps.BonsaiApp]:
+        return self._app
+
+    def register_app(self, app: apps.BonsaiApp) -> Self:
+        if self._app is not None:
+            raise ValueError("App already registered")
+        self._app = app
+        return self
 
     def validate_service(self, obj: Optional[TService]) -> bool:
         if obj is None:

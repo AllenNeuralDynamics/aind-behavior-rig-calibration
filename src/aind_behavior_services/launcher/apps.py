@@ -10,7 +10,19 @@ from aind_behavior_services.launcher.ui_helper import UIHelper
 from aind_behavior_services.utils import run_bonsai_process
 
 
-class BonsaiApp(IService):
+class App(IService):
+    def __init__(self, logger: logging.Logger, *args, **kwargs) -> None:
+        self._logger = logger
+
+    def validate(self, *args, **kwargs) -> bool:
+        raise NotImplementedError
+
+    @property
+    def logger(self) -> logging.Logger:
+        return self._logger
+
+
+class BonsaiApp(App):
     executable: os.PathLike
     workflow: os.PathLike
     is_editor_mode: bool
@@ -22,7 +34,6 @@ class BonsaiApp(IService):
     timeout: Optional[float]
     print_cmd: bool
     _result: Optional[subprocess.CompletedProcess]
-    _logger: logging.Logger
     _ui_helper: UIHelper
 
     def __init__(
@@ -40,7 +51,7 @@ class BonsaiApp(IService):
         timeout: Optional[float] = None,
         ui_helper: Optional[UIHelper] = None,
     ) -> None:
-        self._logger = logger
+        super().__init__(logger)
         self.executable = Path(executable).resolve()
         self.workflow = Path(workflow).resolve()
         self.is_editor_mode = is_editor_mode
@@ -52,10 +63,6 @@ class BonsaiApp(IService):
         self.timeout = timeout
         self._result = None
         self._ui_helper = ui_helper or UIHelper(logger, print)
-
-    @property
-    def logger(self) -> logging.Logger:
-        return self._logger
 
     @property
     def result(self) -> subprocess.CompletedProcess:
@@ -100,7 +107,6 @@ class BonsaiApp(IService):
         try:
             proc.check_returncode()
         except subprocess.CalledProcessError as e:
-            self.logger.error("Bonsai process failed with exit code %d", e.returncode)
             self._log_process_std_output("Bonsai", proc)
             raise e
         else:
