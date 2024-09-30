@@ -35,7 +35,7 @@ class LauncherTests(unittest.TestCase):
         )
 
         with self.assertRaises((FileNotFoundError, OSError, SystemExit)) as _:
-            launcher._validate_dependencies()
+            launcher.validate_dependencies()
 
     def test_logger(self):
         logger = logging_helper.default_logger_factory(None)
