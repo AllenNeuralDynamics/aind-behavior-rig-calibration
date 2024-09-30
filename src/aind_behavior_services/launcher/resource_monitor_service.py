@@ -13,7 +13,7 @@ class ResourceMonitor(IService):
     def __init__(
         self,
         *args,
-        logger: Optional[logging.Logger],
+        logger: Optional[logging.Logger] = None,
         constrains: Optional[List[Constraint]] = None,
         **kwargs,
     ) -> None:
