@@ -25,7 +25,7 @@ class UIHelper:
         zero_label: Optional[str] = None,
         zero_value: Optional[T] = None,
         zero_as_input: bool = True,
-        override_zero: Tuple[Optional[str], Optional[Any]] = ("Enter manually", None),
+        zero_as_input_label: str = "Enter manually",
     ) -> Optional[str | T]:
         self._print(prompt)
         if zero_label is not None:
@@ -40,7 +40,7 @@ class UIHelper:
                 raise ValueError
             else:
                 if zero_as_input:
-                    return str(input(override_zero[0]))
+                    return str(input(zero_as_input_label))
                 else:
                     return zero_value
         else:
