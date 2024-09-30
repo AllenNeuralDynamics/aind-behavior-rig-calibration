@@ -131,7 +131,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.logger.setLevel(logging.DEBUG)
         if cli_args.create_directories is True:
             self._create_directory_structure()
-        self._validate_dependencies()
+        self.validate_dependencies()
 
     # Public properties / interfaces
     @property
@@ -331,7 +331,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             f.write(model.model_dump_json(indent=3))
         return fpath
 
-    def _validate_dependencies(self) -> None:
+    def validate_dependencies(self) -> None:
         """
         Validates the dependencies required for the launcher to run.
         """
