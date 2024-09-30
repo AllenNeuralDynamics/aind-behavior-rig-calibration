@@ -56,6 +56,7 @@ class BonsaiApp(App):
         cwd: Optional[os.PathLike] = None,
         timeout: Optional[float] = None,
         logger: Optional[logging.Logger] = None,
+        print_cmd: bool = False,
         **kwargs,
     ) -> None:
         super().__init__(logger)
@@ -68,6 +69,7 @@ class BonsaiApp(App):
         self.additional_properties = additional_properties or {}
         self.cwd = cwd
         self.timeout = timeout
+        self.print_cmd = print_cmd
         self._result = None
 
     @property
