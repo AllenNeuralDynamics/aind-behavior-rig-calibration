@@ -19,7 +19,6 @@ from aind_behavior_services import (
     AindBehaviorSessionModel,
     AindBehaviorTaskLogicModel,
 )
-from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
 from aind_behavior_services.launcher import logging_helper, ui_helper
 from aind_behavior_services.launcher.services import Services
@@ -254,31 +253,31 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.logger.info("Post-run hook started.")
         if self.services.app is None:
             raise ValueError("Bonsai app not set.")
-        try:
-            self.logger.info("Mapping to aind-data-schema Session")
-            aind_data_schema_session = data_mapper.mapper_from_session_root(
-                schema_root=self.session_directory / "Behavior" / "Logs",
-                session_model=self.session_schema_model,
-                rig_model=self.rig_schema_model,
-                task_logic_model=self.task_logic_schema_model,
-                repository=self.repository,
-                script_path=Path(self.services.app.workflow).resolve(),
-                session_end_time=utcnow(),
-            )
-            aind_data_schema_session.write_standard_file(self.session_directory)
-            self.logger.info("Mapping successful.")
-        except (pydantic.ValidationError, ValueError, IOError) as e:
-            self.logger.error("Failed to map to aind-data-schema Session. %s", e)
-        else:
-            if self.services.watchdog is not None:
-                if self.remote_data_dir is None:
-                    raise ValueError("Remote data directory is not defined.")
-                self.services.watchdog.post_run_hook_routine(
-                    session_schema=self.session_schema,
-                    ads_session=aind_data_schema_session,
-                    remote_path=self.remote_data_dir,
-                    session_directory=self.session_directory,
+        if self.services.data_mapper is not None:
+            try:
+                ads_session = self.services.data_mapper.map_from_session_root(
+                    schema_root=self.session_directory / "Behavior" / "Logs",
+                    session_model=self.session_schema_model,
+                    rig_model=self.rig_schema_model,
+                    task_logic_model=self.task_logic_schema_model,
+                    repository=self.repository,
+                    script_path=Path(self.services.app.workflow).resolve(),
+                    session_end_time=utcnow(),
                 )
+                ads_session.write_standard_file(self.session_directory)
+                self.logger.info("Mapping successful.")
+            except (pydantic.ValidationError, ValueError, IOError) as e:
+                self.logger.error("Failed to map to aind-data-schema Session. %s", e)
+            else:
+                if self.services.watchdog is not None:
+                    if self.remote_data_dir is None:
+                        raise ValueError("Remote data directory is not defined.")
+                    self.services.watchdog.create_manifest_from_ads_session(
+                        session_schema=self.session_schema,
+                        ads_session=ads_session,
+                        remote_path=self.remote_data_dir,
+                        session_directory=self.session_directory,
+                    )
         return self
 
     def _exit(self, code: int = 0) -> None:
@@ -361,6 +360,18 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 raise ValueError("Resource monitor service failed to validate.")
             else:
                 logger.info("Resource monitor service validated.")
+
+        # Data mapper service is optional
+        if services.data_mapper is None:
+            logger.warning("Data mapper service not set.")
+        else:
+            if not services.data_mapper.validate():
+                raise ValueError("Data mapper service failed to validate.")
+            else:
+                logger.info("Data mapper service validated.")
+
+        if (services.data_mapper is None) ^ (services.watchdog is None):
+            raise ValueError("Data mapper and watchdog services must be set together.")
 
     def validate_dependencies(self) -> None:
         """
