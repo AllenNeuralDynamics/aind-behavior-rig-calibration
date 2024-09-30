@@ -25,6 +25,7 @@ class VideoWriterFfmpeg(BaseModel):
     )
     input_arguments: str = Field(default="", description="Input arguments")
 
+
 class VideoWriterOpenCv(BaseModel):
     video_writer_type: Literal["OPENCV"] = Field(default="OPENCV")
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
