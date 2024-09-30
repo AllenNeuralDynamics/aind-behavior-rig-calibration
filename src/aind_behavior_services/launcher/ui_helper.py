@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Callable, Optional, Tuple
+from typing import Any, Callable, Optional, Tuple, TypeVar
 
 from aind_behavior_services.db_utils import SubjectDataBase
 from aind_behavior_services.rig import AindBehaviorRigModel
@@ -16,28 +16,33 @@ class UIHelper:
         self._print = print_func
         self._logger = logger
 
+    T = TypeVar("T", bound=Any)
+
     def prompt_pick_file_from_list(
         self,
         available_files: list[str],
         prompt: str = "Choose a file:",
-        override_zero: Tuple[Optional[str], Optional[str]] = ("Enter manually", None),
-    ) -> str:
+        zero_label: Optional[str] = None,
+        zero_value: Optional[T] = None,
+        zero_as_input: bool = True,
+        override_zero: Tuple[Optional[str], Optional[Any]] = ("Enter manually", None),
+    ) -> Optional[str | T]:
         self._print(prompt)
-        if override_zero[0] is not None:
-            self._print(f"0: {override_zero[0]}")
+        if zero_label is not None:
+            self._print(f"0: {zero_label}")
         for i, file in enumerate(available_files):
             self._print(f"{i+1}: {os.path.split(file)[1]}")
         choice = int(input("Choice: "))
         if choice < 0 or choice >= len(available_files) + 1:
             raise ValueError
         if choice == 0:
-            if override_zero[0] is None:
+            if zero_label is None:
                 raise ValueError
-            if override_zero[1] is not None:
-                return override_zero[1]
             else:
-                path = str(input(override_zero[0]))
-            return path
+                if zero_as_input:
+                    return str(input(override_zero[0]))
+                else:
+                    return zero_value
         else:
             return available_files[choice - 1]
 
@@ -56,8 +61,10 @@ class UIHelper:
         while subject is None:
             try:
                 subject = self.prompt_pick_file_from_list(
-                    list(subject_list.subjects.keys()), prompt="Choose a subject:", override_zero=(None, None)
+                    list(subject_list.subjects.keys()), prompt="Choose a subject:", zero_label=None
                 )
+                if not isinstance(subject, str):
+                    raise ValueError("Return value is not a string type.")
             except ValueError as e:
                 self._logger.error("Invalid choice. Try again. %s", e)
         return subject

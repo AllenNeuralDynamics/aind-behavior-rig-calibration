@@ -23,7 +23,7 @@ from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
 from aind_behavior_services.launcher import logging_helper, ui_helper
 from aind_behavior_services.launcher.services import Services
-from aind_behavior_services.utils import model_from_json_file, run_bonsai_process, utcnow
+from aind_behavior_services.utils import model_from_json_file, utcnow
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disable=invalid-name
@@ -47,13 +47,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         task_logic_schema_model: Type[TTaskLogic],
         data_dir: os.PathLike,
         config_library_dir: os.PathLike,
-        bonsai_workflow: os.PathLike,
         temp_dir: os.PathLike = Path("local/.temp"),
         remote_data_dir: Optional[os.PathLike] = None,
-        bonsai_executable: os.PathLike = Path("bonsai/bonsai.exe"),
         repository_dir: Optional[os.PathLike] = None,
-        bonsai_is_editor_mode: bool = True,
-        bonsai_is_start_flag: bool = True,
         allow_dirty: bool = False,
         skip_hardware_validation: bool = False,
         debug_mode: bool = False,
@@ -68,9 +64,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         )
         self._ui_helper = ui_helper.UIHelper(logger=self.logger)
         self._services = services if services is not None else Services()
-        args = self._cli_wrapper()
+        self._cli_args = self._cli_wrapper()
 
-        repository_dir = Path(args.repository_dir) if args.repository_dir is not None else repository_dir
+        repository_dir = (
+            Path(self._cli_args.repository_dir) if self._cli_args.repository_dir is not None else repository_dir
+        )
         if repository_dir is None:
             self.repository = git.Repo()
         else:
@@ -85,30 +83,27 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.session_schema_model = session_schema_model
         self.task_logic_schema_model = task_logic_schema_model
 
+        # Schema instances
         self._rig_schema: Optional[TRig] = None
         self._session_schema: Optional[TSession] = None
         self._task_logic_schema: Optional[TTaskLogic] = None
-        self._bonsai_visualizer_layout: Optional[str] = None
 
         # Directories
-        self.data_dir = Path(args.data_dir) if args.data_dir is not None else self.abspath(data_dir)
+        self.data_dir = Path(self._cli_args.data_dir) if self._cli_args.data_dir is not None else self.abspath(data_dir)
         self.remote_data_dir = (
-            Path(args.remote_data_dir)
-            if args.remote_data_dir is not None
+            Path(self._cli_args.remote_data_dir)
+            if self._cli_args.remote_data_dir is not None
             else (self.abspath(remote_data_dir) if remote_data_dir is not None else None)
         )
-        self.bonsai_executable = self.abspath(bonsai_executable)
-        self.default_bonsai_workflow = (
-            Path(args.bonsai_workflow) if args.bonsai_workflow is not None else self.abspath(bonsai_workflow)
-        )
+
         # Derived directories
         self.config_library_dir = (
-            Path(args.config_library_dir)
-            if args.config_library_dir is not None
+            Path(self._cli_args.config_library_dir)
+            if self._cli_args.config_library_dir is not None
             else self.abspath(Path(config_library_dir))
         )
         self.computer_name = os.environ["COMPUTERNAME"]
-        self._debug_mode = args.debug if args.debug else debug_mode
+        self._debug_mode = self._cli_args.debug if self._cli_args.debug else debug_mode
 
         self._rig_dir = Path(os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name))
         self._subject_dir = Path(os.path.join(self.config_library_dir, self.SUBJECT_DIR))
@@ -117,18 +112,18 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             os.path.join(self.config_library_dir, self.VISUALIZERS_DIR, self.computer_name)
         )
         # Flags
-        self.bonsai_is_editor_mode = args.bonsai_is_editor_mode if args.bonsai_is_editor_mode else bonsai_is_editor_mode
-        self.bonsai_is_start_flag = args.bonsai_is_start_flag if args.bonsai_is_start_flag else bonsai_is_start_flag
-        self.allow_dirty = args.allow_dirty if args.allow_dirty else allow_dirty
+        self.allow_dirty = self._cli_args.allow_dirty if self._cli_args.allow_dirty else allow_dirty
         self.skip_hardware_validation = (
-            args.skip_hardware_validation if args.skip_hardware_validation else skip_hardware_validation
+            self._cli_args.skip_hardware_validation
+            if self._cli_args.skip_hardware_validation
+            else skip_hardware_validation
         )
         self.group_by_subject_log = group_by_subject_log
 
         self._subject_db_data: Optional[SubjectEntry] = None
         self._run_hook_return: Any = None
 
-        self._post_init_(args)
+        self._post_init_(self._cli_args)
 
     def _post_init_(self, cli_args: argparse.Namespace) -> None:
         """Overridable method that runs at the end of the self.__init__ method"""
@@ -136,6 +131,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.logger.setLevel(logging.DEBUG)
         if cli_args.create_directories is True:
             self._create_directory_structure()
+        self._validate_dependencies()
 
     # Public properties / interfaces
     @property
@@ -193,12 +189,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         if self._debug_mode:
             self._print_diagnosis()
 
-        self._validate_dependencies()
         self._session_schema = self._prompt_session_input()
         self._task_logic_schema = self._prompt_task_logic_input(hint_input=self._subject_db_data)
         self._rig_schema = self._prompt_rig_input()
-        self._bonsai_visualizer_layout = self._prompt_visualizer_layout_input()
-        input("Press enter to start or Control+C to exit...")
         return self
 
     def _run_hooks(self) -> Self:
@@ -214,7 +207,15 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.logger.info("Pre-run hook started.")
         self.session_schema.experiment = self.task_logic_schema.name
         self.session_schema.experiment_version = self.task_logic_schema.version
-        return self
+
+        if self.services.app is None:
+            raise ValueError("Bonsai app not set.")
+        else:
+            if self.services.app.layout is None:
+                self.services.app.layout = self.services.app.prompt_visualizer_layout_input(
+                    self._visualizer_layouts_dir
+                )
+            return self
 
     def _run_hook(self, *args, **kwargs) -> Self:
         self.logger.info("Running hook started.")
@@ -225,51 +226,33 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         if self._rig_schema is None:
             raise ValueError("Rig schema instance not set.")
 
-        additional_properties = {
+        if self.services.app is None:
+            raise ValueError("Bonsai app not set.")
+
+        settings = {
             "TaskLogicPath": os.path.abspath(
                 self._save_temp_model(model=self._task_logic_schema, directory=self.temp_dir)
             ),
             "SessionPath": os.path.abspath(self._save_temp_model(model=self._session_schema, directory=self.temp_dir)),
             "RigPath": os.path.abspath(self._save_temp_model(model=self._rig_schema, directory=self.temp_dir)),
         }
+        if self.services.app.additional_properties is not None:
+            self.services.app.additional_properties.update(settings)
+        else:
+            self.services.app.additional_properties = settings
 
         try:
-            if self.bonsai_is_editor_mode:
-                self.logger.warning("Bonsai is running in editor mode. Cannot assert successful completion.")
-            self.logger.info("Bonsai process running...")
-            proc = run_bonsai_process(
-                bonsai_exe=self.bonsai_executable,
-                workflow_file=self.default_bonsai_workflow,
-                additional_properties=additional_properties,
-                layout=self._bonsai_visualizer_layout,
-                is_editor_mode=self.bonsai_is_editor_mode,
-                is_start_flag=self.bonsai_is_start_flag,
-                cwd=self._cwd,
-                print_cmd=self._debug_mode,
-            )
-            proc.check_returncode()
-
+            self.services.app.run()
+            _ = self.services.app.output_from_result(allow_stderr=True)
         except subprocess.CalledProcessError as e:
-            self.logger.error("Bonsai process exited with an error. \n%s", e)
-            self._log_process_std_output("Bonsai", proc)
+            self.logger.error("Bonsai app failed to run. %s", e)
             self._exit(-1)
-        else:
-            self._log_process_std_output("Bonsai", proc)
-            self.logger.info("Bonsai process completed.")
-
-            if len(proc.stderr) > 0:
-                self.logger.error("Bonsai process finished with errors.")
-                _continue = self._ui_helper.prompt_yes_no_question("Would you still like to continue?")
-                if not _continue:
-                    self.logger.info("User chose to exit.")
-                    self._exit(-1)
-            self._run_hook_return = None  # TODO To be improved
         return self
 
     def _post_run_hook(self, *args, **kwargs) -> Self:
         self.logger.info("Post-run hook started.")
-        if self._run_hook_return is not None:
-            self.logger.info("Run hook returned %s", self._run_hook_return)
+        if self.services.app is None:
+            raise ValueError("Bonsai app not set.")
         try:
             self.logger.info("Mapping to aind-data-schema Session")
             aind_data_schema_session = data_mapper.mapper_from_session_root(
@@ -278,7 +261,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 rig_model=self.rig_schema_model,
                 task_logic_model=self.task_logic_schema_model,
                 repository=self.repository,
-                script_path=Path(self.default_bonsai_workflow).resolve(),
+                script_path=Path(self.services.app.workflow).resolve(),
                 session_end_time=utcnow(),
             )
             aind_data_schema_session.write_standard_file(self.session_directory)
@@ -290,7 +273,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 if self.remote_data_dir is None:
                     raise ValueError("Remote data directory is not defined.")
                 self.services.watchdog.post_run_hook_routine(
-                    logger=self.logger,
                     session_schema=self.session_schema,
                     ads_session=aind_data_schema_session,
                     remote_path=self.remote_data_dir,
@@ -304,7 +286,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             logging_helper.shutdown_logger(self.logger)
         sys.exit(code)
 
-    def _print_diagnosis(self) -> None:  # todo
+    def _print_diagnosis(self) -> None:
         """
         Prints the diagnosis information for the launcher.
 
@@ -330,8 +312,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             "Config Library Directory: %s\n"
             "Temporary Directory: %s\n"
             "Log Directory: %s\n"
-            "Bonsai Executable: %s\n"
-            "Default Workflow: %s\n"
             "-------------------------------",
             self._cwd,
             self.repository.working_dir,
@@ -340,8 +320,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.remote_data_dir,
             self.config_library_dir,
             self.temp_dir,
-            self.bonsai_executable,
-            self.default_bonsai_workflow,
         )
 
     def _save_temp_model(self, model: Union[TRig, TSession, TTaskLogic], directory: Optional[os.PathLike]) -> str:
@@ -358,8 +336,28 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         Validates the dependencies required for the launcher to run.
         """
         try:
-            if not (os.path.isfile(self.bonsai_executable)):
-                raise FileNotFoundError(f"Bonsai executable (bonsai.exe) not found! Expected {self.bonsai_executable}.")
+            # Validate services
+            # Bonsai app is required
+            if self.services.app is None:
+                raise ValueError("Bonsai app not set.")
+            else:
+                self.services.app.validate()
+                self.logger.info("Bonsai app validated.")
+
+            # Watchdog service is optional
+            if self.services.watchdog is None:
+                self.logger.warning("Watchdog service not set.")
+            else:
+                self.services.watchdog.validate()
+                self.logger.info("Watchdog service validated.")
+
+            # Resource monitor service is optional
+            if self.services.resource_monitor is None:
+                self.logger.warning("Resource monitor service not set.")
+            else:
+                self.services.resource_monitor.validate()
+                self.logger.info("Resource monitor service validated.")
+
             if not (os.path.isdir(self.config_library_dir)):
                 raise FileNotFoundError(f"Config library not found! Expected {self.config_library_dir}.")
             if not (os.path.isdir(os.path.join(self.config_library_dir, "Rig", self.computer_name))):
@@ -367,10 +365,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     f"Rig configuration not found! \
                         Expected {os.path.join(self.config_library_dir, self.RIG_DIR, self.computer_name)}."
                 )
-            if not (os.path.isfile(os.path.join(self.default_bonsai_workflow))):
-                raise FileNotFoundError(f"Bonsai workflow file not found! Expected {self.default_bonsai_workflow}.")
-
-            _ = self.services.validate_service(self.services.watchdog)
 
             if self.repository.is_dirty():
                 self.logger.warning(
@@ -426,9 +420,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     batch_file = available_batches[0]
                     print(f"Found a single session config file. Using {batch_file}.")
                 else:
-                    batch_file = self._ui_helper.prompt_pick_file_from_list(
-                        available_batches, prompt="Choose a batch:", override_zero=(None, None)
+                    pick = self._ui_helper.prompt_pick_file_from_list(
+                        available_batches, prompt="Choose a batch:", zero_label=None
                     )
+                    if not isinstance(pick, str):
+                        raise ValueError("Invalid choice.")
+                    batch_file = pick
                     if not os.path.isfile(batch_file):
                         raise FileNotFoundError(f"File not found: {batch_file}")
                     print(f"Using {batch_file}.")
@@ -458,8 +455,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             while True:
                 try:
                     path = self._ui_helper.prompt_pick_file_from_list(
-                        available_rigs, prompt="Choose a rig:", override_zero=(None, None)
+                        available_rigs, prompt="Choose a rig:", zero_label=None
                     )
+                    if not isinstance(path, str):
+                        raise ValueError("Invalid choice.")
                     rig = model_from_json_file(path, self.rig_schema_model)
                     print(f"Using {path}.")
                     return rig
@@ -481,8 +480,10 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 if hint_input is None:
                     available_files = glob.glob(os.path.join(_path, "*.json"))
                     path = self._ui_helper.prompt_pick_file_from_list(
-                        available_files, prompt="Choose a task logic:", override_zero=(None, None)
+                        available_files, prompt="Choose a task logic:", zero_label=None
                     )
+                    if not isinstance(path, str):
+                        raise ValueError("Invalid choice.")
                     if not os.path.isfile(path):
                         raise FileNotFoundError(f"File not found: {path}")
                     task_logic = model_from_json_file(path, self.task_logic_schema_model)
@@ -507,41 +508,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 self.logger.error("Invalid choice. Try again. %s", e)
 
         return task_logic
-
-    def _prompt_visualizer_layout_input(
-        self, directory: Optional[str] = None
-    ) -> Optional[str]:  # todo this should belong in the executable class
-        layout_schemas_path = (
-            Path(os.path.join(self.config_library_dir, directory, self.computer_name))
-            if directory is not None
-            else self._visualizer_layouts_dir
-        )
-        available_layouts = glob.glob(os.path.join(layout_schemas_path, "*.bonsai.layout"))
-        while True:
-            try:
-                print("Pick a visualizer layout:")
-                print("0: Default")
-                print("1: None")
-                _ = [print(f"{i+2}: {os.path.split(file)[1]}") for i, file in enumerate(available_layouts)]
-                choice = int(input("Choice: "))
-                if choice < 0 or choice >= len(available_layouts) + 2:
-                    raise ValueError
-                if choice == 0:
-                    return None
-                if choice == 1:
-                    return ""
-                else:
-                    return available_layouts[choice - 2]
-            except ValueError as e:
-                self.logger.error("Invalid choice. Try again. %s", e)
-
-    def _log_process_std_output(
-        self, process_name: str, proc: subprocess.CompletedProcess
-    ) -> None:  # todo this should belong in the executable class
-        if len(proc.stdout) > 0:
-            self.logger.info("%s full stdout dump: \n%s", process_name, proc.stdout)
-        if len(proc.stderr) > 0:
-            self.logger.error("%s full stderr dump: \n%s", process_name, proc.stderr)
 
     def dispose(self) -> None:
         self.logger.info("Disposing...")
@@ -587,7 +553,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         parser.add_argument("--remote-data-dir", help="Specify the remote data directory")
         parser.add_argument("--repository-dir", help="Specify the repository directory")
         parser.add_argument("--config-library-dir", help="Specify the configuration library directory")
-        parser.add_argument("--bonsai-workflow", help="Specify the workflow")
         parser.add_argument(
             "--create-directories",
             help="Specify whether to force create directories",
@@ -595,18 +560,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             default=False,
         )
         parser.add_argument("--debug", help="Specify whether to run in debug mode", action="store_true", default=False)
-        parser.add_argument(
-            "--bonsai-is-editor-mode",
-            help="Specify whether to run in Bonsai editor mode",
-            action="store_false",
-            default=True,
-        )
-        parser.add_argument(
-            "--bonsai-is-start-flag",
-            help="Specify whether to start the Bonsai workflow",
-            action="store_false",
-            default=True,
-        )
         parser.add_argument(
             "--allow-dirty", help="Specify whether to allow a dirty repository", action="store_true", default=False
         )
