@@ -19,10 +19,12 @@ class Services:
 
     def __init__(
         self,
+        *args,
         logger: Optional[logging.Logger] = None,
         watchdog: Optional[watchdog_service.WatchdogService] = None,
         resource_monitor: Optional[resource_monitor_service.ResourceMonitor] = None,
         app: Optional[app_services.BonsaiApp] = None,
+        **kwargs,
     ) -> None:
         self._logger = logger
         self._watchdog = watchdog

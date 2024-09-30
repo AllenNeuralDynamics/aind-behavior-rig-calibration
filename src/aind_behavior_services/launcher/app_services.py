@@ -11,14 +11,14 @@ from aind_behavior_services.utils import run_bonsai_process
 
 
 class App(IService):
-    def __init__(self, logger: logging.Logger, *args, **kwargs) -> None:
+    def __init__(self, *args, logger: Optional[logging.Logger] = None, **kwargs) -> None:
         self._logger = logger
 
     def validate(self, *args, **kwargs) -> bool:
         raise NotImplementedError
 
     @property
-    def logger(self) -> Optional[logging.Logger]:
+    def logger(self) -> logging.Logger:
         if self._logger is None:
             raise ValueError("Logger not set")
         return self._logger
@@ -46,7 +46,7 @@ class BonsaiApp(App):
 
     def __init__(
         self,
-        logger: logging.Logger,
+        logger: Optional[logging.Logger],
         workflow: os.PathLike,
         executable: os.PathLike = Path("./bonsai/bonsai.exe"),
         /,

@@ -12,14 +12,16 @@ from aind_behavior_services.launcher._service import IService
 class ResourceMonitor(IService):
     def __init__(
         self,
+        *args,
         logger: Optional[logging.Logger],
         constrains: Optional[List[Constraint]] = None,
+        **kwargs,
     ) -> None:
         self.constraints = constrains or []
         self._logger = logger
 
     @property
-    def logger(self) -> Optional[logging.Logger]:
+    def logger(self) -> logging.Logger:
         if self._logger is None:
             raise ValueError("Logger not set")
         return self._logger

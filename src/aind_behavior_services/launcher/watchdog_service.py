@@ -17,12 +17,12 @@ TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 
 
 class WatchdogService(watchdog.Watchdog, IService):
-    def __init__(self, logger: Optional[logging.Logger], *args, **kwargs):
+    def __init__(self, *args, logger: Optional[logging.Logger] = None, **kwargs):
         super().__init__(*args, **kwargs)
         self._logger = logger
 
     @property
-    def logger(self) -> Optional[logging.Logger]:
+    def logger(self) -> logging.Logger:
         if self._logger is None:
             raise ValueError("Logger not set")
         return self._logger
