@@ -17,8 +17,8 @@ TService = TypeVar("TService", bound=SupportedServices)
 
 class Services:
     # todo: This could use some future refactoring to make it more generic. For instance, not subclassing App
-    _watchdog: Optional[watchdog_service.WatchdogService]
     _logger: Optional[logging.Logger]
+    _watchdog: Optional[watchdog_service.WatchdogService]
     _resource_monitor: Optional[resource_monitor_service.ResourceMonitor]
     _app: Optional[app_service.BonsaiApp]
     _data_mapper: Optional[AindDataSchemaSessionDataMapper]
@@ -110,6 +110,6 @@ class Services:
         return obj
 
     def _register_logger(self) -> None:
-        for service in (self._watchdog, self._resource_monitor, self._app):
+        for service in (self._watchdog, self._resource_monitor, self._app, self._data_mapper):
             if service is not None:
                 service.logger = self.logger
