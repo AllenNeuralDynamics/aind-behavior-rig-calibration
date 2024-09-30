@@ -1,8 +1,8 @@
+import logging
 import subprocess
-from logging import Logger
 from os import PathLike
 from pathlib import Path
-from typing import TypeVar
+from typing import Optional, TypeVar
 
 import pydantic
 from requests.exceptions import HTTPError
@@ -17,13 +17,21 @@ TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 
 
 class WatchdogService(watchdog.Watchdog, IService):
-    def __init__(self, logger: Logger, *args, **kwargs):
+    def __init__(self, logger: Optional[logging.Logger], *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._logger = logger
 
     @property
-    def logger(self) -> Logger:
+    def logger(self) -> Optional[logging.Logger]:
+        if self._logger is None:
+            raise ValueError("Logger not set")
         return self._logger
+
+    @logger.setter
+    def logger(self, logger: logging.Logger) -> None:
+        if self._logger is not None:
+            raise ValueError("Logger already set")
+        self._logger = logger
 
     def post_run_hook_routine(
         self,
