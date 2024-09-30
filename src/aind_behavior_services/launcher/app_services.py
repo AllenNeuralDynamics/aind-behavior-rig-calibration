@@ -42,7 +42,6 @@ class BonsaiApp(App):
     timeout: Optional[float]
     print_cmd: bool
     _result: Optional[subprocess.CompletedProcess]
-    _ui_helper: UIHelper
 
     def __init__(
         self,
