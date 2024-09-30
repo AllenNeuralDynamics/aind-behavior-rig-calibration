@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Any, Callable, Optional, Tuple, TypeVar
+from typing import Any, Callable, Optional, TypeVar
 
 from aind_behavior_services.db_utils import SubjectDataBase
 from aind_behavior_services.rig import AindBehaviorRigModel
