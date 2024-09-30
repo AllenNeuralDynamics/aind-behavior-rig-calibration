@@ -11,3 +11,6 @@ class IService(Protocol):
 
     @property
     def logger(self) -> Optional[logging.Logger]: ...
+
+    @logger.setter
+    def logger(self, logger: logging.Logger) -> None: ...
