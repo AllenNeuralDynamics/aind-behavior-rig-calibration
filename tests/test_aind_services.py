@@ -6,7 +6,7 @@ from typing import Dict, List, Literal, Optional
 import pydantic
 import yaml
 
-from aind_behavior_services.aind_services import data_mapper, watchdog
+from aind_behavior_services.launcher import watchdog_service, data_mapper_service
 from aind_behavior_services.rig import AindBehaviorRigModel, CameraController, CameraTypes, SpinnakerCamera
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
@@ -15,7 +15,7 @@ from aind_behavior_services.utils import utcnow
 
 class AindServicesTests(unittest.TestCase):
     def test_session_mapper(self):
-        data_mapper.map(
+        data_mapper_service.map(
             session_model=MockSession(),
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),
@@ -25,13 +25,13 @@ class AindServicesTests(unittest.TestCase):
         )
 
     def test_watchdog_manifest(self):
-        _watchdog = watchdog.Watchdog(
+        _watchdog = watchdog_service.WatchdogClient(
             project_name="Cognitive flexibility in patch foraging", schedule_time=datetime.time(hour=20)
         )
 
         _aind_behavior_session = MockSession()
 
-        _session = data_mapper.map(
+        _session = data_mapper_service.map(
             session_model=_aind_behavior_session,
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),
@@ -52,11 +52,11 @@ class AindServicesTests(unittest.TestCase):
 
         self.assertEqual(
             _config,
-            watchdog.ManifestConfig.model_validate_json(_config.model_dump_json()),
+            watchdog_service.ManifestConfig.model_validate_json(_config.model_dump_json()),
             "Manifest config round trip failed",
         )
 
-        round_via_yaml = watchdog.ManifestConfig.model_validate(yaml.safe_load(_watchdog._yaml_dump(_config)))
+        round_via_yaml = watchdog_service.ManifestConfig.model_validate(yaml.safe_load(_watchdog._yaml_dump(_config)))
         self.assertEqual(_config, round_via_yaml, "Manifest config round trip failed via yaml")
 
 
