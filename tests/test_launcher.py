@@ -1,4 +1,3 @@
-import logging
 import unittest
 from pathlib import Path
 from typing import Literal
@@ -8,7 +7,7 @@ from aind_behavior_services import (
     AindBehaviorSessionModel,
     AindBehaviorTaskLogicModel,
 )
-from aind_behavior_services.launcher import Launcher, logging_helper
+from aind_behavior_services.launcher import Launcher
 
 
 class LauncherTests(unittest.TestCase):
@@ -30,23 +29,12 @@ class LauncherTests(unittest.TestCase):
             task_logic_schema_model=AindGenericTaskTaskLogic,
             data_dir=Path("data"),
             config_library_dir=Path("config"),
-            logger=dummy_logger(),
             validate_init=False,
         )
 
         with self.assertRaises(SystemExit) as e:
             launcher.validate()
             self.assertEqual(e.exception, "Error")
-
-    def test_logger(self):
-        logger = logging_helper.default_logger_factory(None)
-        self.assertIsInstance(logger, logging.Logger)
-
-
-def dummy_logger() -> logging.Logger:
-    logger = logging.getLogger("dummy")
-    logger.setLevel(logging.CRITICAL)
-    return logger
 
 
 if __name__ == "__main__":
