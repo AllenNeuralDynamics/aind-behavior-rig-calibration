@@ -30,7 +30,6 @@ class LauncherTests(unittest.TestCase):
             task_logic_schema_model=AindGenericTaskTaskLogic,
             data_dir=Path("data"),
             config_library_dir=Path("config"),
-            bonsai_workflow=Path("workflow.bonsai"),
             logger=dummy_logger(),
         )
 

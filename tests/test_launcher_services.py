@@ -1,7 +1,7 @@
 import logging
 import unittest
 
-from aind_behavior_services.launcher import resource_monitor_service, watchdog_service
+from aind_behavior_services.launcher import app_service, data_mapper_service, resource_monitor_service, watchdog_service
 
 
 class LauncherServicesTests(unittest.TestCase):
@@ -40,6 +40,13 @@ class LauncherServicesTests(unittest.TestCase):
 
     def test_watchdog_service(self):
         _ = watchdog_service.WatchdogService(logger=logging.getLogger(__name__))
+
+    def test_app_service(self):
+        _ = app_service.BonsaiApp("test.bonsai", logger=logging.getLogger(__name__))
+
+    def test_data_mapper_service(self):
+        _ = data_mapper_service.DataMapperService(logger=logging.getLogger(__name__))
+        _ = data_mapper_service.AindDataSchemaSessionDataMapper(logger=logging.getLogger(__name__))
 
 
 if __name__ == "__main__":
