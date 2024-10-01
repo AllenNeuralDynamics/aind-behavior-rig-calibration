@@ -55,6 +55,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         logger: Optional[logging.Logger] = None,
         group_by_subject_log: bool = False,
         services: Optional[Services] = None,
+        validate_init: bool = True,
     ) -> None:
         self.temp_dir = self.abspath(temp_dir) / secrets.token_hex(nbytes=16)
         self.temp_dir.mkdir(parents=True, exist_ok=True)
@@ -122,16 +123,19 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self._subject_db_data: Optional[SubjectEntry] = None
         self._run_hook_return: Any = None
 
-        self._post_init_(self._cli_args)
+        self._post_init_(validate=validate_init)
 
-    def _post_init_(self, cli_args: argparse.Namespace) -> None:
+    def _post_init_(self, validate: bool = True) -> None:
         """Overridable method that runs at the end of the self.__init__ method"""
+        cli_args = self._cli_args
         if self._debug_mode:
             self.logger.setLevel(logging.DEBUG)
         if cli_args.create_directories is True:
             self._create_directory_structure()
-        self.services.register_logger(self.logger)
-        self.validate_dependencies()
+        if self._services is not None:
+            self.services.register_logger(self.logger)
+        if validate:
+            self.validate()
 
     # Public properties / interfaces
     @property
@@ -373,11 +377,13 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         if (services.data_mapper is None) ^ (services.watchdog is None):
             raise ValueError("Data mapper and watchdog services must be set together.")
 
-    def validate_dependencies(self) -> None:
+    def validate(self) -> None:
         """
         Validates the dependencies required for the launcher to run.
         """
         try:
+            if self._services is None:
+                raise ValueError("Services instance not set.")
             self.validate_services(self.services, self.logger)
 
             if not (os.path.isdir(self.config_library_dir)):

@@ -55,7 +55,7 @@ class Constraint:
     constraint: Callable[..., bool]
     args: List = field(default_factory=list)
     kwargs: dict = field(default_factory=dict)
-    fail_msg_handler: Optional[Callable[..., str]] = field
+    fail_msg_handler: Optional[Callable[..., str]] = field(default=None)
 
     def __call__(self) -> bool | Exception:
         return self.constraint(*self.args, **self.kwargs)
@@ -63,7 +63,8 @@ class Constraint:
     def on_fail(self) -> str:
         if self.fail_msg_handler:
             return self.fail_msg_handler(*self.args, **self.kwargs)
-        return f"Constraint {self.name} failed."
+        else:
+            return f"Constraint {self.name} failed."
 
 
 def available_storage_constraint_factory(drive: str = "C:\\", min_bytes: float = 2e11) -> Constraint:
@@ -72,8 +73,7 @@ def available_storage_constraint_factory(drive: str = "C:\\", min_bytes: float =
         constraint=lambda drive, min_bytes: shutil.disk_usage(drive).free >= min_bytes,
         args=[],
         kwargs={"drive": drive, "min_bytes": min_bytes},
-        fail_msg_handler=lambda drive,
-        min_bytes: f"Drive {drive} does not have enough space. Minimum required: {min_bytes} bytes.",
+        fail_msg_handler=lambda drive: f"Drive {drive} does not have enough space.",
     )
 
 

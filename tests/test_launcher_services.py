@@ -7,7 +7,8 @@ from aind_behavior_services.launcher import app_service, data_mapper_service, re
 class LauncherServicesTests(unittest.TestCase):
     def test_resource_monitor_service(self):
         logger = logging.getLogger(__name__)
-        resource_monitor = resource_monitor_service.ResourceMonitor(logger)
+        logger.level = logging.CRITICAL
+        resource_monitor = resource_monitor_service.ResourceMonitor(logger=logger)
 
         resource_monitor.add_constraint(
             resource_monitor_service.Constraint(
