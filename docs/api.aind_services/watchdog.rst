@@ -26,16 +26,16 @@ Alternatively, a provided powershell script can automatically deploy the service
 Use
 #######
 
-The module provides a single entry point to the watchdog service: :py:class:`~aind_behavior_services.aind_services.watchdog.Watchdog`.
+The module provides a single entry point to the watchdog service: :py:class:`~aind_behavior_services.launcher.watchdog_service.WatchdogClient`.
 
 In general, users are expected to create an instance of the class e.g.:
 
 .. code-block:: python
 
-   from aind_behavior_services.aind_services import watchdog
+   from aind_behavior_services.launcher import watchdog_service
    import datetime
 
-    watchdog = watchdog.Watchdog(
+    watchdog = watchdog_service.WatchdogClient(
         project_name="Cognitive flexibility in patch foraging",  # the project name is required by the aind-transfer-service
         schedule_time=datetime.time(hour=20)  # schedules the transfer time to 8pm
     )
@@ -55,7 +55,7 @@ Once the instance is created, the user can interface with the service using the 
 For an implementation example see the :py:class:`~aind_behavior_services.launcher.Launcher` class.
 
 
-.. automodule:: aind_behavior_services.aind_services.watchdog
+.. automodule:: aind_behavior_services.launcher.watchdog_service
    :members:
    :undoc-members:
    :show-inheritance:
