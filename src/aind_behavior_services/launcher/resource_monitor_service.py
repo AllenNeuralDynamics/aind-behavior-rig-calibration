@@ -12,18 +12,28 @@ from aind_behavior_services.launcher._service import IService
 class ResourceMonitor(IService):
     def __init__(
         self,
-        logger: logging.Logger,
+        *args,
+        logger: Optional[logging.Logger] = None,
         constrains: Optional[List[Constraint]] = None,
+        **kwargs,
     ) -> None:
         self.constraints = constrains or []
         self._logger = logger
 
     @property
     def logger(self) -> logging.Logger:
+        if self._logger is None:
+            raise ValueError("Logger not set")
         return self._logger
 
+    @logger.setter
+    def logger(self, logger: logging.Logger) -> None:
+        if self._logger is not None:
+            raise ValueError("Logger already set")
+        self._logger = logger
+
     def validate(self, *args, **kwargs) -> bool:
-        return True
+        return self.evaluate_constraints()
 
     def add_constraint(self, constraint: Constraint) -> None:
         self.constraints.append(constraint)

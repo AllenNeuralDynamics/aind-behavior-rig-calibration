@@ -19,7 +19,6 @@ from aind_behavior_services import (
     AindBehaviorSessionModel,
     AindBehaviorTaskLogicModel,
 )
-from aind_behavior_services.aind_services import data_mapper
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
 from aind_behavior_services.launcher import logging_helper, ui_helper
 from aind_behavior_services.launcher.services import Services
@@ -63,7 +62,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             logger if logger is not None else logging_helper.default_logger_factory(self.temp_dir / "launcher.log")
         )
         self._ui_helper = ui_helper.UIHelper(logger=self.logger)
-        self._services = services if services is not None else Services()
+        self._services = services
         self._cli_args = self._cli_wrapper()
 
         repository_dir = (
@@ -131,7 +130,8 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.logger.setLevel(logging.DEBUG)
         if cli_args.create_directories is True:
             self._create_directory_structure()
-        self._validate_dependencies()
+        self.services.register_logger(self.logger)
+        self.validate_dependencies()
 
     # Public properties / interfaces
     @property
@@ -253,31 +253,31 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.logger.info("Post-run hook started.")
         if self.services.app is None:
             raise ValueError("Bonsai app not set.")
-        try:
-            self.logger.info("Mapping to aind-data-schema Session")
-            aind_data_schema_session = data_mapper.mapper_from_session_root(
-                schema_root=self.session_directory / "Behavior" / "Logs",
-                session_model=self.session_schema_model,
-                rig_model=self.rig_schema_model,
-                task_logic_model=self.task_logic_schema_model,
-                repository=self.repository,
-                script_path=Path(self.services.app.workflow).resolve(),
-                session_end_time=utcnow(),
-            )
-            aind_data_schema_session.write_standard_file(self.session_directory)
-            self.logger.info("Mapping successful.")
-        except (pydantic.ValidationError, ValueError, IOError) as e:
-            self.logger.error("Failed to map to aind-data-schema Session. %s", e)
-        else:
-            if self.services.watchdog is not None:
-                if self.remote_data_dir is None:
-                    raise ValueError("Remote data directory is not defined.")
-                self.services.watchdog.post_run_hook_routine(
-                    session_schema=self.session_schema,
-                    ads_session=aind_data_schema_session,
-                    remote_path=self.remote_data_dir,
-                    session_directory=self.session_directory,
+        if self.services.data_mapper is not None:
+            try:
+                ads_session = self.services.data_mapper.map_from_session_root(
+                    schema_root=self.session_directory / "Behavior" / "Logs",
+                    session_model=self.session_schema_model,
+                    rig_model=self.rig_schema_model,
+                    task_logic_model=self.task_logic_schema_model,
+                    repository=self.repository,
+                    script_path=Path(self.services.app.workflow).resolve(),
+                    session_end_time=utcnow(),
                 )
+                ads_session.write_standard_file(self.session_directory)
+                self.logger.info("Mapping successful.")
+            except (pydantic.ValidationError, ValueError, IOError) as e:
+                self.logger.error("Failed to map to aind-data-schema Session. %s", e)
+            else:
+                if self.services.watchdog is not None:
+                    if self.remote_data_dir is None:
+                        raise ValueError("Remote data directory is not defined.")
+                    self.services.watchdog.create_manifest_from_ads_session(
+                        session_schema=self.session_schema,
+                        ads_session=ads_session,
+                        remote_path=self.remote_data_dir,
+                        session_directory=self.session_directory,
+                    )
         return self
 
     def _exit(self, code: int = 0) -> None:
@@ -331,32 +331,54 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             f.write(model.model_dump_json(indent=3))
         return fpath
 
-    def _validate_dependencies(self) -> None:  # todo
+    @staticmethod
+    def validate_services(services: Services, logger: logging.Logger) -> None:
+        # Validate services
+        # Bonsai app is required
+        if services.app is None:
+            raise ValueError("Bonsai app not set.")
+        else:
+            if not services.app.validate():
+                raise ValueError("Bonsai app failed to validate.")
+            else:
+                logger.info("Bonsai app validated.")
+
+        # Watchdog service is optional
+        if services.watchdog is None:
+            logger.warning("Watchdog service not set.")
+        else:
+            if not services.watchdog.validate():
+                raise ValueError("Watchdog service failed to validate.")
+            else:
+                logger.info("Watchdog service validated.")
+
+        # Resource monitor service is optional
+        if services.resource_monitor is None:
+            logger.warning("Resource monitor service not set.")
+        else:
+            if not services.resource_monitor.validate():
+                raise ValueError("Resource monitor service failed to validate.")
+            else:
+                logger.info("Resource monitor service validated.")
+
+        # Data mapper service is optional
+        if services.data_mapper is None:
+            logger.warning("Data mapper service not set.")
+        else:
+            if not services.data_mapper.validate():
+                raise ValueError("Data mapper service failed to validate.")
+            else:
+                logger.info("Data mapper service validated.")
+
+        if (services.data_mapper is None) ^ (services.watchdog is None):
+            raise ValueError("Data mapper and watchdog services must be set together.")
+
+    def validate_dependencies(self) -> None:
         """
         Validates the dependencies required for the launcher to run.
         """
         try:
-            # Validate services
-            # Bonsai app is required
-            if self.services.app is None:
-                raise ValueError("Bonsai app not set.")
-            else:
-                self.services.app.validate()
-                self.logger.info("Bonsai app validated.")
-
-            # Watchdog service is optional
-            if self.services.watchdog is None:
-                self.logger.warning("Watchdog service not set.")
-            else:
-                self.services.watchdog.validate()
-                self.logger.info("Watchdog service validated.")
-
-            # Resource monitor service is optional
-            if self.services.resource_monitor is None:
-                self.logger.warning("Resource monitor service not set.")
-            else:
-                self.services.resource_monitor.validate()
-                self.logger.info("Resource monitor service validated.")
+            self.validate_services(self.services, self.logger)
 
             if not (os.path.isdir(self.config_library_dir)):
                 raise FileNotFoundError(f"Config library not found! Expected {self.config_library_dir}.")
@@ -375,6 +397,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                         "Dirty repository not allowed. Exiting. Consider running with --allow-dirty flag."
                     )
                     self._exit(-1)
+
         except Exception as e:
             self.logger.error("Failed to validate dependencies. %s", e)
             self._exit(-1)

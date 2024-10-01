@@ -15,7 +15,7 @@ from aind_behavior_services.utils import utcnow
 
 class AindServicesTests(unittest.TestCase):
     def test_session_mapper(self):
-        data_mapper.mapper(
+        data_mapper.map(
             session_model=MockSession(),
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),
@@ -31,7 +31,7 @@ class AindServicesTests(unittest.TestCase):
 
         _aind_behavior_session = MockSession()
 
-        _session = data_mapper.mapper(
+        _session = data_mapper.map(
             session_model=_aind_behavior_session,
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),

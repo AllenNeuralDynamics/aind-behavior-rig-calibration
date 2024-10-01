@@ -11,7 +11,7 @@ from aind_behavior_services.utils import run_bonsai_process
 
 
 class App(IService):
-    def __init__(self, logger: logging.Logger, *args, **kwargs) -> None:
+    def __init__(self, *args, logger: Optional[logging.Logger] = None, **kwargs) -> None:
         self._logger = logger
 
     def validate(self, *args, **kwargs) -> bool:
@@ -19,7 +19,15 @@ class App(IService):
 
     @property
     def logger(self) -> logging.Logger:
+        if self._logger is None:
+            raise ValueError("Logger not set")
         return self._logger
+
+    @logger.setter
+    def logger(self, logger: logging.Logger) -> None:
+        if self._logger is not None:
+            raise ValueError("Logger already set")
+        self._logger = logger
 
 
 class BonsaiApp(App):
@@ -34,11 +42,9 @@ class BonsaiApp(App):
     timeout: Optional[float]
     print_cmd: bool
     _result: Optional[subprocess.CompletedProcess]
-    _ui_helper: UIHelper
 
     def __init__(
         self,
-        logger: logging.Logger,
         workflow: os.PathLike,
         executable: os.PathLike = Path("./bonsai/bonsai.exe"),
         /,
@@ -49,7 +55,9 @@ class BonsaiApp(App):
         additional_properties: Optional[Dict[str, str]] = None,
         cwd: Optional[os.PathLike] = None,
         timeout: Optional[float] = None,
-        ui_helper: Optional[UIHelper] = None,
+        logger: Optional[logging.Logger] = None,
+        print_cmd: bool = False,
+        **kwargs,
     ) -> None:
         super().__init__(logger)
         self.executable = Path(executable).resolve()
@@ -61,8 +69,8 @@ class BonsaiApp(App):
         self.additional_properties = additional_properties or {}
         self.cwd = cwd
         self.timeout = timeout
+        self.print_cmd = print_cmd
         self._result = None
-        self._ui_helper = ui_helper or UIHelper(logger, print)
 
     @property
     def result(self) -> subprocess.CompletedProcess:
@@ -116,7 +124,9 @@ class BonsaiApp(App):
             if len(proc.stdout) > 0:
                 self.logger.error("Bonsai process finished with errors.")
                 if allow_stderr is None:
-                    allow_stderr = self._ui_helper.prompt_yes_no_question("Would you like to see the error message?")
+                    allow_stderr = UIHelper(self.logger, print).prompt_yes_no_question(
+                        "Would you like to see the error message?"
+                    )
                 if allow_stderr is False:
                     raise subprocess.CalledProcessError(1, proc.args)
         return self
@@ -136,8 +146,12 @@ class BonsaiApp(App):
         while has_pick is False:
             try:
                 available_layouts.insert(0, "None")
-                picked = self._ui_helper.prompt_pick_file_from_list(
-                    available_layouts, prompt="Pick a visualizer layout:", override_zero=("Default", None)
+                picked = UIHelper(self.logger, print).prompt_pick_file_from_list(
+                    available_layouts,
+                    prompt="Pick a visualizer layout:",
+                    zero_label="Default",
+                    zero_value=None,
+                    zero_as_input=False,
                 )
                 if picked == "None":
                     picked = ""
