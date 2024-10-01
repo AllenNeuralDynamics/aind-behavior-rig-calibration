@@ -44,25 +44,12 @@ from . import _data_mapper_service_helpers as helpers
 
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 
+logger = logging.getLogger(__name__)
+
 
 class DataMapperService(IService):
-    def __init__(self, *args, logger: Optional[logging.Logger] = None, **kwargs):
-        self._logger = logger
-
-    @property
-    def logger(self) -> logging.Logger:
-        if self._logger is None:
-            raise ValueError("Logger not set")
-        return self._logger
-
-    @logger.setter
-    def logger(self, logger: logging.Logger) -> None:
-        if self._logger is not None:
-            raise ValueError("Logger already set")
-        self._logger = logger
-
-    def validate(self, *args, **kwargs) -> bool:
-        raise NotImplementedError
+    # Dummy class for now
+    pass
 
 
 class AindDataSchemaSessionDataMapper(DataMapperService):
@@ -70,7 +57,7 @@ class AindDataSchemaSessionDataMapper(DataMapperService):
         return True
 
     def map_from_session_root(self, *args, **kwargs) -> AdsSession:
-        self.logger.info("Mapping to aind-data-schema Session")
+        logger.info("Mapping to aind-data-schema Session")
         return map_from_session_root(*args, **kwargs)
 
 

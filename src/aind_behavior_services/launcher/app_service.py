@@ -10,25 +10,12 @@ from aind_behavior_services.utils import run_bonsai_process
 
 from ._service import IService
 
+logger = logging.getLogger(__name__)
+
 
 class App(IService):
-    def __init__(self, *args, logger: Optional[logging.Logger] = None, **kwargs) -> None:
-        self._logger = logger
-
-    def validate(self, *args, **kwargs) -> bool:
-        raise NotImplementedError
-
-    @property
-    def logger(self) -> logging.Logger:
-        if self._logger is None:
-            raise ValueError("Logger not set")
-        return self._logger
-
-    @logger.setter
-    def logger(self, logger: logging.Logger) -> None:
-        if self._logger is not None:
-            raise ValueError("Logger already set")
-        self._logger = logger
+    # Dummy class for now
+    pass
 
 
 class BonsaiApp(App):
@@ -56,11 +43,9 @@ class BonsaiApp(App):
         additional_properties: Optional[Dict[str, str]] = None,
         cwd: Optional[os.PathLike] = None,
         timeout: Optional[float] = None,
-        logger: Optional[logging.Logger] = None,
         print_cmd: bool = False,
         **kwargs,
     ) -> None:
-        super().__init__(logger)
         self.executable = Path(executable).resolve()
         self.workflow = Path(workflow).resolve()
         self.is_editor_mode = is_editor_mode
@@ -94,8 +79,8 @@ class BonsaiApp(App):
         self.validate()
 
         if self.is_editor_mode:
-            self.logger.warning("Bonsai is running in editor mode. Cannot assert successful completion.")
-        self.logger.info("Bonsai process running...")
+            logger.warning("Bonsai is running in editor mode. Cannot assert successful completion.")
+        logger.info("Bonsai process running...")
         proc = run_bonsai_process(
             workflow_file=self.workflow,
             bonsai_exe=self.executable,
@@ -108,7 +93,7 @@ class BonsaiApp(App):
             print_cmd=self.print_cmd,
         )
         self._result = proc
-        self.logger.info("Bonsai process completed.")
+        logger.info("Bonsai process completed.")
         return proc
 
     def output_from_result(self, allow_stderr: Optional[bool]) -> Self:
@@ -119,13 +104,13 @@ class BonsaiApp(App):
             self._log_process_std_output("Bonsai", proc)
             raise e
         else:
-            self.logger.info("Result from bonsai process is valid.")
+            logger.info("Result from bonsai process is valid.")
             self._log_process_std_output("Bonsai", proc)
 
             if len(proc.stdout) > 0:
-                self.logger.error("Bonsai process finished with errors.")
+                logger.error("Bonsai process finished with errors.")
                 if allow_stderr is None:
-                    allow_stderr = UIHelper(self.logger, print).prompt_yes_no_question(
+                    allow_stderr = UIHelper(logger, print).prompt_yes_no_question(
                         "Would you like to see the error message?"
                     )
                 if allow_stderr is False:
@@ -147,7 +132,7 @@ class BonsaiApp(App):
         while has_pick is False:
             try:
                 available_layouts.insert(0, "None")
-                picked = UIHelper(self.logger, print).prompt_pick_file_from_list(
+                picked = UIHelper(logger, print).prompt_pick_file_from_list(
                     available_layouts,
                     prompt="Pick a visualizer layout:",
                     zero_label="Default",
@@ -157,13 +142,13 @@ class BonsaiApp(App):
                 if picked == "None":
                     picked = ""
             except ValueError as e:
-                self.logger.error("Invalid choice. Try again. %s", e)
+                logger.error("Invalid choice. Try again. %s", e)
             has_pick = True
         self.layout = picked
         return self.layout
 
     def _log_process_std_output(self, process_name: str, proc: subprocess.CompletedProcess) -> None:
         if len(proc.stdout) > 0:
-            self.logger.info("%s full stdout dump: \n%s", process_name, proc.stdout)
+            logger.info("%s full stdout dump: \n%s", process_name, proc.stdout)
         if len(proc.stderr) > 0:
-            self.logger.error("%s full stderr dump: \n%s", process_name, proc.stderr)
+            logger.error("%s full stderr dump: \n%s", process_name, proc.stderr)

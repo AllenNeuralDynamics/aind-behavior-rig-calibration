@@ -33,6 +33,8 @@ from aind_behavior_services.launcher._service import IService
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.utils import format_datetime
 
+logger = logging.getLogger(__name__)
+
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 
 DEFAULT_EXE = "watchdog.exe"
@@ -210,21 +212,8 @@ class WatchdogClient:
 
 
 class WatchdogService(WatchdogClient, IService):
-    def __init__(self, *args, logger: Optional[logging.Logger] = None, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._logger = logger
-
-    @property
-    def logger(self) -> logging.Logger:
-        if self._logger is None:
-            raise ValueError("Logger not set")
-        return self._logger
-
-    @logger.setter
-    def logger(self, logger: logging.Logger) -> None:
-        if self._logger is not None:
-            raise ValueError("Logger already set")
-        self._logger = logger
 
     def create_manifest_from_ads_session(
         self,
@@ -233,7 +222,6 @@ class WatchdogService(WatchdogClient, IService):
         remote_path: PathLike,
         session_directory: PathLike,
     ):
-        logger = self.logger
         try:
             if not self.is_running():
                 logger.warning("Watchdog service is not running. Attempting to start it.")
@@ -272,7 +260,6 @@ class WatchdogService(WatchdogClient, IService):
             logger.error("Failed to create watchdog manifest config. %s", e)
 
     def validate(self, *args, **kwargs) -> bool:
-        logger = self.logger
         logger.info("Watchdog service is enabled.")
         is_running = True
         if not self.is_running():
