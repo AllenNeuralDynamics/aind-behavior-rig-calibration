@@ -1,4 +1,3 @@
-import logging
 import unittest
 
 from aind_behavior_services.launcher import app_service, data_mapper_service, resource_monitor_service, watchdog_service
@@ -6,9 +5,7 @@ from aind_behavior_services.launcher import app_service, data_mapper_service, re
 
 class LauncherServicesTests(unittest.TestCase):
     def test_resource_monitor_service(self):
-        logger = logging.getLogger(__name__)
-        logger.level = logging.CRITICAL
-        resource_monitor = resource_monitor_service.ResourceMonitor(logger=logger)
+        resource_monitor = resource_monitor_service.ResourceMonitor()
 
         resource_monitor.add_constraint(
             resource_monitor_service.Constraint(
@@ -40,14 +37,14 @@ class LauncherServicesTests(unittest.TestCase):
         self.assertFalse(constraint(), False)
 
     def test_watchdog_service(self):
-        _ = watchdog_service.WatchdogService(logger=logging.getLogger(__name__))
+        _ = watchdog_service.WatchdogService()
 
     def test_app_service(self):
-        _ = app_service.BonsaiApp("test.bonsai", logger=logging.getLogger(__name__))
+        _ = app_service.BonsaiApp("test.bonsai")
 
     def test_data_mapper_service(self):
-        _ = data_mapper_service.DataMapperService(logger=logging.getLogger(__name__))
-        _ = data_mapper_service.AindDataSchemaSessionDataMapper(logger=logging.getLogger(__name__))
+        _ = data_mapper_service.DataMapperService()
+        _ = data_mapper_service.AindDataSchemaSessionDataMapper()
 
 
 if __name__ == "__main__":

@@ -24,6 +24,7 @@ from aind_behavior_services.launcher import logging_helper, ui_helper
 from aind_behavior_services.launcher.services import Services
 from aind_behavior_services.utils import model_from_json_file, utcnow
 
+
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disable=invalid-name
 TTaskLogic = TypeVar("TTaskLogic", bound=AindBehaviorTaskLogicModel)  # pylint: disable=invalid-name
@@ -60,9 +61,11 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.temp_dir = self.abspath(temp_dir) / secrets.token_hex(nbytes=16)
         self.temp_dir.mkdir(parents=True, exist_ok=True)
         self.logger = (
-            logger if logger is not None else logging_helper.default_logger_factory(self.temp_dir / "launcher.log")
+            logger
+            if logger is not None
+            else logging_helper.default_logger_builder(logging.getLogger(__name__), self.temp_dir / "launcher.log")
         )
-        self._ui_helper = ui_helper.UIHelper(logger=self.logger)
+        self._ui_helper = ui_helper.UIHelper()
         self._services = services
         self._cli_args = self._cli_wrapper()
 
@@ -132,8 +135,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.logger.setLevel(logging.DEBUG)
         if cli_args.create_directories is True:
             self._create_directory_structure()
-        if self._services is not None:
-            self.services.register_logger(self.logger)
         if validate:
             self.validate()
 
@@ -610,3 +611,4 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     def _copy_tmp_directory(self, dst: os.PathLike) -> None:
         dst = Path(dst) / ".launcher"
         shutil.copytree(self.temp_dir, dst, dirs_exist_ok=True)
+

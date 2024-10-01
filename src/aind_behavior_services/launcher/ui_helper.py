@@ -7,14 +7,14 @@ from aind_behavior_services.rig import AindBehaviorRigModel
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel
 
+logger = logging.getLogger(__name__)
+
 
 class UIHelper:
     _print: Callable[[str], None]
-    _logger: logging.Logger
 
-    def __init__(self, logger: logging.Logger, print_func: Callable[[str], None] = print):
+    def __init__(self, print_func: Callable[[str], None] = print):
         self._print = print_func
-        self._logger = logger
 
     T = TypeVar("T", bound=Any)
 
@@ -66,7 +66,7 @@ class UIHelper:
                 if not isinstance(subject, str):
                     raise ValueError("Return value is not a string type.")
             except ValueError as e:
-                self._logger.error("Invalid choice. Try again. %s", e)
+                logger.error("Invalid choice. Try again. %s", e)
         return subject
 
     @staticmethod
@@ -102,4 +102,4 @@ class UIHelper:
             "-------------------------------"
         )
 
-        self._logger.info(_str)
+        logger.info(_str)

@@ -10,8 +10,7 @@ import aind_behavior_services.utils as utils
 TLogger = TypeVar("TLogger", bound=logging.Logger)
 
 
-def default_logger_factory(output_path: Optional[os.PathLike]) -> logging.Logger:
-    logger = logging.getLogger(__name__)
+def default_logger_builder(logger: TLogger, output_path: Optional[os.PathLike]) -> logging.Logger:
     logger.setLevel(logging.INFO)
     fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     utc_formatter = _TzFormatter(fmt, tz=datetime.timezone.utc)

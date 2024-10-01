@@ -8,29 +8,17 @@ from typing import Callable, List, Optional
 
 from aind_behavior_services.launcher._service import IService
 
+logger = logging.getLogger(__name__)
+
 
 class ResourceMonitor(IService):
     def __init__(
         self,
         *args,
-        logger: Optional[logging.Logger] = None,
         constrains: Optional[List[Constraint]] = None,
         **kwargs,
     ) -> None:
         self.constraints = constrains or []
-        self._logger = logger
-
-    @property
-    def logger(self) -> logging.Logger:
-        if self._logger is None:
-            raise ValueError("Logger not set")
-        return self._logger
-
-    @logger.setter
-    def logger(self, logger: logging.Logger) -> None:
-        if self._logger is not None:
-            raise ValueError("Logger already set")
-        self._logger = logger
 
     def validate(self, *args, **kwargs) -> bool:
         return self.evaluate_constraints()
@@ -44,7 +32,7 @@ class ResourceMonitor(IService):
     def evaluate_constraints(self) -> bool:
         for constraint in self.constraints:
             if not constraint():
-                self.logger.error(constraint.on_fail())
+                logger.error(constraint.on_fail())
                 return False
         return True
 
