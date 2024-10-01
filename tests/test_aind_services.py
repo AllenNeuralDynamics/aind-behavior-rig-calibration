@@ -6,7 +6,7 @@ from typing import Dict, List, Literal, Optional
 import pydantic
 import yaml
 
-from aind_behavior_services.launcher import watchdog_service, data_mapper_service
+from aind_behavior_services.launcher import data_mapper_service, watchdog_service
 from aind_behavior_services.rig import AindBehaviorRigModel, CameraController, CameraTypes, SpinnakerCamera
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
