@@ -25,16 +25,19 @@ class LauncherTests(unittest.TestCase):
             version: Literal[__version__] = __version__
 
         launcher = Launcher(
-            rig_schema_model=AindGenericTaskRig,
-            session_schema_model=AindGenericTaskSession,
-            task_logic_schema_model=AindGenericTaskTaskLogic,
-            data_dir=Path("data"),
-            config_library_dir=Path("config"),
-            logger=dummy_logger(),
-        )
+                rig_schema_model=AindGenericTaskRig,
+                session_schema_model=AindGenericTaskSession,
+                task_logic_schema_model=AindGenericTaskTaskLogic,
+                data_dir=Path("data"),
+                config_library_dir=Path("config"),
+                logger=dummy_logger(),
+                validate_init=False,
+            )
 
-        with self.assertRaises((FileNotFoundError, OSError, SystemExit)) as _:
-            launcher.validate_dependencies()
+        with self.assertRaises(SystemExit) as e:
+            launcher.validate()
+            self.assertEqual(e.exception, "Error")
+
 
     def test_logger(self):
         logger = logging_helper.default_logger_factory(None)
