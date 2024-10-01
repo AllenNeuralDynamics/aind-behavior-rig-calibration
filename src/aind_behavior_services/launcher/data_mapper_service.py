@@ -38,7 +38,7 @@ from aind_behavior_services import (
 )
 from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.launcher._service import IService
-from aind_behavior_services.utils import utcnow, model_from_json_file
+from aind_behavior_services.utils import model_from_json_file, utcnow
 
 from . import _data_mapper_service_helpers as helpers
 
