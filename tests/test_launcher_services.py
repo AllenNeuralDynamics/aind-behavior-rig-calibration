@@ -37,7 +37,7 @@ class LauncherServicesTests(unittest.TestCase):
         self.assertFalse(constraint(), False)
 
     def test_watchdog_service(self):
-        _ = watchdog_service.WatchdogService()
+        _ = watchdog_service.WatchdogService(validate=False)
 
     def test_app_service(self):
         _ = app_service.BonsaiApp("test.bonsai")

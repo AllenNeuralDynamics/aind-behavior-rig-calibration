@@ -37,10 +37,8 @@ logger = logging.getLogger(__name__)
 
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 
-DEFAULT_EXE = "watchdog.exe"
-DEFAULT_EXE_PATH = Path(os.getenv("PROGRAMDATA", ".")) / "aind-watchdog-service" / DEFAULT_EXE
-DEFAULT_WATCHED_DIRECTORY = DEFAULT_EXE_PATH.parent / "manifests"
-DEFAULT_COMPLETED_DIRECTORY = DEFAULT_EXE_PATH.parent / "completed"
+DEFAULT_EXE: Optional[str] = os.getenv("WATCHDOG_EXE", None)
+DEFAULT_CONFIG: Optional[str] = os.getenv("WATCHDOG_CONFIG", None)
 
 
 class WatchdogClient:
@@ -49,9 +47,6 @@ class WatchdogClient:
     def __init__(
         self,
         schedule_time: Optional[datetime.time] = datetime.time(hour=20),
-        executable: os.PathLike = DEFAULT_EXE_PATH,
-        watched_dir: os.PathLike = DEFAULT_WATCHED_DIRECTORY,
-        completed_dir: os.PathLike = DEFAULT_COMPLETED_DIRECTORY,
         project_name: Optional[str] = None,
         platform: Platform = getattr(Platform, "BEHAVIOR"),
         capsule_id: Optional[str] = None,
@@ -60,7 +55,7 @@ class WatchdogClient:
         mount: Optional[str] = None,
         force_cloud_sync: bool = True,
         transfer_endpoint: str = "http://aind-data-transfer-service/api/v1/submit_jobs",
-        validate_project_name: bool = True,
+        validate: bool = True,
     ) -> None:
         self.project_name = project_name
         self.schedule_time = schedule_time
@@ -71,19 +66,46 @@ class WatchdogClient:
         self.mount = mount
         self.force_cloud_sync = force_cloud_sync
         self.transfer_endpoint = transfer_endpoint
-        self._validate_project_name = validate_project_name
 
-        self.executable = Path(executable)
-        self.watched_dir = Path(watched_dir)
-        self.completed_dir = Path(completed_dir)
+        if DEFAULT_EXE is None or DEFAULT_CONFIG is None:
+            raise ValueError("WATCHDOG_EXE and WATCHDOG_CONFIG environment variables must be defined.")
+
+        self.executable_path = Path(DEFAULT_EXE)
+        self.config_path = Path(DEFAULT_CONFIG)
+        self._config_model: WatchConfig = None
+        if validate:
+            self.validate(create_config=True)
+
+    def validate(self, create_config: bool = True) -> bool:
+        if not self.executable_path.exists():
+            raise FileNotFoundError(f"Executable not found at {self.executable_path}")
+        if not self.config_path.exists():
+            if not create_config:
+                raise FileNotFoundError(f"Config file not found at {self.config_path}")
+            else:
+                self._config_model = self.create_watchdog_config(
+                    self.config_path.parent / "Manifests", self.config_path.parent / "Completed"
+                )
+                self._write_yaml(self._config_model, self.config_path)
+        else:
+            self._config_model = WatchConfig.model_validate(self._read_yaml(self.config_path))
+        return True
 
     @staticmethod
     def create_watchdog_config(
-        watched_directory: Optional[os.PathLike],
-        manifest_complete_directory: Optional[os.PathLike],
+        watched_directory: os.PathLike,
+        manifest_complete_directory: os.PathLike,
         webhook_url: Optional[str] = None,
+        create_dir: bool = True,
     ) -> WatchConfig:
         """Create a WatchConfig object"""
+
+        if create_dir:
+            if not Path(watched_directory).exists():
+                Path(watched_directory).mkdir(parents=True, exist_ok=True)
+            if not Path(manifest_complete_directory).exists():
+                Path(manifest_complete_directory).mkdir(parents=True, exist_ok=True)
+
         return WatchConfig(
             flag_dir=str(watched_directory),
             manifest_complete=str(manifest_complete_directory),
@@ -113,7 +135,7 @@ class WatchdogClient:
         mount = kwargs.pop("mount", self.mount)
         force_cloud_sync = kwargs.pop("force_cloud_sync", self.force_cloud_sync)
         transfer_endpoint = kwargs.pop("transfer_endpoint", self.transfer_endpoint)
-        validate_project_name = kwargs.pop("validate_project_name", self._validate_project_name)
+        validate_project_name = kwargs.pop("validate_project_name", True)
         processor_full_name = (
             kwargs.pop("processor_full_name", None)
             or ",".join(ads_session.experimenter_full_name)
@@ -166,10 +188,9 @@ class WatchdogClient:
             response.raise_for_status()
         return content["data"]
 
-    @staticmethod
-    def is_running(process_name: str = DEFAULT_EXE) -> bool:
+    def is_running(self) -> bool:
         output = subprocess.check_output(
-            ["tasklist", "/FI", f"IMAGENAME eq {process_name}"], shell=True, encoding="utf-8"
+            ["tasklist", "/FI", f"IMAGENAME eq {self.executable_path.name}"], shell=True, encoding="utf-8"
         )
         processes = [line.split()[0] for line in output.splitlines()[3:]]
         return len(processes) > 0
@@ -177,18 +198,16 @@ class WatchdogClient:
     def force_restart(self, kill_if_running: bool = True) -> subprocess.Popen[bytes]:
         if kill_if_running is True:
             while self.is_running():
-                subprocess.run(["taskkill", "/IM", DEFAULT_EXE, "/F"], shell=True, check=True)
+                subprocess.run(["taskkill", "/IM", self.executable_path.name, "/F"], shell=True, check=True)
 
-        cmd_builder = "{exe} -f {watched_dir} -m {completed_dir}".format(
-            exe=self.executable, watched_dir=self.watched_dir, completed_dir=self.completed_dir
-        )
+        cmd_builder = "{exe} -c {config}".format(exe=self.executable_path, config=self.config_path)
 
         return subprocess.Popen(cmd_builder, start_new_session=True, shell=True)
 
     def dump_manifest_config(
         self, manifest_config: ManifestConfig, path: Optional[os.PathLike] = None, make_dir: bool = True
     ) -> Path:
-        path = Path(path if path else self.watched_dir / f"manifest_{manifest_config.name}.yaml").resolve()
+        path = Path(path if path else self._config_model.flag_dir / f"manifest_{manifest_config.name}.yaml").resolve()
         if "manifest" not in path.name:
             raise ValueError("The file name must contain the string 'manifest' for the watchdog to work.")
         if make_dir and not path.parent.exists():
@@ -201,14 +220,23 @@ class WatchdogClient:
                 str(Path.as_posix(Path(_path))) for _path in manifest_config.modalities[modality]
             ]
 
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(self._yaml_dump(manifest_config))
+        self._write_yaml(manifest_config, path)
         return path
 
     @staticmethod
     def _yaml_dump(model: BaseModel) -> str:
         native_json = json.loads(model.model_dump_json())
         return yaml.dump(native_json, default_flow_style=False)
+
+    @staticmethod
+    def _write_yaml(model: BaseModel, path: PathLike) -> None:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(WatchdogClient._yaml_dump(model))
+
+    @staticmethod
+    def _read_yaml(path: PathLike) -> dict:
+        with open(path, "r", encoding="utf-8") as f:
+            return yaml.safe_load(f)
 
 
 class WatchdogService(WatchdogClient, IService):
@@ -252,7 +280,7 @@ class WatchdogService(WatchdogClient, IService):
 
             _manifest_name = f"manifest_{session_schema.session_name if session_schema.session_name else format_datetime(session_schema.date)}.yaml"
             _manifest_path = self.dump_manifest_config(
-                watchdog_manifest_config, path=Path(self.watched_dir) / _manifest_name
+                watchdog_manifest_config, path=Path(self._config_model.flag_dir) / _manifest_name
             )
             logger.info("Watchdog manifest config created successfully at %s.", _manifest_path)
 
@@ -260,6 +288,7 @@ class WatchdogService(WatchdogClient, IService):
             logger.error("Failed to create watchdog manifest config. %s", e)
 
     def validate(self, *args, **kwargs) -> bool:
+        super().validate()
         logger.info("Watchdog service is enabled.")
         is_running = True
         if not self.is_running():
