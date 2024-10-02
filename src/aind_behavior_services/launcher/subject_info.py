@@ -33,7 +33,7 @@ class SubjectInfo(BaseModel):
             _in = input(f"Enter {field_name} ({_field.description}): ")
             value = _in if _in != "" else default
             try:
-                setattr(self, field_name, _type_adaptor.validate_strings(value))
+                setattr(self, field_name, _type_adaptor.validate_python(value))
                 return self.model_validate(self.model_dump())
             except (ValidationError, ValueError) as e:
                 logger.error("Error while validating input : %s. %s", value, e)
