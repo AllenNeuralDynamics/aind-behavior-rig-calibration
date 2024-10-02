@@ -38,6 +38,7 @@ from aind_behavior_services import (
 )
 from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.launcher._service import IService
+from aind_behavior_services.launcher.subject_info import SubjectInfo
 from aind_behavior_services.utils import model_from_json_file, utcnow
 
 from . import _data_mapper_service_helpers as helpers
@@ -70,6 +71,7 @@ def map_from_session_root(
     script_path: os.PathLike,
     session_end_time: Optional[datetime.datetime] = None,
     output_parameters: Optional[Dict] = None,
+    subject_info: Optional[SubjectInfo] = None,
     **kwargs,
 ) -> AdsSession:
     return map(
@@ -80,6 +82,7 @@ def map_from_session_root(
         script_path=script_path,
         session_end_time=session_end_time if session_end_time else utcnow(),
         output_parameters=output_parameters,
+        subject_info=subject_info,
         **kwargs,
     )
 
@@ -95,6 +98,7 @@ def map_from_json_files(
     script_path: os.PathLike,
     session_end_time: Optional[datetime.datetime],
     output_parameters: Optional[Dict] = None,
+    subject_info: Optional[SubjectInfo] = None,
     **kwargs,
 ) -> AdsSession:
     return map(
@@ -105,6 +109,7 @@ def map_from_json_files(
         script_path=script_path,
         session_end_time=session_end_time if session_end_time else utcnow(),
         output_parameters=output_parameters,
+        subject_info=subject_info,
         **kwargs,
     )
 
@@ -117,6 +122,7 @@ def map(
     script_path: os.PathLike,
     session_end_time: Optional[datetime.datetime] = None,
     output_parameters: Optional[Dict] = None,
+    subject_info: Optional[SubjectInfo] = None,
     **kwargs,
 ) -> AdsSession:
     # Normalize repository
@@ -168,9 +174,9 @@ def map(
 
     # Construct aind-data-schema session
     aind_data_schema_session = AdsSession(
-        animal_weight_post=None,  # todo: fetch/push to slims
-        animal_weight_prior=None,  # todo: fetch/push to slims
-        reward_consumed_total=None,  # todo: fetch/push to slims
+        animal_weight_post=subject_info.animal_weight_post if subject_info else None,
+        animal_weight_prior=subject_info.animal_weight_prior if subject_info else None,
+        reward_consumed_total=subject_info.reward_consumed_total if subject_info else None,
         reward_delivery=reward_delivery_config,
         experimenter_full_name=session_model.experimenter,
         session_start_time=session_model.date,

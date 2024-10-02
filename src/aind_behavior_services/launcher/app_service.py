@@ -110,9 +110,7 @@ class BonsaiApp(App):
             if len(proc.stdout) > 0:
                 logger.error("Bonsai process finished with errors.")
                 if allow_stderr is None:
-                    allow_stderr = UIHelper(print).prompt_yes_no_question(
-                        "Would you like to see the error message?"
-                    )
+                    allow_stderr = UIHelper(print).prompt_yes_no_question("Would you like to see the error message?")
                 if allow_stderr is False:
                     raise subprocess.CalledProcessError(1, proc.args)
         return self

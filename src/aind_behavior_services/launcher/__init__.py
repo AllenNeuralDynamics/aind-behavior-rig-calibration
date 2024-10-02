@@ -22,8 +22,8 @@ from aind_behavior_services import (
 from aind_behavior_services.db_utils import SubjectDataBase, SubjectEntry
 from aind_behavior_services.launcher import logging_helper, ui_helper
 from aind_behavior_services.launcher.services import Services
+from aind_behavior_services.launcher.subject_info import SubjectInfo
 from aind_behavior_services.utils import model_from_json_file, utcnow
-
 
 TRig = TypeVar("TRig", bound=AindBehaviorRigModel)  # pylint: disable=invalid-name
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)  # pylint: disable=invalid-name
@@ -126,6 +126,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self._subject_db_data: Optional[SubjectEntry] = None
         self._run_hook_return: Any = None
 
+        self._subject_info: Optional[SubjectInfo] = None
         self._post_init_(validate=validate_init)
 
     def _post_init_(self, validate: bool = True) -> None:
@@ -172,6 +173,12 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             raise ValueError("Services instance not set.")
         return self._services
 
+    @property
+    def subject_info(self) -> SubjectInfo:
+        if self._subject_info is None:
+            raise ValueError("Subject info instance not set.")
+        return self._subject_info
+
     def __call__(self) -> None:
         self.main()
 
@@ -212,6 +219,9 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.logger.info("Pre-run hook started.")
         self.session_schema.experiment = self.task_logic_schema.name
         self.session_schema.experiment_version = self.task_logic_schema.version
+
+        self._subject_info = SubjectInfo.from_session(self.session_schema)
+        self._subject_info = self.subject_info.prompt_field("animal_weight_prior", None)
 
         if self.services.app is None:
             raise ValueError("Bonsai app not set.")
@@ -258,6 +268,13 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         self.logger.info("Post-run hook started.")
         if self.services.app is None:
             raise ValueError("Bonsai app not set.")
+        self._subject_info = self.subject_info.prompt_field("animal_weight_post", None)
+        self._subject_info = self.subject_info.prompt_field("reward_consumed_total", None)
+        try:
+            self.logger.info("Subject Info: %s", self.subject_info.model_dump_json(indent=4))
+        except Exception as e:
+            self.logger.error("Failed to log subject info. %s", e)
+
         if self.services.data_mapper is not None:
             try:
                 ads_session = self.services.data_mapper.map_from_session_root(
@@ -268,6 +285,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     repository=self.repository,
                     script_path=Path(self.services.app.workflow).resolve(),
                     session_end_time=utcnow(),
+                    subject_info=self.subject_info,
                 )
                 ads_session.write_standard_file(self.session_directory)
                 self.logger.info("Mapping successful.")
@@ -611,4 +629,3 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
     def _copy_tmp_directory(self, dst: os.PathLike) -> None:
         dst = Path(dst) / ".launcher"
         shutil.copytree(self.temp_dir, dst, dirs_exist_ok=True)
-
