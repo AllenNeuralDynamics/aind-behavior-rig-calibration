@@ -237,7 +237,7 @@ def _mapper_calibration(calibration: Calibration) -> ads_devices.Calibration:
         device_name=calibration.device_name,
         input=calibration.input.model_dump() if calibration.input else {},
         output=calibration.output.model_dump() if calibration.output else {},
-        calibration_date=calibration.date,
+        calibration_date=calibration.date if calibration.date else utcnow(),
         description=calibration.description if calibration.description else "",
         notes=calibration.notes,
     )
