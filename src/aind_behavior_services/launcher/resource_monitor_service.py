@@ -73,5 +73,3 @@ def remote_dir_exists_constraint_factory(dir_path: os.PathLike) -> Constraint:
         kwargs={"dir_path": dir_path},
         fail_msg_handler=lambda dir_path: f"Directory {dir_path} does not exist.",
     )
-
-print(available_storage_constraint_factory(min_bytes=2e20).on_fail())
