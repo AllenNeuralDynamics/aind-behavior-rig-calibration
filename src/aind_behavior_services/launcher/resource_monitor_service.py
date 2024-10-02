@@ -61,7 +61,7 @@ def available_storage_constraint_factory(drive: str = "C:\\", min_bytes: float =
         constraint=lambda drive, min_bytes: shutil.disk_usage(drive).free >= min_bytes,
         args=[],
         kwargs={"drive": drive, "min_bytes": min_bytes},
-        fail_msg_handler=lambda drive: f"Drive {drive} does not have enough space.",
+        fail_msg_handler=lambda drive, min_bytes: f"Drive {drive} does not have enough space.",
     )
 
 
@@ -73,3 +73,5 @@ def remote_dir_exists_constraint_factory(dir_path: os.PathLike) -> Constraint:
         kwargs={"dir_path": dir_path},
         fail_msg_handler=lambda dir_path: f"Directory {dir_path} does not exist.",
     )
+
+print(available_storage_constraint_factory(min_bytes=2e20).on_fail())
