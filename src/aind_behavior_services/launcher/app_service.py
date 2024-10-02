@@ -110,7 +110,7 @@ class BonsaiApp(App):
             if len(proc.stdout) > 0:
                 logger.error("Bonsai process finished with errors.")
                 if allow_stderr is None:
-                    allow_stderr = UIHelper(logger, print).prompt_yes_no_question(
+                    allow_stderr = UIHelper(print).prompt_yes_no_question(
                         "Would you like to see the error message?"
                     )
                 if allow_stderr is False:
@@ -132,7 +132,7 @@ class BonsaiApp(App):
         while has_pick is False:
             try:
                 available_layouts.insert(0, "None")
-                picked = UIHelper(logger, print).prompt_pick_file_from_list(
+                picked = UIHelper(print).prompt_pick_file_from_list(
                     available_layouts,
                     prompt="Pick a visualizer layout:",
                     zero_label="Default",
