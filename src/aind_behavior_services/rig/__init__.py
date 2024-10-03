@@ -68,8 +68,8 @@ class SpinnakerCamera(Device):
     exposure: int = Field(default=1000, ge=100, description="Exposure time")
     gain: float = Field(default=0, ge=0, description="Gain")
     gamma: Optional[float] = Field(default=None, ge=0, description="Gamma. If None, will disable gamma correction.")
-    adc_bit_depth: SpinnakerCameraAdcBitDepth = Field(
-        default=SpinnakerCameraAdcBitDepth.ADC8BIT, description="ADC bit depth"
+    adc_bit_depth: Optional[SpinnakerCameraAdcBitDepth] = Field(
+        default=SpinnakerCameraAdcBitDepth.ADC8BIT, description="ADC bit depth. If None will be left as default."
     )
     region_of_interest: Rect = Field(default=Rect(), description="Region of interest", validate_default=True)
     video_writer: Optional[VideoWriter] = Field(
