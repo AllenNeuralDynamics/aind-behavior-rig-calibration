@@ -3,16 +3,16 @@ from typing import Optional, Self, TypeVar, Union
 
 import aind_behavior_services.launcher.app_service as app_service
 import aind_behavior_services.launcher.resource_monitor_service as resource_monitor_service
-import aind_behavior_services.launcher.watchdog_service as watchdog_service
-from aind_behavior_services.launcher.data_mapper_service import AindDataSchemaSessionDataMapper
+from aind_behavior_services.launcher.data_mapper_service import DataMapperService
+from aind_behavior_services.launcher.data_transfer_service import DataTransferService
 
 logger = logging.getLogger(__name__)
 
 SupportedServices = Union[
-    watchdog_service.WatchdogService,
+    DataTransferService,
     resource_monitor_service.ResourceMonitor,
     app_service.BonsaiApp,
-    AindDataSchemaSessionDataMapper,
+    DataMapperService,
 ]
 
 TService = TypeVar("TService", bound=SupportedServices)
@@ -20,33 +20,33 @@ TService = TypeVar("TService", bound=SupportedServices)
 
 class Services:
     # todo: This could use some future refactoring to make it more generic. For instance, not subclassing App
-    _watchdog: Optional[watchdog_service.WatchdogService]
+    _data_transfer_service: Optional[DataTransferService]
     _resource_monitor: Optional[resource_monitor_service.ResourceMonitor]
     _app: Optional[app_service.BonsaiApp]
-    _data_mapper: Optional[AindDataSchemaSessionDataMapper]
+    _data_mapper: Optional[DataMapperService]
 
     def __init__(
         self,
         *args,
-        watchdog: Optional[watchdog_service.WatchdogService] = None,
+        data_transfer_service: Optional[DataTransferService] = None,
         resource_monitor: Optional[resource_monitor_service.ResourceMonitor] = None,
         app: Optional[app_service.BonsaiApp] = None,
-        data_mapper: Optional[AindDataSchemaSessionDataMapper] = None,
+        data_mapper: Optional[DataMapperService] = None,
         **kwargs,
     ) -> None:
-        self._watchdog = watchdog
+        self._data_transfer_service = data_transfer_service
         self._resource_monitor = resource_monitor
         self._app = app
         self._data_mapper = data_mapper
 
     @property
-    def watchdog(self) -> Optional[watchdog_service.WatchdogService]:
-        return self._watchdog
+    def data_transfer_service(self) -> Optional[DataTransferService]:
+        return self._data_transfer_service
 
-    def register_watchdog(self, watchdog: watchdog_service.WatchdogService) -> Self:
-        if self._watchdog is not None:
-            raise ValueError("Watchdog already registered")
-        self._watchdog = watchdog
+    def register_data_transfer_service(self, data_transfer_service: DataTransferService) -> Self:
+        if self._data_transfer_service is not None:
+            raise ValueError("Data transfer service already registered")
+        self._data_transfer_service = data_transfer_service
         return self
 
     @property
@@ -70,10 +70,10 @@ class Services:
         return self
 
     @property
-    def data_mapper(self) -> Optional[AindDataSchemaSessionDataMapper]:
+    def data_mapper(self) -> Optional[DataMapperService]:
         return self._data_mapper
 
-    def register_data_mapper(self, data_mapper: AindDataSchemaSessionDataMapper) -> Self:
+    def register_data_mapper(self, data_mapper: DataMapperService) -> Self:
         if self._data_mapper is not None:
             raise ValueError("Data mapper already registered")
         self._data_mapper = data_mapper

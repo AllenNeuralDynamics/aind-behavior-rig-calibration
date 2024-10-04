@@ -1,15 +1,6 @@
 from __future__ import annotations
 
-try:
-    import aind_watchdog_service  # noqa: F401
-except ImportError as e:
-    e.add_note(
-        "The 'aind-watchdog-service' package is required to use this module. \
-            Install the optional dependencies defined in `project.toml' \
-                by running `pip install .[aind-services]`"
-    )
-    raise
-
+import abc
 import datetime
 import json
 import logging
@@ -32,24 +23,31 @@ from requests.exceptions import HTTPError
 from aind_behavior_services.launcher._service import IService
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.utils import format_datetime
-import abc
 
 logger = logging.getLogger(__name__)
 
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 
-DEFAULT_EXE: Optional[str] = os.getenv("WATCHDOG_EXE", None)
-DEFAULT_CONFIG: Optional[str] = os.getenv("WATCHDOG_CONFIG", None)
-
 
 class DataTransferService(IService, abc.ABC):
-
     @abc.abstractmethod
     def transfer(self, *args, **kwargs) -> None:
         pass
 
 
-class WatchdogService(DataTransferService):
+class WatchdogDataTransferService(DataTransferService):
+    try:
+        import aind_watchdog_service
+    except ImportError as e:
+        e.add_note(
+            "The 'aind-watchdog-service' package is required to use this module. \
+                Install the optional dependencies defined in `project.toml' \
+                    by running `pip install .[aind-services]`"
+        )
+        raise
+
+    DEFAULT_EXE: Optional[str] = os.getenv("WATCHDOG_EXE", None)
+    DEFAULT_CONFIG: Optional[str] = os.getenv("WATCHDOG_CONFIG", None)
 
     def __init__(
         self,
@@ -76,11 +74,11 @@ class WatchdogService(DataTransferService):
         self.force_cloud_sync = force_cloud_sync
         self.transfer_endpoint = transfer_endpoint
 
-        if DEFAULT_EXE is None or DEFAULT_CONFIG is None:
+        if self.DEFAULT_EXE is None or self.DEFAULT_CONFIG is None:
             raise ValueError("WATCHDOG_EXE and WATCHDOG_CONFIG environment variables must be defined.")
 
-        self.executable_path = Path(DEFAULT_EXE)
-        self.config_path = Path(DEFAULT_CONFIG)
+        self.executable_path = Path(self.DEFAULT_EXE)
+        self.config_path = Path(self.DEFAULT_CONFIG)
         self._config_model: WatchConfig = None
         if validate:
             self.validate(create_config=True)
@@ -149,7 +147,6 @@ class WatchdogService(DataTransferService):
     def create_manifest_config(
         self,
         source: os.PathLike,
-        destination: os.PathLike,
         ads_session: AdsSession,
         ads_schemas: Optional[List[os.PathLike]] = None,
         session_name: Optional[str] = None,
@@ -172,7 +169,7 @@ class WatchdogService(DataTransferService):
             or os.environ.get("USERNAME", "unknown")
         )
 
-        destination = Path(destination).resolve()
+        destination = Path(self.destination).resolve()
         source = Path(source).resolve()
 
         if session_name is None:
@@ -308,4 +305,3 @@ class WatchdogService(DataTransferService):
 
         except (pydantic.ValidationError, ValueError, IOError) as e:
             logger.error("Failed to create watchdog manifest config. %s", e)
-
