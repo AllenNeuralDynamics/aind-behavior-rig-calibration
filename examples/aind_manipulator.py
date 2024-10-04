@@ -27,7 +27,6 @@ calibration_logic = m.CalibrationLogic(task_parameters=m.CalibrationParameters()
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",
-    remote_path=None,
     allow_dirty_repo=False,
     experiment="AindManipulatorCalibration",
     date=utcnow(),

@@ -23,7 +23,6 @@ calibration_logic = treadmill.CalibrationLogic()
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",
-    remote_path=None,
     allow_dirty_repo=False,
     experiment="Calibration",
     date=utcnow(),

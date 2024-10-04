@@ -21,9 +21,6 @@ class AindBehaviorSessionModel(SchemaVersionedModel):
     session_name: Optional[str] = Field(
         default=None, description="Name of the session. This will be used to create a folder in the root path."
     )
-    remote_path: Optional[str] = Field(
-        default=None, description="Remote path where data will be attempted to be copied to after experiment is done"
-    )
     subject: str = Field(..., description="Name of the subject")
     experiment_version: str = Field(..., description="Version of the experiment")
     notes: Optional[str] = Field(default=None, description="Notes about the experiment")

@@ -48,7 +48,6 @@ calibration_logic = olf.CalibrationLogic(
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",
-    remote_path=None,
     date=utcnow(),
     allow_dirty_repo=False,
     experiment="OlfactometerCalibration",
