@@ -40,7 +40,7 @@ from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.launcher._service import IService
 from aind_behavior_services.launcher.subject_info import SubjectInfo
 from aind_behavior_services.utils import model_from_json_file, utcnow
-
+import abc
 from . import _data_mapper_service_helpers as helpers
 
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
@@ -48,7 +48,7 @@ TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
 logger = logging.getLogger(__name__)
 
 
-class DataMapperService(IService):
+class DataMapperService(IService, abc.ABC):
     # Dummy class for now
     pass
 
