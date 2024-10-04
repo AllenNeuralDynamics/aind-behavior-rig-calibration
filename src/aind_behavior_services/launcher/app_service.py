@@ -1,10 +1,10 @@
+import abc
 import glob
 import logging
 import os
 import subprocess
 from pathlib import Path
 from typing import Dict, Optional, Self
-import abc
 
 from aind_behavior_services.launcher.ui_helper import UIHelper
 from aind_behavior_services.utils import run_bonsai_process
