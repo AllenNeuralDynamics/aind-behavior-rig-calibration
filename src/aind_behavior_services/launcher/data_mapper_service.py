@@ -22,6 +22,20 @@ from aind_behavior_services.launcher._service import IService
 from aind_behavior_services.launcher.subject_info import SubjectInfo
 from aind_behavior_services.utils import model_from_json_file, utcnow
 
+# todo lazily import this
+try:
+    import aind_data_schema
+except ImportError as e:
+    e.add_note(
+        "The 'aind-data-schema' package is required to use this module. \
+            Install the optional dependencies defined in `project.toml' \
+                by running `pip install .[aind-services]`"
+    )
+    raise
+
+import aind_data_schema.components.devices
+import aind_data_schema.core.session
+
 from . import _data_mapper_service_helpers as helpers
 
 TSession = TypeVar("TSession", bound=AindBehaviorSessionModel)
@@ -38,35 +52,13 @@ class DataMapperService(IService, abc.ABC):
 
 
 class AindDataSchemaSessionDataMapper(DataMapperService):
-
-    # Lazily import aind_data_schema
-    try:
-        import aind_data_schema
-    except ImportError as e:
-        e.add_note(
-            "The 'aind-data-schema' package is required to use this module. \
-                Install the optional dependencies defined in `project.toml' \
-                    by running `pip install .[aind-services]`"
-        )
-        raise
-
-    import aind_data_schema.components.devices as ads_devices
-    from aind_data_schema.core.session import (
-        Modality,
-        RewardDeliveryConfig,
-        RewardSolution,
-        Software,
-        StimulusEpoch,
-        StimulusModality,
-        Stream,
-    )
-    from aind_data_schema.core.session import Session as AdsSession
-
     def validate(self, *args, **kwargs) -> bool:
         return True
 
     @classmethod
-    def map(cls, *args, session_directory: Optional[os.PathLike] = None, **kwargs) -> Optional[AdsSession]:
+    def map(
+        cls, *args, session_directory: Optional[os.PathLike] = None, **kwargs
+    ) -> Optional[aind_data_schema.core.session.Session]:
         logger.info("Mapping to aind-data-schema Session")
         try:
             ads_session = cls.map_from_session_root(*args, **kwargs)
@@ -93,7 +85,7 @@ class AindDataSchemaSessionDataMapper(DataMapperService):
         output_parameters: Optional[Dict] = None,
         subject_info: Optional[SubjectInfo] = None,
         **kwargs,
-    ) -> AdsSession:
+    ) -> aind_data_schema.core.session.Session:
         return cls._map(
             session_model=model_from_json_file(Path(schema_root) / "session_input.json", session_model),
             rig_model=model_from_json_file(Path(schema_root) / "rig_input.json", rig_model),
@@ -121,7 +113,7 @@ class AindDataSchemaSessionDataMapper(DataMapperService):
         output_parameters: Optional[Dict] = None,
         subject_info: Optional[SubjectInfo] = None,
         **kwargs,
-    ) -> AdsSession:
+    ) -> aind_data_schema.core.session.Session:
         return cls._map(
             session_model=model_from_json_file(session_json, session_model),
             rig_model=model_from_json_file(rig_json, rig_model),
@@ -146,7 +138,7 @@ class AindDataSchemaSessionDataMapper(DataMapperService):
         output_parameters: Optional[Dict] = None,
         subject_info: Optional[SubjectInfo] = None,
         **kwargs,
-    ) -> AdsSession:
+    ) -> aind_data_schema.core.session.Session:
         # Normalize repository
         if isinstance(repository, os.PathLike | str):
             repository = git.Repo(Path(repository))
@@ -164,19 +156,26 @@ class AindDataSchemaSessionDataMapper(DataMapperService):
         # populate devices
         devices = [device[0] for device in helpers.get_fields_of_type(rig_model, AbsRig.Device) if device[0]]
         # Populate modalities
-        modalities: list[Modality] = [getattr(Modality, "BEHAVIOR")]
+        modalities: list[aind_data_schema.core.session.Modality] = [
+            getattr(aind_data_schema.core.session.Modality, "BEHAVIOR")
+        ]
         if len(cameras) > 0:
-            modalities.append(getattr(Modality, "BEHAVIOR_VIDEOS"))
+            modalities.append(getattr(aind_data_schema.core.session.Modality, "BEHAVIOR_VIDEOS"))
         modalities = list(set(modalities))
         # Populate stimulus modalities
-        stimulus_modalities: list[StimulusModality] = []
+        stimulus_modalities: list[aind_data_schema.core.session.StimulusModality] = []
 
         if helpers.get_fields_of_type(rig_model, AbsRig.Screen):
-            stimulus_modalities.extend([StimulusModality.VISUAL, StimulusModality.VIRTUAL_REALITY])
+            stimulus_modalities.extend(
+                [
+                    aind_data_schema.core.session.StimulusModality.VISUAL,
+                    aind_data_schema.core.session.StimulusModality.VIRTUAL_REALITY,
+                ]
+            )
         if helpers.get_fields_of_type(rig_model, AbsRig.HarpOlfactometer):
-            stimulus_modalities.append(StimulusModality.OLFACTORY)
+            stimulus_modalities.append(aind_data_schema.core.session.StimulusModality.OLFACTORY)
         if helpers.get_fields_of_type(rig_model, AbsRig.HarpTreadmill):
-            stimulus_modalities.append(StimulusModality.WHEEL_FRICTION)
+            stimulus_modalities.append(aind_data_schema.core.session.StimulusModality.WHEEL_FRICTION)
 
         # Mouse platform
 
@@ -192,10 +191,12 @@ class AindDataSchemaSessionDataMapper(DataMapperService):
             active_mouse_platform = False
 
         # Reward delivery
-        reward_delivery_config = RewardDeliveryConfig(reward_solution=RewardSolution.WATER, reward_spouts=[])
+        reward_delivery_config = aind_data_schema.core.session.RewardDeliveryConfig(
+            reward_solution=aind_data_schema.core.session.RewardSolution.WATER, reward_spouts=[]
+        )
 
         # Construct aind-data-schema session
-        aind_data_schema_session = AdsSession(
+        aind_data_schema_session = aind_data_schema.core.session.Session(
             animal_weight_post=subject_info.animal_weight_post if subject_info else None,
             animal_weight_prior=subject_info.animal_weight_prior if subject_info else None,
             reward_consumed_total=subject_info.reward_consumed_total if subject_info else None,
@@ -207,7 +208,7 @@ class AindDataSchemaSessionDataMapper(DataMapperService):
             subject_id=session_model.subject,
             notes=session_model.notes,
             data_streams=[
-                Stream(
+                aind_data_schema.core.session.Stream(
                     daq_names=devices,
                     stream_modalities=modalities,
                     stream_start_time=session_model.date,
@@ -219,26 +220,26 @@ class AindDataSchemaSessionDataMapper(DataMapperService):
             mouse_platform_name=mouse_platform,
             active_mouse_platform=active_mouse_platform,
             stimulus_epochs=[
-                StimulusEpoch(
+                aind_data_schema.core.session.StimulusEpoch(
                     stimulus_name=session_model.experiment,
                     stimulus_start_time=session_model.date,
                     stimulus_end_time=session_end_time if session_end_time else session_model.date,
                     stimulus_modalities=stimulus_modalities,
                     software=[
-                        Software(
+                        aind_data_schema.core.session.Software(
                             name="Bonsai",
                             version=f"{repository_remote_url}/blob/{repository_sha}/bonsai/Bonsai.config",
                             url=f"{repository_remote_url}/blob/{repository_sha}/bonsai",
                             parameters=helpers.snapshot_bonsai_environment(),
                         ),
-                        Software(
+                        aind_data_schema.core.session.Software(
                             name="Python",
                             version=f"{repository_remote_url}/blob/{repository_sha}/pyproject.toml",
                             url=f"{repository_remote_url}/blob/{repository_sha}",
                             parameters=helpers.snapshot_python_environment(),
                         ),
                     ],
-                    script=Software(
+                    script=aind_data_schema.core.session.Software(
                         name=Path(script_path).stem,
                         version=session_model.commit_hash if session_model.commit_hash else repository_sha,
                         url=f"{repository_remote_url}/blob/{repository_sha}/{repository_relative_script_path}",
@@ -251,8 +252,8 @@ class AindDataSchemaSessionDataMapper(DataMapperService):
         return aind_data_schema_session
 
     @staticmethod
-    def _mapper_calibration(calibration: Calibration) -> ads_devices.Calibration:
-        return ads_devices.Calibration(
+    def _mapper_calibration(calibration: Calibration) -> aind_data_schema.components.devices.Calibration:
+        return aind_data_schema.components.devices.Calibration(
             device_name=calibration.device_name,
             input=calibration.input.model_dump() if calibration.input else {},
             output=calibration.output.model_dump() if calibration.output else {},
