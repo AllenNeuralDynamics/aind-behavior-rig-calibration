@@ -32,6 +32,7 @@ from requests.exceptions import HTTPError
 from aind_behavior_services.launcher._service import IService
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.utils import format_datetime
+import abc
 
 logger = logging.getLogger(__name__)
 
@@ -41,11 +42,18 @@ DEFAULT_EXE: Optional[str] = os.getenv("WATCHDOG_EXE", None)
 DEFAULT_CONFIG: Optional[str] = os.getenv("WATCHDOG_CONFIG", None)
 
 
-class WatchdogClient:
-    """A class to interact with the AIND Watchdog service"""
+class DataTransferService(IService, abc.ABC):
+
+    @abc.abstractmethod
+    def transfer(self, *args, **kwargs) -> None:
+        pass
+
+
+class WatchdogService(DataTransferService):
 
     def __init__(
         self,
+        destination: PathLike,
         schedule_time: Optional[datetime.time] = datetime.time(hour=20),
         project_name: Optional[str] = None,
         platform: Platform = getattr(Platform, "BEHAVIOR"),
@@ -57,6 +65,7 @@ class WatchdogClient:
         transfer_endpoint: str = "http://aind-data-transfer-service/api/v1/submit_jobs",
         validate: bool = True,
     ) -> None:
+        self.destination = destination
         self.project_name = project_name
         self.schedule_time = schedule_time
         self.platform = platform
@@ -76,7 +85,11 @@ class WatchdogClient:
         if validate:
             self.validate(create_config=True)
 
+    def transfer(self, *args, **kwargs) -> None:
+        self.create_manifest_from_ads_session(*args, **kwargs)
+
     def validate(self, create_config: bool = True) -> bool:
+        logger.info("Attempting to validate Watchdog service.")
         if not self.executable_path.exists():
             raise FileNotFoundError(f"Executable not found at {self.executable_path}")
         if not self.config_path.exists():
@@ -89,7 +102,24 @@ class WatchdogClient:
                 self._write_yaml(self._config_model, self.config_path)
         else:
             self._config_model = WatchConfig.model_validate(self._read_yaml(self.config_path))
-        return True
+
+        is_running = True
+        if not self.is_running():
+            is_running = False
+            logger.warning(
+                "Watchdog service is not running. \
+                                After the session is over, \
+                                the launcher will attempt to forcefully restart it"
+            )
+
+        if not self.is_valid_project_name():
+            is_running = False
+            try:
+                logger.warning("Watchdog project name is not valid.")
+            except HTTPError as e:
+                logger.error("Failed to fetch project names from endpoint. %s", e)
+
+        return is_running
 
     @staticmethod
     def create_watchdog_config(
@@ -113,7 +143,7 @@ class WatchdogClient:
         )
 
     def is_valid_project_name(self) -> bool:
-        project_names = WatchdogClient._get_project_names()
+        project_names = self._get_project_names()
         return self.project_name in project_names
 
     def create_manifest_config(
@@ -149,7 +179,7 @@ class WatchdogClient:
             session_name = (ads_session.stimulus_epochs[0]).stimulus_name
 
         if validate_project_name:
-            project_names = WatchdogClient._get_project_names()
+            project_names = self._get_project_names()
             if project_name not in project_names:
                 raise ValueError(f"Project name {project_name} not found in {project_names}")
 
@@ -228,26 +258,20 @@ class WatchdogClient:
         native_json = json.loads(model.model_dump_json())
         return yaml.dump(native_json, default_flow_style=False)
 
-    @staticmethod
-    def _write_yaml(model: BaseModel, path: PathLike) -> None:
+    @classmethod
+    def _write_yaml(cls, model: BaseModel, path: PathLike) -> None:
         with open(path, "w", encoding="utf-8") as f:
-            f.write(WatchdogClient._yaml_dump(model))
+            f.write(cls._yaml_dump(model))
 
     @staticmethod
     def _read_yaml(path: PathLike) -> dict:
         with open(path, "r", encoding="utf-8") as f:
             return yaml.safe_load(f)
 
-
-class WatchdogService(WatchdogClient, IService):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def create_manifest_from_ads_session(
         self,
         session_schema: TSession,
         ads_session: AdsSession,
-        remote_path: PathLike,
         session_directory: PathLike,
     ):
         try:
@@ -265,15 +289,13 @@ class WatchdogService(WatchdogClient, IService):
                         logger.info("Watchdog service restarted successfully.")
 
             logger.info("Creating watchdog manifest config.")
-            if remote_path is None:
-                raise ValueError(
-                    "Remote path is not defined in the session schema. \
-                        A remote path must be used to create a watchdog manifest."
-                )
+            if self.destination is None:
+                raise ValueError("Remote path must be provided.")
+
             watchdog_manifest_config = self.create_manifest_config(
                 ads_session=ads_session,
                 source=Path(session_directory),
-                destination=Path(remote_path),
+                destination=Path(self.destination),
                 processor_full_name=",".join([name for name in ads_session.experimenter_full_name]),
                 session_name=session_schema.session_name,
             )
@@ -287,23 +309,3 @@ class WatchdogService(WatchdogClient, IService):
         except (pydantic.ValidationError, ValueError, IOError) as e:
             logger.error("Failed to create watchdog manifest config. %s", e)
 
-    def validate(self, *args, **kwargs) -> bool:
-        super().validate()
-        logger.info("Watchdog service is enabled.")
-        is_running = True
-        if not self.is_running():
-            is_running = False
-            logger.warning(
-                "Watchdog service is not running. \
-                                After the session is over, \
-                                the launcher will attempt to forcefully restart it"
-            )
-
-        if not self.is_valid_project_name():
-            is_running = False
-            try:
-                logger.warning("Watchdog project name is not valid.")
-            except HTTPError as e:
-                logger.error("Failed to fetch project names from endpoint. %s", e)
-
-        return is_running
