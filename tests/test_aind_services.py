@@ -6,7 +6,7 @@ from typing import Dict, List, Literal, Optional
 import pydantic
 import yaml
 
-from aind_behavior_services.launcher import data_mapper_service, data_transfer_service
+from aind_behavior_services.launcher import aind_data_schema_data_mapper, watchdog_service
 from aind_behavior_services.rig import AindBehaviorRigModel, CameraController, CameraTypes, SpinnakerCamera
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
@@ -15,7 +15,7 @@ from aind_behavior_services.utils import utcnow
 
 class AindServicesTests(unittest.TestCase):
     def test_session_mapper(self):
-        data_mapper_service.AindDataSchemaSessionDataMapper._map(
+        aind_data_schema_data_mapper.AindDataSchemaSessionDataMapper._map(
             session_model=MockSession(),
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),
@@ -25,7 +25,7 @@ class AindServicesTests(unittest.TestCase):
         )
 
     def test_watchdog_manifest(self):
-        _watchdog = data_transfer_service.WatchdogDataTransferService(
+        _watchdog = watchdog_service.WatchdogDataTransferService(
             destination="mock_path",
             project_name="Cognitive flexibility in patch foraging",
             schedule_time=datetime.time(hour=20),
@@ -34,7 +34,7 @@ class AindServicesTests(unittest.TestCase):
 
         _aind_behavior_session = MockSession()
 
-        _session = data_mapper_service.AindDataSchemaSessionDataMapper._map(
+        _session = aind_data_schema_data_mapper.AindDataSchemaSessionDataMapper._map(
             session_model=_aind_behavior_session,
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),
@@ -54,13 +54,11 @@ class AindServicesTests(unittest.TestCase):
 
         self.assertEqual(
             _config,
-            data_transfer_service.ManifestConfig.model_validate_json(_config.model_dump_json()),
+            watchdog_service.ManifestConfig.model_validate_json(_config.model_dump_json()),
             "Manifest config round trip failed",
         )
 
-        round_via_yaml = data_transfer_service.ManifestConfig.model_validate(
-            yaml.safe_load(_watchdog._yaml_dump(_config))
-        )
+        round_via_yaml = watchdog_service.ManifestConfig.model_validate(yaml.safe_load(_watchdog._yaml_dump(_config)))
         self.assertEqual(_config, round_via_yaml, "Manifest config round trip failed via yaml")
 
 
@@ -92,7 +90,6 @@ def MockSession() -> AindBehaviorSessionModel:
         root_path="MockRootPath",
         subject="0000",
         experiment_version="0.0.0",
-        remote_path="MockRemotePath",
     )
 
 
