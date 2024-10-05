@@ -31,6 +31,7 @@ class SchemaVersionedModelPre(SchemaVersionedModel):
 
 class SchemaVersionedModelPost(SchemaVersionedModel):
     version: Literal[version_post] = version_post
+    aind_behavior_services_pkg_version: Literal["0.1.0"] = "0.1.0"
 
 
 class SchemaVersionCoercionTest(unittest.TestCase):
@@ -64,7 +65,11 @@ class SchemaVersionCoercionTest(unittest.TestCase):
             except ValidationError as e:
                 self.fail(f"Validation failed with error: {e}")
 
-            self.assertEqual(pre_updated.version, post_instance.version, "Schema version was not coerced correctly.")
+            self.assertEqual(
+                pre_updated.aind_behavior_services_pkg_version,
+                post_instance.aind_behavior_services_pkg_version,
+                "Schema version was not coerced correctly.",
+            )
 
     def test_pkg_version_update_backwards_coercion(self):
         post_instance = SchemaVersionedModelPost()
