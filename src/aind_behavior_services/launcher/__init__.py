@@ -48,7 +48,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
         data_dir: os.PathLike,
         config_library_dir: os.PathLike,
         temp_dir: os.PathLike = Path("local/.temp"),
-        remote_data_dir: Optional[os.PathLike] = None,
         repository_dir: Optional[os.PathLike] = None,
         allow_dirty: bool = False,
         skip_hardware_validation: bool = False,

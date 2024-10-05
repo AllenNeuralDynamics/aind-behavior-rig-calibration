@@ -1,6 +1,5 @@
 try:
-    from aind_watchdog_service.models.manifest_config import BucketType, ManifestConfig
-    from aind_watchdog_service.models.watch_config import WatchConfig
+    import aind_watchdog_service  # noqa: F401
 except ImportError as e:
     e.add_note(
         "The 'aind-watchdog-service' package is required to use this module. \
@@ -23,6 +22,8 @@ import requests
 import yaml
 from aind_data_schema.core.session import Session as AdsSession
 from aind_data_schema_models.platforms import Platform
+from aind_watchdog_service.models.manifest_config import BucketType, ManifestConfig
+from aind_watchdog_service.models.watch_config import WatchConfig
 from pydantic import BaseModel
 from requests.exceptions import HTTPError
 
