@@ -93,11 +93,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
         # Directories
         self.data_dir = Path(self._cli_args.data_dir) if self._cli_args.data_dir is not None else self.abspath(data_dir)
-        self.remote_data_dir = (
-            Path(self._cli_args.remote_data_dir)
-            if self._cli_args.remote_data_dir is not None
-            else (self.abspath(remote_data_dir) if remote_data_dir is not None else None)
-        )
 
         # Derived directories
         self.config_library_dir = (
@@ -277,7 +272,7 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
 
         if self.services.data_mapper is not None:
             try:
-                ads_session = self.services.data_mapper.map_from_session_root(
+                mapped = self.services.data_mapper.map(
                     schema_root=self.session_directory / "Behavior" / "Logs",
                     session_model=self.session_schema_model,
                     rig_model=self.rig_schema_model,
@@ -286,21 +281,22 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                     script_path=Path(self.services.app.workflow).resolve(),
                     session_end_time=utcnow(),
                     subject_info=self.subject_info,
+                    session_directory=self.session_directory,
                 )
-                ads_session.write_standard_file(self.session_directory)
                 self.logger.info("Mapping successful.")
-            except (pydantic.ValidationError, ValueError, IOError) as e:
-                self.logger.error("Failed to map to aind-data-schema Session. %s", e)
-            else:
-                if self.services.watchdog is not None:
-                    if self.remote_data_dir is None:
-                        raise ValueError("Remote data directory is not defined.")
-                    self.services.watchdog.create_manifest_from_ads_session(
+            except Exception as e:
+                self.logger.error("Data mapper service has failed: %s", e)
+
+            try:
+                if self.services.data_transfer_service is not None:
+                    self.services.data_transfer_service.transfer(
                         session_schema=self.session_schema,
-                        ads_session=ads_session,
-                        remote_path=self.remote_data_dir,
+                        ads_session=mapped,
                         session_directory=self.session_directory,
                     )
+            except Exception as e:
+                self.logger.error("Data transfer service has failed: %s", e)
+
         return self
 
     def _exit(self, code: int = 0) -> None:
@@ -340,7 +336,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             self.repository.working_dir,
             self.computer_name,
             self.data_dir,
-            self.remote_data_dir,
             self.config_library_dir,
             self.temp_dir,
         )
@@ -366,14 +361,14 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             else:
                 logger.info("Bonsai app validated.")
 
-        # Watchdog service is optional
-        if services.watchdog is None:
-            logger.warning("Watchdog service not set.")
+        # data_transfer_service is optional
+        if services.data_transfer_service is None:
+            logger.warning("Data transfer service not set.")
         else:
-            if not services.watchdog.validate():
-                raise ValueError("Watchdog service failed to validate.")
+            if not services.data_transfer_service.validate():
+                raise ValueError("Data transfer service failed to validate.")
             else:
-                logger.info("Watchdog service validated.")
+                logger.info("Data transfer service validated.")
 
         # Resource monitor service is optional
         if services.resource_monitor is None:
@@ -392,9 +387,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
                 raise ValueError("Data mapper service failed to validate.")
             else:
                 logger.info("Data mapper service validated.")
-
-        if (services.data_mapper is None) ^ (services.watchdog is None):
-            raise ValueError("Data mapper and watchdog services must be set together.")
 
     def validate(self) -> None:
         """
@@ -444,7 +436,6 @@ class Launcher(Generic[TRig, TSession, TTaskLogic]):
             root_path=str(self.data_dir.resolve())
             if not self.group_by_subject_log
             else str(self.data_dir.resolve() / subject),
-            remote_path=str(self.remote_data_dir.resolve()) if self.remote_data_dir is not None else None,
             subject=subject,
             notes=notes,
             commit_hash=self.repository.head.commit.hexsha,

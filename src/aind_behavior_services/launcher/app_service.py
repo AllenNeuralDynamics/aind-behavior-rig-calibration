@@ -1,3 +1,4 @@
+import abc
 import glob
 import logging
 import os
@@ -13,7 +14,7 @@ from ._service import IService
 logger = logging.getLogger(__name__)
 
 
-class App(IService):
+class App(IService, abc.ABC):
     # Dummy class for now
     pass
 

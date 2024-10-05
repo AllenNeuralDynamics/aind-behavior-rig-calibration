@@ -6,7 +6,7 @@ from typing import Dict, List, Literal, Optional
 import pydantic
 import yaml
 
-from aind_behavior_services.launcher import data_mapper_service, watchdog_service
+from aind_behavior_services.launcher import data_mapper_service, data_transfer_service
 from aind_behavior_services.rig import AindBehaviorRigModel, CameraController, CameraTypes, SpinnakerCamera
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
@@ -15,7 +15,7 @@ from aind_behavior_services.utils import utcnow
 
 class AindServicesTests(unittest.TestCase):
     def test_session_mapper(self):
-        data_mapper_service.map(
+        data_mapper_service.AindDataSchemaSessionDataMapper._map(
             session_model=MockSession(),
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),
@@ -25,13 +25,16 @@ class AindServicesTests(unittest.TestCase):
         )
 
     def test_watchdog_manifest(self):
-        _watchdog = watchdog_service.WatchdogClient(
-            project_name="Cognitive flexibility in patch foraging", schedule_time=datetime.time(hour=20)
+        _watchdog = data_transfer_service.WatchdogDataTransferService(
+            destination="mock_path",
+            project_name="Cognitive flexibility in patch foraging",
+            schedule_time=datetime.time(hour=20),
+            validate=False,
         )
 
         _aind_behavior_session = MockSession()
 
-        _session = data_mapper_service.map(
+        _session = data_mapper_service.AindDataSchemaSessionDataMapper._map(
             session_model=_aind_behavior_session,
             rig_model=MockRig(),
             task_logic_model=MockTaskLogic(),
@@ -43,7 +46,6 @@ class AindServicesTests(unittest.TestCase):
         _config = _watchdog.create_manifest_config(
             ads_session=_session,
             source=_aind_behavior_session.root_path,
-            destination=_aind_behavior_session.remote_path,
             ads_schemas=["schema1", "schema2"],
             project_name=_watchdog.project_name,
             session_name=_aind_behavior_session.session_name,
@@ -52,11 +54,13 @@ class AindServicesTests(unittest.TestCase):
 
         self.assertEqual(
             _config,
-            watchdog_service.ManifestConfig.model_validate_json(_config.model_dump_json()),
+            data_transfer_service.ManifestConfig.model_validate_json(_config.model_dump_json()),
             "Manifest config round trip failed",
         )
 
-        round_via_yaml = watchdog_service.ManifestConfig.model_validate(yaml.safe_load(_watchdog._yaml_dump(_config)))
+        round_via_yaml = data_transfer_service.ManifestConfig.model_validate(
+            yaml.safe_load(_watchdog._yaml_dump(_config))
+        )
         self.assertEqual(_config, round_via_yaml, "Manifest config round trip failed via yaml")
 
 

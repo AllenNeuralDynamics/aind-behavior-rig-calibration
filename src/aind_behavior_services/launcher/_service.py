@@ -1,9 +1,9 @@
-from typing import Protocol
+import abc
 
 
-class IService(Protocol):
-    """A minimal interface to ensure that services have expected functionality."""
+class IService(abc.ABC):
+    "A base class for all services that defines a minimal interface"
 
-    def __init__(self, *args, **kwargs) -> None: ...
-
-    def validate(self, *args, **kwargs) -> bool: ...
+    @abc.abstractmethod
+    def validate(self, *args, **kwargs) -> bool:
+        pass

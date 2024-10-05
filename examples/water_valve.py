@@ -44,7 +44,6 @@ calibration_logic = wv.CalibrationLogic(
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",
-    remote_path=None,
     allow_dirty_repo=False,
     experiment="WaterValveCalibration",
     subject="WaterValve",

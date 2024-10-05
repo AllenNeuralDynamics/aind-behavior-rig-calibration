@@ -27,9 +27,6 @@ Feedback and contributions are welcome!
 
 .. toctree::
    :maxdepth: 2
-   :glob:
-
-   api.aind_services/*
 
 
 .. automodule:: aind_behavior_services.launcher

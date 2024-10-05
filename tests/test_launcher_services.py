@@ -1,6 +1,11 @@
 import unittest
 
-from aind_behavior_services.launcher import app_service, data_mapper_service, resource_monitor_service, watchdog_service
+from aind_behavior_services.launcher import (
+    app_service,
+    data_mapper_service,
+    data_transfer_service,
+    resource_monitor_service,
+)
 
 
 class LauncherServicesTests(unittest.TestCase):
@@ -37,13 +42,12 @@ class LauncherServicesTests(unittest.TestCase):
         self.assertFalse(constraint(), False)
 
     def test_watchdog_service(self):
-        _ = watchdog_service.WatchdogService(validate=False)
+        _ = data_transfer_service.WatchdogDataTransferService(destination="mock_path", validate=False)
 
     def test_app_service(self):
         _ = app_service.BonsaiApp("test.bonsai")
 
     def test_data_mapper_service(self):
-        _ = data_mapper_service.DataMapperService()
         _ = data_mapper_service.AindDataSchemaSessionDataMapper()
 
 

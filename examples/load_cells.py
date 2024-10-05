@@ -37,7 +37,6 @@ calibration_logic = lc.CalibrationLogic(
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",
-    remote_path=None,
     allow_dirty_repo=False,
     experiment="LoadCellsCalibration",
     date=utcnow(),
