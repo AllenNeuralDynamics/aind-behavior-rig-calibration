@@ -11,7 +11,7 @@ The metadata follows the general logic of the library by implementing the three 
    - :py:class:`~aind_behavior_services.rig.AindBehaviorRigModel`
    - :py:class:`~aind_behavior_services.task_logic.AindBehaviorTaskLogicModel`
 
-A fourth class :py:class:`~aind_behavior_services.calibration.Calibration`, 
+A fourth class :py:class:`~aind_behavior_services.calibration.Calibration`,
 specific to the Calibration module, is also implemented to keep track of the calibration metrics.
 This class was written to be aligned to the Calibration class in `aind-data-schemas
 <https://github.com/AllenNeuralDynamics/aind-data-schema/blob/2fd0e403bf46f0f1a47e5922c4228517e68376a3/src/aind_data_schema/components/devices.py#L274>`_.
