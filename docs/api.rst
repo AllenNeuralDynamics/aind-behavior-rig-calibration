@@ -6,6 +6,5 @@ API
 
    api.base
    api.calibration
-   api.launcher
    api.data_types
    api.utils
