@@ -19,7 +19,9 @@ These should only need to be installed once on a fresh new system, and are not r
 - Run `./scripts/install_dependencies.ps1` to automatically install dependencies
 - The following dependencies should be manually installed:
   - [Spinnaker SDK 1.29.0.5](https://www.flir.co.uk/support/products/spinnaker-sdk/#Downloads) (device drivers for FLIR cameras)
+
     - On FLIR website: `Download > archive > 1.29.0.5 > SpinnakerSDK_FULL_1.29.0.5_x64.exe`
+
 ---
 
 ## Generating valid JSON input files
