@@ -18,7 +18,7 @@ jobs:
         package_name=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['name'])")
         package_name=${package_name//-/_}
         version=$(python -c "import re; 
-        with open(f'./src/{package_name}/__init__.py', 'r') as f: 
+        with open(f'./src/${package_name}/__init__.py', 'r') as f: 
           content = f.read(); 
           match = re.search(r'__version__\s*=\s*[\'\"]([^\'\"]+)[\'\"]', content); 
           print(match.group(1)) if match else exit(1)")
