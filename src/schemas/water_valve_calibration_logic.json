@@ -1,0 +1,100 @@
+{
+  "definitions": {
+    "CalibrationParameters": {
+      "additionalProperties": true,
+      "properties": {
+        "rng_seed": {
+          "default": null,
+          "description": "Seed of the random number generator",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rng Seed"
+        },
+        "aind_behavior_services_pkg_version": {
+          "default": "0.8.0",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+          "title": "aind_behavior_services package version",
+          "type": "string"
+        },
+        "valve_open_time": {
+          "description": "An array with the times (s) the valve is open during calibration",
+          "items": {
+            "exclusiveMinimum": 0.0,
+            "type": "number"
+          },
+          "minItems": 1,
+          "title": "Valve Open Time",
+          "type": "array"
+        },
+        "valve_open_interval": {
+          "default": 0.2,
+          "description": "Time between two consecutive valve openings (s)",
+          "exclusiveMinimum": 0.0,
+          "title": "Valve open interval",
+          "type": "number"
+        },
+        "repeat_count": {
+          "default": 200,
+          "description": "Number of times the valve opened per measure valve_open_time entry",
+          "minimum": 1,
+          "title": "Repeat count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "valve_open_time"
+      ],
+      "title": "CalibrationParameters",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Olfactometer operation control model that is used to run a calibration data acquisition workflow",
+  "properties": {
+    "name": {
+      "default": "WaterValveCalibrationLogic",
+      "title": "Task name",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "description": "Description of the task.",
+      "title": "Description",
+      "type": "string"
+    },
+    "task_parameters": {
+      "$ref": "#/definitions/CalibrationParameters",
+      "title": "Task parameters"
+    },
+    "version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "stage_name": {
+      "default": null,
+      "description": "Optional stage name the `Task` object instance represents.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Stage Name"
+    }
+  },
+  "required": [
+    "task_parameters"
+  ],
+  "title": "CalibrationLogic",
+  "type": "object"
+}

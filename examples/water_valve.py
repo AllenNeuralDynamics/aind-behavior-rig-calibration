@@ -1,9 +1,9 @@
-import datetime
 import os
 
 from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration import water_valve as wv
 from aind_behavior_services.session import AindBehaviorSessionModel
+from aind_behavior_services.utils import utcnow
 
 
 def linear_model(time, slope, offset):
@@ -35,7 +35,7 @@ calibration = wv.WaterValveCalibration(
     input=input,
     output=input.calibrate_output(),
     device_name="WaterValve",
-    calibration_date=datetime.datetime.now(),
+    date=utcnow(),
 )
 
 calibration_logic = wv.CalibrationLogic(
@@ -44,13 +44,12 @@ calibration_logic = wv.CalibrationLogic(
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",
-    remote_path=None,
     allow_dirty_repo=False,
     experiment="WaterValveCalibration",
     subject="WaterValve",
     experiment_version="WaterValveCalibration",
     commit_hash=get_commit_hash(),
-    date=datetime.datetime.now(),
+    date=utcnow(),
 )
 
 rig = wv.CalibrationRig(rig_name="WaterValveRig")

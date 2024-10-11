@@ -17,6 +17,8 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     
         private double? _rngSeed;
     
+        private string _aindBehaviorServicesPkgVersion = "0.8.0";
+    
         private System.Collections.Generic.List<double> _valveOpenTime = new System.Collections.Generic.List<double>();
     
         private double _valveOpenInterval = 0.2D;
@@ -30,6 +32,7 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
         protected CalibrationParameters(CalibrationParameters other)
         {
             _rngSeed = other._rngSeed;
+            _aindBehaviorServicesPkgVersion = other._aindBehaviorServicesPkgVersion;
             _valveOpenTime = other._valveOpenTime;
             _valveOpenInterval = other._valveOpenInterval;
             _repeatCount = other._repeatCount;
@@ -50,6 +53,19 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
             set
             {
                 _rngSeed = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("aind_behavior_services_pkg_version")]
+        public string AindBehaviorServicesPkgVersion
+        {
+            get
+            {
+                return _aindBehaviorServicesPkgVersion;
+            }
+            set
+            {
+                _aindBehaviorServicesPkgVersion = value;
             }
         }
     
@@ -118,6 +134,7 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("aind_behavior_services_pkg_version = " + _aindBehaviorServicesPkgVersion + ", ");
             stringBuilder.Append("valve_open_time = " + _valveOpenTime + ", ");
             stringBuilder.Append("valve_open_interval = " + _valveOpenInterval + ", ");
             stringBuilder.Append("repeat_count = " + _repeatCount);

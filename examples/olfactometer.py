@@ -1,9 +1,9 @@
-import datetime
 import os
 
 from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration import olfactometer as olf
 from aind_behavior_services.session import AindBehaviorSessionModel
+from aind_behavior_services.utils import utcnow
 
 channels_config = {
     olf.OlfactometerChannel.Channel0: olf.OlfactometerChannelConfig(
@@ -48,8 +48,7 @@ calibration_logic = olf.CalibrationLogic(
 
 calibration_session = AindBehaviorSessionModel(
     root_path="C:\\Data",
-    remote_path=None,
-    date=datetime.datetime.now(),
+    date=utcnow(),
     allow_dirty_repo=False,
     experiment="OlfactometerCalibration",
     experiment_version="0.0.0",

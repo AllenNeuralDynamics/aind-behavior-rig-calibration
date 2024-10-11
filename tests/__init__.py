@@ -1,9 +1,14 @@
 import glob
 import importlib.util
+import logging
 from pathlib import Path
 from types import ModuleType
 
 EXAMPLES_DIR = Path(__file__).parents[1] / "examples"
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
+logging.disable(logging.CRITICAL)
 
 
 def build_example(script_path: str) -> ModuleType:
@@ -12,6 +17,8 @@ def build_example(script_path: str) -> ModuleType:
     if spec is None:
         raise ImportError(f"Can't find {script_path}")
     module = importlib.util.module_from_spec(spec)
+    if spec.loader is None:
+        raise ImportError(f"Can't load {script_path}")
     spec.loader.exec_module(module)
     return module
 

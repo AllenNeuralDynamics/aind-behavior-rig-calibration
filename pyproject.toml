@@ -5,13 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "aind-behavior-services"
 description = "A library that defines AIND data schema and validates JSON files for behavior rig models."
+authors = [
+    { name = "Bruno Cruz", email = "bruno.cruz@alleninstitute.org" },
+]
 license = {text = "MIT"}
 requires-python = ">=3.11"
-classifiers = [
-    "Programming Language :: Python :: 3"
-]
 dynamic = ["version", "readme"]
-
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+]
 dependencies = [
     'pydantic>=2.7, <3.0',
     'harp-python>=0.2',
@@ -19,22 +23,19 @@ dependencies = [
     'scikit-learn',
     'semver',
     'aind-behavior-curriculum@git+https://github.com/AllenNeuralDynamics/aind-behavior-curriculum@v0.0.27',
-
 ]
+
+[project.urls]
+Documentation = "https://allenneuraldynamics.github.io/Aind.Behavior.Services/"
+Repository = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/"
+Issues = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/issues"
+Changelog = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/releases"
 
 [project.optional-dependencies]
 
-aind-data-schema-mapper = [
-    'aind-data-schema==0.33.9'
-]
-
 linters = [
-    'codespell',
-    'black',
-    'coverage',
-    'flake8',
-    'interrogate',
-    'isort'
+    'ruff',
+    'codespell'
 ]
 
 docs = [
@@ -42,55 +43,32 @@ docs = [
     'furo',
     'sphinx-jinja',
     'autodoc_pydantic[erdantic]',
-    'myst_parser',
     'sphinx-jsonschema',
-    'sphinx-copybutton'
+    'sphinx-copybutton',
+    "sphinx_mdinclude",
+
 ]
 
 [tool.setuptools.packages.find]
-where = ["src/DataSchemas"]
+where = ["src"]
+
+[tool.setuptools.package-data]
+aind_behavior_services = ["py.typed"]
 
 [tool.setuptools.dynamic]
 version = {attr = "aind_behavior_services.__version__"}
 readme = {file = ["README.md"]}
 
-[tool.black]
+[tool.ruff]
 line-length = 120
-target_version = ['py311']
-exclude = '''
+target-version = 'py311'
 
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | build
-    | dist
-  )/
-  | .gitignore
-)
-'''
-
-[tool.coverage.run]
-omit = ["*__init__*"]
-source = ["aind_behavior_services", "tests"]
-
-[tool.coverage.report]
-exclude_lines = ["if __name__ == .__main__.:", "pragma: no cover"]
-fail_under = 100
-
-[tool.isort]
-profile = "black"
-skip = [".venv", "build"]
-
-[tool.interrogate]
-exclude = ["setup.py", "docs", "build"]
-fail-under = 100
+[tool.ruff.lint]
+extend-select = ['Q', 'RUF100', 'C90', 'I']
+extend-ignore = []
+mccabe = { max-complexity = 14 }
+pydocstyle = { convention = 'google' }
 
 [tool.codespell]
-skip = '.git,*.pdf,*.svg'
+skip = '.git,*.pdf,*.svg,./bonsai,*.bonsai,./docs/_build'
 ignore-words-list = 'nd'

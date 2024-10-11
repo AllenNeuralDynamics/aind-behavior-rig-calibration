@@ -56,65 +56,205 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class LoadCellCalibration
+    public partial class LoadCellCalibrationInput
     {
     
-        private System.Collections.Generic.IDictionary<string, double> _measuredOffset;
+        private int _channel;
     
-        private System.Collections.Generic.List<System.Collections.Generic.List<object>> _measuredWeight = new System.Collections.Generic.List<System.Collections.Generic.List<object>>();
+        private System.Collections.Generic.List<MeasuredOffset> _offsetMeasurement = new System.Collections.Generic.List<MeasuredOffset>();
     
-        public LoadCellCalibration()
+        private System.Collections.Generic.List<MeasuredWeight> _weightMeasurement = new System.Collections.Generic.List<MeasuredWeight>();
+    
+        public LoadCellCalibrationInput()
         {
         }
     
-        protected LoadCellCalibration(LoadCellCalibration other)
+        protected LoadCellCalibrationInput(LoadCellCalibrationInput other)
         {
-            _measuredOffset = other._measuredOffset;
-            _measuredWeight = other._measuredWeight;
+            _channel = other._channel;
+            _offsetMeasurement = other._offsetMeasurement;
+            _weightMeasurement = other._weightMeasurement;
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("measured_offset")]
-        public System.Collections.Generic.IDictionary<string, double> MeasuredOffset
+        /// <summary>
+        /// Load cell channel number available
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("channel", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Load cell channel number available")]
+        public int Channel
         {
             get
             {
-                return _measuredOffset;
+                return _channel;
             }
             set
             {
-                _measuredOffset = value;
+                _channel = value;
             }
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("measured_weight")]
-        public System.Collections.Generic.List<System.Collections.Generic.List<object>> MeasuredWeight
+        [Newtonsoft.Json.JsonPropertyAttribute("offset_measurement")]
+        public System.Collections.Generic.List<MeasuredOffset> OffsetMeasurement
         {
             get
             {
-                return _measuredWeight;
+                return _offsetMeasurement;
             }
             set
             {
-                _measuredWeight = value;
+                _offsetMeasurement = value;
             }
         }
     
-        public System.IObservable<LoadCellCalibration> Process()
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("weight_measurement")]
+        public System.Collections.Generic.List<MeasuredWeight> WeightMeasurement
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellCalibration(this)));
+            get
+            {
+                return _weightMeasurement;
+            }
+            set
+            {
+                _weightMeasurement = value;
+            }
         }
     
-        public System.IObservable<LoadCellCalibration> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<LoadCellCalibrationInput> Process()
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellCalibration(this));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellCalibrationInput(this)));
+        }
+    
+        public System.IObservable<LoadCellCalibrationInput> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellCalibrationInput(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("measured_offset = " + _measuredOffset + ", ");
-            stringBuilder.Append("measured_weight = " + _measuredWeight);
+            stringBuilder.Append("channel = " + _channel + ", ");
+            stringBuilder.Append("offset_measurement = " + _offsetMeasurement + ", ");
+            stringBuilder.Append("weight_measurement = " + _weightMeasurement);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class LoadCellCalibrationOutput
+    {
+    
+        private int _channel;
+    
+        private int? _offset;
+    
+        private double? _baseline;
+    
+        private System.Collections.Generic.List<MeasuredWeight> _weightLookup = new System.Collections.Generic.List<MeasuredWeight>();
+    
+        public LoadCellCalibrationOutput()
+        {
+        }
+    
+        protected LoadCellCalibrationOutput(LoadCellCalibrationOutput other)
+        {
+            _channel = other._channel;
+            _offset = other._offset;
+            _baseline = other._baseline;
+            _weightLookup = other._weightLookup;
+        }
+    
+        /// <summary>
+        /// Load cell channel number available
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("channel", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Load cell channel number available")]
+        public int Channel
+        {
+            get
+            {
+                return _channel;
+            }
+            set
+            {
+                _channel = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("offset")]
+        public int? Offset
+        {
+            get
+            {
+                return _offset;
+            }
+            set
+            {
+                _offset = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("baseline")]
+        public double? Baseline
+        {
+            get
+            {
+                return _baseline;
+            }
+            set
+            {
+                _baseline = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("weight_lookup")]
+        public System.Collections.Generic.List<MeasuredWeight> WeightLookup
+        {
+            get
+            {
+                return _weightLookup;
+            }
+            set
+            {
+                _weightLookup = value;
+            }
+        }
+    
+        public System.IObservable<LoadCellCalibrationOutput> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoadCellCalibrationOutput(this)));
+        }
+    
+        public System.IObservable<LoadCellCalibrationOutput> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new LoadCellCalibrationOutput(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("channel = " + _channel + ", ");
+            stringBuilder.Append("offset = " + _offset + ", ");
+            stringBuilder.Append("baseline = " + _baseline + ", ");
+            stringBuilder.Append("weight_lookup = " + _weightLookup);
             return true;
         }
     
@@ -456,7 +596,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     public partial class LoadCellsCalibrationInput
     {
     
-        private System.Collections.Generic.IDictionary<string, LoadCellCalibration> _channels;
+        private System.Collections.Generic.List<LoadCellCalibrationInput> _channels = new System.Collections.Generic.List<LoadCellCalibrationInput>();
     
         public LoadCellsCalibrationInput()
         {
@@ -469,7 +609,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("channels")]
-        public System.Collections.Generic.IDictionary<string, LoadCellCalibration> Channels
+        public System.Collections.Generic.List<LoadCellCalibrationInput> Channels
         {
             get
             {
@@ -518,11 +658,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     public partial class LoadCellsCalibrationOutput
     {
     
-        private System.Collections.Generic.IDictionary<string, int> _offset;
-    
-        private System.Collections.Generic.IDictionary<string, double> _baseline;
-    
-        private System.Collections.Generic.IDictionary<string, System.Collections.Generic.List<object>> _weightLookup;
+        private System.Collections.Generic.List<LoadCellCalibrationOutput> _channels = new System.Collections.Generic.List<LoadCellCalibrationOutput>();
     
         public LoadCellsCalibrationOutput()
         {
@@ -530,50 +666,20 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     
         protected LoadCellsCalibrationOutput(LoadCellsCalibrationOutput other)
         {
-            _offset = other._offset;
-            _baseline = other._baseline;
-            _weightLookup = other._weightLookup;
+            _channels = other._channels;
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("offset")]
-        public System.Collections.Generic.IDictionary<string, int> Offset
+        [Newtonsoft.Json.JsonPropertyAttribute("channels")]
+        public System.Collections.Generic.List<LoadCellCalibrationOutput> Channels
         {
             get
             {
-                return _offset;
+                return _channels;
             }
             set
             {
-                _offset = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("baseline")]
-        public System.Collections.Generic.IDictionary<string, double> Baseline
-        {
-            get
-            {
-                return _baseline;
-            }
-            set
-            {
-                _baseline = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("weight_lookup")]
-        public System.Collections.Generic.IDictionary<string, System.Collections.Generic.List<object>> WeightLookup
-        {
-            get
-            {
-                return _weightLookup;
-            }
-            set
-            {
-                _weightLookup = value;
+                _channels = value;
             }
         }
     
@@ -589,9 +695,179 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
+            stringBuilder.Append("channels = " + _channels);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class MeasuredOffset
+    {
+    
+        private int _offset;
+    
+        private double _baseline;
+    
+        public MeasuredOffset()
+        {
+        }
+    
+        protected MeasuredOffset(MeasuredOffset other)
+        {
+            _offset = other._offset;
+            _baseline = other._baseline;
+        }
+    
+        /// <summary>
+        /// The applied offset resistor value[-255, 255]
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("offset", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("The applied offset resistor value[-255, 255]")]
+        public int Offset
+        {
+            get
+            {
+                return _offset;
+            }
+            set
+            {
+                _offset = value;
+            }
+        }
+    
+        /// <summary>
+        /// The measured baseline value
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("baseline", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("The measured baseline value")]
+        public double Baseline
+        {
+            get
+            {
+                return _baseline;
+            }
+            set
+            {
+                _baseline = value;
+            }
+        }
+    
+        public System.IObservable<MeasuredOffset> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new MeasuredOffset(this)));
+        }
+    
+        public System.IObservable<MeasuredOffset> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new MeasuredOffset(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
             stringBuilder.Append("offset = " + _offset + ", ");
-            stringBuilder.Append("baseline = " + _baseline + ", ");
-            stringBuilder.Append("weight_lookup = " + _weightLookup);
+            stringBuilder.Append("baseline = " + _baseline);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.3.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class MeasuredWeight
+    {
+    
+        private double _weight;
+    
+        private double _baseline;
+    
+        public MeasuredWeight()
+        {
+        }
+    
+        protected MeasuredWeight(MeasuredWeight other)
+        {
+            _weight = other._weight;
+            _baseline = other._baseline;
+        }
+    
+        /// <summary>
+        /// The applied weight in grams
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("weight", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("The applied weight in grams")]
+        public double Weight
+        {
+            get
+            {
+                return _weight;
+            }
+            set
+            {
+                _weight = value;
+            }
+        }
+    
+        /// <summary>
+        /// The measured baseline value
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("baseline", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("The measured baseline value")]
+        public double Baseline
+        {
+            get
+            {
+                return _baseline;
+            }
+            set
+            {
+                _baseline = value;
+            }
+        }
+    
+        public System.IObservable<MeasuredWeight> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new MeasuredWeight(this)));
+        }
+    
+        public System.IObservable<MeasuredWeight> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new MeasuredWeight(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("weight = " + _weight + ", ");
+            stringBuilder.Append("baseline = " + _baseline);
             return true;
         }
     
@@ -616,6 +892,8 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     public partial class CalibrationRig
     {
     
+        private string _aindBehaviorServicesPkgVersion = "0.8.0";
+    
         private string _version = "0.0.0";
     
         private string _computerName;
@@ -630,10 +908,24 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     
         protected CalibrationRig(CalibrationRig other)
         {
+            _aindBehaviorServicesPkgVersion = other._aindBehaviorServicesPkgVersion;
             _version = other._version;
             _computerName = other._computerName;
             _rigName = other._rigName;
             _loadCells = other._loadCells;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("aind_behavior_services_pkg_version")]
+        public string AindBehaviorServicesPkgVersion
+        {
+            get
+            {
+                return _aindBehaviorServicesPkgVersion;
+            }
+            set
+            {
+                _aindBehaviorServicesPkgVersion = value;
+            }
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("version")]
@@ -709,6 +1001,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
+            stringBuilder.Append("aind_behavior_services_pkg_version = " + _aindBehaviorServicesPkgVersion + ", ");
             stringBuilder.Append("version = " + _version + ", ");
             stringBuilder.Append("computer_name = " + _computerName + ", ");
             stringBuilder.Append("rig_name = " + _rigName + ", ");
@@ -751,9 +1044,14 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
             return Process<BaseModel>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<LoadCellCalibration> source)
+        public System.IObservable<string> Process(System.IObservable<LoadCellCalibrationInput> source)
         {
-            return Process<LoadCellCalibration>(source);
+            return Process<LoadCellCalibrationInput>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<LoadCellCalibrationOutput> source)
+        {
+            return Process<LoadCellCalibrationOutput>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<LoadCells> source)
@@ -776,6 +1074,16 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
             return Process<LoadCellsCalibrationOutput>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<MeasuredOffset> source)
+        {
+            return Process<MeasuredOffset>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<MeasuredWeight> source)
+        {
+            return Process<MeasuredWeight>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<CalibrationRig> source)
         {
             return Process<CalibrationRig>(source);
@@ -791,11 +1099,14 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BaseModel>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellCalibration>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellCalibrationInput>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellCalibrationOutput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCells>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellsCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellsCalibrationInput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoadCellsCalibrationOutput>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<MeasuredOffset>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<MeasuredWeight>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CalibrationRig>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {

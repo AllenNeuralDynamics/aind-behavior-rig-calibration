@@ -1,0 +1,315 @@
+{
+  "definitions": {
+    "BaseModel": {
+      "properties": {},
+      "title": "BaseModel",
+      "type": "object"
+    },
+    "LoadCellCalibrationInput": {
+      "properties": {
+        "channel": {
+          "description": "Load cell channel number available",
+          "maximum": 7,
+          "minimum": 0,
+          "title": "Load cell channel number",
+          "type": "integer"
+        },
+        "offset_measurement": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/MeasuredOffset"
+          },
+          "title": "Load cell offset calibration data",
+          "type": "array"
+        },
+        "weight_measurement": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/MeasuredWeight"
+          },
+          "title": "Load cell weight calibration data",
+          "type": "array"
+        }
+      },
+      "required": [
+        "channel"
+      ],
+      "title": "LoadCellCalibrationInput",
+      "type": "object"
+    },
+    "LoadCellCalibrationOutput": {
+      "properties": {
+        "channel": {
+          "description": "Load cell channel number available",
+          "maximum": 7,
+          "minimum": 0,
+          "title": "Channel",
+          "type": "integer"
+        },
+        "offset": {
+          "default": null,
+          "oneOf": [
+            {
+              "description": "Load cell offset value [-255, 255]",
+              "maximum": 255,
+              "minimum": -255,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Load cell offset"
+        },
+        "baseline": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Load cell baseline"
+        },
+        "weight_lookup": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/MeasuredWeight"
+          },
+          "title": "Load cell weight lookup calibration table",
+          "type": "array"
+        }
+      },
+      "required": [
+        "channel"
+      ],
+      "title": "LoadCellCalibrationOutput",
+      "type": "object"
+    },
+    "LoadCells": {
+      "properties": {
+        "device_type": {
+          "const": "loadcells",
+          "default": "loadcells",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "additional_settings": {
+          "default": null,
+          "description": "Additional settings",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "calibration": {
+          "default": null,
+          "oneOf": [
+            {
+              "$ref": "#/definitions/LoadCellsCalibration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Calibration of the load cells"
+        },
+        "who_am_i": {
+          "const": 1232,
+          "default": 1232,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "LoadCells",
+      "type": "object"
+    },
+    "LoadCellsCalibration": {
+      "description": "Load cells calibration class",
+      "properties": {
+        "device_name": {
+          "default": "LoadCells",
+          "description": "Must match a device name in rig/instrument",
+          "title": "Device name",
+          "type": "string"
+        },
+        "input": {
+          "$ref": "#/definitions/LoadCellsCalibrationInput",
+          "title": "Input of the calibration"
+        },
+        "output": {
+          "$ref": "#/definitions/LoadCellsCalibrationOutput",
+          "title": "Output of the calibration."
+        },
+        "date": {
+          "default": null,
+          "oneOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Date"
+        },
+        "description": {
+          "const": "Calibration of the load cells system",
+          "default": "Calibration of the load cells system",
+          "title": "Description",
+          "type": "string"
+        },
+        "notes": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "input",
+        "output"
+      ],
+      "title": "LoadCellsCalibration",
+      "type": "object"
+    },
+    "LoadCellsCalibrationInput": {
+      "properties": {
+        "channels": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/LoadCellCalibrationInput"
+          },
+          "title": "Load cells calibration data",
+          "type": "array"
+        }
+      },
+      "title": "LoadCellsCalibrationInput",
+      "type": "object"
+    },
+    "LoadCellsCalibrationOutput": {
+      "properties": {
+        "channels": {
+          "default": [],
+          "items": {
+            "$ref": "#/definitions/LoadCellCalibrationOutput"
+          },
+          "title": "Load cells calibration output",
+          "type": "array"
+        }
+      },
+      "title": "LoadCellsCalibrationOutput",
+      "type": "object"
+    },
+    "MeasuredOffset": {
+      "properties": {
+        "offset": {
+          "description": "The applied offset resistor value[-255, 255]",
+          "maximum": 255,
+          "minimum": -255,
+          "title": "Offset",
+          "type": "integer"
+        },
+        "baseline": {
+          "description": "The measured baseline value",
+          "title": "Baseline",
+          "type": "number"
+        }
+      },
+      "required": [
+        "offset",
+        "baseline"
+      ],
+      "title": "MeasuredOffset",
+      "type": "object"
+    },
+    "MeasuredWeight": {
+      "properties": {
+        "weight": {
+          "description": "The applied weight in grams",
+          "title": "Weight",
+          "type": "number"
+        },
+        "baseline": {
+          "description": "The measured baseline value",
+          "title": "Baseline",
+          "type": "number"
+        }
+      },
+      "required": [
+        "weight",
+        "baseline"
+      ],
+      "title": "MeasuredWeight",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "aind_behavior_services_pkg_version": {
+      "default": "0.8.0",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "title": "aind_behavior_services package version",
+      "type": "string"
+    },
+    "version": {
+      "const": "0.0.0",
+      "default": "0.0.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "computer_name": {
+      "description": "Computer name",
+      "title": "Computer Name",
+      "type": "string"
+    },
+    "rig_name": {
+      "description": "Rig name",
+      "title": "Rig Name",
+      "type": "string"
+    },
+    "load_cells": {
+      "$ref": "#/definitions/LoadCells",
+      "title": "Load Cells acquisition device"
+    }
+  },
+  "required": [
+    "rig_name",
+    "load_cells"
+  ],
+  "title": "CalibrationRig",
+  "type": "object"
+}

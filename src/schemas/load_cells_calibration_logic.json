@@ -1,0 +1,101 @@
+{
+  "definitions": {
+    "CalibrationParameters": {
+      "additionalProperties": true,
+      "properties": {
+        "rng_seed": {
+          "default": null,
+          "description": "Seed of the random number generator",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rng Seed"
+        },
+        "aind_behavior_services_pkg_version": {
+          "default": "0.8.0",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+          "title": "aind_behavior_services package version",
+          "type": "string"
+        },
+        "channels": {
+          "default": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "description": "List of channels to calibrate",
+          "items": {
+            "description": "Load cell channel number available",
+            "maximum": 7,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Channels",
+          "type": "array"
+        },
+        "offset_buffer_size": {
+          "default": 200,
+          "description": "Size of the buffer (in samples) acquired.",
+          "minimum": 1,
+          "title": "Buffer size",
+          "type": "integer"
+        }
+      },
+      "title": "CalibrationParameters",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Load cells operation control model that is used to run a calibration data acquisition workflow",
+  "properties": {
+    "name": {
+      "default": "LoadCellsCalibrationLogic",
+      "title": "Task name",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "description": "Description of the task.",
+      "title": "Description",
+      "type": "string"
+    },
+    "task_parameters": {
+      "$ref": "#/definitions/CalibrationParameters",
+      "title": "Task parameters"
+    },
+    "version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "stage_name": {
+      "default": null,
+      "description": "Optional stage name the `Task` object instance represents.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Stage Name"
+    }
+  },
+  "required": [
+    "task_parameters"
+  ],
+  "title": "CalibrationLogic",
+  "type": "object"
+}

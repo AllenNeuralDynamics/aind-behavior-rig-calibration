@@ -17,6 +17,8 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
     
         private double? _rngSeed;
     
+        private string _aindBehaviorServicesPkgVersion = "0.8.0";
+    
         private System.Collections.Generic.List<int> _channels = new System.Collections.Generic.List<int>();
     
         private int _offsetBufferSize = 200;
@@ -28,6 +30,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
         protected CalibrationParameters(CalibrationParameters other)
         {
             _rngSeed = other._rngSeed;
+            _aindBehaviorServicesPkgVersion = other._aindBehaviorServicesPkgVersion;
             _channels = other._channels;
             _offsetBufferSize = other._offsetBufferSize;
         }
@@ -47,6 +50,19 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
             set
             {
                 _rngSeed = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("aind_behavior_services_pkg_version")]
+        public string AindBehaviorServicesPkgVersion
+        {
+            get
+            {
+                return _aindBehaviorServicesPkgVersion;
+            }
+            set
+            {
+                _aindBehaviorServicesPkgVersion = value;
             }
         }
     
@@ -98,6 +114,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("aind_behavior_services_pkg_version = " + _aindBehaviorServicesPkgVersion + ", ");
             stringBuilder.Append("channels = " + _channels + ", ");
             stringBuilder.Append("offset_buffer_size = " + _offsetBufferSize);
             return true;

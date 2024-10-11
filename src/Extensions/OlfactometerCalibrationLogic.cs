@@ -17,6 +17,8 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
     
         private double? _rngSeed;
     
+        private string _aindBehaviorServicesPkgVersion = "0.8.0";
+    
         private System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> _channelConfig;
     
         private double _fullFlowRate = 1000D;
@@ -34,6 +36,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
         protected CalibrationParameters(CalibrationParameters other)
         {
             _rngSeed = other._rngSeed;
+            _aindBehaviorServicesPkgVersion = other._aindBehaviorServicesPkgVersion;
             _channelConfig = other._channelConfig;
             _fullFlowRate = other._fullFlowRate;
             _nRepeatsPerStimulus = other._nRepeatsPerStimulus;
@@ -56,6 +59,19 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
             set
             {
                 _rngSeed = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("aind_behavior_services_pkg_version")]
+        public string AindBehaviorServicesPkgVersion
+        {
+            get
+            {
+                return _aindBehaviorServicesPkgVersion;
+            }
+            set
+            {
+                _aindBehaviorServicesPkgVersion = value;
             }
         }
     
@@ -158,6 +174,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("rng_seed = " + _rngSeed + ", ");
+            stringBuilder.Append("aind_behavior_services_pkg_version = " + _aindBehaviorServicesPkgVersion + ", ");
             stringBuilder.Append("channel_config = " + _channelConfig + ", ");
             stringBuilder.Append("full_flow_rate = " + _fullFlowRate + ", ");
             stringBuilder.Append("n_repeats_per_stimulus = " + _nRepeatsPerStimulus + ", ");

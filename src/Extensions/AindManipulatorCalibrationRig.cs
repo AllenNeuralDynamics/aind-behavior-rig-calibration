@@ -897,6 +897,8 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     public partial class CalibrationRig
     {
     
+        private string _aindBehaviorServicesPkgVersion = "0.8.0";
+    
         private string _version = "0.1.0";
     
         private string _computerName;
@@ -911,10 +913,24 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     
         protected CalibrationRig(CalibrationRig other)
         {
+            _aindBehaviorServicesPkgVersion = other._aindBehaviorServicesPkgVersion;
             _version = other._version;
             _computerName = other._computerName;
             _rigName = other._rigName;
             _manipulator = other._manipulator;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("aind_behavior_services_pkg_version")]
+        public string AindBehaviorServicesPkgVersion
+        {
+            get
+            {
+                return _aindBehaviorServicesPkgVersion;
+            }
+            set
+            {
+                _aindBehaviorServicesPkgVersion = value;
+            }
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("version")]
@@ -990,6 +1006,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
+            stringBuilder.Append("aind_behavior_services_pkg_version = " + _aindBehaviorServicesPkgVersion + ", ");
             stringBuilder.Append("version = " + _version + ", ");
             stringBuilder.Append("computer_name = " + _computerName + ", ");
             stringBuilder.Append("rig_name = " + _rigName + ", ");

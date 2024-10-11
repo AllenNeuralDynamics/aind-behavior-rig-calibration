@@ -14,10 +14,10 @@ import sys
 import erdantic as erd
 from pydantic import BaseModel
 
-sys.path.insert(0, os.path.abspath("../src/DataSchemas"))
-import aind_behavior_services  # noqa: E402
+sys.path.insert(0, os.path.abspath("../src"))
+import aind_behavior_services
 
-SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/tree/main/src/DataSchemas/"
+SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/tree/main/src/"
 
 
 project = "AIND Behavior Services"
@@ -28,25 +28,17 @@ release = aind_behavior_services.__version__
 
 # -- Generate jsons --------------------------------------------------------------
 
-json_root_path = os.path.abspath("../src/DataSchemas/schemas")
+json_root_path = os.path.abspath("../src/schemas")
 json_files = glob.glob(os.path.join(json_root_path, "*.json"))
-rst_target_path = os.path.abspath("json-schemas")
-
-root_template = """
-JsonSchema
--------------
-.. toctree::
-   :maxdepth: 4
-
-"""
+rst_target_path = os.path.abspath("json_schemas")
 
 leaf_template = """
 {json_file_name}
 ----------------------------------------------------
 
-`Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/{json_file_name}.json>`_
+`Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/schemas/{json_file_name}.json>`_
 
-.. jsonschema:: https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/DataSchemas/schemas/{json_file_name}.json
+.. jsonschema:: https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.Services/main/src/schemas/{json_file_name}.json
    :lift_definitions:
    :auto_reference:
 
@@ -54,12 +46,8 @@ leaf_template = """
 
 for json_file in json_files:
     json_file_name = os.path.basename(json_file)
-    root_template += f"   json-schemas/{json_file_name.replace('.json', '')}\n"
     with open(os.path.join(rst_target_path, f"{json_file_name.replace('.json', '')}.rst"), "w") as f:
         f.write(leaf_template.format(json_file_name=json_file_name.replace(".json", "")))
-
-with open("json-schemas.rst", "w") as f:
-    f.write(root_template)
 
 
 # -- General configuration ---------------------------------------------------
@@ -74,7 +62,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.githubpages",
     "sphinx.ext.linkcode",
-    "myst_parser",
+    "sphinx_mdinclude",
     "sphinxcontrib.autodoc_pydantic",
     "sphinx_copybutton",
 ]

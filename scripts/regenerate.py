@@ -1,9 +1,11 @@
 import inspect
 from pathlib import Path
 
+from aind_behavior_services import db_utils
 from aind_behavior_services.calibration import aind_manipulator as m
 from aind_behavior_services.calibration import load_cells as lc
 from aind_behavior_services.calibration import olfactometer as olf
+from aind_behavior_services.calibration import treadmill as treadmill
 from aind_behavior_services.calibration import water_valve as wv
 from aind_behavior_services.data_types import DataTypes
 from aind_behavior_services.session import AindBehaviorSessionModel
@@ -13,9 +15,7 @@ from aind_behavior_services.utils import (
     snake_to_pascal_case,
 )
 
-from aind_behavior_services import db_utils
-
-SCHEMA_ROOT = Path("./src/DataSchemas/schemas")
+SCHEMA_ROOT = Path("./src/schemas")
 EXTENSIONS_ROOT = Path("./src/Extensions/")
 NAMESPACE_PREFIX = "AindBehaviorServices"
 
@@ -26,10 +26,12 @@ def main():
         wv.CalibrationLogic,
         lc.CalibrationLogic,
         m.CalibrationLogic,
+        treadmill.CalibrationLogic,
         olf.CalibrationRig,
         wv.CalibrationRig,
         lc.CalibrationRig,
         m.CalibrationRig,
+        treadmill.CalibrationRig,
     ]
 
     for model in models:
@@ -49,16 +51,9 @@ def main():
         namespace=f"{NAMESPACE_PREFIX}.AindBehaviorSession",
     )
 
+    convert_pydantic_to_bonsai({"aind_behavior_data_types": DataTypes}, schema_path=SCHEMA_ROOT, skip_sgen=True)
     convert_pydantic_to_bonsai(
-        {"aind_behavior_data_types": DataTypes},
-        schema_path=SCHEMA_ROOT, skip_sgen=True
-    )
-
-    convert_pydantic_to_bonsai(
-        {"aind_behavior_subject_database": db_utils.SubjectDataBase},
-        schema_path=SCHEMA_ROOT,
-        output_path=EXTENSIONS_ROOT,
-        namespace=f"{NAMESPACE_PREFIX}.AindBehaviorSubjectDatabase",
+        {"aind_behavior_subject_database": db_utils.SubjectDataBase}, schema_path=SCHEMA_ROOT, skip_sgen=True
     )
 
 

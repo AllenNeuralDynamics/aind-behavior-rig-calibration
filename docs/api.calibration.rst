@@ -1,4 +1,4 @@
-Calibration
+calibration
 -------------
 
 Calibration Module
@@ -11,7 +11,7 @@ The metadata follows the general logic of the library by implementing the three 
    - :py:class:`~aind_behavior_services.rig.AindBehaviorRigModel`
    - :py:class:`~aind_behavior_services.task_logic.AindBehaviorTaskLogicModel`
 
-A fourth class :py:class:`~aind_behavior_services.calibration.Calibration`, 
+A fourth class :py:class:`~aind_behavior_services.calibration.Calibration`,
 specific to the Calibration module, is also implemented to keep track of the calibration metrics.
 This class was written to be aligned to the Calibration class in `aind-data-schemas
 <https://github.com/AllenNeuralDynamics/aind-data-schema/blob/2fd0e403bf46f0f1a47e5922c4228517e68376a3/src/aind_data_schema/components/devices.py#L274>`_.
@@ -85,11 +85,11 @@ For an example see :py:class:`aind_behavior_services.calibration.olfactometer.Ca
 
 
 Sub-classing :py:class:`~aind_behavior_services.task_logic.AindBehaviorTaskLogicModel`
-################################################################################
+########################################################################################
 
 The same way a :py:class:`~aind_behavior_services.task_logic.AindBehaviorTaskLogicModel` is used to define
 the settings to run a behavior task, it is also used to define the settings to run a calibration workflow.
-It will thus fallow an identical sub-classing pattern:
+It will thus follow an identical sub-classing pattern:
 
 
 .. code-block:: python
@@ -119,5 +119,6 @@ For an example see :py:class:`aind_behavior_services.calibration.olfactometer.Ca
    api.calibration/load_cells
    api.calibration/olfactometer
    api.calibration/water_valve
+   api.calibration/treadmill
 
 

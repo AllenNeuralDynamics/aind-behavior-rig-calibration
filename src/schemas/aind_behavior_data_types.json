@@ -1,0 +1,190 @@
+{
+  "definitions": {
+    "DataType": {
+      "enum": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ],
+      "title": "DataType",
+      "type": "string"
+    },
+    "RenderSynchState": {
+      "properties": {
+        "sync_quad_value": {
+          "default": null,
+          "description": "The synchronization quad value",
+          "oneOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Sync Quad Value"
+        },
+        "frame_index": {
+          "default": null,
+          "description": "The frame index of the event",
+          "oneOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Frame Index"
+        },
+        "frame_timestamp": {
+          "default": null,
+          "description": "The timestamp of the frame",
+          "oneOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Frame Timestamp"
+        }
+      },
+      "title": "RenderSynchState",
+      "type": "object"
+    },
+    "SoftwareEvent": {
+      "description": "A software event is a generic event that can be used to track any event that occurs in the software.",
+      "properties": {
+        "name": {
+          "description": "The name of the event",
+          "title": "Name",
+          "type": "string"
+        },
+        "timestamp": {
+          "default": null,
+          "description": "The timestamp of the event",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Timestamp"
+        },
+        "timestamp_source": {
+          "$ref": "#/definitions/TimestampSource",
+          "default": "null",
+          "description": "The source of the timestamp"
+        },
+        "frame_index": {
+          "default": null,
+          "description": "The frame index of the event",
+          "oneOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Frame Index"
+        },
+        "frame_timestamp": {
+          "default": null,
+          "description": "The timestamp of the frame",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Frame Timestamp"
+        },
+        "data": {
+          "default": null,
+          "description": "The data of the event",
+          "oneOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Data"
+        },
+        "dataType": {
+          "$ref": "#/definitions/DataType",
+          "default": "null",
+          "description": "The data type of the event"
+        },
+        "data_type_hint": {
+          "default": null,
+          "description": "The data type hint of the event",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Data Type Hint"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "SoftwareEvent",
+      "type": "object"
+    },
+    "TimestampSource": {
+      "enum": [
+        "null",
+        "harp",
+        "render"
+      ],
+      "title": "TimestampSource",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "aind_behavior_services_pkg_version": {
+      "default": "0.8.0",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "title": "aind_behavior_services package version",
+      "type": "string"
+    },
+    "version": {
+      "const": "0.1.1",
+      "default": "0.1.1",
+      "title": "Version",
+      "type": "string"
+    },
+    "software_event": {
+      "$ref": "#/definitions/SoftwareEvent"
+    },
+    "render_synch_state": {
+      "$ref": "#/definitions/RenderSynchState"
+    }
+  },
+  "required": [
+    "software_event",
+    "render_synch_state"
+  ],
+  "title": "DataTypes",
+  "type": "object",
+  "x-abstract": "True"
+}

@@ -18,7 +18,6 @@ These should only need to be installed once on a fresh new system, and are not r
 - Windows 10 or 11
 - Run `./scripts/install_dependencies.ps1` to automatically install dependencies
 - The following dependencies should be manually installed:
-  - [FTDI CDM Driver 2.12.28](https://www.ftdichip.com/Drivers/CDM/CDM21228_Setup.zip) (serial port drivers for HARP devices)
   - [Spinnaker SDK 1.29.0.5](https://www.flir.co.uk/support/products/spinnaker-sdk/#Downloads) (device drivers for FLIR cameras)
     - On FLIR website: `Download > archive > 1.29.0.5 > SpinnakerSDK_FULL_1.29.0.5_x64.exe`
 ---
@@ -42,7 +41,7 @@ Contributions to this repository are welcome! However, please ensure that your c
 
 ### Linting
 
-We use [flake8](https://flake8.pycqa.org/), [black](https://black.readthedocs.io/), and [isort](https://pycqa.github.io/isort/) as our linting tools.
+We use [ruff](https://docs.astral.sh/ruff/) as our primary linting tool.
 
 ### Testing
 

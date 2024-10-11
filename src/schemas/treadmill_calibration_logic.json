@@ -1,0 +1,74 @@
+{
+  "definitions": {
+    "CalibrationParameters": {
+      "additionalProperties": true,
+      "properties": {
+        "rng_seed": {
+          "default": null,
+          "description": "Seed of the random number generator",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rng Seed"
+        },
+        "aind_behavior_services_pkg_version": {
+          "default": "0.8.0",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+          "title": "aind_behavior_services package version",
+          "type": "string"
+        }
+      },
+      "title": "CalibrationParameters",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Treadmill operation control model that is used to run a calibration data acquisition workflow",
+  "properties": {
+    "name": {
+      "default": "TreadmillCalibrationLogic",
+      "title": "Task name",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "description": "Description of the task.",
+      "title": "Description",
+      "type": "string"
+    },
+    "task_parameters": {
+      "$ref": "#/definitions/CalibrationParameters",
+      "default": {
+        "rng_seed": null,
+        "aind_behavior_services_pkg_version": "0.8.0"
+      },
+      "title": "Task parameters"
+    },
+    "version": {
+      "const": "0.0.0",
+      "default": "0.0.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "stage_name": {
+      "default": null,
+      "description": "Optional stage name the `Task` object instance represents.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Stage Name"
+    }
+  },
+  "title": "CalibrationLogic",
+  "type": "object"
+}

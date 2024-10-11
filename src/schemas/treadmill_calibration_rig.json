@@ -1,0 +1,210 @@
+{
+  "definitions": {
+    "BaseModel": {
+      "properties": {},
+      "title": "BaseModel",
+      "type": "object"
+    },
+    "Treadmill": {
+      "properties": {
+        "device_type": {
+          "const": "treadmill",
+          "default": "treadmill",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "additional_settings": {
+          "default": null,
+          "description": "Additional settings",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "calibration": {
+          "default": null,
+          "oneOf": [
+            {
+              "$ref": "#/definitions/TreadmillCalibration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Calibration of the treadmill"
+        },
+        "who_am_i": {
+          "const": 1402,
+          "default": 1402,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "Treadmill",
+      "type": "object"
+    },
+    "TreadmillCalibration": {
+      "description": "Treadmill calibration class",
+      "properties": {
+        "device_name": {
+          "default": "Treadmill",
+          "description": "Must match a device name in rig/instrument",
+          "title": "Device name",
+          "type": "string"
+        },
+        "input": {
+          "$ref": "#/definitions/TreadmillCalibrationInput",
+          "title": "Input of the calibration"
+        },
+        "output": {
+          "$ref": "#/definitions/TreadmillCalibrationOutput",
+          "title": "Output of the calibration."
+        },
+        "date": {
+          "default": null,
+          "oneOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Date"
+        },
+        "description": {
+          "const": "Calibration of the treadmill system",
+          "default": "Calibration of the treadmill system",
+          "title": "Description",
+          "type": "string"
+        },
+        "notes": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "input",
+        "output"
+      ],
+      "title": "TreadmillCalibration",
+      "type": "object"
+    },
+    "TreadmillCalibrationInput": {
+      "properties": {},
+      "title": "TreadmillCalibrationInput",
+      "type": "object"
+    },
+    "TreadmillCalibrationOutput": {
+      "properties": {
+        "wheel_diameter": {
+          "default": 15,
+          "description": "Wheel diameter",
+          "minimum": 0.0,
+          "title": "Wheel Diameter",
+          "type": "number"
+        },
+        "pulses_per_revolution": {
+          "default": 28800,
+          "description": "Pulses per revolution",
+          "minimum": 1,
+          "title": "Pulses Per Revolution",
+          "type": "integer"
+        },
+        "invert_direction": {
+          "default": false,
+          "description": "Invert direction",
+          "title": "Invert Direction",
+          "type": "boolean"
+        },
+        "brake_lookup_calibration": {
+          "description": "Brake lookup calibration. Each pair of values define (input [torque], output [brake set-point U16])",
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "type": "array"
+          },
+          "minItems": 2,
+          "title": "Brake Lookup Calibration",
+          "type": "array"
+        }
+      },
+      "required": [
+        "brake_lookup_calibration"
+      ],
+      "title": "TreadmillCalibrationOutput",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "aind_behavior_services_pkg_version": {
+      "default": "0.8.0",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "title": "aind_behavior_services package version",
+      "type": "string"
+    },
+    "version": {
+      "const": "0.0.0",
+      "default": "0.0.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "computer_name": {
+      "description": "Computer name",
+      "title": "Computer Name",
+      "type": "string"
+    },
+    "rig_name": {
+      "description": "Rig name",
+      "title": "Rig Name",
+      "type": "string"
+    },
+    "treadmill": {
+      "$ref": "#/definitions/Treadmill",
+      "title": "Treadmill device"
+    }
+  },
+  "required": [
+    "rig_name",
+    "treadmill"
+  ],
+  "title": "CalibrationRig",
+  "type": "object"
+}

@@ -9,14 +9,13 @@ from . import build_examples
 
 
 class BonsaiTests(unittest.TestCase):
-
     def test_deserialization(self):
-
         tested_modules = [
             "aind_manipulator",
             "load_cells",
             "olfactometer",
             "water_valve",
+            "treadmill",
         ]
 
         build_examples()
@@ -40,7 +39,7 @@ class BonsaiTests(unittest.TestCase):
             additional_properties=workflow_props,
         )
 
-        self.assertEqual(completed_proc.stderr.decode(), "")
+        self.assertEqual(completed_proc.stderr.decode(), "", f"error:\n {completed_proc.stderr.decode()}")
         self.assertEqual(completed_proc.returncode, 0)
 
 

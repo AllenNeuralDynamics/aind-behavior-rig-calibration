@@ -6,16 +6,17 @@
 Welcome to AIND Behavior Services's documentation!
 ==================================================
 
-.. include:: ../README.md
-   :parser: myst_parser.sphinx_
+.. mdinclude:: ../README.md
 
 .. toctree::
    :maxdepth: 4
    :caption: Contents:
+   :glob:
 
    self
    api
-   json-schemas
+   json_schemas
+   articles/*
    GitHub Source Code <https://github.com/AllenNeuralDynamics/Aind.Behavior.Services>
 
 Indices and tables

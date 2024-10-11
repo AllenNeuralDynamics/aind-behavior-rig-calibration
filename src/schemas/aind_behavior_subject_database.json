@@ -1,0 +1,49 @@
+{
+  "definitions": {
+    "SubjectEntry": {
+      "properties": {
+        "task_logic_target": {
+          "description": "Name of the json file containing the task logic",
+          "title": "Task Logic Target",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_logic_target"
+      ],
+      "title": "SubjectEntry",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "aind_behavior_services_pkg_version": {
+      "default": "0.8.0",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "title": "aind_behavior_services package version",
+      "type": "string"
+    },
+    "version": {
+      "const": "0.1.0",
+      "default": "0.1.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "subjects": {
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/SubjectEntry"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "description": "List of subjects and their task logic targets",
+      "title": "Subjects",
+      "type": "object"
+    }
+  },
+  "title": "SubjectDataBase",
+  "type": "object"
+}
