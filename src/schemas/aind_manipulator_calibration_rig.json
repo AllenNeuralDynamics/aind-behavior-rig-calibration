@@ -10,19 +10,11 @@
           "type": "string"
         },
         "input": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/AindManipulatorCalibrationInput"
-            }
-          ],
+          "$ref": "#/definitions/AindManipulatorCalibrationInput",
           "title": "Input of the calibration"
         },
         "output": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/AindManipulatorCalibrationOutput"
-            }
-          ],
+          "$ref": "#/definitions/AindManipulatorCalibrationOutput",
           "title": "Output of the calibration."
         },
         "date": {
@@ -67,11 +59,7 @@
     "AindManipulatorCalibrationInput": {
       "properties": {
         "full_step_to_mm": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/ManipulatorPosition"
-            }
-          ],
+          "$ref": "#/definitions/ManipulatorPosition",
           "default": {
             "x": 0.01,
             "y1": 0.01,
@@ -143,11 +131,7 @@
           "type": "array"
         },
         "initial_position": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/ManipulatorPosition"
-            }
-          ],
+          "$ref": "#/definitions/ManipulatorPosition",
           "default": {
             "x": 0.0,
             "y1": 0.0,
@@ -250,11 +234,7 @@
       "description": "Axis configuration",
       "properties": {
         "axis": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/Axis"
-            }
-          ],
+          "$ref": "#/definitions/Axis",
           "title": "Axis to be configured"
         },
         "step_acceleration_interval": {
@@ -274,11 +254,7 @@
           "type": "integer"
         },
         "microstep_resolution": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/MicrostepResolution"
-            }
-          ],
+          "$ref": "#/definitions/MicrostepResolution",
           "default": 0,
           "title": "Microstep resolution"
         },
@@ -290,11 +266,7 @@
           "type": "integer"
         },
         "motor_operation_mode": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/MotorOperationMode"
-            }
-          ],
+          "$ref": "#/definitions/MotorOperationMode",
           "default": 0,
           "title": "Motor operation mode"
         },
@@ -379,7 +351,7 @@
   },
   "properties": {
     "aind_behavior_services_pkg_version": {
-      "default": "0.8.0-rc3",
+      "default": "0.8.0",
       "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
       "title": "aind_behavior_services package version",
       "type": "string"
@@ -401,11 +373,7 @@
       "type": "string"
     },
     "manipulator": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/AindManipulatorDevice"
-        }
-      ],
+      "$ref": "#/definitions/AindManipulatorDevice",
       "default": null,
       "title": "Manipulator device"
     }

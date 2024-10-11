@@ -17,7 +17,7 @@ namespace AindBehaviorServices.WaterValveCalibrationLogic
     
         private double? _rngSeed;
     
-        private string _aindBehaviorServicesPkgVersion = "0.8.0-rc3";
+        private string _aindBehaviorServicesPkgVersion = "0.8.0";
     
         private System.Collections.Generic.List<double> _valveOpenTime = new System.Collections.Generic.List<double>();
     

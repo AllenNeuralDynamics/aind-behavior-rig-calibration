@@ -17,7 +17,7 @@
           "title": "Rng Seed"
         },
         "aind_behavior_services_pkg_version": {
-          "default": "0.8.0-rc3",
+          "default": "0.8.0",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
@@ -71,11 +71,7 @@
           "type": "integer"
         },
         "channel_type": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/OlfactometerChannelType"
-            }
-          ],
+          "$ref": "#/definitions/OlfactometerChannelType",
           "default": "Odor",
           "title": "Channel type"
         },
@@ -150,11 +146,7 @@
       "type": "string"
     },
     "task_parameters": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/CalibrationParameters"
-        }
-      ],
+      "$ref": "#/definitions/CalibrationParameters",
       "title": "Task parameters"
     },
     "version": {

@@ -78,19 +78,11 @@
           "type": "string"
         },
         "input": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/TreadmillCalibrationInput"
-            }
-          ],
+          "$ref": "#/definitions/TreadmillCalibrationInput",
           "title": "Input of the calibration"
         },
         "output": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/TreadmillCalibrationOutput"
-            }
-          ],
+          "$ref": "#/definitions/TreadmillCalibrationOutput",
           "title": "Output of the calibration."
         },
         "date": {
@@ -183,7 +175,7 @@
   },
   "properties": {
     "aind_behavior_services_pkg_version": {
-      "default": "0.8.0-rc3",
+      "default": "0.8.0",
       "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
       "title": "aind_behavior_services package version",
       "type": "string"
@@ -205,11 +197,7 @@
       "type": "string"
     },
     "treadmill": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/Treadmill"
-        }
-      ],
+      "$ref": "#/definitions/Treadmill",
       "title": "Treadmill device"
     }
   },
