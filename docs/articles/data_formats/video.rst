@@ -55,19 +55,28 @@ The metadata file is expected to contain the following columns:
 
 As for the video, since the format will depend on the scientific question and software/hardware constrains, we will not enforce a specification. However, we strongly discourage the use of RAW, uncompressed data, and should the user not have a preference, we suggest the follow default:
 
-Since this format will depend on the scientific question and software/hardware constrains, we will not enforce a specific format. However, if the user does not have a preference we suggest the follow specification:
+Since this format will depend on the scientific question and software/hardware constrains, we will not enforce a specific format. However, if the user does not have a preference we suggest using the defaults defined in:
+`~aind_behavior_services.rig.VideoWriterFfmpeg`
+
+or
 
 - Use mp4 container
-- Use ``ffmpeg`` with one of the following encoding codecs:
+- Acquire without any gamma correction
+- Use ``ffmpeg`` with the following encoding codec string for online encoding (optimized for compression quality and speed):
 
-    - ``-c:v hevc_nvenc -pix_fmt x2rgb10le -color_range full -tune hq -preset p3 -rc vbr -cq 16 -rc-lookahead 56 -temporal-aq 1 -qmin 0 -qmax 10`` (We are currently benchmarking this codec, so this may change in the future)
+  - output arguments: ``-vf "scale=out_color_matrix=bt709:out_range=full" -c:v h264_nvenc -pix_fmt nv12 -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M``
+  - input_arguments: ``-colorspace rgb -color_primaries bt709 -color_trc linear``
+
+and the following encoding codec string for offline re-encoding (optimized for quality and size):
+
+- output arguments: ``-vf "scale=out_color_matrix=bt709:out_range=full:sws_dither=none,colorspace=ispace=bt709:all=bt709:dither=none,scale=out_range=tv:sws_dither=none,format=yuv420p" -c:v libx264 -preset veryslow -crf 18 -pix_fmt yuv420p -metadata author="Allen Institute for Neural Dynamics" -movflags +faststart+write_colr``
 
 Application notes
 #####################
 
 We currently support the following cameras:
     - ``Blackfly S BFS-U3-16S2M``
-    - ``Blackfly S BFS-U3-04S2M```
+    - ``Blackfly S BFS-U3-04S2M``
 
 Additional cameras could be supported but the user should provide the necessary information to integrate it with the current pipeline.
 
@@ -117,8 +126,7 @@ The following features should be true if the data asset is to be considered vali
   - The difference between adjacent ``Seconds`` and adjacent ``FrameTime`` should be very close (I would suggest a threshold of 0.5ms for now);
 
     .. note::
-
-    While dropped frames are not ideal, they do not necessarily invalidate the data. However, the user should be aware of the potential consequences and/or ways to correct the data asset.
+        While dropped frames are not ideal, they do not necessarily invalidate the data. However, the user should be aware of the potential consequences and/or ways to correct the data asset.
 
 - If using a stable frame rate (this should be inferred from a rig configuration file), the average frame rate should match the theoretical frame rate;
 
