@@ -1,0 +1,64 @@
+name: Tag and Publish
+
+on:
+    workflow_dispatch: {}
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+    - uses: actions/checkout@v3
+    - name: Extract version from __init__.py and package name from pyproject.toml
+      id: get_version_and_name
+      run: |
+        package_name=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['name'])")
+        package_name=${package_name//-/_}
+        version=$(python -c "import re; 
+        with open(f'./src/{package_name}/__init__.py', 'r') as f: 
+          content = f.read(); 
+          match = re.search(r'__version__\s*=\s*[\'\"]([^\'\"]+)[\'\"]', content); 
+          print(match.group(1)) if match else exit(1)")
+        echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
+        echo "PACKAGE_VERSION=$version" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Create Git tag
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -a v${{ env.PACKAGE_VERSION }} -m "Release v${{ env.PACKAGE_VERSION }}"
+        git push origin v${{ env.PACKAGE_VERSION }}
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        token: ${{ secrets.SERVICE_TOKEN }}
+        tag_name: v${{ env.PACKAGE_VERSION }}
+        name: Release v${{ env.PACKAGE_VERSION }}
+        generate_release_notes: true
+
+  publish:
+    needs: tag
+    if: always()  # Enable publishing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Pull latest changes
+        run: git pull origin ${{ env.DEFAULT_BRANCH }}
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: |
+          pip install --upgrade setuptools wheel twine build
+          python -m build
+          twine check dist/*
+      - name: Publish on PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.AIND_PYPI_TOKEN }}
