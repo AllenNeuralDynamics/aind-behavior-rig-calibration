@@ -17,7 +17,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationLogic
     
         private double? _rngSeed;
     
-        private string _aindBehaviorServicesPkgVersion = "0.8.0";
+        private string _aindBehaviorServicesPkgVersion = "0.8.1";
     
         public CalibrationParameters()
         {

@@ -19,7 +19,7 @@
 <polygon fill="none" stroke="black" points="0,-282.5 0,-304.5 207,-304.5 207,-282.5 0,-282.5"/>
 <text text-anchor="start" x="3" y="-288.2" font-family="Times New Roman,Times,Liberation Serif,serif" font-size="14.00">aind_behavior_services_pkg_version</text>
 <polygon fill="none" stroke="black" points="207,-282.5 207,-304.5 290,-304.5 290,-282.5 207,-282.5"/>
-<text text-anchor="start" x="209.88" y="-288.2" font-family="Times New Roman,Times,Liberation Serif,serif" font-size="14.00">Literal[&#39;0.8.0&#39;]</text>
+<text text-anchor="start" x="209.88" y="-288.2" font-family="Times New Roman,Times,Liberation Serif,serif" font-size="14.00">Literal[&#39;0.8.1&#39;]</text>
 <polygon fill="none" stroke="black" points="0,-260.5 0,-282.5 207,-282.5 207,-260.5 0,-260.5"/>
 <text text-anchor="start" x="83.62" y="-266.2" font-family="Times New Roman,Times,Liberation Serif,serif" font-size="14.00">version</text>
 <polygon fill="none" stroke="black" points="207,-260.5 207,-282.5 290,-282.5 290,-260.5 207,-260.5"/>
