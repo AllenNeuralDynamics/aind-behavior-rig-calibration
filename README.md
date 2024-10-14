@@ -68,8 +68,8 @@ Where possible, adhere to [Semantic Versioning](https://semver.org/).
 
 ## Project dependency tree
 
-```mermaid
 
+```mermaid
 classDiagram
     class aind_behavior_curriculum {
         +Task
@@ -100,11 +100,9 @@ classDiagram
         +Saves data in standard format
     }
 
-
     class aind_behavior_some_task_analysis {
         +Analysis code for some task
     }
-
 
     class aind_behavior_core_analysis {
         +Data ingestion
@@ -121,11 +119,5 @@ classDiagram
     
     aind_behavior_experiment_launcher --|> aind_behavior_some_task : Launches
 
-    style aind_behavior_curriculum fill:#BBDEFB,stroke:#0D47A1,stroke-width:1px
-    style aind_behavior_services fill:#C8E6C9,stroke:#1B5E20,stroke-width:1px
-    style aind_behavior_experiment_launcher fill:#E1F5FE,stroke:#0288D1,stroke-width:1px
-    style aind_behavior_some_task fill:#FFECB3,stroke:#FFA000,stroke-width:1px
-    style aind_behavior_some_task_analysis fill:#FFEFD5,stroke:#BF360C,stroke-width:1px
-    style aind_behavior_core_analysis fill:#B2EBF2,stroke:#00695C,stroke-width:1px
-
 ```
+
