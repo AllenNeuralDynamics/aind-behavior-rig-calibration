@@ -275,8 +275,3 @@ class Screen(Device):
 class AindBehaviorRigModel(SchemaVersionedModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
-
-    @field_validator("version", mode="before")
-    @classmethod
-    def coerce_version(cls, v: str) -> str:
-        return coerce_schema_version(cls, v)

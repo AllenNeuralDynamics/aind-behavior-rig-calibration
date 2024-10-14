@@ -28,11 +28,6 @@ class AindBehaviorSessionModel(SchemaVersionedModel):
     allow_dirty_repo: bool = Field(default=False, description="Allow running from a dirty repository")
     skip_hardware_validation: bool = Field(default=False, description="Skip hardware validation")
 
-    @field_validator("version", mode="before")
-    @classmethod
-    def coerce_version(cls, v: str, ctx) -> str:
-        return coerce_schema_version(cls, v)
-
     @model_validator(mode="after")
     def generate_session_name_default(self) -> Self:
         if self.session_name is None:
