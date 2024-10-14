@@ -19,11 +19,12 @@ class TaskParameters(curriculum_task.TaskParameters):
         return coerce_schema_version(cls, v, ctx.field_name)
 
 
+# This class should be inherited from but do not add extra parameters. Instead, add them to TaskParameters
 class AindBehaviorTaskLogicModel(curriculum_task.Task):
     task_parameters: TaskParameters = Field(..., description="Parameters of the task logic", validate_default=True)
     version: str = Field(..., pattern=curriculum_task.SEMVER_REGEX, description="task schema version")
 
-    @field_validator("version", mode="before")
+    @field_validator("version", mode="before", check_fields=False)
     @classmethod
     def coerce_version(cls, v: str) -> str:
         return coerce_schema_version(cls, v)
