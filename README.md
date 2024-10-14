@@ -4,12 +4,15 @@ A repository containing code for data acquisition and processing for AIND behavi
 
 ---
 
-## Deployment
+## Installation
 
-Install the [prerequisites](#prerequisites) mentioned below.
-From the root of the repository, run `./scripts/deploy.ps1` to bootstrap both python and bonsai environments.
+The python package can be installed from pypi using the following command:
 
----
+```bash
+pip install aind-behavior-services
+```
+
+However, to use all the tasks and hardware that this package supports, you should over over the [prerequisites](#prerequisites) and [deployment](#deployment) sections.
 
 ## Prerequisites
 
@@ -21,6 +24,13 @@ These should only need to be installed once on a fresh new system, and are not r
   - [Spinnaker SDK 1.29.0.5](https://www.flir.co.uk/support/products/spinnaker-sdk/#Downloads) (device drivers for FLIR cameras)
 
     - On FLIR website: `Download > archive > 1.29.0.5 > SpinnakerSDK_FULL_1.29.0.5_x64.exe`
+
+---
+
+## Deployment
+
+Install the [prerequisites](#prerequisites) mentioned below.
+From the root of the repository, run `./scripts/deploy.ps1` to bootstrap both python and bonsai environments.
 
 ---
 
@@ -58,4 +68,56 @@ Where possible, adhere to [Semantic Versioning](https://semver.org/).
 
 ## Project dependency tree
 
-![Dependency tree](https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/raw/main/assets/dependency_tree.drawio.svg)
+
+```mermaid
+classDiagram
+    class aind_behavior_curriculum {
+        +Task
+        +Curriculum
+    }
+
+    class aind_behavior_services {
+        +Task (Subclasses)
+        +Rig (maintains hardware library)
+        +Session
+        +Calibration (maintains device/calibration library)
+        +Deployment instructions
+        +Ecosystem documentation
+    }
+
+    class aind_behavior_experiment_launcher {
+        +Launch experiment
+        +Interfaces with external applications (e.g. Bonsai)
+        +Interfaces with aind-services
+    }
+
+    class aind_behavior_some_task {
+        +Concrete implementation of a task
+        +Rig (Subclasses for some task)
+        +Session
+        +Task Logic (Subclasses for some task)
+        +Maintains a task data-schema
+        +Saves data in standard format
+    }
+
+    class aind_behavior_some_task_analysis {
+        +Analysis code for some task
+    }
+
+    class aind_behavior_core_analysis {
+        +Data ingestion
+        +Data contract definition
+        +Core analysis primitives
+        +QC
+    }
+
+    aind_behavior_curriculum --|> aind_behavior_services : Subclasses Task
+    aind_behavior_services --|> aind_behavior_some_task 
+    aind_behavior_some_task --|> aind_behavior_some_task_analysis : Analysis
+    aind_behavior_core_analysis --|> aind_behavior_some_task_analysis : Imports core analysis methods
+    aind_behavior_some_task_analysis --|> aind_behavior_curriculum : Metrics[Task]
+    
+    aind_behavior_experiment_launcher --|> aind_behavior_some_task : Launches
+
+```
+
