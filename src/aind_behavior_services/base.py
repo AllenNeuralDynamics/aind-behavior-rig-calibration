@@ -20,7 +20,7 @@ class SchemaVersionedModel(BaseModel):
     )
     version: str = Field(..., pattern=SEMVER_REGEX, description="schema version", title="Version", frozen=True)
 
-    @field_validator("aind_behavior_services_pkg_version", mode="before", check_fields=False)
+    @field_validator("aind_behavior_services_pkg_version", "version", mode="before", check_fields=False)
     @classmethod
     def coerce_version(cls, v: str, ctx) -> str:
         return coerce_schema_version(cls, v, ctx.field_name)
@@ -72,14 +72,11 @@ def coerce_schema_version(cls: type[SchemaVersionedModel], v: str, version_strin
     semver = Version.parse(v)
     if semver > _default_schema_version:
         raise ValueError(
-            f"Deserialized schema version ({semver}) \
-                is greater than the current version({_default_schema_version})."
+            f"Error deserializing versioned field {version_string} (v{semver} > v{_default_schema_version})"
         )
     elif semver < _default_schema_version:
         warnings.warn(
-            f"Deserialized schema version ({semver}) \
-                is less than the current version({_default_schema_version}). \
-                    Will attempt to coerce the conversion."
+            f"Coercing deserialized versioned field {version_string} (v{semver} < v{_default_schema_version})"
         )
         return str(_default_schema_version)
     else:
