@@ -121,10 +121,11 @@ classDiagram
     
     aind_behavior_experiment_launcher --|> aind_behavior_some_task : Launches
 
-    style aind_behavior_curriculum fill:#D8EFFF,stroke:#000000,stroke-width:1px
-    style aind_behavior_services fill:#D9FAD7,stroke:#000000,stroke-width:1px
-    style aind_behavior_experiment_launcher fill:#E3F2FD,stroke:#000000,stroke-width:1px
-    style aind_behavior_some_task fill:#FFE6B3,stroke:#000000,stroke-width:1px
-    style aind_behavior_some_task_analysis fill:#FFF3E0,stroke:#000000,stroke-width:1px
-    style aind_behavior_core_analysis fill:#E0F7FA,stroke:#000000,stroke-width:1px
+    style aind_behavior_curriculum fill:#BBDEFB,stroke:#0D47A1,stroke-width:1px
+    style aind_behavior_services fill:#C8E6C9,stroke:#1B5E20,stroke-width:1px
+    style aind_behavior_experiment_launcher fill:#E1F5FE,stroke:#0288D1,stroke-width:1px
+    style aind_behavior_some_task fill:#FFECB3,stroke:#FFA000,stroke-width:1px
+    style aind_behavior_some_task_analysis fill:#FFEFD5,stroke:#BF360C,stroke-width:1px
+    style aind_behavior_core_analysis fill:#B2EBF2,stroke:#00695C,stroke-width:1px
+
 ```
