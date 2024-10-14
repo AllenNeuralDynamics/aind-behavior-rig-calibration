@@ -6,7 +6,7 @@ from typing import Annotated, Dict, Generic, Literal, Optional, TypeVar, Union
 
 from pydantic import BaseModel, Field, RootModel, field_validator
 
-from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
+from aind_behavior_services.base import SchemaVersionedModel
 
 
 class Device(BaseModel):

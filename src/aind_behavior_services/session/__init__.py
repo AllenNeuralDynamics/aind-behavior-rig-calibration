@@ -2,10 +2,10 @@
 import datetime
 from typing import List, Literal, Optional, Self
 
-from pydantic import Field, field_validator, model_validator
+from pydantic import Field, model_validator
 
 import aind_behavior_services.utils
-from aind_behavior_services.base import SchemaVersionedModel, coerce_schema_version
+from aind_behavior_services.base import SchemaVersionedModel
 
 __version__ = "0.3.0"
 
