@@ -63,24 +63,27 @@ class SemVerAnnotation:
         return handler(core_schema.str_schema())
 
 
-def coerce_schema_version(cls: type[SchemaVersionedModel], v: str, version_string: str = "version") -> str:
+def coerce_schema_version(
+    cls: type[SchemaVersionedModel], v: str, version_string: str = "version", check_compatibility: bool = True
+) -> str:
     try:  # Get the default schema version from the model literal field
         _default_schema_version = Version.parse(get_args(cls.model_fields[version_string].annotation)[0])
     except IndexError:  # This handles the case where the base class does not define a literal schema_version value
         return v
 
     semver = Version.parse(v)
-    if semver > _default_schema_version:
-        raise ValueError(
-            f"Error deserializing versioned field {version_string} (v{semver} > v{_default_schema_version})"
-        )
-    elif semver < _default_schema_version:
+    if semver != _default_schema_version:
         warnings.warn(
-            f"Coercing deserialized versioned field {version_string} (v{semver} < v{_default_schema_version})"
+            f"Deserialized versioned field {semver}, expected {_default_schema_version}). Will attempt to coerce."
         )
-        return str(_default_schema_version)
-    else:
-        return str(semver)
+        if check_compatibility:
+            if semver.major == 0:  # Assume that 0.x.y versions are compatible within X
+                if semver.minor != _default_schema_version.minor:
+                    raise ValueError("Incompatible schema versions.")
+            else:
+                if not semver.is_compatible(_default_schema_version):
+                    raise ValueError("Incompatible schema versions.")
+    return str(_default_schema_version)
 
 
 def get_commit_hash(repository: Optional[PathLike] = None) -> str:
