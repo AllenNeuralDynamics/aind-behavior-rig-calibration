@@ -1,15 +1,14 @@
-from typing import Annotated, ClassVar, List, Literal, Optional
+from typing import ClassVar, List, Literal, Optional
 
 from pydantic import BaseModel, Field, field_validator
 
 from aind_behavior_services.calibration import Calibration
+from aind_behavior_services.patterns import ValuePair
 from aind_behavior_services.rig import AindBehaviorRigModel, HarpTreadmill
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
 
 TASK_LOGIC_VERSION = "0.0.0"  # currently not used
 RIG_VERSION = "0.0.0"  # current not used
-
-ValuePair = Annotated[List[float], Field(min_length=2, max_length=2)]
 
 
 class TreadmillCalibrationInput(BaseModel):
