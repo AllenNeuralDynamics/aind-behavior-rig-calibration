@@ -50,7 +50,7 @@ jobs:
       - name: Run tests
         run: python -m unittest
       - name: Regenerate schemas
-        run: python .\scripts\regenerate.py
+        run: regenerate
       - name: Check for uncommitted changes
         run: |
           git config --global core.safecrlf false
