@@ -49,6 +49,9 @@ docs = [
 
 ]
 
+[project.scripts]
+regenerate = "aind_behavior_services.scripts.regenerate:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
