@@ -17,7 +17,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationLogic
     
         private double? _rngSeed;
     
-        private string _aindBehaviorServicesPkgVersion = "0.8.2";
+        private string _aindBehaviorServicesPkgVersion = "0.8.3";
     
         private System.Collections.Generic.List<int> _channels = new System.Collections.Generic.List<int>();
     

@@ -892,7 +892,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     public partial class CalibrationRig
     {
     
-        private string _aindBehaviorServicesPkgVersion = "0.8.2";
+        private string _aindBehaviorServicesPkgVersion = "0.8.3";
     
         private string _version = "0.0.0";
     
