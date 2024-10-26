@@ -42,7 +42,7 @@ One of the core principles of this repository is the strict adherence to [json-s
 
 ## Regenerating schemas
 
-Once a Pydantic model is updated, updates to all downstream dependencies must be made to ensure that the ground-truth data schemas (and all dependent interoperability tools) are also updated. This can be achieved by running the `./scripts/renegerate.ps1` script from the root of the repository.
+Once a Pydantic model is updated, updates to all downstream dependencies must be made to ensure that the ground-truth data schemas (and all dependent interoperability tools) are also updated. This can be achieved by running the `regenerate` command from the root of the repository.
 This script will regenerate all `json-schemas` along with `C#` code (`./scr/Extensions`) used by the Bonsai environment.
 
 ---
