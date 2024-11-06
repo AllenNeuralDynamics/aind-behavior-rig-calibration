@@ -56,7 +56,7 @@ The metadata file is expected to contain the following columns:
 As for the video, since the format will depend on the scientific question and software/hardware constrains, we will not enforce a specification. However, we strongly discourage the use of RAW, uncompressed data, and should the user not have a preference, we suggest the follow default:
 
 Since this format will depend on the scientific question and software/hardware constrains, we will not enforce a specific format. However, if the user does not have a preference we suggest using the defaults defined in:
-`~aind_behavior_services.rig.VideoWriterFfmpeg`
+``~aind_behavior_services.rig.VideoWriterFfmpeg``
 
 or
 
@@ -64,8 +64,12 @@ or
 - Acquire without any gamma correction
 - Use ``ffmpeg`` with the following encoding codec string for online encoding (optimized for compression quality and speed):
 
+  Note: this has been tested with monochrome videos with the raw pixel format
+  ``gray``. For color videos, the input arguments might need to be altered to
+  match the color space of the input.
+  
   - output arguments: ``-vf "scale=out_color_matrix=bt709:out_range=full" -c:v h264_nvenc -pix_fmt nv12 -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M``
-  - input_arguments: ``-colorspace rgb -color_primaries bt709 -color_trc linear``
+  - input_arguments: ``-colorspace bt709 -color_primaries bt709 -color_range full -color_trc linear``
 
 and the following encoding codec string for offline re-encoding (optimized for quality and size):
 
