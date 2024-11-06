@@ -4,7 +4,8 @@ import os
 from enum import Enum
 from typing import Annotated, Dict, Generic, Literal, Optional, TypeVar, Union
 
-from pydantic import BaseModel, Field, RootModel, field_validator
+from pydantic import BaseModel, Field, field_validator
+from typing_extensions import TypeAliasType
 
 from aind_behavior_services.base import SchemaVersionedModel
 
@@ -35,8 +36,9 @@ class VideoWriterOpenCv(BaseModel):
     four_cc: str = Field(default="FMP4", description="Four character code")
 
 
-class VideoWriter(RootModel):
-    root: Annotated[Union[VideoWriterFfmpeg, VideoWriterOpenCv], Field(discriminator="video_writer_type")]
+VideoWriter = TypeAliasType(
+    "VideoWriter", Annotated[Union[VideoWriterFfmpeg, VideoWriterOpenCv], Field(discriminator="video_writer_type")]
+)
 
 
 class WebCamera(Device):
@@ -178,8 +180,9 @@ class HarpStepperDriver(HarpDeviceGeneric):
     who_am_i: Literal[1130] = 1130
 
 
-class HarpDevice(RootModel):
-    root: Annotated[
+HarpDevice = TypeAliasType(
+    "HarpDevice",
+    Annotated[
         Union[
             HarpBehavior,
             HarpOlfactometer,
@@ -195,7 +198,8 @@ class HarpDevice(RootModel):
             HarpStepperDriver,
         ],
         Field(discriminator="device_type"),
-    ]
+    ],
+)
 
 
 class Vector3(BaseModel):

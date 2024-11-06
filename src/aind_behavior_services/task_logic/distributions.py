@@ -5,7 +5,8 @@ from enum import Enum
 from typing import Annotated, List, Literal, Optional, Self, Union
 
 # Import aind-datas-schema types
-from pydantic import BaseModel, Field, NonNegativeFloat, RootModel, field_validator, model_validator
+from pydantic import BaseModel, Field, NonNegativeFloat, field_validator, model_validator
+from typing_extensions import TypeAliasType
 
 
 class TruncationParameters(BaseModel):
@@ -191,8 +192,9 @@ class PdfDistribution(DistributionBase):
     )
 
 
-class Distribution(RootModel):
-    root: Annotated[
+Distribution = TypeAliasType(
+    "Distribution",
+    Annotated[
         Union[
             Scalar,
             NormalDistribution,
@@ -204,13 +206,14 @@ class Distribution(RootModel):
             BetaDistribution,
             GammaDistribution,
             PdfDistribution,
-        ],
-        Field(discriminator="family", title="Distribution", description="Available distributions"),
-    ]
+        ]
+    ],
+    Field(discriminator="family", title="Distribution", description="Available distributions"),
+)
 
-
-class DistributionParameters(RootModel):
-    root: Annotated[
+DistributionParameters = TypeAliasType(
+    "DistributionParameters",
+    Annotated[
         Union[
             ScalarDistributionParameter,
             NormalDistributionParameters,
@@ -224,4 +227,5 @@ class DistributionParameters(RootModel):
             PdfDistributionParameters,
         ],
         Field(discriminator="family", title="DistributionParameters", description="Parameters of the distribution"),
-    ]
+    ],
+)
