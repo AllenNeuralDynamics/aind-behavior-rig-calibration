@@ -17,7 +17,7 @@ namespace AindBehaviorServices.TreadmillCalibrationLogic
     
         private double? _rngSeed;
     
-        private string _aindBehaviorServicesPkgVersion = "0.8.3";
+        private string _aindBehaviorServicesPkgVersion = "0.8.5";
     
         public CalibrationParameters()
         {
