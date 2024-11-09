@@ -206,9 +206,9 @@ Distribution = TypeAliasType(
             BetaDistribution,
             GammaDistribution,
             PdfDistribution,
-        ]
+        ],
+        Field(discriminator="family", title="Distribution", description="Available distributions"),
     ],
-    Field(discriminator="family", title="Distribution", description="Available distributions"),
 )
 
 DistributionParameters = TypeAliasType(
