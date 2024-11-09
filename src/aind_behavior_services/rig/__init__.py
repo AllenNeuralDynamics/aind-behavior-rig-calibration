@@ -25,7 +25,8 @@ class VideoWriterFfmpeg(BaseModel):
         description="Output arguments",
     )
     input_arguments: str = Field(
-        default="-v verbose -colorspace bt709 -color_primaries bt709 -color_range full -color_trc linear", description="Input arguments"
+        default="-v verbose -colorspace bt709 -color_primaries bt709 -color_range full -color_trc linear",
+        description="Input arguments",
     )
 
 
