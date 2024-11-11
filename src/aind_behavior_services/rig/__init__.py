@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from enum import Enum
-from typing import Annotated, Dict, Generic, Literal, Optional, TypeVar, Union
+from typing import Annotated, Dict, Generic, List, Literal, Optional, TypeVar, Union
 
 from pydantic import BaseModel, Field, field_validator
 from typing_extensions import TypeAliasType
@@ -99,6 +99,7 @@ class CameraController(Device, Generic[TCamera]):
 
 
 class HarpDeviceType(str, Enum):
+    GENERIC = "generic"
     LOADCELLS = "loadcells"
     BEHAVIOR = "behavior"
     OLFACTOMETER = "olfactometer"
@@ -111,7 +112,8 @@ class HarpDeviceType(str, Enum):
     SNIFFDETECTOR = "sniffdetector"
     CUTTLEFISH = "cuttlefish"
     STEPPERDRIVER = "stepperdriver"
-    GENERIC = "generic"
+    ENVIRONMENTSENSOR = "environmentsensor"
+    WHITERABBIT = "whiterabbit"
 
 
 class HarpDeviceGeneric(Device):
@@ -119,6 +121,53 @@ class HarpDeviceGeneric(Device):
     device_type: Literal[HarpDeviceType.GENERIC] = HarpDeviceType.GENERIC
     serial_number: Optional[str] = Field(default=None, description="Device serial number")
     port_name: str = Field(..., description="Device port name")
+
+
+class ConnectedClockOutput(BaseModel):
+    target_device: Optional[str] = Field(
+        default=None, description="Optional device name to provide user additional information"
+    )
+    output_channel: int = Field(..., ge=0, description="Output channel")
+
+
+def _assert_unique_output_channels(outputs: List[ConnectedClockOutput]) -> List[ConnectedClockOutput]:
+    channels = set([ch.output_channel for ch in outputs])
+    if len(channels) != len(outputs):
+        raise ValueError("Output channels must be unique")
+    return outputs
+
+
+class HarpClockGenerator(HarpDeviceGeneric):
+    device_type: Literal[HarpDeviceType.CLOCKGENERATOR] = HarpDeviceType.CLOCKGENERATOR
+    who_am_i: Literal[1158] = 1158
+    connected_clock_outputs: List[ConnectedClockOutput] = Field(default=[], description="Connected clock outputs")
+
+    @field_validator("connected_clock_outputs")
+    @classmethod
+    def validate_connected_clock_outputs(cls, v: List[ConnectedClockOutput]) -> List[ConnectedClockOutput]:
+        return _assert_unique_output_channels(v)
+
+
+class HarpWhiteRabbit(HarpDeviceGeneric):
+    device_type: Literal[HarpDeviceType.WHITERABBIT] = HarpDeviceType.WHITERABBIT
+    who_am_i: Literal[1404] = 1404
+    connected_clock_outputs: List[ConnectedClockOutput] = Field(default=[], description="Connected clock outputs")
+
+    @field_validator("connected_clock_outputs")
+    @classmethod
+    def validate_connected_clock_outputs(cls, v: List[ConnectedClockOutput]) -> List[ConnectedClockOutput]:
+        return _assert_unique_output_channels(v)
+
+
+class HarpClockSynchronizer(HarpDeviceGeneric):
+    device_type: Literal[HarpDeviceType.CLOCKSYNCHRONIZER] = HarpDeviceType.CLOCKSYNCHRONIZER
+    who_am_i: Literal[1152] = 1152
+    connected_clock_outputs: List[ConnectedClockOutput] = Field(default=[], description="Connected clock outputs")
+
+    @field_validator("connected_clock_outputs")
+    @classmethod
+    def validate_connected_clock_outputs(cls, v: List[ConnectedClockOutput]) -> List[ConnectedClockOutput]:
+        return _assert_unique_output_channels(v)
 
 
 class HarpBehavior(HarpDeviceGeneric):
@@ -139,16 +188,6 @@ class HarpLoadCells(HarpDeviceGeneric):
 class HarpOlfactometer(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.OLFACTOMETER] = HarpDeviceType.OLFACTOMETER
     who_am_i: Literal[1140] = 1140
-
-
-class HarpClockGenerator(HarpDeviceGeneric):
-    device_type: Literal[HarpDeviceType.CLOCKGENERATOR] = HarpDeviceType.CLOCKGENERATOR
-    who_am_i: Literal[1158] = 1158
-
-
-class HarpClockSynchronizer(HarpDeviceGeneric):
-    device_type: Literal[HarpDeviceType.CLOCKSYNCHRONIZER] = HarpDeviceType.CLOCKSYNCHRONIZER
-    who_am_i: Literal[1152] = 1152
 
 
 class HarpAnalogInput(HarpDeviceGeneric):
@@ -181,6 +220,11 @@ class HarpStepperDriver(HarpDeviceGeneric):
     who_am_i: Literal[1130] = 1130
 
 
+class HarpEnvironmentSensor(HarpDeviceGeneric):
+    device_type: Literal[HarpDeviceType.ENVIRONMENTSENSOR] = HarpDeviceType.ENVIRONMENTSENSOR
+    who_am_i: Literal[1405] = 1405
+
+
 HarpDevice = TypeAliasType(
     "HarpDevice",
     Annotated[
@@ -197,6 +241,8 @@ HarpDevice = TypeAliasType(
             HarpSniffDetector,
             HarpClockSynchronizer,
             HarpStepperDriver,
+            HarpEnvironmentSensor,
+            HarpWhiteRabbit,
         ],
         Field(discriminator="device_type"),
     ],
