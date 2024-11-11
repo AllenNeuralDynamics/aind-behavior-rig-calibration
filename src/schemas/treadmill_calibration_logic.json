@@ -17,7 +17,7 @@
           "title": "Rng Seed"
         },
         "aind_behavior_services_pkg_version": {
-          "default": "0.8.5",
+          "default": "0.8.6",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
@@ -45,7 +45,7 @@
       "$ref": "#/definitions/CalibrationParameters",
       "default": {
         "rng_seed": null,
-        "aind_behavior_services_pkg_version": "0.8.5"
+        "aind_behavior_services_pkg_version": "0.8.6"
       },
       "title": "Task parameters"
     },

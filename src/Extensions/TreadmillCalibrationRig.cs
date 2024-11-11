@@ -550,7 +550,7 @@ namespace AindBehaviorServices.TreadmillCalibrationRig
     public partial class CalibrationRig
     {
     
-        private string _aindBehaviorServicesPkgVersion = "0.8.5";
+        private string _aindBehaviorServicesPkgVersion = "0.8.6";
     
         private string _version = "0.0.0";
     
