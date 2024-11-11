@@ -99,6 +99,7 @@ class CameraController(Device, Generic[TCamera]):
 
 
 class HarpDeviceType(str, Enum):
+    GENERIC = "generic"
     LOADCELLS = "loadcells"
     BEHAVIOR = "behavior"
     OLFACTOMETER = "olfactometer"
@@ -111,7 +112,8 @@ class HarpDeviceType(str, Enum):
     SNIFFDETECTOR = "sniffdetector"
     CUTTLEFISH = "cuttlefish"
     STEPPERDRIVER = "stepperdriver"
-    GENERIC = "generic"
+    ENVIRONMENTSENSOR = "environmentsensor"
+    WHITERABBIT = "whiterabbit"
 
 
 class HarpDeviceGeneric(Device):
@@ -120,6 +122,9 @@ class HarpDeviceGeneric(Device):
     serial_number: Optional[str] = Field(default=None, description="Device serial number")
     port_name: str = Field(..., description="Device port name")
 
+class HarpWhiteRabbit(HarpDeviceGeneric):
+    device_type: Literal[HarpDeviceType.WHITERABBIT] = HarpDeviceType.WHITERABBIT
+    who_am_i: Literal[1404] = 1404
 
 class HarpBehavior(HarpDeviceGeneric):
     device_type: Literal[HarpDeviceType.BEHAVIOR] = HarpDeviceType.BEHAVIOR
@@ -181,6 +186,11 @@ class HarpStepperDriver(HarpDeviceGeneric):
     who_am_i: Literal[1130] = 1130
 
 
+class HarpEnvironmentSensor(HarpDeviceGeneric):
+    device_type: Literal[HarpDeviceType.ENVIRONMENTSENSOR] = HarpDeviceType.ENVIRONMENTSENSOR
+    who_am_i: Literal[1405] = 1405
+
+
 HarpDevice = TypeAliasType(
     "HarpDevice",
     Annotated[
@@ -197,6 +207,8 @@ HarpDevice = TypeAliasType(
             HarpSniffDetector,
             HarpClockSynchronizer,
             HarpStepperDriver,
+            HarpEnvironmentSensor,
+            HarpWhiteRabbit,
         ],
         Field(discriminator="device_type"),
     ],
