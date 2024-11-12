@@ -59,7 +59,7 @@
               "type": "null"
             }
           ],
-          "title": "Load cell offset"
+          "title": "Load cell offset applied to the wheatstone bridge circuit"
         },
         "baseline": {
           "default": null,
@@ -71,7 +71,19 @@
               "type": "null"
             }
           ],
-          "title": "Load cell baseline"
+          "title": "Load cell baseline that will be DSP subtracted"
+        },
+        "slope": {
+          "default": null,
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Load cell slope that will be used to convert adc units to weight (g)."
         },
         "weight_lookup": {
           "default": [],

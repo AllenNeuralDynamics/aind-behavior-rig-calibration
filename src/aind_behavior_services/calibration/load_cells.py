@@ -1,6 +1,10 @@
+from __future__ import annotations
+
 from typing import Annotated, List, Literal, Optional
 
+import numpy as np
 from pydantic import BaseModel, Field, field_validator
+from sklearn.linear_model import LinearRegression
 
 from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import AindBehaviorRigModel, HarpLoadCells
@@ -38,6 +42,18 @@ class LoadCellCalibrationInput(BaseModel):
     )
 
 
+class LoadCellCalibrationOutput(BaseModel):
+    channel: LoadCellChannel
+    offset: Optional[LoadCellOffset] = Field(
+        default=None, title="Load cell offset applied to the wheatstone bridge circuit"
+    )
+    baseline: Optional[float] = Field(default=None, title="Load cell baseline that will be DSP subtracted")
+    slope: Optional[float] = Field(
+        default=None, title="Load cell slope that will be used to convert adc units to weight (g)."
+    )
+    weight_lookup: List[MeasuredWeight] = Field(default=[], title="Load cell weight lookup calibration table")
+
+
 class LoadCellsCalibrationInput(BaseModel):
     channels: List[LoadCellCalibrationInput] = Field(
         default=[], title="Load cells calibration data", validate_default=True
@@ -51,12 +67,32 @@ class LoadCellsCalibrationInput(BaseModel):
             raise ValueError("Channels must be unique.")
         return values
 
+    @classmethod
+    def calibrate_loadcell_output(cls, value: LoadCellCalibrationInput) -> "LoadCellCalibrationOutput":
+        x = np.array([m.weight for m in value.weight_measurement])
+        y = np.array([m.baseline for m in value.weight_measurement])
 
-class LoadCellCalibrationOutput(BaseModel):
-    channel: LoadCellChannel
-    offset: Optional[LoadCellOffset] = Field(default=None, title="Load cell offset")
-    baseline: Optional[float] = Field(default=None, title="Load cell baseline")
-    weight_lookup: List[MeasuredWeight] = Field(default=[], title="Load cell weight lookup calibration table")
+        # Calculate the linear regression
+        model = LinearRegression()
+        model.fit(x.reshape(-1, 1), y)
+        return LoadCellCalibrationOutput(
+            channel=value.channel,
+            offset=cls.get_optimum_offset(value.offset_measurement),
+            baseline=model.intercept_,
+            slope=model.coef_[0],
+            weight_lookup=value.weight_measurement,
+        )
+
+    @staticmethod
+    def get_optimum_offset(value: Optional[List[MeasuredOffset]]) -> Optional[LoadCellOffset]:
+        if not value:
+            return None
+        if len(value) == 0:
+            return None
+        return value[np.argmin([m.baseline for m in value])].offset
+
+    def calibrate_output(self) -> LoadCellsCalibrationOutput:
+        return LoadCellsCalibrationOutput(channels=[self.calibrate_loadcell_output(c) for c in self.channels])
 
 
 class LoadCellsCalibrationOutput(BaseModel):
