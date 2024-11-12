@@ -166,6 +166,8 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
     
         private double? _baseline;
     
+        private double? _slope;
+    
         private System.Collections.Generic.List<MeasuredWeight> _weightLookup = new System.Collections.Generic.List<MeasuredWeight>();
     
         public LoadCellCalibrationOutput()
@@ -177,6 +179,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
             _channel = other._channel;
             _offset = other._offset;
             _baseline = other._baseline;
+            _slope = other._slope;
             _weightLookup = other._weightLookup;
         }
     
@@ -226,6 +229,20 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("slope")]
+        public double? Slope
+        {
+            get
+            {
+                return _slope;
+            }
+            set
+            {
+                _slope = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("weight_lookup")]
         public System.Collections.Generic.List<MeasuredWeight> WeightLookup
         {
@@ -254,6 +271,7 @@ namespace AindBehaviorServices.LoadCellsCalibrationRig
             stringBuilder.Append("channel = " + _channel + ", ");
             stringBuilder.Append("offset = " + _offset + ", ");
             stringBuilder.Append("baseline = " + _baseline + ", ");
+            stringBuilder.Append("slope = " + _slope + ", ");
             stringBuilder.Append("weight_lookup = " + _weightLookup);
             return true;
         }
