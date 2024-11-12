@@ -17,7 +17,7 @@ namespace AindBehaviorServices.OlfactometerCalibrationLogic
     
         private double? _rngSeed;
     
-        private string _aindBehaviorServicesPkgVersion = "0.8.6";
+        private string _aindBehaviorServicesPkgVersion = "0.8.7";
     
         private System.Collections.Generic.IDictionary<string, OlfactometerChannelConfig> _channelConfig;
     
