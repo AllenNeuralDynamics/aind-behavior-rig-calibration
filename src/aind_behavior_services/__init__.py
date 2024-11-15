@@ -1,4 +1,4 @@
-__version__ = "0.8.7"
+__version__ = "0.8.8"
 
 from .rig import AindBehaviorRigModel  # noqa: F401
 from .session import AindBehaviorSessionModel  # noqa: F401
