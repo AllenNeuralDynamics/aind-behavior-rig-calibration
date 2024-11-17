@@ -12,6 +12,7 @@ winget install -e --id Nvidia.GeForceExperience -v 3.26.0.160 @autoaccept
 winget install -e --id Nvidia.CUDA -v 11.3 @autoaccept
 winget install -e --id Notepad++.Notepad++ @autoaccept
 winget install --id=Microsoft.DotNet.SDK.8  -e @autoaccept
+winget install --id=astral-sh.uv  -e @autoaccept
 
 ## Install dotnet tools
 
