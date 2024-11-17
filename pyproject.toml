@@ -33,7 +33,7 @@ Changelog = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/relea
 
 [project.optional-dependencies]
 
-linters = [
+dev = [
     'ruff',
     'codespell'
 ]
@@ -73,5 +73,5 @@ mccabe = { max-complexity = 14 }
 pydocstyle = { convention = 'google' }
 
 [tool.codespell]
-skip = '.git,*.pdf,*.svg,./bonsai,*.bonsai,./docs/_build'
+skip = '.git,*.pdf,*.svg,./bonsai,*.bonsai,./docs/_build,uv.lock'
 ignore-words-list = 'nd'
