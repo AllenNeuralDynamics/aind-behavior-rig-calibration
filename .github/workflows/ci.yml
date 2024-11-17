@@ -48,7 +48,11 @@ jobs:
       - name: Setup Bonsai
         working-directory: bonsai
         run: .\Setup.ps1
-
+      - name: Upload Bonsai Files
+        uses: actions/upload-artifact@v3
+        with:
+          name: bonsai-files
+          path: bonsai
   tests:
     runs-on: windows-latest
     name: Testing ${{ matrix.python-version }}
@@ -59,6 +63,10 @@ jobs:
         python-version: ['3.11', '3.12', '3.13']
     steps:
       - uses: actions/checkout@v4
+      - name: Download Bonsai Files
+        uses: actions/download-artifact@v3
+        with:
+          name: bonsai-files
 
       - uses: astral-sh/setup-uv@v3
         with:
