@@ -69,12 +69,8 @@ jobs:
           name: bonsai-files
           path: bonsai-files
 
-      - name: List all files and directories
-        run: Get-ChildItem -Recurse -Path . -Force
-
       - name: Move Bonsai Files
         run: |
-          mkdir bonsai
           move bonsai-files\* bonsai
 
       - uses: astral-sh/setup-uv@v3
