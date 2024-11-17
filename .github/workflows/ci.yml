@@ -70,7 +70,7 @@ jobs:
           path: bonsai-files
 
       - name: List all files and directories
-        run: dir /s /b
+        run: Get-ChildItem -Recurse -Path . -Force
 
       - name: Move Bonsai Files
         run: |
