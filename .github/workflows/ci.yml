@@ -58,7 +58,7 @@ jobs:
       - name: Run tests
         run: uv run -m unittest
       - name: Regenerate schemas
-        run: regenerate
+        run: uv run regenerate
       - name: Check for uncommitted changes
         run: |
           git config --global core.safecrlf false
