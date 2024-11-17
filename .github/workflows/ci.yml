@@ -67,8 +67,15 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: bonsai-files
+          path: bonsai-files
+
+      - name: List all files and directories
+        run: dir /s /b
+
       - name: Move Bonsai Files
-        run: move bonsai-files\* bonsai
+        run: |
+          mkdir bonsai
+          move bonsai-files\* bonsai
 
       - uses: astral-sh/setup-uv@v3
         with:
