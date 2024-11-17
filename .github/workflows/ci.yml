@@ -34,11 +34,11 @@ jobs:
       - name: Run codespell
         run : uv run codespell .
 
-  tests:
+  setup-bonsai:
     runs-on: windows-latest
+    name: Setup Bonsai
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4.0.0
         with:
@@ -49,11 +49,23 @@ jobs:
         working-directory: bonsai
         run: .\Setup.ps1
 
+  tests:
+    runs-on: windows-latest
+    name: Testing ${{ matrix.python-version }}
+    needs: setup-bonsai
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+
       - uses: astral-sh/setup-uv@v3
         with:
           enable-cache: true
-      - name: Set up Python
-        run: uv python install
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: uv sync --extra dev
