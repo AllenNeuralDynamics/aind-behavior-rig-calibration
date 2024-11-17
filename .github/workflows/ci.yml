@@ -69,12 +69,10 @@ jobs:
           name: bonsai-files
           path: bonsai-files
 
-      - name: Move Bonsai Files
+      - name: Remove and Move Bonsai Files
         run: |
+          Remove-Item -Recurse -Force bonsai\*
           move bonsai-files\* bonsai
-
-      - name: List all files and directories
-        run: Get-ChildItem -Recurse -Path . -Force
 
       - uses: astral-sh/setup-uv@v3
         with:
