@@ -74,6 +74,10 @@ jobs:
           Remove-Item -Recurse -Force bonsai\*
           move bonsai-files\* bonsai
 
+      - name: Add .NET tools to PATH
+        run: |
+          $env:PATH += ";C:\Users\runner\.dotnet\tools"
+
       - uses: astral-sh/setup-uv@v3
         with:
           enable-cache: true
