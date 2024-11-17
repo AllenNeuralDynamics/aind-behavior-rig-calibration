@@ -1,5 +1,11 @@
 # aind-behavior-services
 
+![CI](https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/actions/workflows/ci.yml/badge.svg)
+[![PyPI - Version](https://img.shields.io/pypi/v/aind-behavior-experiment-launcher)](https://pypi.org/project/aind-behavior-experiment-launcher/)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
+[![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+
 A repository containing code for data acquisition and processing for AIND behavior rigs.
 
 ---
@@ -59,6 +65,10 @@ We use [ruff](https://docs.astral.sh/ruff/) as our primary linting tool.
 
 Attempt to add tests when new features are added.
 To run the currently available tests, run `python -m unittest` from the root of the repository.
+
+### Lock files
+
+We use [uv](https://docs.astral.sh/uv/) to manage our lock files.
 
 ### Versioning
 
