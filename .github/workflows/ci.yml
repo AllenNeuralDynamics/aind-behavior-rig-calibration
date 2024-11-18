@@ -39,20 +39,26 @@ jobs:
     name: Setup Bonsai
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4.0.0
         with:
-          dotnet-version: 7.x
+          dotnet-version: 8.x
+
       - name: Restore dotnet tools
         run: dotnet tool restore
+
       - name: Setup Bonsai
         working-directory: bonsai
         run: .\Setup.ps1
+
       - name: Upload Bonsai Files
         uses: actions/upload-artifact@v3
         with:
-          name: bonsai-files
+          name: bonsai-environment
           path: bonsai
+
+
   tests:
     runs-on: windows-latest
     name: Testing ${{ matrix.python-version }}
@@ -63,20 +69,25 @@ jobs:
         python-version: ['3.11', '3.12', '3.13']
     steps:
       - uses: actions/checkout@v4
-      - name: Download Bonsai Files
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v4.0.0
+        with:
+          dotnet-version: 8.x
+
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+
+      - name: Download Bonsai artifact
         uses: actions/download-artifact@v3
         with:
-          name: bonsai-files
-          path: bonsai-files
+          name: bonsai-environment
+          path: bonsai-environment
 
       - name: Remove and Move Bonsai Files
         run: |
           Remove-Item -Recurse -Force bonsai\*
-          move bonsai-files\* bonsai
-
-      - name: Add .NET tools to PATH
-        run: |
-          $env:PATH += ";C:\Users\runner\.dotnet\tools"
+          move bonsai-environment\* bonsai
 
       - uses: astral-sh/setup-uv@v3
         with:
