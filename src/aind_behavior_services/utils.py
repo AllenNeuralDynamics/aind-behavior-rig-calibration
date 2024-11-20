@@ -419,8 +419,19 @@ def format_datetime(value: datetime.datetime, is_tz_strict: bool = False) -> str
         return value.strftime("%Y-%m-%dT%H%M%S%z")
 
 
+def now() -> datetime.datetime:
+    """Returns the current time as a timezone unaware datetime."""
+    return datetime.datetime.now()
+
+
 def utcnow() -> datetime.datetime:
+    """Returns the current time as a timezone aware datetime in UTC."""
     return datetime.datetime.now(datetime.timezone.utc)
+
+
+def tznow() -> datetime.datetime:
+    """Returns the current time as a timezone aware datetime in the local timezone."""
+    return utcnow().astimezone()
 
 
 def model_from_json_file(json_path: os.PathLike | str, model: type[TModel]) -> TModel:
