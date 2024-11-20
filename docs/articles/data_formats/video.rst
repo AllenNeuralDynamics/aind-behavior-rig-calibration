@@ -64,22 +64,16 @@ or
 - Acquire without any gamma correction
 - Use ``ffmpeg`` with the following encoding codec string for online encoding (optimized for compression quality and speed):
 
-  .. note::
-     This pipeline has been designed and tested with monochrome videos with the raw pixel format ``gray``. For color videos, the arguments might need to be altered to match the color space of the input.
-
-  - output arguments: ``-vf "scale=out_color_matrix=bt709:out_range=full,format=bgr24,scale=out_range=full" -c:v h264_nvenc -pix_fmt yuv420p -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M``
+  Note: this has been tested with monochrome videos with the raw pixel format
+  ``gray``. For color videos, the input arguments might need to be altered to
+  match the color space of the input.
+  
+  - output arguments: ``-vf "scale=out_color_matrix=bt709:out_range=full" -c:v h264_nvenc -pix_fmt nv12 -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M``
   - input_arguments: ``-colorspace bt709 -color_primaries bt709 -color_range full -color_trc linear``
 
 and the following encoding codec string for offline re-encoding (optimized for quality and size):
 
 - output arguments: ``-vf "scale=out_color_matrix=bt709:out_range=full:sws_dither=none,format=yuv420p10le,colorspace=ispace=bt709:all=bt709:dither=none,scale=out_range=tv:sws_dither=none,format=yuv420p" -c:v libx264 -preset veryslow -crf 18 -pix_fmt yuv420p -metadata author="Allen Institute for Neural Dynamics" -movflags +faststart+write_colr``
-
-.. warning::
-
-  For higher bit depth (more than 8 bit) recordings, change the output arguments of the online, first stage, encoding to be as follows:
-    - output arguments: ``-vf "scale=out_color_matrix=bt709:out_range=full,format=rgb48le,scale=out_range=full" -c:v h264_nvenc -pix_fmt yuv420p -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M``
-
-This is almost the same, except the intermediate color representation is 48 bits per pixel instead of 24.
 
 Application notes
 #####################
