@@ -77,7 +77,7 @@ and the following encoding codec string for offline re-encoding (optimized for q
 .. warning::
 
   For higher bit depth (more than 8 bit) recordings, change the output arguments of the online, first stage, encoding to be as follows:
-    - output arguments: ``-vf "scale=out_color_matrix=bt709:out_range=full,format=rgb48le,scale=out_range=full" -c:v h264_nvenc -pix_fmt yuv420p -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M``
+    - output arguments: ``-vf "scale=out_color_matrix=bt709:out_range=full,format=rgb48le,scale=out_range=full" -c:v h264_nvenc -pix_fmt yuv420p10le -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M``
 
 This is almost the same, except the intermediate color representation is 48 bits per pixel instead of 24.
 
