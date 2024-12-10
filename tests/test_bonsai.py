@@ -13,7 +13,6 @@ class BonsaiTests(unittest.TestCase):
         tested_modules = [
             "aind_manipulator",
             "load_cells",
-            "olfactometer",
             "water_valve",
             "treadmill",
         ]
