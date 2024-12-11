@@ -2,22 +2,20 @@
 <WorkflowBuilder Version="2.8.5"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
-                 xmlns:p1="clr-namespace:AindBehaviorServices.OlfactometerCalibrationLogic;assembly=Extensions"
-                 xmlns:p2="clr-namespace:AindBehaviorServices.OlfactometerCalibrationRig;assembly=Extensions"
+                 xmlns:p1="clr-namespace:AindBehaviorServices.LoadCellsCalibrationLogic;assembly=Extensions"
+                 xmlns:p2="clr-namespace:AindBehaviorServices.LoadCellsCalibrationRig;assembly=Extensions"
                  xmlns:p3="clr-namespace:AindBehaviorServices.AindBehaviorSession;assembly=Extensions"
-                 xmlns:p4="clr-namespace:AindBehaviorServices.LoadCellsCalibrationLogic;assembly=Extensions"
-                 xmlns:p5="clr-namespace:AindBehaviorServices.LoadCellsCalibrationRig;assembly=Extensions"
-                 xmlns:p6="clr-namespace:AindBehaviorServices.AindManipulatorCalibrationLogic;assembly=Extensions"
-                 xmlns:p7="clr-namespace:AindBehaviorServices.AindManipulatorCalibrationRig;assembly=Extensions"
-                 xmlns:p8="clr-namespace:AindBehaviorServices.WaterValveCalibrationLogic;assembly=Extensions"
-                 xmlns:p9="clr-namespace:AindBehaviorServices.WaterValveCalibrationRig;assembly=Extensions"
-                 xmlns:p10="clr-namespace:AindBehaviorServices.TreadmillCalibrationLogic;assembly=Extensions"
-                 xmlns:p11="clr-namespace:AindBehaviorServices.TreadmillCalibrationRig;assembly=Extensions"
+                 xmlns:p4="clr-namespace:AindBehaviorServices.AindManipulatorCalibrationLogic;assembly=Extensions"
+                 xmlns:p5="clr-namespace:AindBehaviorServices.AindManipulatorCalibrationRig;assembly=Extensions"
+                 xmlns:p6="clr-namespace:AindBehaviorServices.WaterValveCalibrationLogic;assembly=Extensions"
+                 xmlns:p7="clr-namespace:AindBehaviorServices.WaterValveCalibrationRig;assembly=Extensions"
+                 xmlns:p8="clr-namespace:AindBehaviorServices.TreadmillCalibrationLogic;assembly=Extensions"
+                 xmlns:p9="clr-namespace:AindBehaviorServices.TreadmillCalibrationRig;assembly=Extensions"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
       <Expression xsi:type="rx:Defer">
-        <Name>olfactometer</Name>
+        <Name>load_cells</Name>
         <Workflow>
           <Nodes>
             <Expression xsi:type="ExternalizedMapping">
@@ -26,9 +24,9 @@
               <Property Name="SessionPath" />
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\LoadSchemas.bonsai">
-              <TaskLogicPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\olfactometer_calibration_logic.json</TaskLogicPath>
-              <RigPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\olfactometer_rig.json</RigPath>
-              <SessionPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\olfactometer_session.json</SessionPath>
+              <TaskLogicPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\load_cells_calibration_logic.json</TaskLogicPath>
+              <RigPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\load_cells_rig.json</RigPath>
+              <SessionPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\load_cells_session.json</SessionPath>
             </Expression>
             <Expression xsi:type="GroupWorkflow">
               <Name>DeserializeSchemas</Name>
@@ -99,7 +97,7 @@
         </Workflow>
       </Expression>
       <Expression xsi:type="rx:Defer">
-        <Name>load_cells</Name>
+        <Name>aind_manipulator</Name>
         <Workflow>
           <Nodes>
             <Expression xsi:type="ExternalizedMapping">
@@ -108,9 +106,9 @@
               <Property Name="SessionPath" />
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\LoadSchemas.bonsai">
-              <TaskLogicPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\load_cells_calibration_logic.json</TaskLogicPath>
-              <RigPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\load_cells_rig.json</RigPath>
-              <SessionPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\load_cells_session.json</SessionPath>
+              <TaskLogicPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\aind_manipulator_calibration_logic.json</TaskLogicPath>
+              <RigPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\aind_manipulator_rig.json</RigPath>
+              <SessionPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\aind_manipulator_session.json</SessionPath>
             </Expression>
             <Expression xsi:type="GroupWorkflow">
               <Name>DeserializeSchemas</Name>
@@ -181,7 +179,7 @@
         </Workflow>
       </Expression>
       <Expression xsi:type="rx:Defer">
-        <Name>aind_manipulator</Name>
+        <Name>water_valve</Name>
         <Workflow>
           <Nodes>
             <Expression xsi:type="ExternalizedMapping">
@@ -190,9 +188,9 @@
               <Property Name="SessionPath" />
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\LoadSchemas.bonsai">
-              <TaskLogicPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\aind_manipulator_calibration_logic.json</TaskLogicPath>
-              <RigPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\aind_manipulator_rig.json</RigPath>
-              <SessionPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\aind_manipulator_session.json</SessionPath>
+              <TaskLogicPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\water_valve_calibration_logic.json</TaskLogicPath>
+              <RigPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\water_valve_rig.json</RigPath>
+              <SessionPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\water_valve_session.json</SessionPath>
             </Expression>
             <Expression xsi:type="GroupWorkflow">
               <Name>DeserializeSchemas</Name>
@@ -263,7 +261,7 @@
         </Workflow>
       </Expression>
       <Expression xsi:type="rx:Defer">
-        <Name>water_valve</Name>
+        <Name>treadmill</Name>
         <Workflow>
           <Nodes>
             <Expression xsi:type="ExternalizedMapping">
@@ -272,9 +270,9 @@
               <Property Name="SessionPath" />
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\LoadSchemas.bonsai">
-              <TaskLogicPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\water_valve_calibration_logic.json</TaskLogicPath>
-              <RigPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\water_valve_rig.json</RigPath>
-              <SessionPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\water_valve_session.json</SessionPath>
+              <TaskLogicPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\treadmill_calibration_logic.json</TaskLogicPath>
+              <RigPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\treadmill_rig.json</RigPath>
+              <SessionPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\treadmill_session.json</SessionPath>
             </Expression>
             <Expression xsi:type="GroupWorkflow">
               <Name>DeserializeSchemas</Name>
@@ -300,88 +298,6 @@
                   </Expression>
                   <Expression xsi:type="p9:DeserializeFromJson">
                     <p9:Type xsi:type="TypeMapping" TypeArguments="p9:CalibrationRig" />
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Take">
-                      <rx:Count>1</rx:Count>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="rx:AsyncSubject">
-                    <Name>RigSchema</Name>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>RawSessionSchema</Name>
-                  </Expression>
-                  <Expression xsi:type="p3:DeserializeFromJson">
-                    <p3:Type xsi:type="TypeMapping" TypeArguments="p3:AindBehaviorSessionModel" />
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Take">
-                      <rx:Count>1</rx:Count>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="rx:AsyncSubject">
-                    <Name>SessionSchema</Name>
-                  </Expression>
-                </Nodes>
-                <Edges>
-                  <Edge From="0" To="1" Label="Source1" />
-                  <Edge From="1" To="2" Label="Source1" />
-                  <Edge From="2" To="3" Label="Source1" />
-                  <Edge From="3" To="4" Label="Source1" />
-                  <Edge From="5" To="6" Label="Source1" />
-                  <Edge From="6" To="7" Label="Source1" />
-                  <Edge From="7" To="8" Label="Source1" />
-                  <Edge From="9" To="10" Label="Source1" />
-                  <Edge From="10" To="11" Label="Source1" />
-                  <Edge From="11" To="12" Label="Source1" />
-                </Edges>
-              </Workflow>
-            </Expression>
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-          </Edges>
-        </Workflow>
-      </Expression>
-      <Expression xsi:type="rx:Defer">
-        <Name>treadmill</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="ExternalizedMapping">
-              <Property Name="TaskLogicPath" />
-              <Property Name="RigPath" />
-              <Property Name="SessionPath" />
-            </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\LoadSchemas.bonsai">
-              <TaskLogicPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\treadmill_calibration_logic.json</TaskLogicPath>
-              <RigPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\treadmill_rig.json</RigPath>
-              <SessionPath>C:\git\AllenNeuralDynamics\Aind.Behavior.Services\local\treadmill_session.json</SessionPath>
-            </Expression>
-            <Expression xsi:type="GroupWorkflow">
-              <Name>DeserializeSchemas</Name>
-              <Workflow>
-                <Nodes>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>RawTaskLogicSchema</Name>
-                  </Expression>
-                  <Expression xsi:type="p10:DeserializeFromJson">
-                    <p10:Type xsi:type="TypeMapping" TypeArguments="p10:CalibrationLogic" />
-                  </Expression>
-                  <Expression xsi:type="rx:AsyncSubject">
-                    <Name>TaskLogicSchema</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>TaskParameters</Selector>
-                  </Expression>
-                  <Expression xsi:type="rx:AsyncSubject">
-                    <Name>TaskLogicParameters</Name>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>RawRigSchema</Name>
-                  </Expression>
-                  <Expression xsi:type="p11:DeserializeFromJson">
-                    <p11:Type xsi:type="TypeMapping" TypeArguments="p11:CalibrationRig" />
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Take">
