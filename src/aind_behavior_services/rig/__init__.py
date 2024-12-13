@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from enum import Enum, IntEnum, auto
-from typing import Annotated, Dict, Generic, List, Literal, Optional, TypeVar, Union
+from typing import Annotated, Any, Dict, Generic, List, Literal, Optional, TypeVar, Union
 
 from pydantic import BaseModel, Field, field_validator
 from typing_extensions import TypeAliasType
@@ -16,16 +16,53 @@ class Device(BaseModel):
     calibration: Optional[BaseModel] = Field(default=None, description="Calibration")
 
 
+_FFMPEG_OUTPUT_8BIT = '-vf "scale=out_color_matrix=bt709:out_range=full,format=bgr24,scale=out_range=full" -c:v h264_nvenc -pix_fmt yuv420p -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M'
+
+_FFMPEG_OUTPUT_16BIT = '-vf "scale=out_color_matrix=bt709:out_range=full,format=rgb48le,scale=out_range=full" -c:v hevc_nvenc -pix_fmt p010le -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M'
+
+_FFMPEG_INPUT = "-colorspace bt709 -color_primaries bt709 -color_range full -color_trc linear"
+
+
+class VideoWriterFfmpegFactory:
+    def __init__(self, bit_depth: Literal[8, 16] = 8, video_writer_ffmpeg_kwargs: Dict[str, Any] = None):
+        self._bit_depth = bit_depth
+        self.video_writer_ffmpeg_kwargs = video_writer_ffmpeg_kwargs or {}
+        self._output_arguments: str
+        self._input_arguments: str
+        self._solve_strings()
+
+    def _solve_strings(self):
+        if self._bit_depth == 8:
+            self._output_arguments = _FFMPEG_OUTPUT_8BIT
+        elif self._bit_depth == 16:
+            self._output_arguments = _FFMPEG_OUTPUT_16BIT
+        else:
+            raise ValueError(f"Bit depth {self._bit_depth} not supported")
+        self._input_arguments = _FFMPEG_INPUT
+
+    def construct_video_writer_ffmpeg(self) -> VideoWriterFfmpeg:
+        return VideoWriterFfmpeg(
+            output_arguments=self._output_arguments,
+            input_arguments=self._input_arguments,
+            **self.video_writer_ffmpeg_kwargs,
+        )
+
+    def update_video_writer_ffmpeg_kwargs(self, video_writer: VideoWriterFfmpeg):
+        return video_writer.model_copy(
+            update={"output_arguments": self._output_arguments, "input_arguments": self._input_arguments}
+        )
+
+
 class VideoWriterFfmpeg(BaseModel):
     video_writer_type: Literal["FFMPEG"] = Field(default="FFMPEG")
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
     container_extension: str = Field(default="mp4", description="Container extension")
     output_arguments: str = Field(
-        default='-vf "scale=out_color_matrix=bt709:out_range=full,format=bgr24,scale=out_range=full" -c:v h264_nvenc -pix_fmt yuv420p -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M',  # E501
+        default=_FFMPEG_OUTPUT_8BIT,
         description="Output arguments",
     )
     input_arguments: str = Field(
-        default="-colorspace bt709 -color_primaries bt709 -color_range full -color_trc linear",
+        default=_FFMPEG_INPUT,
         description="Input arguments",
     )
 
