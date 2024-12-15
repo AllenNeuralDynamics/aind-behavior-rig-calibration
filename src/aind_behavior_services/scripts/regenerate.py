@@ -4,7 +4,6 @@ from pathlib import Path
 from aind_behavior_services import db_utils
 from aind_behavior_services.calibration import aind_manipulator as m
 from aind_behavior_services.calibration import load_cells as lc
-from aind_behavior_services.calibration import olfactometer as olf
 from aind_behavior_services.calibration import treadmill as treadmill
 from aind_behavior_services.calibration import water_valve as wv
 from aind_behavior_services.data_types import DataTypes
@@ -22,12 +21,10 @@ NAMESPACE_PREFIX = "AindBehaviorServices"
 
 def main():
     models = [
-        olf.CalibrationLogic,
         wv.CalibrationLogic,
         lc.CalibrationLogic,
         m.CalibrationLogic,
         treadmill.CalibrationLogic,
-        olf.CalibrationRig,
         wv.CalibrationRig,
         lc.CalibrationRig,
         m.CalibrationRig,
