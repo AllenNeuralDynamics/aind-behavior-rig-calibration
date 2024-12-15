@@ -74,4 +74,4 @@ pydocstyle = { convention = 'google' }
 
 [tool.codespell]
 skip = '.git,*.pdf,*.svg,./bonsai,*.bonsai,./docs/_build,uv.lock'
-ignore-words-list = 'nd'
+ignore-words-list = 'nd, assertIn'
