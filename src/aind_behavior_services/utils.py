@@ -460,7 +460,7 @@ _ISearchableTypeChecker = tuple(get_args(ISearchable))  # pre-compute for perfor
 def get_fields_of_type(
     searchable: ISearchable,
     target_type: Type[T],
-    *args,
+    *,
     recursive: bool = True,
     stop_recursion_on_type: bool = True,
     **kwargs,
