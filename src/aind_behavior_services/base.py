@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import warnings
 from os import PathLike
 from typing import Any, Callable, Literal, Optional, get_args
 
@@ -76,8 +75,8 @@ def coerce_schema_version(
 
     semver = Version.parse(v)
     if semver != _default_schema_version:
-        warnings.warn(
-            f"Deserialized versioned field {semver}, expected {_default_schema_version}). Will attempt to coerce."
+        logger.warning(
+            f"Deserialized versioned field {semver}, expected {_default_schema_version}. Will attempt to coerce."
         )
         if check_compatibility:
             if semver.major == 0:  # Assume that 0.x.y versions are compatible within X
