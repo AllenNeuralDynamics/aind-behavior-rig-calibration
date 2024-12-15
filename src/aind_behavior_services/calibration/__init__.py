@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import datetime
+import logging
 from typing import Optional
 
 from pydantic import BaseModel, Field
+
+logger = logging.getLogger(__name__)
 
 
 class Calibration(BaseModel):

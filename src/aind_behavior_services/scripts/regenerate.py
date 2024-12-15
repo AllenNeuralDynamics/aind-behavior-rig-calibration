@@ -1,4 +1,5 @@
 import inspect
+import logging
 from pathlib import Path
 
 from aind_behavior_services import db_utils
@@ -13,6 +14,8 @@ from aind_behavior_services.utils import (
     pascal_to_snake_case,
     snake_to_pascal_case,
 )
+
+logger = logging.getLogger(__name__)
 
 SCHEMA_ROOT = Path("./src/schemas")
 EXTENSIONS_ROOT = Path("./src/Extensions/")

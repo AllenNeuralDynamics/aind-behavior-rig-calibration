@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 from enum import Enum, IntEnum, auto
 from typing import Annotated, Any, Dict, Generic, List, Literal, Optional, TypeVar, Union
@@ -8,6 +9,9 @@ from pydantic import BaseModel, Field, field_validator
 from typing_extensions import TypeAliasType
 
 from aind_behavior_services.base import SchemaVersionedModel
+from aind_behavior_services.utils import get_fields_of_type
+
+logger = logging.getLogger(__name__)
 
 
 class Device(BaseModel):
@@ -433,6 +437,7 @@ HarpDevice = TypeAliasType(
             HarpStepperDriver,
             HarpEnvironmentSensor,
             HarpWhiteRabbit,
+            HarpDeviceGeneric,
         ],
         Field(discriminator="device_type"),
     ],
@@ -516,3 +521,17 @@ class Screen(Device):
 class AindBehaviorRigModel(SchemaVersionedModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
+
+
+TRig = TypeVar("TRig", bound=AindBehaviorRigModel)
+
+
+def validate_harp_clock_output(rig: TRig) -> TRig:
+    harp_devices = get_fields_of_type(rig, HarpDeviceGeneric)
+    if len(harp_devices) < 2:
+        return rig
+    n_clock_targets = len(harp_devices) - 1
+    clock_outputs = get_fields_of_type(rig, ConnectedClockOutput)
+    if len(clock_outputs) != n_clock_targets:
+        raise ValueError(f"Expected {n_clock_targets} clock outputs, got {len(clock_outputs)}")
+    return rig

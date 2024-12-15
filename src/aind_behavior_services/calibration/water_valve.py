@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import Annotated, Dict, List, Literal, Optional
 
 import numpy as np
@@ -9,6 +10,8 @@ from sklearn.linear_model import LinearRegression
 from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import AindBehaviorRigModel
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
+
+logger = logging.getLogger(__name__)
 
 TASK_LOGIC_VERSION = "0.4.0"
 RIG_VERSION = "0.0.0"

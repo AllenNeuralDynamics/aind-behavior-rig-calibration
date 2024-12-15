@@ -1,12 +1,15 @@
 # Import core types
 from __future__ import annotations
 
+import logging
 from enum import Enum
 from typing import Annotated, List, Literal, Optional, Self, Union
 
 # Import aind-datas-schema types
 from pydantic import BaseModel, Field, NonNegativeFloat, field_validator, model_validator
 from typing_extensions import TypeAliasType
+
+logger = logging.getLogger(__name__)
 
 
 class TruncationParameters(BaseModel):

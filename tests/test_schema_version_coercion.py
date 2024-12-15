@@ -1,5 +1,4 @@
 import unittest
-import warnings
 from typing import Literal
 
 from pydantic import Field, ValidationError
@@ -49,29 +48,29 @@ class SchemaVersionCoercionTest(unittest.TestCase):
     def test_version_update_forwards_coercion(self):
         pre_instance = AindBehaviorTaskLogicModelPre()
         post_instance = AindBehaviorTaskLogicModelPost()
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
+        with self.assertLogs(None, level="WARNING") as cm:
             pre_updated = AindBehaviorTaskLogicModelPost.model_validate_json(pre_instance.model_dump_json())
+            self.assertIn("Deserialized versioned field 0.0.1, expected 0.0.2. Will attempt to coerce.", cm.output[0])
             self.assertEqual(pre_updated.version, post_instance.version, "Schema version was not coerced correctly.")
 
     def test_version_update_backwards_coercion(self):
         post_instance = AindBehaviorTaskLogicModelPost()
         major_post_instance = AindBehaviorTaskLogicModelMajorPost()
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            AindBehaviorTaskLogicModelPre.model_validate_json(
-                post_instance.model_dump_json()
-            ).version == AindBehaviorTaskLogicModelPre().version
+        with self.assertLogs(None, level="WARNING") as cm:
+            self.assertEqual(
+                AindBehaviorTaskLogicModelPre.model_validate_json(post_instance.model_dump_json()).version,
+                AindBehaviorTaskLogicModelPre().version,
+            )
+            self.assertIn("Deserialized versioned field 0.0.2, expected 0.0.1. Will attempt to coerce.", cm.output[0])
             with self.assertRaises(ValidationError) as _:
                 AindBehaviorTaskLogicModelPre.model_validate_json(major_post_instance.model_dump_json())
 
     def test_pkg_version_update_forwards_coercion(self):
         pre_instance = SchemaVersionedModelPre()
         post_instance = SchemaVersionedModelPost()
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
+        with self.assertLogs(None, level="WARNING") as cm:
             pre_updated = SchemaVersionedModelPost.model_validate_json(pre_instance.model_dump_json())
-
+            self.assertIn("Deserialized versioned field 0.1.0, expected 0.1.1. Will attempt to coerce.", cm.output[0])
             self.assertEqual(
                 pre_updated.aind_behavior_services_pkg_version,
                 post_instance.aind_behavior_services_pkg_version,
@@ -81,11 +80,12 @@ class SchemaVersionCoercionTest(unittest.TestCase):
     def test_pkg_version_update_backwards_coercion(self):
         post_instance = SchemaVersionedModelPost()
         major_post_instance = SchemaVersionedModelMajorPost()
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            SchemaVersionedModelPre.model_validate_json(
-                post_instance.model_dump_json()
-            ).version == SchemaVersionedModelPre().version
+        with self.assertLogs(None, level="WARNING") as cm:
+            self.assertEqual(
+                SchemaVersionedModelPre.model_validate_json(post_instance.model_dump_json()).version,
+                SchemaVersionedModelPre().version,
+            )
+            self.assertIn("Deserialized versioned field 0.1.1, expected 0.1.0. Will attempt to coerce.", cm.output[0])
             with self.assertRaises(ValidationError) as _:
                 SchemaVersionedModelPre.model_validate_json(major_post_instance.model_dump_json())
 
