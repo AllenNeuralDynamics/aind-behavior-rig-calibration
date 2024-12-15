@@ -8,8 +8,9 @@ from os import PathLike
 from pathlib import Path
 from string import capwords
 from subprocess import CompletedProcess, run
-from typing import Any, Dict, List, Optional, Type, TypeVar, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Type, TypeVar, Union, get_args
 
+import pydantic
 from pydantic import BaseModel, PydanticInvalidForJsonSchema
 from pydantic.json_schema import (
     GenerateJsonSchema,
@@ -19,6 +20,8 @@ from pydantic.json_schema import (
     models_json_schema,
 )
 from pydantic_core import PydanticOmit, core_schema, to_jsonable_python
+
+T = TypeVar("T")
 
 TModel = TypeVar("TModel", bound=BaseModel)
 
@@ -356,10 +359,11 @@ def run_bonsai_process(
     timeout: Optional[float] = None,
     print_cmd: bool = False,
 ) -> CompletedProcess:
-
     if not Path(bonsai_exe).exists():
         has_setup = (Path(bonsai_exe).parent / "setup.ps1").exists()
-        m = f"Bonsai executable not found at {bonsai_exe}." + (" A 'setup.ps1' file exists in the target directory, consider running it." if has_setup else "")
+        m = f"Bonsai executable not found at {bonsai_exe}." + (
+            " A 'setup.ps1' file exists in the target directory, consider running it." if has_setup else ""
+        )
         raise FileNotFoundError(m)
 
     output_cmd = _build_bonsai_process_command(
@@ -443,3 +447,45 @@ def tznow() -> datetime.datetime:
 def model_from_json_file(json_path: os.PathLike | str, model: type[TModel]) -> TModel:
     with open(Path(json_path), "r", encoding="utf-8") as file:
         return model.model_validate_json(file.read())
+
+
+ISearchable = Union[pydantic.BaseModel, Dict, List]
+_ISearchableTypeChecker = tuple(get_args(ISearchable))  # pre-compute for performance
+
+
+def get_fields_of_type(
+    searchable: ISearchable,
+    target_type: Type[T],
+    *args,
+    recursive: bool = True,
+    stop_recursion_on_type: bool = True,
+    **kwargs,
+) -> List[Tuple[Optional[str], T]]:
+    _iterable: Iterable
+    _is_type: bool
+    result: List[Tuple[Optional[str], T]] = []
+
+    if isinstance(searchable, dict):
+        _iterable = searchable.items()
+    elif isinstance(searchable, list):
+        _iterable = list(zip([None for _ in range(len(searchable))], searchable))
+    elif isinstance(searchable, pydantic.BaseModel):
+        _iterable = {k: getattr(searchable, k) for k in searchable.model_fields.keys()}.items()
+    else:
+        raise ValueError(f"Unsupported model type: {type(searchable)}")
+
+    for name, field in _iterable:
+        _is_type = False
+        if isinstance(field, target_type):
+            result.append((name, field))
+            _is_type = True
+        if recursive and isinstance(field, _ISearchableTypeChecker) and not (stop_recursion_on_type and _is_type):
+            result.extend(
+                get_fields_of_type(
+                    field,
+                    target_type,
+                    recursive=recursive,
+                    stop_recursion_on_type=stop_recursion_on_type,
+                )
+            )
+    return result
