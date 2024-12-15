@@ -1,6 +1,7 @@
 import datetime
 import inspect
 import json
+import logging
 import os
 import subprocess
 from enum import Enum
@@ -20,6 +21,9 @@ from pydantic.json_schema import (
     models_json_schema,
 )
 from pydantic_core import PydanticOmit, core_schema, to_jsonable_python
+
+logger = logging.getLogger(__name__)
+
 
 T = TypeVar("T")
 
@@ -377,7 +381,7 @@ def run_bonsai_process(
     if cwd is None:
         cwd = os.getcwd()
     if print_cmd:
-        print(output_cmd)
+        logging.debug(output_cmd)
     return subprocess.run(output_cmd, cwd=cwd, check=True, timeout=timeout, capture_output=True)
 
 
@@ -409,12 +413,12 @@ def open_bonsai_process(
 
     if log_file_name is None:
         if print_cmd:
-            print(output_cmd)
+            logging.debug(output_cmd)
         return subprocess.Popen(output_cmd, cwd=cwd, creationflags=creation_flags)
     else:
         logging_cmd = f'powershell -ep Bypass -c "& {output_cmd} *>&1 | tee -a {log_file_name}"'
         if print_cmd:
-            print(logging_cmd)
+            logging.debug(logging_cmd)
         return subprocess.Popen(logging_cmd, cwd=cwd, creationflags=creation_flags)
 
 

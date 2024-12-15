@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import warnings
 from os import PathLike
 from typing import Any, Callable, Literal, Optional, get_args
@@ -12,6 +13,8 @@ from pydantic_core import core_schema
 from semver import Version
 
 from aind_behavior_services import __version__ as pkg_version
+
+logger = logging.getLogger(__name__)
 
 
 class SchemaVersionedModel(BaseModel):

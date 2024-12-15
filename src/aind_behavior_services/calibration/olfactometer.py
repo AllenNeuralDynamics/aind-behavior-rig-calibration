@@ -1,3 +1,4 @@
+import logging
 from enum import Enum, IntEnum
 from typing import Dict, Literal, Optional
 
@@ -7,6 +8,8 @@ from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.rig import (
     HarpOlfactometer,
 )
+
+logger = logging.getLogger(__name__)
 
 TASK_LOGIC_VERSION = "0.4.0"
 RIG_VERSION = "0.0.0"

@@ -1,9 +1,12 @@
+import logging
 from enum import StrEnum
 from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, Field
 
 from aind_behavior_services.base import SchemaVersionedModel
+
+logger = logging.getLogger(__name__)
 
 __version__ = "0.1.1"
 

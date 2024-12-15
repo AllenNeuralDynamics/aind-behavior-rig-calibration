@@ -8,6 +8,9 @@ import aind_behavior_services.utils
 from aind_behavior_services.base import SchemaVersionedModel
 
 __version__ = "0.3.0"
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class AindBehaviorSessionModel(SchemaVersionedModel):

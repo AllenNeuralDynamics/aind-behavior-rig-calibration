@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 from enum import Enum, IntEnum, auto
 from typing import Annotated, Any, Dict, Generic, List, Literal, Optional, TypeVar, Union
@@ -8,6 +9,8 @@ from pydantic import BaseModel, Field, field_validator
 from typing_extensions import TypeAliasType
 
 from aind_behavior_services.base import SchemaVersionedModel
+
+logger = logging.getLogger(__name__)
 
 
 class Device(BaseModel):
