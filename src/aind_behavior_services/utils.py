@@ -356,6 +356,12 @@ def run_bonsai_process(
     timeout: Optional[float] = None,
     print_cmd: bool = False,
 ) -> CompletedProcess:
+
+    if not Path(bonsai_exe).exists():
+        has_setup = (Path(bonsai_exe).parent / "setup.ps1").exists()
+        m = f"Bonsai executable not found at {bonsai_exe}." + (" A 'setup.ps1' file exists in the target directory, consider running it." if has_setup else "")
+        raise FileNotFoundError(m)
+
     output_cmd = _build_bonsai_process_command(
         workflow_file=workflow_file,
         bonsai_exe=bonsai_exe,
