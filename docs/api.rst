@@ -5,6 +5,9 @@ API
    :maxdepth: 2
 
    api.base
-   api.calibration
+   api.rig
+   api.task_logic
+   api.session
    api.data_types
+   api.calibration
    api.utils
