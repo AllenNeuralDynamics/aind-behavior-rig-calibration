@@ -19,7 +19,7 @@ classifiers = [
 dependencies = [
     'pydantic>=2.7, <3.0',
     'harp-python>=0.2',
-    'aind-behavior-curriculum==0.0.27',
+    'aind-behavior-curriculum < 0.2',
     'gitpython>=3.1, <4.0',
     'scikit-learn',
     'semver',
