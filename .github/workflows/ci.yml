@@ -1,6 +1,7 @@
-name: CI
+name: ci/cd
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - main
@@ -9,100 +10,15 @@ on:
       - main
 
 jobs:
-  linters:
-    runs-on: windows-latest
-    name: Lint ${{ matrix.python-version }}
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.11', '3.12', '3.13']
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: astral-sh/setup-uv@v3
-        with:
-          enable-cache: true
+  python-linting:
+    uses: AllenNeuralDynamics/Aind.Behavior.GitHubActions/.github/workflows/python-linting.yml@main
+    with:
+        runs-on: ubuntu-latest
 
-      - name: Set up Python ${{ matrix.python-version }}
-        run: uv python install ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: uv sync --extra dev
-      - name: Run ruff format
-        run: uv run ruff format . --config .\pyproject.toml
-      - name: Run ruff check
-        run: uv run ruff check . --config .\pyproject.toml
-      - name: Run codespell
-        run : uv run codespell .
-
-  setup-bonsai:
-    runs-on: windows-latest
-    name: Setup Bonsai
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v4.0.0
-        with:
-          dotnet-version: 8.x
-
-      - name: Restore dotnet tools
-        run: dotnet tool restore
-
-      - name: Setup Bonsai
-        working-directory: bonsai
-        run: .\Setup.ps1
-
-      - name: Upload Bonsai Files
-        uses: actions/upload-artifact@v3
-        with:
-          name: bonsai-environment
-          path: bonsai
-
-
-  tests:
-    runs-on: windows-latest
-    name: Testing ${{ matrix.python-version }}
-    needs: setup-bonsai
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.11', '3.12', '3.13']
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v4.0.0
-        with:
-          dotnet-version: 8.x
-
-      - name: Restore dotnet tools
-        run: dotnet tool restore
-
-      - name: Download Bonsai artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: bonsai-environment
-          path: bonsai-environment
-
-      - name: Remove and Move Bonsai Files
-        run: |
-          Remove-Item -Recurse -Force bonsai\*
-          move bonsai-environment\* bonsai
-
-      - uses: astral-sh/setup-uv@v3
-        with:
-          enable-cache: true
-
-      - name: Set up Python ${{ matrix.python-version }}
-        run: uv python install ${{ matrix.python-version }}
-
-      - name: Install dependencies
-        run: uv sync --extra dev
-      - name: Run tests
-        run: uv run -m unittest
-      - name: Regenerate schemas
-        run: uv run regenerate
-      - name: Check for uncommitted changes
-        run: |
-          git config --global core.safecrlf false
-          git diff --exit-code || (echo "Untracked changes found" && exit 1)
+  aind-behavior-framework-testing:
+    uses: AllenNeuralDynamics/Aind.Behavior.GitHubActions/.github/workflows/test-aind-behavior-framework.yml@main
+    with:
+        python-version-path: .python-version
+        run-coverage: false
+        run-schema: true
