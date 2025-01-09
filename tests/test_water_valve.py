@@ -66,7 +66,6 @@ class WaterValveTests(unittest.TestCase):
             device_name="WaterValve",
             date=datetime.now(),
         )
-
         self.assertAlmostEqual(_slope, calibration.output.slope, 2, "Slope is not almost equal")
         self.assertAlmostEqual(_offset, calibration.output.offset, 2, "Offset is not almost equal")
         self.assertAlmostEqual(1.0, calibration.output.r2, 2, "R2 is not almost equal")

@@ -1,8 +1,5 @@
-import os
 
-from aind_behavior_services.base import get_commit_hash
 from aind_behavior_services.calibration import water_valve as wv
-from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.utils import utcnow
 
 
@@ -37,29 +34,3 @@ calibration = wv.WaterValveCalibration(
     device_name="WaterValve",
     date=utcnow(),
 )
-
-calibration_logic = wv.CalibrationLogic(
-    task_parameters=wv.CalibrationParameters(valve_open_time=_delta_times, valve_open_interval=0.5, repeat_count=200)
-)
-
-calibration_session = AindBehaviorSessionModel(
-    root_path="C:\\Data",
-    allow_dirty_repo=False,
-    experiment="WaterValveCalibration",
-    subject="WaterValve",
-    experiment_version="WaterValveCalibration",
-    commit_hash=get_commit_hash(),
-    date=utcnow(),
-)
-
-rig = wv.CalibrationRig(rig_name="WaterValveRig")
-
-seed_path = "local/water_valve_{suffix}.json"
-os.makedirs(os.path.dirname(seed_path), exist_ok=True)
-
-with open(seed_path.format(suffix="calibration_logic"), "w") as f:
-    f.write(calibration_logic.model_dump_json(indent=3))
-with open(seed_path.format(suffix="session"), "w") as f:
-    f.write(calibration_session.model_dump_json(indent=3))
-with open(seed_path.format(suffix="rig"), "w") as f:
-    f.write(rig.model_dump_json(indent=3))
