@@ -11,9 +11,6 @@ from aind_behavior_services.rig import (
 
 logger = logging.getLogger(__name__)
 
-TASK_LOGIC_VERSION = "0.4.0"
-RIG_VERSION = "0.0.0"
-
 
 class OlfactometerChannel(IntEnum):
     """Harp Olfactometer available channel"""

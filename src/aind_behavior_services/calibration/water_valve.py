@@ -11,8 +11,6 @@ from aind_behavior_services.calibration import Calibration
 
 logger = logging.getLogger(__name__)
 
-TASK_LOGIC_VERSION = "0.4.0"
-RIG_VERSION = "0.0.0"
 
 PositiveFloat = Annotated[float, Field(gt=0)]
 
