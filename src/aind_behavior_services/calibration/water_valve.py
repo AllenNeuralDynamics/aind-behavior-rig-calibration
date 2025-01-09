@@ -8,13 +8,9 @@ from pydantic import BaseModel, Field
 from sklearn.linear_model import LinearRegression
 
 from aind_behavior_services.calibration import Calibration
-from aind_behavior_services.rig import AindBehaviorRigModel
-from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
 
 logger = logging.getLogger(__name__)
 
-TASK_LOGIC_VERSION = "0.4.0"
-RIG_VERSION = "0.0.0"
 
 PositiveFloat = Annotated[float, Field(gt=0)]
 
@@ -52,15 +48,15 @@ class WaterValveCalibrationInput(BaseModel):
         if input is None:
             input = self
 
-        x_times = []
-        y_weight = []
+        _x_times = []
+        _y_weight = []
 
         for measurement in input.measurements:
             for weight in measurement.water_weight:
-                x_times.append(measurement.valve_open_time)
-                y_weight.append(weight / measurement.repeat_count)
-        x_times = np.asarray(x_times)
-        y_weight = np.asarray(y_weight)
+                _x_times.append(measurement.valve_open_time)
+                _y_weight.append(weight / measurement.repeat_count)
+        x_times = np.asarray(_x_times)
+        y_weight = np.asarray(_y_weight)
         # Calculate the linear regression
         model = LinearRegression()
         model.fit(x_times.reshape(-1, 1), y_weight)
@@ -111,35 +107,3 @@ class WaterValveCalibration(Calibration):
     )
     input: WaterValveCalibrationInput = Field(..., title="Input of the calibration")
     output: WaterValveCalibrationOutput = Field(..., title="Output of the calibration.")
-
-
-class CalibrationParameters(TaskParameters):
-    valve_open_time: list[PositiveFloat] = Field(
-        ...,
-        min_length=1,
-        description="An array with the times (s) the valve is open during calibration",
-    )
-    valve_open_interval: float = Field(
-        default=0.2,
-        description="Time between two consecutive valve openings (s)",
-        title="Valve open interval",
-        gt=0,
-    )
-    repeat_count: int = Field(
-        default=200,
-        ge=1,
-        description="Number of times the valve opened per measure valve_open_time entry",
-        title="Repeat count",
-    )
-
-
-class CalibrationLogic(AindBehaviorTaskLogicModel):
-    """Olfactometer operation control model that is used to run a calibration data acquisition workflow"""
-
-    name: str = Field(default="WaterValveCalibrationLogic", title="Task name")
-    version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
-    task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
-
-
-class CalibrationRig(AindBehaviorRigModel):
-    version: Literal[RIG_VERSION] = RIG_VERSION

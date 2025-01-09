@@ -3,10 +3,7 @@ import logging
 from pathlib import Path
 
 from aind_behavior_services import db_utils
-from aind_behavior_services.calibration import aind_manipulator as m
-from aind_behavior_services.calibration import load_cells as lc
-from aind_behavior_services.calibration import treadmill as treadmill
-from aind_behavior_services.calibration import water_valve as wv
+from aind_behavior_services.calibration import aind_manipulator
 from aind_behavior_services.data_types import DataTypes
 from aind_behavior_services.session import AindBehaviorSessionModel
 from aind_behavior_services.utils import (
@@ -24,14 +21,8 @@ NAMESPACE_PREFIX = "AindBehaviorServices"
 
 def main():
     models = [
-        wv.CalibrationLogic,
-        lc.CalibrationLogic,
-        m.CalibrationLogic,
-        treadmill.CalibrationLogic,
-        wv.CalibrationRig,
-        lc.CalibrationRig,
-        m.CalibrationRig,
-        treadmill.CalibrationRig,
+        aind_manipulator.CalibrationLogic,
+        aind_manipulator.CalibrationRig,
     ]
 
     for model in models:
