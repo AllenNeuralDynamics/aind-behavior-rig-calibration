@@ -6,5 +6,8 @@ on:
 jobs:
   tag-and-publish:
     uses : AllenNeuralDynamics/Aind.Behavior.GitHubActions/.github/workflows/python-package-tag-and-publish.yml@main
+    secrets:
+      AIND_PYPI_TOKEN: ${{ secrets.AIND_PYPI_TOKEN }}
+      SERVICE_TOKEN: ${{ secrets.SERVICE_TOKEN }}
     with:
         publish: true
