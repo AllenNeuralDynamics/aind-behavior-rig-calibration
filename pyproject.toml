@@ -52,6 +52,12 @@ docs = [
 [project.scripts]
 regenerate = "aind_behavior_services.scripts.regenerate:main"
 
+[tool.setuptools]
+ # FIXME: temporary workaround:
+ #   - https://github.com/astral-sh/uv/issues/9513
+ #   - https://github.com/pypa/setuptools/issues/4759
+ license-files = []
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
