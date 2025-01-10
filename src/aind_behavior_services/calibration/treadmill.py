@@ -1,14 +1,13 @@
+import logging
 from typing import ClassVar, List, Literal, Optional
 
 from pydantic import BaseModel, Field, field_validator
 
 from aind_behavior_services.calibration import Calibration
 from aind_behavior_services.patterns import ValuePair
-from aind_behavior_services.rig import AindBehaviorRigModel, HarpTreadmill
-from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
+from aind_behavior_services.rig import HarpTreadmill
 
-TASK_LOGIC_VERSION = "0.0.0"  # currently not used
-RIG_VERSION = "0.0.0"  # current not used
+logger = logging.getLogger(__name__)
 
 
 class TreadmillCalibrationInput(BaseModel):
@@ -55,24 +54,5 @@ class TreadmillCalibration(Calibration):
     output: TreadmillCalibrationOutput = Field(..., title="Output of the calibration.")
 
 
-class CalibrationParameters(TaskParameters):
-    pass
-
-
-class CalibrationLogic(AindBehaviorTaskLogicModel):
-    """Treadmill operation control model that is used to run a calibration data acquisition workflow"""
-
-    name: str = Field(default="TreadmillCalibrationLogic", title="Task name")
-    version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
-    task_parameters: CalibrationParameters = Field(
-        default=CalibrationParameters(), title="Task parameters", validate_default=True
-    )
-
-
 class Treadmill(HarpTreadmill):
     calibration: Optional[TreadmillCalibration] = Field(default=None, title="Calibration of the treadmill")
-
-
-class CalibrationRig(AindBehaviorRigModel):
-    version: Literal[RIG_VERSION] = RIG_VERSION
-    treadmill: Treadmill = Field(..., title="Treadmill device")

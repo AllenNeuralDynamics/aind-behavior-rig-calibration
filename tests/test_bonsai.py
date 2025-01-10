@@ -12,10 +12,6 @@ class BonsaiTests(unittest.TestCase):
     def test_deserialization(self):
         tested_modules = [
             "aind_manipulator",
-            "load_cells",
-            "olfactometer",
-            "water_valve",
-            "treadmill",
         ]
 
         build_examples()

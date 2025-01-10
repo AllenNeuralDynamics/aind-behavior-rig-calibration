@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import logging
 from typing import Dict, Literal, Optional
 
 from pydantic import BaseModel, Field
 
 from aind_behavior_services.base import SchemaVersionedModel
+
+logger = logging.getLogger(__name__)
 
 # Import core types
 

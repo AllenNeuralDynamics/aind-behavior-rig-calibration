@@ -1,3 +1,4 @@
+import logging
 from typing import Literal, Optional
 
 import aind_behavior_curriculum.task as curriculum_task
@@ -5,6 +6,8 @@ from pydantic import Field, field_validator
 
 from aind_behavior_services import __version__ as pkg_version
 from aind_behavior_services.base import SEMVER_REGEX, coerce_schema_version
+
+logger = logging.getLogger(__name__)
 
 
 class TaskParameters(curriculum_task.TaskParameters):

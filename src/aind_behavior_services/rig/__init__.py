@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+import logging
 import os
 from enum import Enum, IntEnum, auto
-from typing import Annotated, Dict, Generic, List, Literal, Optional, TypeVar, Union
+from typing import Annotated, Any, Dict, Generic, List, Literal, Optional, TypeVar, Union
 
 from pydantic import BaseModel, Field, field_validator
 from typing_extensions import TypeAliasType
 
 from aind_behavior_services.base import SchemaVersionedModel
+from aind_behavior_services.utils import get_fields_of_type
+
+logger = logging.getLogger(__name__)
 
 
 class Device(BaseModel):
@@ -16,16 +20,56 @@ class Device(BaseModel):
     calibration: Optional[BaseModel] = Field(default=None, description="Calibration")
 
 
+FFMPEG_OUTPUT_8BIT = '-vf "scale=out_color_matrix=bt709:out_range=full,format=bgr24,scale=out_range=full" -c:v h264_nvenc -pix_fmt yuv420p -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M'
+""" Default output arguments for 8-bit video encoding """
+
+FFMPEG_OUTPUT_16BIT = '-vf "scale=out_color_matrix=bt709:out_range=full,format=rgb48le,scale=out_range=full" -c:v hevc_nvenc -pix_fmt p010le -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M'
+""" Default output arguments for 16-bit video encoding """
+
+FFMPEG_INPUT = "-colorspace bt709 -color_primaries bt709 -color_range full -color_trc linear"
+""" Default input arguments """
+
+
+class VideoWriterFfmpegFactory:
+    def __init__(self, bit_depth: Literal[8, 16] = 8, video_writer_ffmpeg_kwargs: Dict[str, Any] = None):
+        self._bit_depth = bit_depth
+        self.video_writer_ffmpeg_kwargs = video_writer_ffmpeg_kwargs or {}
+        self._output_arguments: str
+        self._input_arguments: str
+        self._solve_strings()
+
+    def _solve_strings(self):
+        if self._bit_depth == 8:
+            self._output_arguments = FFMPEG_OUTPUT_8BIT
+        elif self._bit_depth == 16:
+            self._output_arguments = FFMPEG_OUTPUT_16BIT
+        else:
+            raise ValueError(f"Bit depth {self._bit_depth} not supported")
+        self._input_arguments = FFMPEG_INPUT
+
+    def construct_video_writer_ffmpeg(self) -> VideoWriterFfmpeg:
+        return VideoWriterFfmpeg(
+            output_arguments=self._output_arguments,
+            input_arguments=self._input_arguments,
+            **self.video_writer_ffmpeg_kwargs,
+        )
+
+    def update_video_writer_ffmpeg_kwargs(self, video_writer: VideoWriterFfmpeg):
+        return video_writer.model_copy(
+            update={"output_arguments": self._output_arguments, "input_arguments": self._input_arguments}
+        )
+
+
 class VideoWriterFfmpeg(BaseModel):
     video_writer_type: Literal["FFMPEG"] = Field(default="FFMPEG")
     frame_rate: int = Field(default=30, ge=0, description="Encoding frame rate")
     container_extension: str = Field(default="mp4", description="Container extension")
     output_arguments: str = Field(
-        default='-vf "scale=out_color_matrix=bt709:out_range=full,format=bgr24,scale=out_range=full" -c:v h264_nvenc -pix_fmt yuv420p -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author="Allen Institute for Neural Dynamics" -maxrate 700M -bufsize 350M',  # E501
+        default=FFMPEG_OUTPUT_8BIT,
         description="Output arguments",
     )
     input_arguments: str = Field(
-        default="-colorspace bt709 -color_primaries bt709 -color_range full -color_trc linear",
+        default=FFMPEG_INPUT,
         description="Input arguments",
     )
 
@@ -393,6 +437,7 @@ HarpDevice = TypeAliasType(
             HarpStepperDriver,
             HarpEnvironmentSensor,
             HarpWhiteRabbit,
+            HarpDeviceGeneric,
         ],
         Field(discriminator="device_type"),
     ],
@@ -476,3 +521,17 @@ class Screen(Device):
 class AindBehaviorRigModel(SchemaVersionedModel):
     computer_name: str = Field(default_factory=lambda: os.environ["COMPUTERNAME"], description="Computer name")
     rig_name: str = Field(..., description="Rig name")
+
+
+TRig = TypeVar("TRig", bound=AindBehaviorRigModel)
+
+
+def validate_harp_clock_output(rig: TRig) -> TRig:
+    harp_devices = get_fields_of_type(rig, HarpDeviceGeneric)
+    if len(harp_devices) < 2:
+        return rig
+    n_clock_targets = len(harp_devices) - 1
+    clock_outputs = get_fields_of_type(rig, ConnectedClockOutput)
+    if len(clock_outputs) != n_clock_targets:
+        raise ValueError(f"Expected {n_clock_targets} clock outputs, got {len(clock_outputs)}")
+    return rig

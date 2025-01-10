@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import Annotated, List, Literal, Optional
 
 import numpy as np
@@ -7,11 +8,10 @@ from pydantic import BaseModel, Field, field_validator
 from sklearn.linear_model import LinearRegression
 
 from aind_behavior_services.calibration import Calibration
-from aind_behavior_services.rig import AindBehaviorRigModel, HarpLoadCells
-from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
+from aind_behavior_services.rig import HarpLoadCells
 
-TASK_LOGIC_VERSION = "0.4.0"
-RIG_VERSION = "0.0.0"
+logger = logging.getLogger(__name__)
+
 
 LoadCellChannel = Annotated[int, Field(ge=0, le=7, description="Load cell channel number available")]
 
@@ -120,28 +120,5 @@ class LoadCellsCalibration(Calibration):
     output: LoadCellsCalibrationOutput = Field(..., title="Output of the calibration.")
 
 
-class CalibrationParameters(TaskParameters):
-    channels: List[LoadCellChannel] = Field(default=list(range(8)), description="List of channels to calibrate")
-    offset_buffer_size: int = Field(
-        default=200,
-        description="Size of the buffer (in samples) acquired.",
-        title="Buffer size",
-        ge=1,
-    )
-
-
-class CalibrationLogic(AindBehaviorTaskLogicModel):
-    """Load cells operation control model that is used to run a calibration data acquisition workflow"""
-
-    name: str = Field(default="LoadCellsCalibrationLogic", title="Task name")
-    version: Literal[TASK_LOGIC_VERSION] = TASK_LOGIC_VERSION
-    task_parameters: CalibrationParameters = Field(..., title="Task parameters", validate_default=True)
-
-
 class LoadCells(HarpLoadCells):
     calibration: Optional[LoadCellsCalibration] = Field(default=None, title="Calibration of the load cells")
-
-
-class CalibrationRig(AindBehaviorRigModel):
-    version: Literal[RIG_VERSION] = RIG_VERSION
-    load_cells: LoadCells = Field(..., title="Load Cells acquisition device")

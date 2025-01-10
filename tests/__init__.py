@@ -8,7 +8,6 @@ EXAMPLES_DIR = Path(__file__).parents[1] / "examples"
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
-logging.disable(logging.CRITICAL)
 
 
 def build_example(script_path: str) -> ModuleType:
