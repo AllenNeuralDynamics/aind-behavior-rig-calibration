@@ -6,7 +6,7 @@ from pydantic import Field, model_validator
 import aind_behavior_services.utils
 from aind_behavior_services.base import DefaultAwareDatetime, SchemaVersionedModel
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 import logging
 
 logger = logging.getLogger(__name__)
