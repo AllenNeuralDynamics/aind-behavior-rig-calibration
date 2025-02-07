@@ -1,12 +1,29 @@
 from __future__ import annotations
 
+import datetime
 import logging
 from os import PathLike
-from typing import Any, Callable, Literal, Optional, get_args
+from typing import (
+    TYPE_CHECKING,
+    Annotated,
+    Any,
+    Callable,
+    Literal,
+    Optional,
+    get_args,
+)
 
 import git
 from aind_behavior_curriculum.task import SEMVER_REGEX
-from pydantic import BaseModel, Field, GetJsonSchemaHandler, field_validator
+from pydantic import (
+    AwareDatetime,
+    BaseModel,
+    Field,
+    GetJsonSchemaHandler,
+    ValidatorFunctionWrapHandler,
+    WrapValidator,
+    field_validator,
+)
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 from semver import Version
@@ -98,3 +115,18 @@ def get_commit_hash(repository: Optional[PathLike] = None) -> str:
         return repo.head.commit.hexsha
     except git.InvalidGitRepositoryError as e:
         raise e("Not a git repository. Please run from the root of the repository.") from e
+
+
+if TYPE_CHECKING:
+    DefaultAwareDatetime = Annotated[AwareDatetime, ...]
+else:
+
+    def _add_default_tz(dt: Any, handler: ValidatorFunctionWrapHandler) -> datetime.datetime:
+        if isinstance(dt, str):
+            dt = datetime.datetime.fromisoformat(dt)
+        if isinstance(dt, datetime.datetime):
+            if dt.tzinfo is None:
+                dt = dt.astimezone()
+        return dt
+
+    DefaultAwareDatetime = Annotated[AwareDatetime, WrapValidator(_add_default_tz), Field(validate_default=True)]

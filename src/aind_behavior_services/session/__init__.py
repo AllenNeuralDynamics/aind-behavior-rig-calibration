@@ -1,13 +1,12 @@
 # Import core types
-import datetime
 from typing import List, Literal, Optional, Self
 
 from pydantic import Field, model_validator
 
 import aind_behavior_services.utils
-from aind_behavior_services.base import SchemaVersionedModel
+from aind_behavior_services.base import DefaultAwareDatetime, SchemaVersionedModel
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 import logging
 
 logger = logging.getLogger(__name__)
@@ -17,9 +16,9 @@ class AindBehaviorSessionModel(SchemaVersionedModel):
     version: Literal[__version__] = __version__
     experiment: str = Field(..., description="Name of the experiment")
     experimenter: List[str] = Field(default=[], description="Name of the experimenter")
-    date: datetime.datetime = Field(
+    date: DefaultAwareDatetime = Field(
         default_factory=aind_behavior_services.utils.utcnow, description="Date of the experiment", validate_default=True
-    )  # TODO waiting for https://github.com/pydantic/pydantic/issues/9571
+    )
     root_path: str = Field(..., description="Root path where data will be logged")
     session_name: Optional[str] = Field(
         default=None, description="Name of the session. This will be used to create a folder in the root path."

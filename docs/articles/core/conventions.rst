@@ -8,7 +8,7 @@ Version
 Introduction
 #############
 
-The goal of this document is NOT to be exhaustive and opinionated. Instead, it should include a minimal list of common patterns that can be easily referenced and re-used across all data formats standards guaranteeing a minimal level of consistency and quality.
+The goal of this document is NOT to be exhaustive and opinionated. Instead, it should include a minimal list of common patterns that can be easily referenced and reused across all data formats standards guaranteeing a minimal level of consistency and quality.
 
 Filenames
 ####################
