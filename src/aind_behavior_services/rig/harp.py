@@ -1,8 +1,10 @@
+from typing_extensions import deprecated
+
 from aind_behavior_services.utils import get_fields_of_type
 
 from ._base import TRig
 from ._harp_gen import *  # noqa
-from ._harp_gen import ConnectedClockOutput, _HarpDeviceBase
+from ._harp_gen import ConnectedClockOutput, HarpLicketySplit, HarpTimestampGeneratorGen3, _HarpDeviceBase
 
 
 def validate_harp_clock_output(rig: TRig) -> TRig:
@@ -14,3 +16,16 @@ def validate_harp_clock_output(rig: TRig) -> TRig:
     if len(clock_outputs) != n_clock_targets:
         raise ValueError(f"Expected {n_clock_targets} clock outputs, got {len(clock_outputs)}")
     return rig
+
+
+# For backwards compatibility
+
+
+@deprecated("Use HarpTimestampGeneratorGen3 instead.")
+class HarpClockGenerator(HarpTimestampGeneratorGen3):
+    pass
+
+
+@deprecated("Use HarpLicketySplit instead.")
+class HarpLickometer(HarpLicketySplit):
+    pass
