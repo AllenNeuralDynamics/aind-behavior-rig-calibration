@@ -35,8 +35,15 @@ Changelog = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/relea
 
 dev = [
     'ruff',
-    'codespell'
+    'codespell',
+    'aind-behavior-services[generators]'
 ]
+
+generators = [
+    'jinja2',
+    'requests',
+    'pyyaml'
+    ]
 
 docs = [
     'Sphinx<7.3',
@@ -51,6 +58,7 @@ docs = [
 
 [project.scripts]
 regenerate = "aind_behavior_services.scripts.regenerate:main"
+generate-python = "_generators:main"
 
 [tool.setuptools]
  # FIXME: temporary workaround:
