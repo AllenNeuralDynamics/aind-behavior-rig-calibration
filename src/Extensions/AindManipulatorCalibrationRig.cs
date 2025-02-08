@@ -332,7 +332,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     public partial class AindManipulatorDevice
     {
     
-        private string _deviceType = "stepperdriver";
+        private string _deviceType = "StepperDriver";
     
         private BaseModel _additionalSettings;
     
