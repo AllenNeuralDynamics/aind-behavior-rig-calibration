@@ -70,11 +70,11 @@ class VideoWriterOpenCv(BaseModel):
 
 
 if TYPE_CHECKING:
+    VideoWriter = Union[VideoWriterFfmpeg, VideoWriterOpenCv]
+else:
     VideoWriter = TypeAliasType(
         "VideoWriter", Annotated[Union[VideoWriterFfmpeg, VideoWriterOpenCv], Field(discriminator="video_writer_type")]
     )
-else:
-    VideoWriter = Union[VideoWriterFfmpeg, VideoWriterOpenCv]
 
 
 class WebCamera(Device):
