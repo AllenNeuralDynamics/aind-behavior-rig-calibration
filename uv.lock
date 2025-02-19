@@ -34,6 +34,9 @@ dependencies = [
 [package.optional-dependencies]
 dev = [
     { name = "codespell" },
+    { name = "jinja2" },
+    { name = "pyyaml" },
+    { name = "requests" },
     { name = "ruff" },
 ]
 docs = [
@@ -45,16 +48,25 @@ docs = [
     { name = "sphinx-jsonschema" },
     { name = "sphinx-mdinclude" },
 ]
+generators = [
+    { name = "jinja2" },
+    { name = "pyyaml" },
+    { name = "requests" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "aind-behavior-curriculum", specifier = "<0.2" },
+    { name = "aind-behavior-services", extras = ["generators"], marker = "extra == 'dev'" },
     { name = "autodoc-pydantic", extras = ["erdantic"], marker = "extra == 'docs'" },
     { name = "codespell", marker = "extra == 'dev'" },
     { name = "furo", marker = "extra == 'docs'" },
     { name = "gitpython", specifier = ">=3.1,<4.0" },
     { name = "harp-python", specifier = ">=0.2" },
+    { name = "jinja2", marker = "extra == 'generators'" },
     { name = "pydantic", specifier = ">=2.7,<3.0" },
+    { name = "pyyaml", marker = "extra == 'generators'" },
+    { name = "requests", marker = "extra == 'generators'" },
     { name = "ruff", marker = "extra == 'dev'" },
     { name = "scikit-learn" },
     { name = "semver" },

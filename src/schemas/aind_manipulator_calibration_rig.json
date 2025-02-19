@@ -151,8 +151,8 @@
     "AindManipulatorDevice": {
       "properties": {
         "device_type": {
-          "const": "stepperdriver",
-          "default": "stepperdriver",
+          "const": "StepperDriver",
+          "default": "StepperDriver",
           "title": "Device Type",
           "type": "string"
         },
