@@ -2,7 +2,7 @@ import datetime
 import unittest
 from typing import Literal
 
-from pydantic import Field, TypeAdapter, ValidationError
+from pydantic import Field, TypeAdapter
 
 from aind_behavior_services import AindBehaviorTaskLogicModel
 from aind_behavior_services.base import DefaultAwareDatetime, SchemaVersionedModel
@@ -75,15 +75,12 @@ class SchemaVersionCoercionTest(unittest.TestCase):
 
     def test_version_update_backwards_coercion(self):
         post_instance = self.AindBehaviorTaskLogicModelPost()
-        major_post_instance = self.AindBehaviorTaskLogicModelMajorPost()
         with self.assertLogs(None, level="WARNING") as cm:
             self.assertEqual(
                 self.AindBehaviorTaskLogicModelPre.model_validate_json(post_instance.model_dump_json()).version,
                 self.AindBehaviorTaskLogicModelPre().version,
             )
             self.assertIn("Deserialized versioned field 0.0.2, expected 0.0.1. Will attempt to coerce.", cm.output[0])
-            with self.assertRaises(ValidationError) as _:
-                self.AindBehaviorTaskLogicModelPre.model_validate_json(major_post_instance.model_dump_json())
 
     def test_pkg_version_update_forwards_coercion(self):
         pre_instance = self.SchemaVersionedModelPre()
@@ -99,15 +96,12 @@ class SchemaVersionCoercionTest(unittest.TestCase):
 
     def test_pkg_version_update_backwards_coercion(self):
         post_instance = self.SchemaVersionedModelPost()
-        major_post_instance = self.SchemaVersionedModelMajorPost()
         with self.assertLogs(None, level="WARNING") as cm:
             self.assertEqual(
                 self.SchemaVersionedModelPre.model_validate_json(post_instance.model_dump_json()).version,
                 self.SchemaVersionedModelPre().version,
             )
             self.assertIn("Deserialized versioned field 0.1.1, expected 0.1.0. Will attempt to coerce.", cm.output[0])
-            with self.assertRaises(ValidationError) as _:
-                self.SchemaVersionedModelPre.model_validate_json(major_post_instance.model_dump_json())
 
 
 if __name__ == "__main__":

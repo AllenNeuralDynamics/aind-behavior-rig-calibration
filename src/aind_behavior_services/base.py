@@ -95,7 +95,8 @@ def coerce_schema_version(
         logger.warning(
             "Deserialized versioned field %s, expected %s. Will attempt to coerce. "
             "This will be considered a best-effort operation.",
-            semver, _default_schema_version
+            semver,
+            _default_schema_version,
         )
     return str(_default_schema_version)
 
