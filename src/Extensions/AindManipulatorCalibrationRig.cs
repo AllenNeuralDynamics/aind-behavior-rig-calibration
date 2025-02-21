@@ -897,7 +897,7 @@ namespace AindBehaviorServices.AindManipulatorCalibrationRig
     public partial class CalibrationRig
     {
     
-        private string _aindBehaviorServicesPkgVersion = "0.10.0";
+        private string _aindBehaviorServicesPkgVersion = "0.10.1";
     
         private string _version = "0.1.0";
     
