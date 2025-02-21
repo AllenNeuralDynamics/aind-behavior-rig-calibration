@@ -93,15 +93,11 @@ def coerce_schema_version(
     semver = Version.parse(v)
     if semver != _default_schema_version:
         logger.warning(
-            f"Deserialized versioned field {semver}, expected {_default_schema_version}. Will attempt to coerce."
+            "Deserialized versioned field %s, expected %s. Will attempt to coerce. "
+            "This will be considered a best-effort operation.",
+            semver,
+            _default_schema_version,
         )
-        if check_compatibility:
-            if semver.major == 0:  # Assume that 0.x.y versions are compatible within X
-                if semver.minor != _default_schema_version.minor:
-                    raise ValueError("Incompatible schema versions.")
-            else:
-                if not semver.is_compatible(_default_schema_version):
-                    raise ValueError("Incompatible schema versions.")
     return str(_default_schema_version)
 
 
