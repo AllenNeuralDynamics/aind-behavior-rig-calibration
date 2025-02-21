@@ -44,12 +44,10 @@ class LoadCellCalibrationInput(BaseModel):
 
 class LoadCellCalibrationOutput(BaseModel):
     channel: LoadCellChannel
-    offset: Optional[LoadCellOffset] = Field(
-        default=None, title="Load cell offset applied to the wheatstone bridge circuit"
-    )
-    baseline: Optional[float] = Field(default=None, title="Load cell baseline that will be DSP subtracted")
-    slope: Optional[float] = Field(
-        default=None, title="Load cell slope that will be used to convert adc units to weight (g)."
+    offset: LoadCellOffset = Field(default=0, title="Load cell offset applied to the wheatstone bridge circuit")
+    baseline: float = Field(default=0.0, title="Load cell baseline that will be DSP subtracted to the raw adc output.")
+    slope: float = Field(
+        default=1.0, title="Load cell slope that will be used to convert tared (- baseline) adc units to weight (g)."
     )
     weight_lookup: List[MeasuredWeight] = Field(default=[], title="Load cell weight lookup calibration table")
 
@@ -75,9 +73,14 @@ class LoadCellsCalibrationInput(BaseModel):
         # Calculate the linear regression
         model = LinearRegression()
         model.fit(x.reshape(-1, 1), y)
+        optimum_offset = cls.get_optimum_offset(value.offset_measurement)
+        if not optimum_offset:
+            logger.warning("No optimum offset found for channel %s. Using default (0).", value.channel)
+            optimum_offset = 0
+
         return LoadCellCalibrationOutput(
             channel=value.channel,
-            offset=cls.get_optimum_offset(value.offset_measurement),
+            offset=optimum_offset,
             baseline=model.intercept_,
             slope=model.coef_[0],
             weight_lookup=value.weight_measurement,
