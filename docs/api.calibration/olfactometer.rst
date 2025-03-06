@@ -5,9 +5,3 @@ olfactometer
    :members:
    :undoc-members:
    :show-inheritance:
-
-Example
-########
-
-.. literalinclude:: ../../examples/olfactometer.py
-      :language: python
