@@ -1,0 +1,1742 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
+
+    <link rel="shortcut icon" href="_static/favicon.ico"/><!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 --><title>Index - AIND Behavior Services</title>
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">AIND Behavior Services</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="_static/light-logo.svg" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="_static/dark-logo.svg" alt="Dark Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">AIND Behavior Services</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Welcome to AIND Behavior Services’s documentation!</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.base.html">base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.rig.html">rig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.task_logic.html">task_logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.session.html">session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.data_types.html">data_types</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api.calibration.html">calibration</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of calibration</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.calibration/aind_manipulator.html">aind_manipulator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.calibration/load_cells.html">load_cells</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.calibration/olfactometer.html">olfactometer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.calibration/water_valve.html">water_valve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.calibration/treadmill.html">treadmill</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.utils.html">utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="json_schemas.html">JsonSchema</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of JsonSchema</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="json_schemas/aind_behavior_data_types.html">aind_behavior_data_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_schemas/aind_behavior_session.html">aind_behavior_session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_schemas/aind_behavior_subject_database.html">aind_behavior_subject_database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_schemas/aind_manipulator_calibration_logic.html">aind_manipulator_calibration_logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_schemas/aind_manipulator_calibration_rig.html">aind_manipulator_calibration_rig</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="articles/data_formats.html">Data formats</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Data formats</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="articles/core/conventions.html">Standard conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="articles/core/dataset_structure.html">Dataset structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="articles/data_formats/harp.html">Harp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="articles/data_formats/software_events.html">Software Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="articles/data_formats/video.html">Video</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/AllenNeuralDynamics/Aind.Behavior.Services">GitHub Source Code</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          
+<section class="genindex-section">
+  <h1 id="index">Index</h1>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#J"><strong>J</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#O"><strong>O</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#Q"><strong>Q</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#V"><strong>V</strong></a> | <a href="#W"><strong>W</strong></a> | <a href="#X"><strong>X</strong></a> | <a href="#Y"><strong>Y</strong></a> | <a href="#Z"><strong>Z</strong></a></div>
+</section>
+<section id="A" class="genindex-section">
+  <h2>A</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraAdcBitDepth.ADC10BIT">ADC10BIT (aind_behavior_services.rig.cameras.SpinnakerCameraAdcBitDepth attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraAdcBitDepth.ADC12BIT">ADC12BIT (aind_behavior_services.rig.cameras.SpinnakerCameraAdcBitDepth attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraAdcBitDepth.ADC8BIT">ADC8BIT (aind_behavior_services.rig.cameras.SpinnakerCameraAdcBitDepth attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.adc_bit_depth">adc_bit_depth (aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig._base.Device.additional_settings">additional_settings (aind_behavior_services.rig._base.Device attribute)</a>
+</li>
+        <li>
+    aind_behavior_services.base
+
+        <ul>
+          <li><a href="api.base.html#module-aind_behavior_services.base">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.calibration.aind_manipulator
+
+        <ul>
+          <li><a href="api.calibration/aind_manipulator.html#module-aind_behavior_services.calibration.aind_manipulator">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.calibration.load_cells
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#module-aind_behavior_services.calibration.load_cells">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.calibration.olfactometer
+
+        <ul>
+          <li><a href="api.calibration/olfactometer.html#module-aind_behavior_services.calibration.olfactometer">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.calibration.treadmill
+
+        <ul>
+          <li><a href="api.calibration/treadmill.html#module-aind_behavior_services.calibration.treadmill">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.calibration.water_valve
+
+        <ul>
+          <li><a href="api.calibration/water_valve.html#module-aind_behavior_services.calibration.water_valve">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.data_types
+
+        <ul>
+          <li><a href="api.data_types.html#module-aind_behavior_services.data_types">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.rig._base
+
+        <ul>
+          <li><a href="api.rig.html#module-aind_behavior_services.rig._base">module</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    aind_behavior_services.rig._harp_gen
+
+        <ul>
+          <li><a href="api.rig.html#module-aind_behavior_services.rig._harp_gen">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.rig.cameras
+
+        <ul>
+          <li><a href="api.rig.html#module-aind_behavior_services.rig.cameras">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.rig.harp
+
+        <ul>
+          <li><a href="api.rig.html#module-aind_behavior_services.rig.harp">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.rig.visual_stimulation
+
+        <ul>
+          <li><a href="api.rig.html#module-aind_behavior_services.rig.visual_stimulation">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.session
+
+        <ul>
+          <li><a href="api.session.html#module-aind_behavior_services.session">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.task_logic
+
+        <ul>
+          <li><a href="api.task_logic.html#module-aind_behavior_services.task_logic">module</a>
+</li>
+        </ul></li>
+        <li>
+    aind_behavior_services.utils
+
+        <ul>
+          <li><a href="api.utils.html#module-aind_behavior_services.utils">module</a>
+</li>
+        </ul></li>
+        <li><a href="api.base.html#aind_behavior_services.base.SchemaVersionedModel.aind_behavior_services_pkg_version">aind_behavior_services_pkg_version (aind_behavior_services.base.SchemaVersionedModel attribute)</a>
+
+        <ul>
+          <li><a href="api.task_logic.html#aind_behavior_services.task_logic.TaskParameters.aind_behavior_services_pkg_version">(aind_behavior_services.task_logic.TaskParameters attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.allow_dirty_repo">allow_dirty_repo (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataType.ARRAY">ARRAY (aind_behavior_services.data_types.DataType attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AxisConfiguration.axis">axis (aind_behavior_services.calibration.aind_manipulator.AxisConfiguration attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.Axis">Axis (class in aind_behavior_services.calibration.aind_manipulator)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibrationInput.axis_configuration">axis_configuration (aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibrationInput attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="B" class="genindex-section">
+  <h2>B</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.B10">B10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.B12">B12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.B16">B16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.B8">B8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellCalibrationOutput.baseline">baseline (aind_behavior_services.calibration.load_cells.LoadCellCalibrationOutput attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.MeasuredOffset.baseline">(aind_behavior_services.calibration.load_cells.MeasuredOffset attribute)</a>
+</li>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.MeasuredWeight.baseline">(aind_behavior_services.calibration.load_cells.MeasuredWeight attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERBG10">BAYERBG10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERBG10P">BAYERBG10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERBG10PACKED">BAYERBG10PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERBG12">BAYERBG12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERBG12P">BAYERBG12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERBG12PACKED">BAYERBG12PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERBG16">BAYERBG16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERBG8">BAYERBG8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGB10">BAYERGB10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGB10P">BAYERGB10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGB10PACKED">BAYERGB10PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGB12">BAYERGB12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGB12P">BAYERGB12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGB12PACKED">BAYERGB12PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGB16">BAYERGB16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGB8">BAYERGB8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGR10">BAYERGR10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGR10P">BAYERGR10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGR10PACKED">BAYERGR10PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGR12">BAYERGR12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGR12P">BAYERGR12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGR12PACKED">BAYERGR12PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGR16">BAYERGR16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERGR8">BAYERGR8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERRG10">BAYERRG10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERRG10P">BAYERRG10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERRG10PACKED">BAYERRG10PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERRG12">BAYERRG12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERRG12P">BAYERRG12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERRG12PACKED">BAYERRG12PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERRG16">BAYERRG16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BAYERRG8">BAYERRG8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGR10">BGR10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGR10P">BGR10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGR12">BGR12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGR12P">BGR12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGR14">BGR14 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGR16">BGR16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGR565P">BGR565P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGR8">BGR8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGRA10">BGRA10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGRA10P">BGRA10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGRA12">BGRA12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGRA12P">BGRA12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGRA14">BGRA14 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGRA16">BGRA16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.BGRA8">BGRA8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.binning">binning (aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.bonsai_sgen">bonsai_sgen() (in module aind_behavior_services.utils)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.BonsaiSgenSerializers">BonsaiSgenSerializers (class in aind_behavior_services.utils)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataType.BOOLEAL">BOOLEAL (aind_behavior_services.data_types.DataType attribute)</a>
+</li>
+        <li><a href="api.calibration/treadmill.html#aind_behavior_services.calibration.treadmill.TreadmillCalibrationOutput.brake_lookup_calibration">brake_lookup_calibration (aind_behavior_services.calibration.treadmill.TreadmillCalibrationOutput attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Screen.brightness">brightness (aind_behavior_services.rig.visual_stimulation.Screen attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="C" class="genindex-section">
+  <h2>C</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibrationInput.calibrate_loadcell_output">calibrate_loadcell_output() (aind_behavior_services.calibration.load_cells.LoadCellsCalibrationInput class method)</a>
+</li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibrationInput.calibrate_output">calibrate_output() (aind_behavior_services.calibration.load_cells.LoadCellsCalibrationInput method)</a>
+
+        <ul>
+          <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibrationInput.calibrate_output">(aind_behavior_services.calibration.water_valve.WaterValveCalibrationInput method)</a>
+</li>
+        </ul></li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AindManipulatorDevice.calibration">calibration (aind_behavior_services.calibration.aind_manipulator.AindManipulatorDevice attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCells.calibration">(aind_behavior_services.calibration.load_cells.LoadCells attribute)</a>
+</li>
+          <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.Olfactometer.calibration">(aind_behavior_services.calibration.olfactometer.Olfactometer attribute)</a>
+</li>
+          <li><a href="api.calibration/treadmill.html#aind_behavior_services.calibration.treadmill.Treadmill.calibration">(aind_behavior_services.calibration.treadmill.Treadmill attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._base.Device.calibration">(aind_behavior_services.rig._base.Device attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Screen.calibration">(aind_behavior_services.rig.visual_stimulation.Screen attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.CameraController.cameras">cameras (aind_behavior_services.rig.cameras.CameraController attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannelType.CARRIER">CARRIER (aind_behavior_services.calibration.olfactometer.OlfactometerChannelType attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplaysCalibration.center">center (aind_behavior_services.rig.visual_stimulation.DisplaysCalibration attribute)</a>
+</li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellCalibrationInput.channel">channel (aind_behavior_services.calibration.load_cells.LoadCellCalibrationInput attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellCalibrationOutput.channel">(aind_behavior_services.calibration.load_cells.LoadCellCalibrationOutput attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannel.Channel0">Channel0 (aind_behavior_services.calibration.olfactometer.OlfactometerChannel attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannel.Channel1">Channel1 (aind_behavior_services.calibration.olfactometer.OlfactometerChannel attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannel.Channel2">Channel2 (aind_behavior_services.calibration.olfactometer.OlfactometerChannel attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannel.Channel3">Channel3 (aind_behavior_services.calibration.olfactometer.OlfactometerChannel attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerCalibrationInput.channel_config">channel_config (aind_behavior_services.calibration.olfactometer.OlfactometerCalibrationInput attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig.channel_index">channel_index (aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig.channel_type">channel_type (aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig attribute)</a>
+</li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibrationInput.channels">channels (aind_behavior_services.calibration.load_cells.LoadCellsCalibrationInput attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibrationOutput.channels">(aind_behavior_services.calibration.load_cells.LoadCellsCalibrationOutput attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.base.html#aind_behavior_services.base.coerce_schema_version">coerce_schema_version() (in module aind_behavior_services.base)</a>
+</li>
+        <li><a href="api.base.html#aind_behavior_services.base.SchemaVersionedModel.coerce_version">coerce_version() (aind_behavior_services.base.SchemaVersionedModel class method)</a>
+
+        <ul>
+          <li><a href="api.task_logic.html#aind_behavior_services.task_logic.AindBehaviorTaskLogicModel.coerce_version">(aind_behavior_services.task_logic.AindBehaviorTaskLogicModel class method)</a>
+</li>
+          <li><a href="api.task_logic.html#aind_behavior_services.task_logic.TaskParameters.coerce_version">(aind_behavior_services.task_logic.TaskParameters class method)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.color_processing">color_processing (aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+</li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.commit_hash">commit_hash (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig._base.AindBehaviorRigModel.computer_name">computer_name (aind_behavior_services.rig._base.AindBehaviorRigModel attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.CONFIDENCE1">CONFIDENCE1 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.CONFIDENCE16">CONFIDENCE16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.CONFIDENCE1P">CONFIDENCE1P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.CONFIDENCE32F">CONFIDENCE32F (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.CONFIDENCE8">CONFIDENCE8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpClockSynchronizer.connected_clock_outputs">connected_clock_outputs (aind_behavior_services.rig._harp_gen.HarpClockSynchronizer attribute)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen1.connected_clock_outputs">(aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen1 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen3.connected_clock_outputs">(aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen3 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpWhiteRabbit.connected_clock_outputs">(aind_behavior_services.rig._harp_gen.HarpWhiteRabbit attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterFfmpegFactory.construct_video_writer_ffmpeg">construct_video_writer_ffmpeg() (aind_behavior_services.rig.cameras.VideoWriterFfmpegFactory method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterFfmpeg.container_extension">container_extension (aind_behavior_services.rig.cameras.VideoWriterFfmpeg attribute)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterOpenCv.container_extension">(aind_behavior_services.rig.cameras.VideoWriterOpenCv attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Screen.contrast">contrast (aind_behavior_services.rig.visual_stimulation.Screen attribute)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.convert_pydantic_to_bonsai">convert_pydantic_to_bonsai() (in module aind_behavior_services.utils)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_A10P">COORD3D_A10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_A12P">COORD3D_A12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_A16">COORD3D_A16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_A32F">COORD3D_A32F (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_A8">COORD3D_A8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_ABC10P">COORD3D_ABC10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_ABC10P_PLANAR">COORD3D_ABC10P_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_ABC12P">COORD3D_ABC12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_ABC12P_PLANAR">COORD3D_ABC12P_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_ABC16">COORD3D_ABC16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_ABC16_PLANAR">COORD3D_ABC16_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_ABC32F">COORD3D_ABC32F (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_ABC32F_PLANAR">COORD3D_ABC32F_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_ABC8">COORD3D_ABC8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_ABC8_PLANAR">COORD3D_ABC8_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_AC10P">COORD3D_AC10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_AC10P_PLANAR">COORD3D_AC10P_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_AC12P">COORD3D_AC12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_AC12P_PLANAR">COORD3D_AC12P_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_AC16">COORD3D_AC16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_AC16_PLANAR">COORD3D_AC16_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_AC32F">COORD3D_AC32F (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_AC32F_PLANAR">COORD3D_AC32F_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_AC8">COORD3D_AC8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_AC8_PLANAR">COORD3D_AC8_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_B10P">COORD3D_B10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_B12P">COORD3D_B12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_B16">COORD3D_B16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_B32F">COORD3D_B32F (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_B8">COORD3D_B8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_C10P">COORD3D_C10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_C12P">COORD3D_C12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_C16">COORD3D_C16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_C32F">COORD3D_C32F (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.COORD3D_C8">COORD3D_C8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.CustomGenerateJsonSchema">CustomGenerateJsonSchema (class in aind_behavior_services.utils)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="D" class="genindex-section">
+  <h2>D</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.SoftwareEvent.data">data (aind_behavior_services.data_types.SoftwareEvent attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.SoftwareEvent.data_type">data_type (aind_behavior_services.data_types.SoftwareEvent attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.SoftwareEvent.data_type_hint">data_type_hint (aind_behavior_services.data_types.SoftwareEvent attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataType">DataType (class in aind_behavior_services.data_types)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataTypes.Config">DataTypes.Config (class in aind_behavior_services.data_types)</a>
+</li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.date">date (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibration.description">description (aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibration attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibration.description">(aind_behavior_services.calibration.load_cells.LoadCellsCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerCalibration.description">(aind_behavior_services.calibration.olfactometer.OlfactometerCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/treadmill.html#aind_behavior_services.calibration.treadmill.TreadmillCalibration.description">(aind_behavior_services.calibration.treadmill.TreadmillCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibration.description">(aind_behavior_services.calibration.water_valve.WaterValveCalibration attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibration.device_name">device_name (aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibration attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibration.device_name">(aind_behavior_services.calibration.load_cells.LoadCellsCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerCalibration.device_name">(aind_behavior_services.calibration.olfactometer.OlfactometerCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/treadmill.html#aind_behavior_services.calibration.treadmill.TreadmillCalibration.device_name">(aind_behavior_services.calibration.treadmill.TreadmillCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibration.device_name">(aind_behavior_services.calibration.water_valve.WaterValveCalibration attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig._base.Device.device_type">device_type (aind_behavior_services.rig._base.Device attribute)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpAnalogInput.device_type">(aind_behavior_services.rig._harp_gen.HarpAnalogInput attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpArchimedes.device_type">(aind_behavior_services.rig._harp_gen.HarpArchimedes attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpBehavior.device_type">(aind_behavior_services.rig._harp_gen.HarpBehavior attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpCameraController.device_type">(aind_behavior_services.rig._harp_gen.HarpCameraController attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpCameraControllerGen2.device_type">(aind_behavior_services.rig._harp_gen.HarpCameraControllerGen2 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpClockSynchronizer.device_type">(aind_behavior_services.rig._harp_gen.HarpClockSynchronizer attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpCuttlefish.device_type">(aind_behavior_services.rig._harp_gen.HarpCuttlefish attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpDeviceGeneric.device_type">(aind_behavior_services.rig._harp_gen.HarpDeviceGeneric attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpDriver12Volts.device_type">(aind_behavior_services.rig._harp_gen.HarpDriver12Volts attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpEnvironmentSensor.device_type">(aind_behavior_services.rig._harp_gen.HarpEnvironmentSensor attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpFlyPad.device_type">(aind_behavior_services.rig._harp_gen.HarpFlyPad attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpIblBehaviorControl.device_type">(aind_behavior_services.rig._harp_gen.HarpIblBehaviorControl attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpInputExpander.device_type">(aind_behavior_services.rig._harp_gen.HarpInputExpander attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpLedController.device_type">(aind_behavior_services.rig._harp_gen.HarpLedController attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpLicketySplit.device_type">(aind_behavior_services.rig._harp_gen.HarpLicketySplit attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpLoadCells.device_type">(aind_behavior_services.rig._harp_gen.HarpLoadCells attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpMultiPwmGenerator.device_type">(aind_behavior_services.rig._harp_gen.HarpMultiPwmGenerator attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpNeurophotometricsFP3002.device_type">(aind_behavior_services.rig._harp_gen.HarpNeurophotometricsFP3002 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpOlfactometer.device_type">(aind_behavior_services.rig._harp_gen.HarpOlfactometer attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpOutputExpander.device_type">(aind_behavior_services.rig._harp_gen.HarpOutputExpander attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpPluma.device_type">(aind_behavior_services.rig._harp_gen.HarpPluma attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpPoke.device_type">(aind_behavior_services.rig._harp_gen.HarpPoke attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpPyControlAdapter.device_type">(aind_behavior_services.rig._harp_gen.HarpPyControlAdapter attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpRfidReader.device_type">(aind_behavior_services.rig._harp_gen.HarpRfidReader attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpRgbArray.device_type">(aind_behavior_services.rig._harp_gen.HarpRgbArray attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpSimpleAnalogGenerator.device_type">(aind_behavior_services.rig._harp_gen.HarpSimpleAnalogGenerator attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpSniffDetector.device_type">(aind_behavior_services.rig._harp_gen.HarpSniffDetector attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpSoundCard.device_type">(aind_behavior_services.rig._harp_gen.HarpSoundCard attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpStepperDriver.device_type">(aind_behavior_services.rig._harp_gen.HarpStepperDriver attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpSynchronizer.device_type">(aind_behavior_services.rig._harp_gen.HarpSynchronizer attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpSyringePump.device_type">(aind_behavior_services.rig._harp_gen.HarpSyringePump attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen1.device_type">(aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen1 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen3.device_type">(aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen3 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpTreadmill.device_type">(aind_behavior_services.rig._harp_gen.HarpTreadmill attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpUSBHub.device_type">(aind_behavior_services.rig._harp_gen.HarpUSBHub attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpVestibularH1.device_type">(aind_behavior_services.rig._harp_gen.HarpVestibularH1 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpVestibularH2.device_type">(aind_behavior_services.rig._harp_gen.HarpVestibularH2 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpWear.device_type">(aind_behavior_services.rig._harp_gen.HarpWear attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpWearBaseStationGen2.device_type">(aind_behavior_services.rig._harp_gen.HarpWearBaseStationGen2 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpWhiteRabbit.device_type">(aind_behavior_services.rig._harp_gen.HarpWhiteRabbit attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig.cameras.CameraController.device_type">(aind_behavior_services.rig.cameras.CameraController attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.device_type">(aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig.cameras.WebCamera.device_type">(aind_behavior_services.rig.cameras.WebCamera attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Screen.device_type">(aind_behavior_services.rig.visual_stimulation.Screen attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplayIntrinsics.display_height">display_height (aind_behavior_services.rig.visual_stimulation.DisplayIntrinsics attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Screen.display_index">display_index (aind_behavior_services.rig.visual_stimulation.Screen attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplayIntrinsics.display_width">display_width (aind_behavior_services.rig.visual_stimulation.DisplayIntrinsics attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.MotorOperationMode.DYNAMIC">DYNAMIC (aind_behavior_services.calibration.aind_manipulator.MotorOperationMode attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="E" class="genindex-section">
+  <h2>E</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibrationInput.ensure_unique_channels">ensure_unique_channels() (aind_behavior_services.calibration.load_cells.LoadCellsCalibrationInput class method)</a>
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibrationOutput.ensure_unique_channels">(aind_behavior_services.calibration.load_cells.LoadCellsCalibrationOutput class method)</a>
+</li>
+        </ul></li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.CustomGenerateJsonSchema.enum_schema">enum_schema() (aind_behavior_services.utils.CustomGenerateJsonSchema method)</a>
+</li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.experiment">experiment (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.experiment_version">experiment_version (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.experimenter">experimenter (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.export_schema">export_schema() (in module aind_behavior_services.utils)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.exposure">exposure (aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplayCalibration.extrinsics">extrinsics (aind_behavior_services.rig.visual_stimulation.DisplayCalibration attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="F" class="genindex-section">
+  <h2>F</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.FFMPEG_INPUT">FFMPEG_INPUT (in module aind_behavior_services.rig.cameras)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.FFMPEG_OUTPUT_16BIT">FFMPEG_OUTPUT_16BIT (in module aind_behavior_services.rig.cameras)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.FFMPEG_OUTPUT_8BIT">FFMPEG_OUTPUT_8BIT (in module aind_behavior_services.rig.cameras)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig.flow_rate">flow_rate (aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig.flow_rate_capacity">flow_rate_capacity (aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig attribute)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.format_datetime">format_datetime() (in module aind_behavior_services.utils)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterOpenCv.four_cc">four_cc (aind_behavior_services.rig.cameras.VideoWriterOpenCv attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplayIntrinsics.frame_height">frame_height (aind_behavior_services.rig.visual_stimulation.DisplayIntrinsics attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.RenderSynchState.frame_index">frame_index (aind_behavior_services.data_types.RenderSynchState attribute)</a>
+
+        <ul>
+          <li><a href="api.data_types.html#aind_behavior_services.data_types.SoftwareEvent.frame_index">(aind_behavior_services.data_types.SoftwareEvent attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.CameraController.frame_rate">frame_rate (aind_behavior_services.rig.cameras.CameraController attribute)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterFfmpeg.frame_rate">(aind_behavior_services.rig.cameras.VideoWriterFfmpeg attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterOpenCv.frame_rate">(aind_behavior_services.rig.cameras.VideoWriterOpenCv attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.RenderSynchState.frame_timestamp">frame_timestamp (aind_behavior_services.data_types.RenderSynchState attribute)</a>
+
+        <ul>
+          <li><a href="api.data_types.html#aind_behavior_services.data_types.SoftwareEvent.frame_timestamp">(aind_behavior_services.data_types.SoftwareEvent attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplayIntrinsics.frame_width">frame_width (aind_behavior_services.rig.visual_stimulation.DisplayIntrinsics attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibrationInput.full_step_to_mm">full_step_to_mm (aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibrationInput attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="G" class="genindex-section">
+  <h2>G</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.G10">G10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.G12">G12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.G16">G16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.G8">G8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.gain">gain (aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.gamma">gamma (aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+</li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.generate_session_name_default">generate_session_name_default() (aind_behavior_services.session.AindBehaviorSessionModel method)</a>
+</li>
+        <li><a href="api.base.html#aind_behavior_services.base.get_commit_hash">get_commit_hash() (in module aind_behavior_services.base)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.get_fields_of_type">get_fields_of_type() (in module aind_behavior_services.utils)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.CustomGenerateJsonSchema.get_flattened_oneof">get_flattened_oneof() (aind_behavior_services.utils.CustomGenerateJsonSchema method)</a>
+</li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibrationInput.get_optimum_offset">get_optimum_offset() (aind_behavior_services.calibration.load_cells.LoadCellsCalibrationInput static method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="H" class="genindex-section">
+  <h2>H</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.TimestampSource.HARP">HARP (aind_behavior_services.data_types.TimestampSource attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.Rect.height">height (aind_behavior_services.rig.cameras.Rect attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibrationInput.homing_order">homing_order (aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibrationInput attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.WebCamera.index">index (aind_behavior_services.rig.cameras.WebCamera attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibrationInput.initial_position">initial_position (aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibrationInput attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibration.input">input (aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibration attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibration.input">(aind_behavior_services.calibration.load_cells.LoadCellsCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerCalibration.input">(aind_behavior_services.calibration.olfactometer.OlfactometerCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/treadmill.html#aind_behavior_services.calibration.treadmill.TreadmillCalibration.input">(aind_behavior_services.calibration.treadmill.TreadmillCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibration.input">(aind_behavior_services.calibration.water_valve.WaterValveCalibration attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterFfmpeg.input_arguments">input_arguments (aind_behavior_services.rig.cameras.VideoWriterFfmpeg attribute)</a>
+</li>
+        <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibrationOutput.interval_average">interval_average (aind_behavior_services.calibration.water_valve.WaterValveCalibrationOutput attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplayCalibration.intrinsics">intrinsics (aind_behavior_services.rig.visual_stimulation.DisplayCalibration attribute)</a>
+</li>
+        <li><a href="api.calibration/treadmill.html#aind_behavior_services.calibration.treadmill.TreadmillCalibrationOutput.invert_direction">invert_direction (aind_behavior_services.calibration.treadmill.TreadmillCalibrationOutput attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="J" class="genindex-section">
+  <h2>J</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.utils.html#aind_behavior_services.utils.BonsaiSgenSerializers.JSON">JSON (aind_behavior_services.utils.BonsaiSgenSerializers attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataTypes.Config.json_schema_extra">json_schema_extra (aind_behavior_services.data_types.DataTypes.Config attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="L" class="genindex-section">
+  <h2>L</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplaysCalibration.left">left (aind_behavior_services.rig.visual_stimulation.DisplaysCalibration attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.utils.html#aind_behavior_services.utils.CustomGenerateJsonSchema.literal_schema">literal_schema() (aind_behavior_services.utils.CustomGenerateJsonSchema method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="M" class="genindex-section">
+  <h2>M</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.CalibrationRig.manipulator">manipulator (aind_behavior_services.calibration.aind_manipulator.CalibrationRig attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AxisConfiguration.max_limit">max_limit (aind_behavior_services.calibration.aind_manipulator.AxisConfiguration attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AxisConfiguration.maximum_step_interval">maximum_step_interval (aind_behavior_services.calibration.aind_manipulator.AxisConfiguration attribute)</a>
+</li>
+        <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibrationInput.measurements">measurements (aind_behavior_services.calibration.water_valve.WaterValveCalibrationInput attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.MicrostepResolution.MICROSTEP16">MICROSTEP16 (aind_behavior_services.calibration.aind_manipulator.MicrostepResolution attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.MicrostepResolution.MICROSTEP32">MICROSTEP32 (aind_behavior_services.calibration.aind_manipulator.MicrostepResolution attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.MicrostepResolution.MICROSTEP64">MICROSTEP64 (aind_behavior_services.calibration.aind_manipulator.MicrostepResolution attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.MicrostepResolution.MICROSTEP8">MICROSTEP8 (aind_behavior_services.calibration.aind_manipulator.MicrostepResolution attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AxisConfiguration.microstep_resolution">microstep_resolution (aind_behavior_services.calibration.aind_manipulator.AxisConfiguration attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.MicrostepResolution">MicrostepResolution (class in aind_behavior_services.calibration.aind_manipulator)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AxisConfiguration.min_limit">min_limit (aind_behavior_services.calibration.aind_manipulator.AxisConfiguration attribute)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.model_from_json_file">model_from_json_file() (in module aind_behavior_services.utils)</a>
+</li>
+        <li>
+    module
+
+        <ul>
+          <li><a href="api.base.html#module-aind_behavior_services.base">aind_behavior_services.base</a>
+</li>
+          <li><a href="api.calibration/aind_manipulator.html#module-aind_behavior_services.calibration.aind_manipulator">aind_behavior_services.calibration.aind_manipulator</a>
+</li>
+          <li><a href="api.calibration/load_cells.html#module-aind_behavior_services.calibration.load_cells">aind_behavior_services.calibration.load_cells</a>
+</li>
+          <li><a href="api.calibration/olfactometer.html#module-aind_behavior_services.calibration.olfactometer">aind_behavior_services.calibration.olfactometer</a>
+</li>
+          <li><a href="api.calibration/treadmill.html#module-aind_behavior_services.calibration.treadmill">aind_behavior_services.calibration.treadmill</a>
+</li>
+          <li><a href="api.calibration/water_valve.html#module-aind_behavior_services.calibration.water_valve">aind_behavior_services.calibration.water_valve</a>
+</li>
+          <li><a href="api.data_types.html#module-aind_behavior_services.data_types">aind_behavior_services.data_types</a>
+</li>
+          <li><a href="api.rig.html#module-aind_behavior_services.rig._base">aind_behavior_services.rig._base</a>
+</li>
+          <li><a href="api.rig.html#module-aind_behavior_services.rig._harp_gen">aind_behavior_services.rig._harp_gen</a>
+</li>
+          <li><a href="api.rig.html#module-aind_behavior_services.rig.cameras">aind_behavior_services.rig.cameras</a>
+</li>
+          <li><a href="api.rig.html#module-aind_behavior_services.rig.harp">aind_behavior_services.rig.harp</a>
+</li>
+          <li><a href="api.rig.html#module-aind_behavior_services.rig.visual_stimulation">aind_behavior_services.rig.visual_stimulation</a>
+</li>
+          <li><a href="api.session.html#module-aind_behavior_services.session">aind_behavior_services.session</a>
+</li>
+          <li><a href="api.task_logic.html#module-aind_behavior_services.task_logic">aind_behavior_services.task_logic</a>
+</li>
+          <li><a href="api.utils.html#module-aind_behavior_services.utils">aind_behavior_services.utils</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO10">MONO10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO10P">MONO10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO10PACKED">MONO10PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO12">MONO12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO12P">MONO12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO12PACKED">MONO12PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO14">MONO14 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO16">MONO16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO16S">MONO16S (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO1P">MONO1P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO2P">MONO2P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO32F">MONO32F (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO4P">MONO4P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO8">MONO8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.MONO8S">MONO8S (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AxisConfiguration.motor_operation_mode">motor_operation_mode (aind_behavior_services.calibration.aind_manipulator.AxisConfiguration attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.MotorOperationMode">MotorOperationMode (class in aind_behavior_services.calibration.aind_manipulator)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="N" class="genindex-section">
+  <h2>N</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.CalibrationLogic.name">name (aind_behavior_services.calibration.aind_manipulator.CalibrationLogic attribute)</a>
+
+        <ul>
+          <li><a href="api.data_types.html#aind_behavior_services.data_types.SoftwareEvent.name">(aind_behavior_services.data_types.SoftwareEvent attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.Axis.NONE">NONE (aind_behavior_services.calibration.aind_manipulator.Axis attribute)</a>
+
+        <ul>
+          <li><a href="api.utils.html#aind_behavior_services.utils.BonsaiSgenSerializers.NONE">(aind_behavior_services.utils.BonsaiSgenSerializers attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.notes">notes (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.utils.html#aind_behavior_services.utils.now">now() (in module aind_behavior_services.utils)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataType.NULL">NULL (aind_behavior_services.data_types.DataType attribute)</a>
+
+        <ul>
+          <li><a href="api.data_types.html#aind_behavior_services.data_types.TimestampSource.NULL">(aind_behavior_services.data_types.TimestampSource attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.CustomGenerateJsonSchema.nullable_schema">nullable_schema() (aind_behavior_services.utils.CustomGenerateJsonSchema method)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataType.NUMBER">NUMBER (aind_behavior_services.data_types.DataType attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="O" class="genindex-section">
+  <h2>O</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataType.OBJECT">OBJECT (aind_behavior_services.data_types.DataType attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannelType.ODOR">ODOR (aind_behavior_services.calibration.olfactometer.OlfactometerChannelType attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig.odorant">odorant (aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig.odorant_dilution">odorant_dilution (aind_behavior_services.calibration.olfactometer.OlfactometerChannelConfig attribute)</a>
+</li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellCalibrationOutput.offset">offset (aind_behavior_services.calibration.load_cells.LoadCellCalibrationOutput attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.MeasuredOffset.offset">(aind_behavior_services.calibration.load_cells.MeasuredOffset attribute)</a>
+</li>
+          <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibrationOutput.offset">(aind_behavior_services.calibration.water_valve.WaterValveCalibrationOutput attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellCalibrationInput.offset_measurement">offset_measurement (aind_behavior_services.calibration.load_cells.LoadCellCalibrationInput attribute)</a>
+</li>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannel">OlfactometerChannel (class in aind_behavior_services.calibration.olfactometer)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerChannelType">OlfactometerChannelType (class in aind_behavior_services.calibration.olfactometer)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.open_bonsai_process">open_bonsai_process() (in module aind_behavior_services.utils)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibration.output">output (aind_behavior_services.calibration.aind_manipulator.AindManipulatorCalibration attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellsCalibration.output">(aind_behavior_services.calibration.load_cells.LoadCellsCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/olfactometer.html#aind_behavior_services.calibration.olfactometer.OlfactometerCalibration.output">(aind_behavior_services.calibration.olfactometer.OlfactometerCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/treadmill.html#aind_behavior_services.calibration.treadmill.TreadmillCalibration.output">(aind_behavior_services.calibration.treadmill.TreadmillCalibration attribute)</a>
+</li>
+          <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibration.output">(aind_behavior_services.calibration.water_valve.WaterValveCalibration attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterFfmpeg.output_arguments">output_arguments (aind_behavior_services.rig.cameras.VideoWriterFfmpeg attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.ConnectedClockOutput.output_channel">output_channel (aind_behavior_services.rig._harp_gen.ConnectedClockOutput attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.utils.html#aind_behavior_services.utils.pascal_to_snake_case">pascal_to_snake_case() (in module aind_behavior_services.utils)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.pixel_format">pixel_format (aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+</li>
+        <li><a href="api.calibration/treadmill.html#aind_behavior_services.calibration.treadmill.TreadmillCalibrationOutput.pulses_per_revolution">pulses_per_revolution (aind_behavior_services.calibration.treadmill.TreadmillCalibrationOutput attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="Q" class="genindex-section">
+  <h2>Q</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.MotorOperationMode.QUIET">QUIET (aind_behavior_services.calibration.aind_manipulator.MotorOperationMode attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="R" class="genindex-section">
+  <h2>R</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.R10">R10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.R12">R12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.R16">R16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibrationOutput.r2">r2 (aind_behavior_services.calibration.water_valve.WaterValveCalibrationOutput attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.R8">R8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.region_of_interest">region_of_interest (aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.TimestampSource.RENDER">RENDER (aind_behavior_services.data_types.TimestampSource attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataTypes.render_synch_state">render_synch_state (aind_behavior_services.data_types.DataTypes attribute)</a>
+</li>
+        <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.Measurement.repeat_count">repeat_count (aind_behavior_services.calibration.water_valve.Measurement attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB10">RGB10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB10_PLANAR">RGB10_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB10P">RGB10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB10P32">RGB10P32 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB12">RGB12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB12_PLANAR">RGB12_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB12P">RGB12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB14">RGB14 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB16">RGB16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB16_PLANAR">RGB16_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB16S">RGB16S (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB32F">RGB32F (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB565P">RGB565P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB8">RGB8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB8_PLANAR">RGB8_PLANAR (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGB8PACKED">RGB8PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGBA10">RGBA10 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGBA10P">RGBA10P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGBA12">RGBA12 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGBA12P">RGBA12P (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGBA14">RGBA14 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGBA16">RGBA16 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGBA32F">RGBA32F (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.RGBA8">RGBA8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig._base.AindBehaviorRigModel.rig_name">rig_name (aind_behavior_services.rig._base.AindBehaviorRigModel attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplaysCalibration.right">right (aind_behavior_services.rig.visual_stimulation.DisplaysCalibration attribute)</a>
+</li>
+        <li><a href="api.task_logic.html#aind_behavior_services.task_logic.TaskParameters.rng_seed">rng_seed (aind_behavior_services.task_logic.TaskParameters attribute)</a>
+</li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.root_path">root_path (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplayExtrinsics.rotation">rotation (aind_behavior_services.rig.visual_stimulation.DisplayExtrinsics attribute)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.run_bonsai_process">run_bonsai_process() (in module aind_behavior_services.utils)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="S" class="genindex-section">
+  <h2>S</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.utils.html#aind_behavior_services.utils.screaming_snake_case_to_pascal_case">screaming_snake_case_to_pascal_case() (in module aind_behavior_services.utils)</a>
+</li>
+        <li><a href="api.base.html#aind_behavior_services.base.SemVerAnnotation">SemVerAnnotation (class in aind_behavior_services.base)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.serial_number">serial_number (aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+</li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.session_name">session_name (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.skip_hardware_validation">skip_hardware_validation (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellCalibrationOutput.slope">slope (aind_behavior_services.calibration.load_cells.LoadCellCalibrationOutput attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibrationOutput.slope">(aind_behavior_services.calibration.water_valve.WaterValveCalibrationOutput attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.snake_to_pascal_case">snake_to_pascal_case() (in module aind_behavior_services.utils)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataTypes.software_event">software_event (aind_behavior_services.data_types.DataTypes attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraAdcBitDepth">SpinnakerCameraAdcBitDepth (class in aind_behavior_services.rig.cameras)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat">SpinnakerCameraPixelFormat (class in aind_behavior_services.rig.cameras)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AxisConfiguration.step_acceleration_interval">step_acceleration_interval (aind_behavior_services.calibration.aind_manipulator.AxisConfiguration attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.AxisConfiguration.step_interval">step_interval (aind_behavior_services.calibration.aind_manipulator.AxisConfiguration attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.DataType.STRING">STRING (aind_behavior_services.data_types.DataType attribute)</a>
+</li>
+        <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.subject">subject (aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.RenderSynchState.sync_quad_value">sync_quad_value (aind_behavior_services.data_types.RenderSynchState attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="T" class="genindex-section">
+  <h2>T</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.ConnectedClockOutput.target_device">target_device (aind_behavior_services.rig._harp_gen.ConnectedClockOutput attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Screen.target_render_frequency">target_render_frequency (aind_behavior_services.rig.visual_stimulation.Screen attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Screen.target_update_frequency">target_update_frequency (aind_behavior_services.rig.visual_stimulation.Screen attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.CalibrationLogic.task_parameters">task_parameters (aind_behavior_services.calibration.aind_manipulator.CalibrationLogic attribute)</a>
+
+        <ul>
+          <li><a href="api.task_logic.html#aind_behavior_services.task_logic.AindBehaviorTaskLogicModel.task_parameters">(aind_behavior_services.task_logic.AindBehaviorTaskLogicModel attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Screen.texture_assets_directory">texture_assets_directory (aind_behavior_services.rig.visual_stimulation.Screen attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.SoftwareEvent.timestamp">timestamp (aind_behavior_services.data_types.SoftwareEvent attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.SoftwareEvent.timestamp_source">timestamp_source (aind_behavior_services.data_types.SoftwareEvent attribute)</a>
+</li>
+        <li><a href="api.data_types.html#aind_behavior_services.data_types.TimestampSource">TimestampSource (class in aind_behavior_services.data_types)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.DisplayExtrinsics.translation">translation (aind_behavior_services.rig.visual_stimulation.DisplayExtrinsics attribute)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.tznow">tznow() (in module aind_behavior_services.utils)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="U" class="genindex-section">
+  <h2>U</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.utils.html#aind_behavior_services.utils.CustomGenerateJsonSchema.union_schema">union_schema() (aind_behavior_services.utils.CustomGenerateJsonSchema method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterFfmpegFactory.update_video_writer_ffmpeg_kwargs">update_video_writer_ffmpeg_kwargs() (aind_behavior_services.rig.cameras.VideoWriterFfmpegFactory method)</a>
+</li>
+        <li><a href="api.utils.html#aind_behavior_services.utils.utcnow">utcnow() (in module aind_behavior_services.utils)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="V" class="genindex-section">
+  <h2>V</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.WaterValveCalibrationOutput.valid_domain">valid_domain (aind_behavior_services.calibration.water_valve.WaterValveCalibrationOutput attribute)</a>
+</li>
+        <li><a href="api.calibration/treadmill.html#aind_behavior_services.calibration.treadmill.TreadmillCalibrationOutput.validate_brake_lookup_calibration">validate_brake_lookup_calibration() (aind_behavior_services.calibration.treadmill.TreadmillCalibrationOutput class method)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpClockSynchronizer.validate_connected_clock_outputs">validate_connected_clock_outputs() (aind_behavior_services.rig._harp_gen.HarpClockSynchronizer class method)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen1.validate_connected_clock_outputs">(aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen1 class method)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen3.validate_connected_clock_outputs">(aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen3 class method)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpWhiteRabbit.validate_connected_clock_outputs">(aind_behavior_services.rig._harp_gen.HarpWhiteRabbit class method)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.harp.validate_harp_clock_output">validate_harp_clock_output() (in module aind_behavior_services.rig.harp)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.validate_roi">validate_roi() (aind_behavior_services.rig.cameras.SpinnakerCamera class method)</a>
+</li>
+        <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.Measurement.valve_open_interval">valve_open_interval (aind_behavior_services.calibration.water_valve.Measurement attribute)</a>
+</li>
+        <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.Measurement.valve_open_time">valve_open_time (aind_behavior_services.calibration.water_valve.Measurement attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.base.html#aind_behavior_services.base.SchemaVersionedModel.version">version (aind_behavior_services.base.SchemaVersionedModel attribute)</a>
+
+        <ul>
+          <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.CalibrationLogic.version">(aind_behavior_services.calibration.aind_manipulator.CalibrationLogic attribute)</a>
+</li>
+          <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.CalibrationRig.version">(aind_behavior_services.calibration.aind_manipulator.CalibrationRig attribute)</a>
+</li>
+          <li><a href="api.data_types.html#aind_behavior_services.data_types.DataTypes.version">(aind_behavior_services.data_types.DataTypes attribute)</a>
+</li>
+          <li><a href="api.session.html#aind_behavior_services.session.AindBehaviorSessionModel.version">(aind_behavior_services.session.AindBehaviorSessionModel attribute)</a>
+</li>
+          <li><a href="api.task_logic.html#aind_behavior_services.task_logic.AindBehaviorTaskLogicModel.version">(aind_behavior_services.task_logic.AindBehaviorTaskLogicModel attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCamera.video_writer">video_writer (aind_behavior_services.rig.cameras.SpinnakerCamera attribute)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig.cameras.WebCamera.video_writer">(aind_behavior_services.rig.cameras.WebCamera attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterFfmpeg.video_writer_type">video_writer_type (aind_behavior_services.rig.cameras.VideoWriterFfmpeg attribute)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterOpenCv.video_writer_type">(aind_behavior_services.rig.cameras.VideoWriterOpenCv attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.VideoWriterFfmpegFactory">VideoWriterFfmpegFactory (class in aind_behavior_services.rig.cameras)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="W" class="genindex-section">
+  <h2>W</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/water_valve.html#aind_behavior_services.calibration.water_valve.Measurement.water_weight">water_weight (aind_behavior_services.calibration.water_valve.Measurement attribute)</a>
+</li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.MeasuredWeight.weight">weight (aind_behavior_services.calibration.load_cells.MeasuredWeight attribute)</a>
+</li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellCalibrationOutput.weight_lookup">weight_lookup (aind_behavior_services.calibration.load_cells.LoadCellCalibrationOutput attribute)</a>
+</li>
+        <li><a href="api.calibration/load_cells.html#aind_behavior_services.calibration.load_cells.LoadCellCalibrationInput.weight_measurement">weight_measurement (aind_behavior_services.calibration.load_cells.LoadCellCalibrationInput attribute)</a>
+</li>
+        <li><a href="api.calibration/treadmill.html#aind_behavior_services.calibration.treadmill.TreadmillCalibrationOutput.wheel_diameter">wheel_diameter (aind_behavior_services.calibration.treadmill.TreadmillCalibrationOutput attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpAnalogInput.who_am_i">who_am_i (aind_behavior_services.rig._harp_gen.HarpAnalogInput attribute)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpArchimedes.who_am_i">(aind_behavior_services.rig._harp_gen.HarpArchimedes attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpBehavior.who_am_i">(aind_behavior_services.rig._harp_gen.HarpBehavior attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpCameraController.who_am_i">(aind_behavior_services.rig._harp_gen.HarpCameraController attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpCameraControllerGen2.who_am_i">(aind_behavior_services.rig._harp_gen.HarpCameraControllerGen2 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpClockSynchronizer.who_am_i">(aind_behavior_services.rig._harp_gen.HarpClockSynchronizer attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpCuttlefish.who_am_i">(aind_behavior_services.rig._harp_gen.HarpCuttlefish attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpDriver12Volts.who_am_i">(aind_behavior_services.rig._harp_gen.HarpDriver12Volts attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpEnvironmentSensor.who_am_i">(aind_behavior_services.rig._harp_gen.HarpEnvironmentSensor attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpFlyPad.who_am_i">(aind_behavior_services.rig._harp_gen.HarpFlyPad attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpIblBehaviorControl.who_am_i">(aind_behavior_services.rig._harp_gen.HarpIblBehaviorControl attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpInputExpander.who_am_i">(aind_behavior_services.rig._harp_gen.HarpInputExpander attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpLedController.who_am_i">(aind_behavior_services.rig._harp_gen.HarpLedController attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpLicketySplit.who_am_i">(aind_behavior_services.rig._harp_gen.HarpLicketySplit attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpLoadCells.who_am_i">(aind_behavior_services.rig._harp_gen.HarpLoadCells attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpMultiPwmGenerator.who_am_i">(aind_behavior_services.rig._harp_gen.HarpMultiPwmGenerator attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpNeurophotometricsFP3002.who_am_i">(aind_behavior_services.rig._harp_gen.HarpNeurophotometricsFP3002 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpOlfactometer.who_am_i">(aind_behavior_services.rig._harp_gen.HarpOlfactometer attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpOutputExpander.who_am_i">(aind_behavior_services.rig._harp_gen.HarpOutputExpander attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpPluma.who_am_i">(aind_behavior_services.rig._harp_gen.HarpPluma attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpPoke.who_am_i">(aind_behavior_services.rig._harp_gen.HarpPoke attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpPyControlAdapter.who_am_i">(aind_behavior_services.rig._harp_gen.HarpPyControlAdapter attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpRfidReader.who_am_i">(aind_behavior_services.rig._harp_gen.HarpRfidReader attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpRgbArray.who_am_i">(aind_behavior_services.rig._harp_gen.HarpRgbArray attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpSimpleAnalogGenerator.who_am_i">(aind_behavior_services.rig._harp_gen.HarpSimpleAnalogGenerator attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpSniffDetector.who_am_i">(aind_behavior_services.rig._harp_gen.HarpSniffDetector attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpSoundCard.who_am_i">(aind_behavior_services.rig._harp_gen.HarpSoundCard attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpStepperDriver.who_am_i">(aind_behavior_services.rig._harp_gen.HarpStepperDriver attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpSynchronizer.who_am_i">(aind_behavior_services.rig._harp_gen.HarpSynchronizer attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpSyringePump.who_am_i">(aind_behavior_services.rig._harp_gen.HarpSyringePump attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen1.who_am_i">(aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen1 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen3.who_am_i">(aind_behavior_services.rig._harp_gen.HarpTimestampGeneratorGen3 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpTreadmill.who_am_i">(aind_behavior_services.rig._harp_gen.HarpTreadmill attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpUSBHub.who_am_i">(aind_behavior_services.rig._harp_gen.HarpUSBHub attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpVestibularH1.who_am_i">(aind_behavior_services.rig._harp_gen.HarpVestibularH1 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpVestibularH2.who_am_i">(aind_behavior_services.rig._harp_gen.HarpVestibularH2 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpWear.who_am_i">(aind_behavior_services.rig._harp_gen.HarpWear attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpWearBaseStationGen2.who_am_i">(aind_behavior_services.rig._harp_gen.HarpWearBaseStationGen2 attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig._harp_gen.HarpWhiteRabbit.who_am_i">(aind_behavior_services.rig._harp_gen.HarpWhiteRabbit attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.Rect.width">width (aind_behavior_services.rig.cameras.Rect attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="X" class="genindex-section">
+  <h2>X</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.Axis.X">X (aind_behavior_services.calibration.aind_manipulator.Axis attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.ManipulatorPosition.x">x (aind_behavior_services.calibration.aind_manipulator.ManipulatorPosition attribute)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig.cameras.Rect.x">(aind_behavior_services.rig.cameras.Rect attribute)</a>
+</li>
+          <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Vector3.x">(aind_behavior_services.rig.visual_stimulation.Vector3 attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="Y" class="genindex-section">
+  <h2>Y</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.Rect.y">y (aind_behavior_services.rig.cameras.Rect attribute)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Vector3.y">(aind_behavior_services.rig.visual_stimulation.Vector3 attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.Axis.Y1">Y1 (aind_behavior_services.calibration.aind_manipulator.Axis attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.ManipulatorPosition.y1">y1 (aind_behavior_services.calibration.aind_manipulator.ManipulatorPosition attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.Axis.Y2">Y2 (aind_behavior_services.calibration.aind_manipulator.Axis attribute)</a>
+</li>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.ManipulatorPosition.y2">y2 (aind_behavior_services.calibration.aind_manipulator.ManipulatorPosition attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.utils.html#aind_behavior_services.utils.BonsaiSgenSerializers.YAML">YAML (aind_behavior_services.utils.BonsaiSgenSerializers attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.YCBCR411_8">YCBCR411_8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.YCBCR422_8">YCBCR422_8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.YCBCR8">YCBCR8 (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.YUV411PACKED">YUV411PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.YUV422PACKED">YUV422PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+        <li><a href="api.rig.html#aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat.YUV444PACKED">YUV444PACKED (aind_behavior_services.rig.cameras.SpinnakerCameraPixelFormat attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="Z" class="genindex-section">
+  <h2>Z</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.Axis.Z">Z (aind_behavior_services.calibration.aind_manipulator.Axis attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.calibration/aind_manipulator.html#aind_behavior_services.calibration.aind_manipulator.ManipulatorPosition.z">z (aind_behavior_services.calibration.aind_manipulator.ManipulatorPosition attribute)</a>
+
+        <ul>
+          <li><a href="api.rig.html#aind_behavior_services.rig.visual_stimulation.Vector3.z">(aind_behavior_services.rig.visual_stimulation.Vector3 attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=11e62b30"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>
